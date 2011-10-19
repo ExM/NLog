@@ -1,13 +1,10 @@
-
-#if !NET_CF && !MONO && !SILVERLIGHT
+using System.ComponentModel;
+using System.Windows.Forms;
+using NLog.Config;
+using NLog.Internal;
 
 namespace NLog.Targets
 {
-	using System.ComponentModel;
-	using System.Windows.Forms;
-	using NLog.Config;
-	using NLog.Internal;
-
 	/// <summary>
 	/// Logs text to Windows.Forms.Control.Text property control of specified Name.
 	/// </summary>
@@ -116,4 +113,3 @@ namespace NLog.Targets
 		}
 	}
 }
-#endif

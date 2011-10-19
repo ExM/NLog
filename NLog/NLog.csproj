@@ -32,7 +32,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyBuildInfo.cs" />
@@ -121,14 +123,12 @@
     <Compile Include="Internal\FileAppenders\SingleProcessFileAppender.cs" />
     <Compile Include="Internal\FileAppenders\UnixMultiProcessFileAppender.cs" />
     <Compile Include="Internal\FileInfoHelper.cs" />
-    <Compile Include="Internal\FormHelper.cs" />
     <Compile Include="Internal\IRenderable.cs" />
     <Compile Include="Internal\ISmtpClient.cs" />
     <Compile Include="Internal\ISupportsInitialize.cs" />
     <Compile Include="Internal\IUsesStackTrace.cs" />
     <Compile Include="Internal\LocalizableAttribute.cs" />
     <Compile Include="Internal\LoggerConfiguration.cs" />
-    <Compile Include="Internal\MessageBoxHelper.cs" />
     <Compile Include="Internal\MultiFileWatcher.cs" />
     <Compile Include="Internal\MySmtpClient.cs" />
     <Compile Include="Internal\NativeMethods.cs" />
@@ -248,15 +248,6 @@
     <Compile Include="LogLevel.cs" />
     <Compile Include="LogManager.cs" />
     <Compile Include="LogMessageGenerator.cs" />
-    <Compile Include="LogReceiverService\ILogReceiverClient.cs" />
-    <Compile Include="LogReceiverService\ILogReceiverServer.cs" />
-    <Compile Include="LogReceiverService\LogReceiverForwardingService.cs" />
-    <Compile Include="LogReceiverService\LogReceiverServiceConfig.cs" />
-    <Compile Include="LogReceiverService\NLogEvent.cs" />
-    <Compile Include="LogReceiverService\NLogEvents.cs" />
-    <Compile Include="LogReceiverService\SoapLogReceiverClient.cs" />
-    <Compile Include="LogReceiverService\StringCollection.cs" />
-    <Compile Include="LogReceiverService\WcfLogReceiverClient.cs" />
     <Compile Include="MappedDiagnosticsContext.cs" />
     <Compile Include="MDC.cs" />
     <Compile Include="NDC.cs" />
@@ -273,20 +264,14 @@
     <Compile Include="Targets\ConsoleRowHighlightingRule.cs" />
     <Compile Include="Targets\ConsoleTarget.cs" />
     <Compile Include="Targets\ConsoleWordHighlightingRule.cs" />
-    <Compile Include="Targets\DatabaseCommandInfo.cs" />
-    <Compile Include="Targets\DatabaseParameterInfo.cs" />
-    <Compile Include="Targets\DatabaseTarget.cs" />
     <Compile Include="Targets\DebuggerTarget.cs" />
     <Compile Include="Targets\DebugTarget.cs" />
     <Compile Include="Targets\EventLogTarget.cs" />
     <Compile Include="Targets\FileArchivePeriod.cs" />
     <Compile Include="Targets\FileTarget.cs" />
-    <Compile Include="Targets\FormControlTarget.cs" />
     <Compile Include="Targets\LineEndingMode.cs" />
-    <Compile Include="Targets\LogReceiverWebServiceTarget.cs" />
     <Compile Include="Targets\MailTarget.cs" />
     <Compile Include="Targets\MemoryTarget.cs" />
-    <Compile Include="Targets\MessageBoxTarget.cs" />
     <Compile Include="Targets\MethodCallParameter.cs" />
     <Compile Include="Targets\MethodCallTarget.cs" />
     <Compile Include="Targets\MethodCallTargetBase.cs" />
@@ -297,9 +282,6 @@
     <Compile Include="Targets\NullTarget.cs" />
     <Compile Include="Targets\OutputDebugStringTarget.cs" />
     <Compile Include="Targets\PerformanceCounterTarget.cs" />
-    <Compile Include="Targets\RichTextBoxRowColoringRule.cs" />
-    <Compile Include="Targets\RichTextBoxTarget.cs" />
-    <Compile Include="Targets\RichTextBoxWordColoringRule.cs" />
     <Compile Include="Targets\SmtpAuthenticationMode.cs" />
     <Compile Include="Targets\Target.cs" />
     <Compile Include="Targets\TargetAttribute.cs" />

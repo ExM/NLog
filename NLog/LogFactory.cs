@@ -10,7 +10,6 @@ namespace NLog
 	using System.Runtime.CompilerServices;
 	using System.Text;
 	using System.Threading;
-	using System.Windows;
 	using NLog.Common;
 	using NLog.Config;
 	using NLog.Internal;

@@ -1,13 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using NLog.Common;
+using NLog.Internal;
+using NLog.Layouts;
 
 namespace NLog.Targets
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Text;
-	using NLog.Common;
-	using NLog.Internal;
-	using NLog.Layouts;
-
 	/// <summary>
 	/// Pops up log messages as message boxes.
 	/// </summary>
@@ -56,7 +55,6 @@ namespace NLog.Targets
 		/// parameter.
 		/// </summary>
 		/// <param name="logEvent">The logging event.</param>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "This is just debugging output.")]
 		protected override void Write(LogEventInfo logEvent)
 		{
 			MessageBoxHelper.Show(this.Layout.Render(logEvent), this.Caption.Render(logEvent));
@@ -67,7 +65,6 @@ namespace NLog.Targets
 		/// parameter.
 		/// </summary>
 		/// <param name="logEvents">The array of logging events.</param>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "This is just debugging output.")]
 		protected override void Write(AsyncLogEventInfo[] logEvents)
 		{
 			if (logEvents.Length == 0)

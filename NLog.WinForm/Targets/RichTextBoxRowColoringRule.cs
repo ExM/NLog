@@ -1,13 +1,10 @@
-
-#if !NET_CF && !MONO && !SILVERLIGHT
+using System.ComponentModel;
+using System.Drawing;
+using NLog.Conditions;
+using NLog.Config;
 
 namespace NLog.Targets
 {
-	using System.ComponentModel;
-	using System.Drawing;
-	using NLog.Conditions;
-	using NLog.Config;
-
 	/// <summary>
 	/// The row-coloring condition.
 	/// </summary>
@@ -117,4 +114,3 @@ namespace NLog.Targets
 		}
 	}
 }
-#endif

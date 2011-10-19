@@ -1,17 +1,15 @@
-
-#if !NET_CF && !MONO && !SILVERLIGHT
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Drawing;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using NLog.Config;
+using NLog.Internal;
 
 namespace NLog.Targets
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Collections.ObjectModel;
-	using System.ComponentModel;
-	using System.Drawing;
-	using System.Text.RegularExpressions;
-	using System.Windows.Forms;
-	using NLog.Config;
-	using NLog.Internal;
 
 	/// <summary>
 	/// Log text a Rich Text Box control in an existing or new form.
@@ -336,4 +334,4 @@ namespace NLog.Targets
 		}
 	}
 }
-#endif
+

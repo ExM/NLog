@@ -1,12 +1,9 @@
-
-#if !MONO && !SILVERLIGHT && !NET_CF
+using System;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace NLog.Internal
 {
-	using System;
-	using System.Drawing;
-	using System.Windows.Forms;
-
 	/// <summary>
 	/// Form helper methods.
 	/// </summary>
@@ -18,7 +15,6 @@ namespace NLog.Internal
 		/// <param name="name">Name of RichTextBox.</param>
 		/// <param name="parentForm">Form to dock RichTextBox.</param>
 		/// <returns>Created RichTextBox.</returns>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Objects are disposed elsewhere")]
 		internal static RichTextBox CreateRichTextBox(string name, Form parentForm)
 		{
 			var rtb = new RichTextBox();
@@ -99,9 +95,6 @@ namespace NLog.Internal
 		/// <param name="showMinimized">If set to <c>true</c> the form will be minimized.</param>
 		/// <param name="toolWindow">If set to <c>true</c> the form will be created as tool window.</param>
 		/// <returns>Created form.</returns>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.Control.set_Text(System.String)", Justification = "Does not need to be localized.")]
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Objects are disposed elsewhere")]
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", Justification = "Using property names in message.")]
 		internal static Form CreateForm(string name, int width, int height, bool show, bool showMinimized, bool toolWindow)
 		{
 			var f = new Form
@@ -111,12 +104,11 @@ namespace NLog.Internal
 				Icon = GetNLogIcon()
 			};
 
-#if !Smartphone
 			if (toolWindow)
 			{
 				f.FormBorderStyle = FormBorderStyle.SizableToolWindow;
 			}
-#endif
+
 			if (width > 0)
 			{
 				f.Width = width;
@@ -152,4 +144,4 @@ namespace NLog.Internal
 		}
 	}
 }
-#endif
+

@@ -7,7 +7,7 @@ namespace NLog.Internal
 	/// <summary>
 	/// Helper class for dealing with exceptions.
 	/// </summary>
-	internal static class ExceptionHelper
+	public static class ExceptionHelper //TODO: change namespace
 	{
 		/// <summary>
 		/// Determines whether the exception must be rethrown.
@@ -16,22 +16,9 @@ namespace NLog.Internal
 		/// <returns>True if the exception must be rethrown, false otherwise.</returns>
 		public static bool MustBeRethrown(this Exception exception)
 		{
-			if (exception is StackOverflowException)
-			{
-				return true;
-			}
-
-			if (exception is ThreadAbortException)
-			{
-				return true;
-			}
-
-			if (exception is OutOfMemoryException)
-			{
-				return true;
-			}
-
-			return false;
+			return exception is StackOverflowException ||
+				exception is ThreadAbortException ||
+				exception is OutOfMemoryException;
 		}
 	}
 }
