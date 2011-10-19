@@ -1,0 +1,17 @@
+This project is based on the work of Jaroslaw Kowalski <jaak@jkowalski.net> (Copyright (c) 2004-2011 under BSD license)
+
+Derived code is under LGPLv3 license. See LICENSE.txt for details.
+
+This version works only with Net 4.0 and Mono.
+Design goals:
+  1. compiled binary compatibility libraries.
+  2. maximum compatibility with the original API the library.
+
+Source code of this project
+ git://github.com/ExM/NLog.git
+
+Source code of the original project
+ git://github.com/jkowalski/NLog.git
+
+Original description of the API the library
+ http://nlog-project.org/wiki/Documentation
