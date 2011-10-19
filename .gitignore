@@ -1,9 +1,7 @@
-/src/**/bin/Debug
-/tests/**/bin/Debug
-/src/**/bin/Release
-/tests/**/bin/Release
-test-results/
-*.pidb
-*.userprefs
 *.suo
+*~
+Release/
+Debug/
+*.userprefs
+*.pidb
 

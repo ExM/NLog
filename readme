@@ -1,6 +1,6 @@
 This project is based on the work of Jaroslaw Kowalski <jaak@jkowalski.net> (Copyright (c) 2004-2011 under BSD license)
 
-Derived code is under LGPLv3 license. See LICENSE.txt for details.
+Derived code is under LGPLv3 license. See License.txt for details.
 
 This version works only with Net 4.0 and Mono.
 Design goals:
