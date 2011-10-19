@@ -8,7 +8,6 @@ namespace NLog.Config
 	/// </summary>
 	public static class SimpleConfigurator
 	{
-#if !NET_CF
 		/// <summary>
 		/// Configures NLog for console logging so that all messages above and including
 		/// the <see cref="LogLevel.Info"/> level are output to the console.
@@ -23,7 +22,6 @@ namespace NLog.Config
 		/// the specified level are output to the console.
 		/// </summary>
 		/// <param name="minLevel">The minimal logging level.</param>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Target is disposed elsewhere.")]
 		public static void ConfigureForConsoleLogging(LogLevel minLevel)
 		{
 			ConsoleTarget consoleTarget = new ConsoleTarget();
@@ -33,7 +31,6 @@ namespace NLog.Config
 			config.LoggingRules.Add(rule);
 			LogManager.Configuration = config;
 		}
-#endif
 
 		/// <summary>
 		/// Configures NLog for to log to the specified target so that all messages 
@@ -59,7 +56,6 @@ namespace NLog.Config
 			LogManager.Configuration = config;
 		}
 
-#if !SILVERLIGHT2 && !SILVERLIGHT3 && !WINDOWS_PHONE
 		/// <summary>
 		/// Configures NLog for file logging so that all messages above and including
 		/// the <see cref="LogLevel.Info"/> level are written to the specified file.
@@ -76,13 +72,11 @@ namespace NLog.Config
 		/// </summary>
 		/// <param name="fileName">Log file name.</param>
 		/// <param name="minLevel">The minimal logging level.</param>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Target is disposed elsewhere.")]
 		public static void ConfigureForFileLogging(string fileName, LogLevel minLevel)
 		{
 			FileTarget target = new FileTarget();
 			target.FileName = fileName;
 			ConfigureForTargetLogging(target, minLevel);
 		}
-#endif
 	}
 }

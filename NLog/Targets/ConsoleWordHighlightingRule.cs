@@ -1,5 +1,4 @@
 
-#if !NET_CF && !SILVERLIGHT
 
 namespace NLog.Targets
 {
@@ -132,4 +131,3 @@ namespace NLog.Targets
 	}
 }
 
-#endif

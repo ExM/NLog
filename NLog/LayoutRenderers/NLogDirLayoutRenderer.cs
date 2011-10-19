@@ -1,5 +1,4 @@
 
-#if !SILVERLIGHT
 
 namespace NLog.LayoutRenderers
 {
@@ -21,11 +20,7 @@ namespace NLog.LayoutRenderers
 		/// </summary>
 		static NLogDirLayoutRenderer()
 		{
-#if !NET_CF
 			NLogDir = Path.GetDirectoryName(typeof(LogManager).Assembly.Location);
-#else
-			NLogDir = Path.GetDirectoryName(typeof(LogManager).Assembly.GetName().CodeBase);
-#endif
 		}
 
 		/// <summary>
@@ -66,5 +61,3 @@ namespace NLog.LayoutRenderers
 		}
 	}
 }
-
-#endif

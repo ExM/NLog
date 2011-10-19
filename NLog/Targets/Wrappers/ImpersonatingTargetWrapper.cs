@@ -1,6 +1,4 @@
 
-#if !NET_CF && !SILVERLIGHT
-
 namespace NLog.Targets.Wrappers
 {
 	using System;
@@ -231,5 +229,3 @@ namespace NLog.Targets.Wrappers
 		}
 	}
 }
-
-#endif

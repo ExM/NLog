@@ -74,7 +74,6 @@ namespace NLog.Config
 			this.Initialize(reader, fileName, ignoreErrors);
 		}
 
-#if !SILVERLIGHT
 		/// <summary>
 		/// Initializes a new instance of the <see cref="XmlLoggingConfiguration" /> class.
 		/// </summary>
@@ -105,9 +104,7 @@ namespace NLog.Config
 				this.Initialize(reader, fileName, ignoreErrors);
 			}
 		}
-#endif
 
-#if !NET_CF && !SILVERLIGHT
 		/// <summary>
 		/// Gets the default <see cref="LoggingConfiguration" /> object by parsing 
 		/// the application configuration file (<c>app.exe.config</c>).
@@ -120,7 +117,6 @@ namespace NLog.Config
 				return o as LoggingConfiguration;
 			}
 		}
-#endif
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the configuration files
@@ -176,7 +172,6 @@ namespace NLog.Config
 			return s;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Target is disposed elsewhere.")]
 		private static Target WrapWithAsyncTargetWrapper(Target target)
 		{
 			var asyncTargetWrapper = new AsyncTargetWrapper();
@@ -203,13 +198,8 @@ namespace NLog.Config
 				if (fileName != null)
 				{
 					InternalLogger.Info("Configuring from an XML element in {0}...", fileName);
-#if SILVERLIGHT
-					string key = fileName;
-#else
 					string key = Path.GetFullPath(fileName);
-#endif
 					this.visitedFile[key] = true;
-
 					this.originalFileName = fileName;
 					this.ParseTopLevel(content, Path.GetDirectoryName(fileName));
 				}
@@ -235,12 +225,7 @@ namespace NLog.Config
 
 		private void ConfigureFromFile(string fileName)
 		{
-#if SILVERLIGHT
-			// file names are relative to XAP
-			string key = fileName;
-#else
 			string key = Path.GetFullPath(fileName);
-#endif
 			if (this.visitedFile.ContainsKey(key))
 			{
 				return;
@@ -286,9 +271,7 @@ namespace NLog.Config
 			this.AutoReload = nlogElement.GetOptionalBooleanAttribute("autoReload", false);
 			LogManager.ThrowExceptions = nlogElement.GetOptionalBooleanAttribute("throwExceptions", LogManager.ThrowExceptions);
 			InternalLogger.LogToConsole = nlogElement.GetOptionalBooleanAttribute("internalLogToConsole", InternalLogger.LogToConsole);
-#if !NET_CF
 			InternalLogger.LogToConsoleError = nlogElement.GetOptionalBooleanAttribute("internalLogToConsoleError", InternalLogger.LogToConsoleError);
-#endif
 			InternalLogger.LogFile = nlogElement.GetOptionalAttribute("internalLogFile", InternalLogger.LogFile);
 			InternalLogger.LogLevel = LogLevel.FromString(nlogElement.GetOptionalAttribute("internalLogLevel", InternalLogger.LogLevel.Name));
 			LogManager.GlobalThreshold = LogLevel.FromString(nlogElement.GetOptionalAttribute("globalThreshold", LogManager.GlobalThreshold.Name));
@@ -611,7 +594,6 @@ namespace NLog.Config
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2001:AvoidCallingProblematicMethods", MessageId = "System.Reflection.Assembly.LoadFrom", Justification = "Need to load external assembly.")]
 		private void ParseExtensionsElement(NLogXmlElement extensionsElement, string baseDirectory)
 		{
 			extensionsElement.AssertName("extensions");
@@ -631,23 +613,14 @@ namespace NLog.Config
 					this.configurationItemFactory.RegisterType(Type.GetType(type, true), prefix);
 				}
 
-#if !WINDOWS_PHONE
 				string assemblyFile = addElement.GetOptionalAttribute("assemblyFile", null);
 				if (assemblyFile != null)
 				{
 					try
 					{
-#if SILVERLIGHT
-								var si = Application.GetResourceStream(new Uri(assemblyFile, UriKind.Relative));
-								var assemblyPart = new AssemblyPart();
-								Assembly asm = assemblyPart.Load(si.Stream);
-#else
-
 						string fullFileName = Path.Combine(baseDirectory, assemblyFile);
 						InternalLogger.Info("Loading assembly file: {0}", fullFileName);
-
 						Assembly asm = Assembly.LoadFrom(fullFileName);
-#endif
 						this.configurationItemFactory.RegisterItemsFromAssembly(asm, prefix);
 					}
 					catch (Exception exception)
@@ -673,14 +646,7 @@ namespace NLog.Config
 					try
 					{
 						InternalLogger.Info("Loading assembly name: {0}", assemblyName);
-#if SILVERLIGHT
-						var si = Application.GetResourceStream(new Uri(assemblyName + ".dll", UriKind.Relative));
-						var assemblyPart = new AssemblyPart();
-						Assembly asm = assemblyPart.Load(si.Stream);
-#else
 						Assembly asm = Assembly.Load(assemblyName);
-#endif
-
 						this.configurationItemFactory.RegisterItemsFromAssembly(asm, prefix);
 					}
 					catch (Exception exception)
@@ -699,7 +665,6 @@ namespace NLog.Config
 
 					continue;
 				}
-#endif
 			}
 		}
 
@@ -718,12 +683,7 @@ namespace NLog.Config
 					newFileName = Path.Combine(baseDirectory, newFileName);
 				}
 
-#if SILVERLIGHT
-				newFileName = newFileName.Replace("\\", "/");
-				if (Application.GetResourceStream(new Uri(newFileName, UriKind.Relative)) != null)
-#else
 				if (File.Exists(newFileName))
-#endif
 				{
 					InternalLogger.Debug("Including file '{0}'", newFileName);
 					this.ConfigureFromFile(newFileName);

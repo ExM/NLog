@@ -1,8 +1,6 @@
 
 #define TRACE
 
-#if !NET_CF && !SILVERLIGHT
-
 namespace NLog.Targets
 {
 	using System.Diagnostics;
@@ -50,4 +48,3 @@ namespace NLog.Targets
 	}
 }
 
-#endif

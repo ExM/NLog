@@ -1,6 +1,4 @@
 
-#if !NET_CF && !SILVERLIGHT
-
 namespace NLog.Internal
 {
 	using System.Net.Mail;
@@ -22,5 +20,3 @@ namespace NLog.Internal
 #endif
 	}
 }
-
-#endif

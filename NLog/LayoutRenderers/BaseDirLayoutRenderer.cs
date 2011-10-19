@@ -1,6 +1,4 @@
 
-#if !SILVERLIGHT
-
 namespace NLog.LayoutRenderers
 {
 	using System;
@@ -23,11 +21,7 @@ namespace NLog.LayoutRenderers
 		/// </summary>
 		public BaseDirLayoutRenderer()
 		{
-#if !NET_CF
 			this.baseDir = AppDomain.CurrentDomain.BaseDirectory;
-#else
-			this.baseDir = NLog.Internal.CompactFrameworkHelper.GetExeBaseDir();
-#endif
 		}
 
 		/// <summary>
@@ -65,4 +59,3 @@ namespace NLog.LayoutRenderers
 	}
 }
 
-#endif

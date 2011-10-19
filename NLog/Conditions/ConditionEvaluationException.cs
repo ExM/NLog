@@ -6,9 +6,7 @@ namespace NLog.Conditions
 	/// <summary>
 	/// Exception during evaluation of condition expression.
 	/// </summary>
-#if !NET_CF && !SILVERLIGHT
 	[Serializable]
-#endif
 	public class ConditionEvaluationException : Exception 
 	{
 		/// <summary>
@@ -37,7 +35,6 @@ namespace NLog.Conditions
 		{
 		}
 
-#if !NET_CF && !SILVERLIGHT
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ConditionEvaluationException" /> class.
 		/// </summary>
@@ -53,6 +50,5 @@ namespace NLog.Conditions
 			: base(info, context)
 		{
 		}
-#endif
 	}
 }

@@ -1,5 +1,5 @@
 
-#if !NET_CF && !MONO && !SILVERLIGHT
+#if !MONO
 
 namespace NLog.LayoutRenderers
 {

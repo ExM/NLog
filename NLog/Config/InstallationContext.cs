@@ -13,7 +13,6 @@ namespace NLog.Config
 	/// </summary>
 	public sealed class InstallationContext : IDisposable
 	{
-#if !SILVERLIGHT && !NET_CF
 		/// <summary>
 		/// Mapping between log levels and console output colors.
 		/// </summary>
@@ -26,7 +25,6 @@ namespace NLog.Config
 			{ LogLevel.Error, ConsoleColor.Red },
 			{ LogLevel.Fatal, ConsoleColor.DarkRed },
 		};
-#endif
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InstallationContext"/> class.
@@ -155,7 +153,6 @@ namespace NLog.Config
 					message = string.Format(CultureInfo.InvariantCulture, message, arguments);
 				}
 
-#if !SILVERLIGHT && !NET_CF
 				var oldColor = Console.ForegroundColor;
 				Console.ForegroundColor = logLevel2ConsoleColor[logLevel];
 
@@ -167,9 +164,6 @@ namespace NLog.Config
 				{
 					Console.ForegroundColor = oldColor;
 				}
-#else
-				this.LogOutput.WriteLine(message);
-#endif
 			}
 		}
 	}

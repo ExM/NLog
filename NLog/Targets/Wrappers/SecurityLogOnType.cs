@@ -1,12 +1,9 @@
 
-#if !NET_CF && !SILVERLIGHT
-
 namespace NLog.Targets.Wrappers
 {
 	/// <summary>
 	/// Logon type.
 	/// </summary>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Valid security logon type is required.")]
 	public enum SecurityLogOnType : int
 	{
 		/// <summary>
@@ -73,5 +70,3 @@ namespace NLog.Targets.Wrappers
 		NewCredentials = 9,
 	}
 }
-
-#endif

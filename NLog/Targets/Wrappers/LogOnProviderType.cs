@@ -1,5 +1,4 @@
 
-#if !NET_CF && !SILVERLIGHT
 
 namespace NLog.Targets.Wrappers
 {
@@ -19,5 +18,3 @@ namespace NLog.Targets.Wrappers
 		Default = 0,
 	}
 }
-
-#endif

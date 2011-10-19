@@ -38,10 +38,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyBuildInfo.cs" />
-    <Compile Include="ComInterop\ComLogger.cs" />
-    <Compile Include="ComInterop\ComLogManager.cs" />
-    <Compile Include="ComInterop\IComLogger.cs" />
-    <Compile Include="ComInterop\IComLogManager.cs" />
     <Compile Include="Common\AsyncContinuation.cs" />
     <Compile Include="Common\AsyncHelpers.cs" />
     <Compile Include="Common\AsynchronousAction.cs" />
@@ -106,7 +102,6 @@
     <Compile Include="GlobalDiagnosticsContext.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Internal\AspHelper.cs" />
-    <Compile Include="Internal\CompactFrameworkHelper.cs" />
     <Compile Include="Internal\CompilerAttributes.cs" />
     <Compile Include="Internal\CurrentTimeGetter.cs" />
     <Compile Include="Internal\DictionaryAdapter.cs" />
@@ -127,7 +122,6 @@
     <Compile Include="Internal\ISmtpClient.cs" />
     <Compile Include="Internal\ISupportsInitialize.cs" />
     <Compile Include="Internal\IUsesStackTrace.cs" />
-    <Compile Include="Internal\LocalizableAttribute.cs" />
     <Compile Include="Internal\LoggerConfiguration.cs" />
     <Compile Include="Internal\MultiFileWatcher.cs" />
     <Compile Include="Internal\MySmtpClient.cs" />
@@ -137,8 +131,6 @@
     <Compile Include="Internal\NetworkSenders\ISocket.cs" />
     <Compile Include="Internal\NetworkSenders\NetworkSender.cs" />
     <Compile Include="Internal\NetworkSenders\NetworkSenderFactory.cs" />
-    <Compile Include="Internal\NetworkSenders\SocketAsyncEventArgs.cs" />
-    <Compile Include="Internal\NetworkSenders\SocketError.cs" />
     <Compile Include="Internal\NetworkSenders\SocketProxy.cs" />
     <Compile Include="Internal\NetworkSenders\TcpNetworkSender.cs" />
     <Compile Include="Internal\NetworkSenders\UdpNetworkSender.cs" />
@@ -170,7 +162,6 @@
     <Compile Include="LayoutRenderers\CallSiteLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\CounterLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\DateLayoutRenderer.cs" />
-    <Compile Include="LayoutRenderers\DocumentUriLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\EnvironmentLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\EventContextLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\ExceptionLayoutRenderer.cs" />
@@ -203,8 +194,6 @@
     <Compile Include="LayoutRenderers\QueryPerformanceCounterLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\RegistryLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\ShortDateLayoutRenderer.cs" />
-    <Compile Include="LayoutRenderers\SilverlightApplicationInfoLayoutRenderer.cs" />
-    <Compile Include="LayoutRenderers\SilverlightApplicationInfoOption.cs" />
     <Compile Include="LayoutRenderers\SpecialFolderLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\StackTraceFormat.cs" />
     <Compile Include="LayoutRenderers\StackTraceLayoutRenderer.cs" />

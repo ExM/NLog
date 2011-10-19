@@ -1,6 +1,4 @@
 
-#if !SILVERLIGHT || (WINDOWS_PHONE && !WINDOWS_PHONE_7)
-
 namespace NLog.Internal.NetworkSenders
 {
 	using System;
@@ -37,7 +35,6 @@ namespace NLog.Internal.NetworkSenders
 		/// <param name="socketType">Type of the socket.</param>
 		/// <param name="protocolType">Type of the protocol.</param>
 		/// <returns>Implementation of <see cref="ISocket"/> to use.</returns>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Socket is disposed elsewhere.")]
 		protected internal virtual ISocket CreateSocket(AddressFamily addressFamily, SocketType socketType, ProtocolType protocolType)
 		{
 			return new SocketProxy(addressFamily, socketType, protocolType);
@@ -87,7 +84,6 @@ namespace NLog.Internal.NetworkSenders
 		/// <param name="length">Number of bytes to send.</param>
 		/// <param name="asyncContinuation">The async continuation to be invoked after the buffer has been sent.</param>
 		/// <remarks>To be overridden in inheriting classes.</remarks>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Dispose() is called in the event handler.")]
 		protected override void DoSend(byte[] bytes, int offset, int length, AsyncContinuation asyncContinuation)
 		{
 			lock (this)
@@ -125,5 +121,3 @@ namespace NLog.Internal.NetworkSenders
 		}
 	}
 }
-
-#endif

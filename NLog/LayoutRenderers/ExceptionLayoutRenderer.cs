@@ -147,14 +147,10 @@ namespace NLog.LayoutRenderers
 
 		private static void AppendMethod(StringBuilder sb, Exception ex)
 		{
-#if SILVERLIGHT || NET_CF
-			sb.Append(ParseMethodNameFromStackTrace(ex.StackTrace));
-#else
 			if (ex.TargetSite != null)
 			{
 				sb.Append(ex.TargetSite.ToString());
 			}
-#endif
 		}
 
 		private static void AppendStackTrace(StringBuilder sb, Exception ex)
@@ -218,55 +214,5 @@ namespace NLog.LayoutRenderers
 
 			return dataTargets.ToArray();
 		}
-
-#if SILVERLIGHT || NET_CF
-		private static string ParseMethodNameFromStackTrace(string stackTrace)
-		{
-			// get the first line of the stack trace
-			string stackFrameLine;
-
-			int p = stackTrace.IndexOfAny(new[] { '\r', '\n' });
-			if (p >= 0)
-			{
-				stackFrameLine = stackTrace.Substring(0, p);
-			}
-			else
-			{
-				stackFrameLine = stackTrace;
-			}
-
-			// stack trace is composed of lines which look like this
-			//
-			// at NLog.UnitTests.LayoutRenderers.ExceptionTests.GenericClass`3.Method2[T1,T2,T3](T1 aaa, T2 b, T3 o, Int32 i, DateTime now, Nullable`1 gfff, List`1[] something)
-			//
-			// "at " prefix can be localized so we cannot hard-code it but it's followed by a space, class name (which does not have a space in it) and opening paranthesis
-			int lastSpace = -1;
-			int startPos = 0;
-			int endPos = stackFrameLine.Length;
-
-			for (int i = 0; i < stackFrameLine.Length; ++i)
-			{
-				switch (stackFrameLine[i])
-				{
-					case ' ':
-						lastSpace = i;
-						break;
-
-					case '(':
-						startPos = lastSpace + 1;
-						break;
-
-					case ')':
-						endPos = i + 1;
-
-						// end the loop
-						i = stackFrameLine.Length;
-						break;
-				}
-			}
-
-			return stackTrace.Substring(startPos, endPos - startPos);
-		}
-#endif
 	}
 }

@@ -26,14 +26,12 @@ namespace NLog.Targets
 	[Target("Console")]
 	public sealed class ConsoleTarget : TargetWithLayoutHeaderAndFooter
 	{
-#if !NET_CF
 		/// <summary>
 		/// Gets or sets a value indicating whether to send the log messages to the standard error instead of the standard output.
 		/// </summary>
 		/// <docgen category='Console Options' order='10' />
 		[DefaultValue(false)]
 		public bool Error { get; set; }
-#endif
 
 		/// <summary>
 		/// Initializes the target.
@@ -75,7 +73,6 @@ namespace NLog.Targets
 
 		private void Output(string s)
 		{
-#if !NET_CF
 			if (this.Error)
 			{
 				Console.Error.WriteLine(s);
@@ -84,9 +81,6 @@ namespace NLog.Targets
 			{
 				Console.Out.WriteLine(s);
 			}
-#else
-			Console.WriteLine(s);
-#endif
 		}
 	}
 }

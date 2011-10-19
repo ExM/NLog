@@ -1,5 +1,4 @@
 
-#if !SILVERLIGHT2 && !SILVERLIGHT3 && !WINDOWS_PHONE
 
 namespace NLog.Targets
 {
@@ -47,16 +46,10 @@ namespace NLog.Targets
 			this.ArchiveAboveSize = -1;
 			this.ConcurrentWriteAttempts = 10;
 			this.ConcurrentWrites = true;
-#if SILVERLIGHT
-			this.Encoding = Encoding.UTF8;
-#else
 			this.Encoding = Encoding.Default;
-#endif
 			this.BufferSize = 32768;
 			this.AutoFlush = true;
-#if !SILVERLIGHT && !NET_CF
 			this.FileAttributes = Win32FileAttributes.Normal;
-#endif
 			this.NewLineChars = EnvironmentHelper.NewLine;
 			this.EnableFileDelete = true;
 			this.OpenFileCacheTimeout = -1;
@@ -129,14 +122,12 @@ namespace NLog.Targets
 		[DefaultValue(true)]
 		public bool EnableFileDelete { get; set; }
 
-#if !NET_CF && !SILVERLIGHT
 		/// <summary>
 		/// Gets or sets the file attributes (Windows only).
 		/// </summary>
 		/// <docgen category='Output Options' order='10' />
 		[Advanced]
 		public Win32FileAttributes FileAttributes { get; set; }
-#endif
 
 		/// <summary>
 		/// Gets or sets the line ending mode.
@@ -433,9 +424,7 @@ namespace NLog.Targets
 					}
 					else if (this.ConcurrentWrites)
 					{
-#if NET_CF || SILVERLIGHT
-						this.appenderFactory = RetryingMultiProcessFileAppender.TheFactory;
-#elif MONO
+#if MONO
 						//
 						// mono on Windows uses mutexes, on Unix - special appender
 						//
@@ -464,9 +453,7 @@ namespace NLog.Targets
 					}
 					else if (this.ConcurrentWrites)
 					{
-#if NET_CF || SILVERLIGHT
-						this.appenderFactory = RetryingMultiProcessFileAppender.TheFactory;
-#elif MONO
+#if MONO
 						//
 						// mono on Windows uses mutexes, on Unix - special appender
 						//
@@ -727,11 +714,7 @@ namespace NLog.Targets
 
 			try
 			{
-#if SILVERLIGHT
-				foreach (string s in Directory.EnumerateFiles(dirName, fileNameMask))
-#else
 				foreach (string s in Directory.GetFiles(dirName, fileNameMask))
-#endif
 				{
 					string baseName = Path.GetFileName(s);
 					string number = baseName.Substring(firstPart, baseName.Length - trailerLength - firstPart);
@@ -1150,5 +1133,3 @@ namespace NLog.Targets
 		}
 	}
 }
-
-#endif

@@ -15,11 +15,9 @@ namespace NLog
 	{
 		private static readonly LogFactory globalFactory = new LogFactory();
 
-#if !NET_CF && !SILVERLIGHT
 		/// <summary>
 		/// Initializes static members of the LogManager class.
 		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Significant logic in .cctor()")]
 		static LogManager()
 		{
 			try
@@ -36,7 +34,6 @@ namespace NLog
 				InternalLogger.Warn("Error setting up termiation events: {0}", exception);
 			}
 		}
-#endif
 
 		/// <summary>
 		/// Prevents a default instance of the LogManager class from being created.
@@ -54,7 +51,6 @@ namespace NLog
 			remove { globalFactory.ConfigurationChanged -= value; }
 		}
 
-#if !NET_CF && !SILVERLIGHT
 		/// <summary>
 		/// Occurs when logging <see cref="Configuration" /> gets reloaded.
 		/// </summary>
@@ -63,7 +59,7 @@ namespace NLog
 			add { globalFactory.ConfigurationReloaded += value; }
 			remove { globalFactory.ConfigurationReloaded -= value; }
 		}
-#endif
+
 		/// <summary>
 		/// Gets or sets a value indicating whether NLog should throw exceptions. 
 		/// By default exceptions are not thrown under any circumstances.
@@ -92,7 +88,7 @@ namespace NLog
 			set { globalFactory.GlobalThreshold = value; }
 		}
 
-#if !NET_CF
+
 		/// <summary>
 		/// Gets the logger named after the currently-being-initialized class.
 		/// </summary>
@@ -102,12 +98,7 @@ namespace NLog
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static Logger GetCurrentClassLogger()
 		{
-#if SILVERLIGHT
-			StackFrame frame = new StackTrace().GetFrame(1);
-#else
 			StackFrame frame = new StackFrame(1, false);
-#endif
-
 			return globalFactory.GetLogger(frame.GetMethod().DeclaringType.FullName);
 		}
 
@@ -121,14 +112,9 @@ namespace NLog
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static Logger GetCurrentClassLogger(Type loggerType)
 		{
-#if SILVERLIGHT
-			StackFrame frame = new StackTrace().GetFrame(1);
-#else
 			StackFrame frame = new StackFrame(1, false);
-#endif
 			return globalFactory.GetLogger(frame.GetMethod().DeclaringType.FullName, loggerType);
 		}
-#endif
 
 		/// <summary>
 		/// Creates a logger that discards all log messages.
@@ -170,62 +156,62 @@ namespace NLog
 			globalFactory.ReconfigExistingLoggers();
 		}
 
-#if !SILVERLIGHT
-/// <summary>
-/// Flush any pending log messages (in case of asynchronous targets).
-/// </summary>
-public static void Flush()
-{
-	globalFactory.Flush();
-}
 
-/// <summary>
-/// Flush any pending log messages (in case of asynchronous targets).
-/// </summary>
-/// <param name="timeout">Maximum time to allow for the flush. Any messages after that time will be discarded.</param>
-public static void Flush(TimeSpan timeout)
-{
-	globalFactory.Flush(timeout);
-}
+		/// <summary>
+		/// Flush any pending log messages (in case of asynchronous targets).
+		/// </summary>
+		public static void Flush()
+		{
+			globalFactory.Flush();
+		}
 
-/// <summary>
-/// Flush any pending log messages (in case of asynchronous targets).
-/// </summary>
-/// <param name="timeoutMilliseconds">Maximum time to allow for the flush. Any messages after that time will be discarded.</param>
-public static void Flush(int timeoutMilliseconds)
-{
-	globalFactory.Flush(timeoutMilliseconds);
-}
-#endif
+		/// <summary>
+		/// Flush any pending log messages (in case of asynchronous targets).
+		/// </summary>
+		/// <param name="timeout">Maximum time to allow for the flush. Any messages after that time will be discarded.</param>
+		public static void Flush(TimeSpan timeout)
+		{
+			globalFactory.Flush(timeout);
+		}
 
-/// <summary>
-/// Flush any pending log messages (in case of asynchronous targets).
-/// </summary>
-/// <param name="asyncContinuation">The asynchronous continuation.</param>
-public static void Flush(AsyncContinuation asyncContinuation)
-{
-	globalFactory.Flush(asyncContinuation);
-}
+		/// <summary>
+		/// Flush any pending log messages (in case of asynchronous targets).
+		/// </summary>
+		/// <param name="timeoutMilliseconds">Maximum time to allow for the flush. Any messages after that time will be discarded.</param>
+		public static void Flush(int timeoutMilliseconds)
+		{
+			globalFactory.Flush(timeoutMilliseconds);
+		}
 
-/// <summary>
-/// Flush any pending log messages (in case of asynchronous targets).
-/// </summary>
-/// <param name="asyncContinuation">The asynchronous continuation.</param>
-/// <param name="timeout">Maximum time to allow for the flush. Any messages after that time will be discarded.</param>
-public static void Flush(AsyncContinuation asyncContinuation, TimeSpan timeout)
-{
-	globalFactory.Flush(asyncContinuation, timeout);
-}
 
-/// <summary>
-/// Flush any pending log messages (in case of asynchronous targets).
-/// </summary>
-/// <param name="asyncContinuation">The asynchronous continuation.</param>
-/// <param name="timeoutMilliseconds">Maximum time to allow for the flush. Any messages after that time will be discarded.</param>
-public static void Flush(AsyncContinuation asyncContinuation, int timeoutMilliseconds)
-{
-	globalFactory.Flush(asyncContinuation, timeoutMilliseconds);
-}
+		/// <summary>
+		/// Flush any pending log messages (in case of asynchronous targets).
+		/// </summary>
+		/// <param name="asyncContinuation">The asynchronous continuation.</param>
+		public static void Flush(AsyncContinuation asyncContinuation)
+		{
+			globalFactory.Flush(asyncContinuation);
+		}
+
+		/// <summary>
+		/// Flush any pending log messages (in case of asynchronous targets).
+		/// </summary>
+		/// <param name="asyncContinuation">The asynchronous continuation.</param>
+		/// <param name="timeout">Maximum time to allow for the flush. Any messages after that time will be discarded.</param>
+		public static void Flush(AsyncContinuation asyncContinuation, TimeSpan timeout)
+		{
+			globalFactory.Flush(asyncContinuation, timeout);
+		}
+
+		/// <summary>
+		/// Flush any pending log messages (in case of asynchronous targets).
+		/// </summary>
+		/// <param name="asyncContinuation">The asynchronous continuation.</param>
+		/// <param name="timeoutMilliseconds">Maximum time to allow for the flush. Any messages after that time will be discarded.</param>
+		public static void Flush(AsyncContinuation asyncContinuation, int timeoutMilliseconds)
+		{
+			globalFactory.Flush(asyncContinuation, timeoutMilliseconds);
+		}
 
 		/// <summary>Decreases the log enable counter and if it reaches -1 
 		/// the logs are disabled.</summary>
@@ -258,7 +244,6 @@ public static void Flush(AsyncContinuation asyncContinuation, int timeoutMillise
 			return globalFactory.IsLoggingEnabled();
 		}
 
-#if !NET_CF && !SILVERLIGHT
 		private static void SetupTerminationEvents()
 		{
 			AppDomain.CurrentDomain.ProcessExit += TurnOffLogging;
@@ -273,6 +258,5 @@ public static void Flush(AsyncContinuation asyncContinuation, int timeoutMillise
 			Configuration = null;
 			InternalLogger.Info("Logger has been shut down.");
 		}
-#endif
 	}
 }

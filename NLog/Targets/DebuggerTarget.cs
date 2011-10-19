@@ -1,5 +1,4 @@
 
-#if !NET_CF
 
 namespace NLog.Targets
 {
@@ -65,4 +64,3 @@ namespace NLog.Targets
 	}
 }
 
-#endif

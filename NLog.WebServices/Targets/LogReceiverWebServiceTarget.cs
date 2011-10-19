@@ -195,7 +195,6 @@ namespace NLog.Targets
 			return networkLogEvents;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Client is disposed asynchronously.")]
 		private void Send(NLogEvents events, IEnumerable<AsyncLogEventInfo> asyncContinuations)
 		{
 			if (!this.OnSend(events, asyncContinuations))

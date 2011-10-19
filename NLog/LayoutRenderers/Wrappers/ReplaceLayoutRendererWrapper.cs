@@ -61,11 +61,7 @@ namespace NLog.LayoutRenderers.Wrappers
 				regexString = System.Text.RegularExpressions.Regex.Escape(regexString);
 			}
 
-#if SILVERLIGHT
-			RegexOptions regexOptions = RegexOptions.None;
-#else
 			RegexOptions regexOptions = RegexOptions.Compiled;
-#endif
 			if (this.IgnoreCase)
 			{
 				regexOptions |= RegexOptions.IgnoreCase;

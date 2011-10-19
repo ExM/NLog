@@ -1,5 +1,4 @@
 
-#if !SILVERLIGHT2 && !SILVERLIGHT3 && !WINDOWS_PHONE
 
 namespace NLog.Targets
 {
@@ -18,5 +17,3 @@ namespace NLog.Targets
 		Rolling, 
 	}
 }
-
-#endif

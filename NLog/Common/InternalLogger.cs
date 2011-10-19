@@ -19,18 +19,13 @@ namespace NLog.Common
 		/// <summary>
 		/// Initializes static members of the InternalLogger class.
 		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Significant logic in .cctor()")]
 		static InternalLogger()
 		{
-#if !NET_CF && !SILVERLIGHT
 			LogToConsole = GetSetting("nlog.internalLogToConsole", "NLOG_INTERNAL_LOG_TO_CONSOLE", false);
 			LogToConsoleError = GetSetting("nlog.internalLogToConsoleError", "NLOG_INTERNAL_LOG_TO_CONSOLE_ERROR", false);
 			LogLevel = GetSetting("nlog.internalLogLevel", "NLOG_INTERNAL_LOG_LEVEL", LogLevel.Info);
 			LogFile = GetSetting("nlog.internalLogFile", "NLOG_INTERNAL_LOG_FILE", string.Empty);
 			Info("NLog internal logger initialized.");
-#else
-			LogLevel = LogLevel.Info;
-#endif
 			IncludeTimestamp = true;
 		}
 
@@ -323,7 +318,6 @@ namespace NLog.Common
 			}
 		}
 
-#if !NET_CF && !SILVERLIGHT
 		private static string GetSettingString(string configName, string envName)
 		{
 			string settingValue = ConfigurationManager.AppSettings[configName];
@@ -390,6 +384,5 @@ namespace NLog.Common
 				return defaultValue;
 			}
 		}
-#endif
 	}
 }

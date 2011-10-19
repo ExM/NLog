@@ -1,6 +1,4 @@
 
-#if !NET_CF && !SILVERLIGHT
-
 namespace NLog.Targets
 {
 	using System;
@@ -276,4 +274,3 @@ namespace NLog.Targets
 	}
 }
 
-#endif

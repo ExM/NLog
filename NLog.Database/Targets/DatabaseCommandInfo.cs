@@ -1,14 +1,11 @@
-
-#if !SILVERLIGHT
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using NLog.Config;
+using NLog.Layouts;
 
 namespace NLog.Targets
 {
-	using System.Collections.Generic;
-	using System.ComponentModel;
-	using System.Data;
-	using NLog.Config;
-	using NLog.Layouts;
-
 	/// <summary>
 	/// Information about database command + parameters.
 	/// </summary>
@@ -61,5 +58,3 @@ namespace NLog.Targets
 		public IList<DatabaseParameterInfo> Parameters { get; private set; }
 	}
 }
-
-#endif

@@ -160,8 +160,6 @@ namespace NLog.Internal.FileAppenders
 			throw new InvalidOperationException("Should not be reached.");
 		}
 
-#if !NET_CF && !SILVERLIGHT
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Objects are disposed elsewhere")]
 		private FileStream WindowsCreateFile(string fileName, bool allowConcurrentWrite)
 		{
 			int fileShare = Win32FileNativeMethods.FILE_SHARE_READ;
@@ -195,7 +193,6 @@ namespace NLog.Internal.FileAppenders
 			returnValue.Seek(0, SeekOrigin.End);
 			return returnValue;
 		}
-#endif
 
 		private FileStream TryCreateFileStream(bool allowConcurrentWrite)
 		{
@@ -206,19 +203,15 @@ namespace NLog.Internal.FileAppenders
 				fileShare = FileShare.ReadWrite;
 			}
 
-#if !NET_CF
 			if (this.CreateFileParameters.EnableFileDelete && PlatformDetector.CurrentOS != RuntimeOS.Windows)
 			{
 				fileShare |= FileShare.Delete;
 			}
-#endif
 
-#if !NET_CF && !SILVERLIGHT
 			if (PlatformDetector.IsDesktopWin32)
 			{
 				return this.WindowsCreateFile(this.FileName, allowConcurrentWrite);
 			}
-#endif
 
 			return new FileStream(
 				this.FileName, 

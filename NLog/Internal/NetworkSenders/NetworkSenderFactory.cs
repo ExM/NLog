@@ -35,7 +35,6 @@ namespace NLog.Internal.NetworkSenders
 				return new HttpNetworkSender(url);
 			}
 
-#if !WINDOWS_PHONE_7
 			if (url.StartsWith("tcp://", StringComparison.OrdinalIgnoreCase))
 			{
 				return new TcpNetworkSender(url, AddressFamily.Unspecified);
@@ -50,9 +49,7 @@ namespace NLog.Internal.NetworkSenders
 			{
 				return new TcpNetworkSender(url, AddressFamily.InterNetworkV6);
 			}
-#endif
 
-#if !SILVERLIGHT || (WINDOWS_PHONE && !WINDOWS_PHONE_7)
 			if (url.StartsWith("udp://", StringComparison.OrdinalIgnoreCase))
 			{
 				return new UdpNetworkSender(url, AddressFamily.Unspecified);
@@ -67,7 +64,6 @@ namespace NLog.Internal.NetworkSenders
 			{
 				return new UdpNetworkSender(url, AddressFamily.InterNetworkV6);
 			}
-#endif
 
 			throw new ArgumentException("Unrecognized network address", "url");
 		}

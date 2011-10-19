@@ -1,5 +1,4 @@
 
-#if !NET_CF && !SILVERLIGHT
 
 namespace NLog.LayoutRenderers
 {
@@ -95,4 +94,3 @@ namespace NLog.LayoutRenderers
 	}
 }
 
-#endif

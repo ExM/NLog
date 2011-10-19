@@ -1,22 +1,19 @@
-
-#if !SILVERLIGHT
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Configuration;
+using System.Data;
+using System.Data.Common;
+using System.Globalization;
+using System.Reflection;
+using System.Text;
+using NLog.Common;
+using NLog.Config;
+using NLog.Internal;
+using NLog.Layouts;
 
 namespace NLog.Targets
 {
-	using System;
-	using System.Collections.Generic;
-	using System.ComponentModel;
-	using System.Configuration;
-	using System.Data;
-	using System.Data.Common;
-	using System.Globalization;
-	using System.Reflection;
-	using System.Text;
-	using NLog.Common;
-	using NLog.Config;
-	using NLog.Internal;
-	using NLog.Layouts;
-
 	/// <summary>
 	/// Writes log messages to the database using an ADO.NET provider.
 	/// </summary>
@@ -54,9 +51,7 @@ namespace NLog.Targets
 			this.UninstallDdlCommands = new List<DatabaseCommandInfo>();
 			this.DBProvider = "sqlserver";
 			this.DBHost = ".";
-#if !NET_CF
 			this.ConnectionStringsSettings = ConfigurationManager.ConnectionStrings;
-#endif
 		}
 
 		/// <summary>
@@ -91,13 +86,11 @@ namespace NLog.Targets
 		[DefaultValue("sqlserver")]
 		public string DBProvider { get; set; }
 
-#if !NET_CF
 		/// <summary>
 		/// Gets or sets the name of the connection string (as specified in <see href="http://msdn.microsoft.com/en-us/library/bf7sd233.aspx">&lt;connectionStrings&gt; configuration section</see>.
 		/// </summary>
 		/// <docgen category='Connection Options' order='10' />
 		public string ConnectionStringName { get; set; }
-#endif
 
 		/// <summary>
 		/// Gets or sets the connection string. When provided, it overrides the values
@@ -197,12 +190,10 @@ namespace NLog.Targets
 		[ArrayParameter(typeof(DatabaseParameterInfo), "parameter")]
 		public IList<DatabaseParameterInfo> Parameters { get; private set; }
 
-#if !NET_CF
 		internal DbProviderFactory ProviderFactory { get; set; }
 
 		// this is so we can mock the connection string without creating sub-processes
 		internal ConnectionStringSettingsCollection ConnectionStringsSettings { get; set;  }
-#endif
 
 		internal Type ConnectionType { get; set; }
 
@@ -240,13 +231,11 @@ namespace NLog.Targets
 		{
 			IDbConnection connection;
 
-#if !NET_CF
 			if (this.ProviderFactory != null)
 			{
 				connection = this.ProviderFactory.CreateConnection();
 			}
 			else
-#endif
 			{
 				connection = (IDbConnection)Activator.CreateInstance(this.ConnectionType);
 			}
@@ -260,14 +249,12 @@ namespace NLog.Targets
 		/// Initializes the target. Can be used by inheriting classes
 		/// to initialize logging.
 		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "connectionStrings", Justification = "Name of the config file section.")]
 		protected override void InitializeTarget()
 		{
 			base.InitializeTarget();
 
 			bool foundProvider = false;
 
-#if !NET_CF
 			if (!string.IsNullOrEmpty(this.ConnectionStringName))
 			{
 				// read connection string and provider factory from the configuration file
@@ -293,7 +280,6 @@ namespace NLog.Targets
 					}
 				}
 			}
-#endif
 
 			if (!foundProvider)
 			{
@@ -408,7 +394,6 @@ namespace NLog.Targets
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities", Justification = "It's up to the user to ensure proper quoting.")]
 		private void WriteEventToDatabase(LogEventInfo logEvent)
 		{
 			this.EnsureConnectionOpen(this.BuildConnectionString(logEvent));
@@ -517,7 +502,6 @@ namespace NLog.Targets
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities", Justification = "It's up to the user to ensure proper quoting.")]
 		private void RunInstallCommands(InstallationContext installationContext, IEnumerable<DatabaseCommandInfo> commands)
 		{
 			// create log event that will be used to render all layouts
@@ -582,5 +566,3 @@ namespace NLog.Targets
 		}
 	}
 }
-
-#endif

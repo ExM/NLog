@@ -6,9 +6,7 @@ namespace NLog
 	/// <summary>
 	/// Exception thrown during NLog configuration.
 	/// </summary>
-#if !NET_CF && !SILVERLIGHT
 	[Serializable]
-#endif
 	public class NLogConfigurationException : Exception
 	{
 		/// <summary>
@@ -37,7 +35,6 @@ namespace NLog
 		{
 		}
 
-#if !NET_CF && !SILVERLIGHT
 		/// <summary>
 		/// Initializes a new instance of the <see cref="NLogConfigurationException" /> class.
 		/// </summary>
@@ -53,6 +50,5 @@ namespace NLog
 			: base(info, context)
 		{
 		}
-#endif
 	}
 }

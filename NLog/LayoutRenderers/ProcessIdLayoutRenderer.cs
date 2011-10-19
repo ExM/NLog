@@ -1,6 +1,4 @@
 
-#if !SILVERLIGHT
-
 namespace NLog.LayoutRenderers
 {
 	using System.Globalization;
@@ -28,4 +26,3 @@ namespace NLog.LayoutRenderers
 	}
 }
 
-#endif

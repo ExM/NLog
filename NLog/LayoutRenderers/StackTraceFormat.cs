@@ -1,5 +1,4 @@
 
-#if !NET_CF
 
 namespace NLog.LayoutRenderers
 {
@@ -25,4 +24,3 @@ namespace NLog.LayoutRenderers
 	}
 }
 
-#endif

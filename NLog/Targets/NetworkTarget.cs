@@ -339,7 +339,6 @@ namespace NLog.Targets
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", Justification = "Using property names in message.")]
 		private void ChunkedSend(NetworkSender sender, byte[] buffer, AsyncContinuation continuation)
 		{
 			int tosend = buffer.Length;

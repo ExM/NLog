@@ -22,7 +22,6 @@ namespace NLog
 		private static readonly Assembly mscorlibAssembly = typeof(string).Assembly;
 		private static readonly Assembly systemAssembly = typeof(Debug).Assembly;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", Justification = "Using 'NLog' in message.")]
 		internal static void Write(Type loggerType, TargetWithFilterChain targets, LogEventInfo logEvent, LogFactory factory)
 		{
 			if (targets == null)
@@ -30,23 +29,16 @@ namespace NLog
 				return;
 			}
 
-#if !NET_CF
 			StackTraceUsage stu = targets.GetStackTraceUsage();
 
 			if (stu != StackTraceUsage.None && !logEvent.HasStackTrace)
 			{
 				StackTrace stackTrace;
-#if !SILVERLIGHT
 				stackTrace = new StackTrace(StackTraceSkipMethods, stu == StackTraceUsage.WithSource);
-#else
-				stackTrace = new StackTrace();
-#endif
-
 				int firstUserFrame = FindCallingMethodOnStackTrace(stackTrace, loggerType);
-
 				logEvent.SetStackTrace(stackTrace, firstUserFrame);
 			}
-#endif
+
 
 			int originalThreadId = Thread.CurrentThread.ManagedThreadId;
 			AsyncContinuation exceptionHandler = ex =>
@@ -69,7 +61,6 @@ namespace NLog
 			}
 		}
 
-#if !NET_CF
 		private static int FindCallingMethodOnStackTrace(StackTrace stackTrace, Type loggerType)
 		{
 			int firstUserFrame = 0;
@@ -119,7 +110,6 @@ namespace NLog
 
 			return false;
 		}
-#endif
 
 		private static bool WriteToTargetWithFilterChain(TargetWithFilterChain targetListHead, LogEventInfo logEvent, AsyncContinuation onException)
 		{

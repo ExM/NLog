@@ -127,7 +127,6 @@ namespace NLog.Internal.NetworkSenders
 		/// <remarks>To be overridden in inheriting classes.</remarks>
 		protected abstract void DoSend(byte[] bytes, int offset, int length, AsyncContinuation asyncContinuation);
 
-#if !WINDOWS_PHONE_7
 		/// <summary>
 		/// Parses the URI into an endpoint address.
 		/// </summary>
@@ -136,9 +135,6 @@ namespace NLog.Internal.NetworkSenders
 		/// <returns>Parsed endpoint.</returns>
 		protected virtual EndPoint ParseEndpointAddress(Uri uri, AddressFamily addressFamily)
 		{
-#if SILVERLIGHT
-			return new DnsEndPoint(uri.Host, uri.Port, addressFamily);
-#else
 			switch (uri.HostNameType)
 			{
 				case UriHostNameType.IPv4:
@@ -159,9 +155,7 @@ namespace NLog.Internal.NetworkSenders
 						throw new IOException("Cannot resolve '" + uri.Host + "' to an address in '" + addressFamily + "'");
 					}
 			}
-#endif
 		}
-#endif
 
 		private void Dispose(bool disposing)
 		{

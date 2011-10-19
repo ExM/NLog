@@ -1,5 +1,4 @@
 
-#if !NET_CF && !SILVERLIGHT
 
 namespace NLog.Targets.Wrappers
 {
@@ -29,5 +28,3 @@ namespace NLog.Targets.Wrappers
 		Delegation = 3
 	}
 }
-
-#endif

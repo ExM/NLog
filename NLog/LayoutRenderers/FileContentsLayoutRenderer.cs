@@ -23,11 +23,7 @@ namespace NLog.LayoutRenderers
 		/// </summary>
 		public FileContentsLayoutRenderer()
 		{
-#if SILVERLIGHT
-			this.Encoding = Encoding.UTF8;
-#else
 			this.Encoding = Encoding.Default;
-#endif
 			this.lastFileName = string.Empty;
 		}
 

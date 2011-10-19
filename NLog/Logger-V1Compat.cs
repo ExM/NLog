@@ -1,5 +1,4 @@
 
-#if !SILVERLIGHT
 
 namespace NLog
 {
@@ -3153,5 +3152,3 @@ namespace NLog
 		// end of generated code
 	}
 }
-
-#endif

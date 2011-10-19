@@ -1,6 +1,4 @@
 
-#if !NET_CF && !SILVERLIGHT
-
 namespace NLog.LayoutRenderers
 {
 	using System.Diagnostics;
@@ -83,5 +81,3 @@ namespace NLog.LayoutRenderers
 		}
 	}
 }
-
-#endif

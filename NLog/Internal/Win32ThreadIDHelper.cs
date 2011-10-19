@@ -1,10 +1,7 @@
 
-#if !SILVERLIGHT
-
 namespace NLog.Internal
 {
 	using System;
-	using System.Diagnostics.CodeAnalysis;
 	using System.IO;
 	using System.Runtime.InteropServices;
 	using System.Text;
@@ -75,5 +72,3 @@ namespace NLog.Internal
 		}
 	}
 }
-
-#endif

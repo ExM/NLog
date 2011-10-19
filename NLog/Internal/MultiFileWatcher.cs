@@ -1,5 +1,4 @@
 
-#if !NET_CF && !SILVERLIGHT
 
 namespace NLog.Internal
 {
@@ -65,7 +64,6 @@ namespace NLog.Internal
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Watcher is released in Dispose()")]
 		internal void Watch(string fileName)
 		{
 			var watcher = new FileSystemWatcher
@@ -100,4 +98,3 @@ namespace NLog.Internal
 	}
 }
 
-#endif

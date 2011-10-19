@@ -1,5 +1,4 @@
 
-#if !NET_CF && !SILVERLIGHT
 
 namespace NLog.Internal
 {
@@ -63,4 +62,3 @@ namespace NLog.Internal
 	}
 }
 
-#endif

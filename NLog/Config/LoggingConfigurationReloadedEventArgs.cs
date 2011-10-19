@@ -1,6 +1,4 @@
 
-#if !SILVERLIGHT && !NET_CF
-
 namespace NLog.Config
 {
 	using System;
@@ -34,5 +32,3 @@ namespace NLog.Config
 		public Exception Exception { get; private set; }
 	}
 }
-
-#endif

@@ -1,5 +1,4 @@
 
-#if !NET_CF && !SILVERLIGHT
 
 namespace NLog.Internal.FileAppenders
 {
@@ -129,7 +128,6 @@ namespace NLog.Internal.FileAppenders
 		/// <returns>
 		/// True if the operation succeeded, false otherwise.
 		/// </returns>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2001:AvoidCallingProblematicMethods", MessageId = "System.Runtime.InteropServices.SafeHandle.DangerousGetHandle", Justification = "Optimization")]
 		public override bool GetFileInfo(out DateTime lastWriteTime, out long fileLength)
 		{
 			return FileInfoHelper.Helper.GetFileInfo(FileName, this.file.SafeFileHandle.DangerousGetHandle(), out lastWriteTime, out fileLength);
@@ -166,5 +164,3 @@ namespace NLog.Internal.FileAppenders
 		}
 	}
 }
-
-#endif

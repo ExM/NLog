@@ -1,6 +1,4 @@
 
-#if !NET_CF && !SILVERLIGHT
-
 namespace NLog.Targets
 {
 	using System;
@@ -55,7 +53,6 @@ namespace NLog.Targets
 		/// <remarks>
 		/// The default value of the layout is: <code>${longdate}|${level:uppercase=true}|${logger}|${message}</code>
 		/// </remarks>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Justification = "This one is safe.")]
 		public MailTarget()
 		{
 			this.Body = "${message}${newline}";
@@ -172,7 +169,6 @@ namespace NLog.Targets
 		[DefaultValue(25)]
 		public int SmtpPort { get; set; }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "This is a factory method.")]
 		internal virtual ISmtpClient CreateSmtpClient()
 		{
 			return new MySmtpClient();
@@ -355,5 +351,3 @@ namespace NLog.Targets
 		}
 	}
 }
-
-#endif

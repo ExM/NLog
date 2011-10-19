@@ -1,6 +1,4 @@
 
-#if !SILVERLIGHT
-
 namespace NLog.LayoutRenderers
 {
 	using System.ComponentModel;
@@ -41,5 +39,3 @@ namespace NLog.LayoutRenderers
 		}
 	}
 }
-
-#endif

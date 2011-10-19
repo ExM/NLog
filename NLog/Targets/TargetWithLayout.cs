@@ -16,7 +16,6 @@ namespace NLog.Targets
 		/// <remarks>
 		/// The default value of the layout is: <code>${longdate}|${level:uppercase=true}|${logger}|${message}</code>
 		/// </remarks>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Justification = "This one is safe.")]
 		protected TargetWithLayout()
 		{
 			this.Layout = "${longdate}|${level:uppercase=true}|${logger}|${message}";

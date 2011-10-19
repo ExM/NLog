@@ -1,5 +1,4 @@
 
-#if !NET_CF && !SILVERLIGHT
 
 namespace NLog.Internal
 {
@@ -23,5 +22,3 @@ namespace NLog.Internal
 		void Send(MailMessage msg);
 	}
 }
-
-#endif

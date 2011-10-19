@@ -1,6 +1,4 @@
 
-#if !NET_CF
-
 namespace NLog.LayoutRenderers
 {
 	using System.ComponentModel;
@@ -25,10 +23,8 @@ namespace NLog.LayoutRenderers
 		{
 			this.ClassName = true;
 			this.MethodName = true;
-#if !SILVERLIGHT
 			this.FileName = false;
 			this.IncludeSourcePath = true;
-#endif
 		}
 
 		/// <summary>
@@ -45,7 +41,6 @@ namespace NLog.LayoutRenderers
 		[DefaultValue(true)]
 		public bool MethodName { get; set; }
 
-#if !SILVERLIGHT
 		/// <summary>
 		/// Gets or sets a value indicating whether to render the source file name and line number.
 		/// </summary>
@@ -59,7 +54,6 @@ namespace NLog.LayoutRenderers
 		/// <docgen category='Rendering Options' order='10' />
 		[DefaultValue(true)]
 		public bool IncludeSourcePath { get; set; }
-#endif
 
 		/// <summary>
 		/// Gets the level of stack trace information required by the implementing class.
@@ -68,12 +62,10 @@ namespace NLog.LayoutRenderers
 		{
 			get
 			{
-#if !SILVERLIGHT
 				if (this.FileName)
 				{
 					return StackTraceUsage.Max;
 				}
-#endif
 
 				return StackTraceUsage.WithoutSource;
 			}
@@ -119,7 +111,6 @@ namespace NLog.LayoutRenderers
 					}
 				}
 
-#if !SILVERLIGHT
 				if (this.FileName)
 				{
 					string fileName = frame.GetFileName();
@@ -140,10 +131,8 @@ namespace NLog.LayoutRenderers
 						builder.Append(")");
 					}
 				}
-#endif
 			}
 		}
 	}
 }
 
-#endif

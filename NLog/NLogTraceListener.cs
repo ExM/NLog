@@ -1,5 +1,4 @@
 
-#if !SILVERLIGHT
 
 namespace NLog
 {
@@ -22,9 +21,7 @@ namespace NLog
 		private LogFactory logFactory;
 		private LogLevel defaultLogLevel = LogLevel.Debug;
 		private bool attributesLoaded;
-#if !NET_CF
 		private bool autoLoggerName;
-#endif
 		private LogLevel forceLogLevel;
 
 		/// <summary>
@@ -88,7 +85,6 @@ namespace NLog
 			}
 		}
 
-#if !NET_CF
 		/// <summary>
 		/// Gets a value indicating whether the trace listener is thread safe.
 		/// </summary>
@@ -116,7 +112,6 @@ namespace NLog
 				this.autoLoggerName = value;
 			}
 		}
-#endif
 
 		/// <summary>
 		/// When overridden in a derived class, writes the specified message to the listener you create in the derived class.
@@ -177,7 +172,6 @@ namespace NLog
 			}
 		}
 
-#if !NET_CF
 		/// <summary>
 		/// Writes trace information, a data object and event information to the listener specific output.
 		/// </summary>
@@ -308,7 +302,6 @@ namespace NLog
 					return LogLevel.Debug;
 			}
 		}
-#endif
 
 		private void ProcessLogEventInfo(LogLevel logLevel, string loggerName, [Localizable(false)] string message, object[] arguments, int? eventId)
 		{
@@ -316,7 +309,6 @@ namespace NLog
 
 			ev.LoggerName = (loggerName ?? this.Name) ?? string.Empty;
 			
-#if !NET_CF
 			if (this.AutoLoggerName)
 			{
 				var stack = new StackTrace();
@@ -354,7 +346,6 @@ namespace NLog
 					}
 				}
 			}
-#endif
 
 			ev.TimeStamp = CurrentTimeGetter.Now;
 			ev.Message = message;
@@ -375,7 +366,6 @@ namespace NLog
 			if (!this.attributesLoaded)
 			{
 				this.attributesLoaded = true;
-#if !NET_CF
 				foreach (DictionaryEntry de in this.Attributes)
 				{
 					var key = (string)de.Key;
@@ -396,10 +386,8 @@ namespace NLog
 							break;
 					}
 				}
-#endif
 			}
 		}
 	}
 }
 
-#endif

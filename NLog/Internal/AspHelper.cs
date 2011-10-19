@@ -1,6 +1,4 @@
 
-#if !NET_CF && !SILVERLIGHT
-
 namespace NLog.Internal
 {
 	using System;
@@ -210,5 +208,3 @@ namespace NLog.Internal
 		}
 	}
 }
-
-#endif
