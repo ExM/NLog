@@ -1,5 +1,5 @@
-﻿<nlog>
+<nlog>
   <targets>
-    <target name='debug' type='Debug' layout='${message}' />
+	<target name='debug' type='Debug' layout='${message}' />
   </targets>
 </nlog>

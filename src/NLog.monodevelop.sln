@@ -44,7 +44,8 @@ Global
 		$2.inheritsScope = text/x-csharp
 		$2.scope = text/x-csharp
 		$0.TextStylePolicy = $3
-		$3.inheritsSet = VisualStudio
+		$3.TabWidth = 4
+		$3.inheritsSet = Mono
 		$3.inheritsScope = text/plain
 		$3.scope = text/plain
 		$0.TextStylePolicy = $4

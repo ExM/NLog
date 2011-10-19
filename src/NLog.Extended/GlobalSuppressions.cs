@@ -6,5 +6,4 @@
 // To add a suppression to this file, right-click the message in the 
 // Error List, point to "Suppress Message(s)", and click 
 // "In Project Suppression File". 
-// You do not need to add suppressions to this file manually. 
-
+// You do not need to add suppressions to this file manually.
