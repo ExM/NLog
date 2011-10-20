@@ -1,14 +1,13 @@
+using System;
+using System.Globalization;
 
 namespace NLog.Conditions
 {
-	using System;
-	using System.Globalization;
-
 	/// <summary>
 	/// Condition relational (<b>==</b>, <b>!=</b>, <b>&lt;</b>, <b>&lt;=</b>,
 	/// <b>&gt;</b> or <b>&gt;=</b>) expression.
 	/// </summary>
-	internal sealed class ConditionRelationalExpression : ConditionExpression
+	public sealed class ConditionRelationalExpression : ConditionExpression
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ConditionRelationalExpression" /> class.

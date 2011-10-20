@@ -1,17 +1,16 @@
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Reflection;
+using System.Text;
+using NLog.Common;
 
 namespace NLog.Conditions
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Globalization;
-	using System.Reflection;
-	using System.Text;
-	using NLog.Common;
-
 	/// <summary>
 	/// Condition method invocation expression (represented by <b>method(p1,p2,p3)</b> syntax).
 	/// </summary>
-	internal sealed class ConditionMethodExpression : ConditionExpression
+	public sealed class ConditionMethodExpression : ConditionExpression
 	{
 		private readonly bool acceptsLogEvent;
 		private readonly string conditionMethodName;

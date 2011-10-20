@@ -4,7 +4,7 @@ namespace NLog.Internal
 	/// <summary>
 	/// Simple character tokenizer.
 	/// </summary>
-	internal class SimpleStringReader
+	public class SimpleStringReader
 	{
 		private readonly string text;
 

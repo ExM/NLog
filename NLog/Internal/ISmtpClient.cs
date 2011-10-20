@@ -9,7 +9,7 @@ namespace NLog.Internal
 	/// <summary>
 	/// Supports mocking of SMTP Client code.
 	/// </summary>
-	internal interface ISmtpClient : IDisposable
+	public interface ISmtpClient : IDisposable //TODO: change namespace
 	{
 		string Host { get; set; }
 

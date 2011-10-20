@@ -4,7 +4,7 @@ namespace NLog.Internal
 	/// <summary>
 	/// Logger configuration.
 	/// </summary>
-	internal class LoggerConfiguration
+	public class LoggerConfiguration
 	{
 		private readonly TargetWithFilterChain[] targetsByLevel;
 

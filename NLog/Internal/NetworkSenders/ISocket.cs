@@ -6,7 +6,7 @@ namespace NLog.Internal.NetworkSenders
 	/// <summary>
 	/// Interface for mocking socket calls.
 	/// </summary>
-	internal interface ISocket
+	public interface ISocket //TODO: change namespace
 	{
 		bool ConnectAsync(SocketAsyncEventArgs args);
 

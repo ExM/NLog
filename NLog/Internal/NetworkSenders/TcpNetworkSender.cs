@@ -9,7 +9,7 @@ namespace NLog.Internal.NetworkSenders
 	/// <summary>
 	/// Sends messages over a TCP network connection.
 	/// </summary>
-	internal class TcpNetworkSender : NetworkSender
+	public class TcpNetworkSender : NetworkSender //TODO: change namespace
 	{
 		private readonly Queue<SocketAsyncEventArgs> pendingRequests = new Queue<SocketAsyncEventArgs>();
 
@@ -225,7 +225,7 @@ namespace NLog.Internal.NetworkSenders
 		/// <summary>
 		/// Facilitates mocking of <see cref="SocketAsyncEventArgs"/> class.
 		/// </summary>
-		internal class MySocketAsyncEventArgs : SocketAsyncEventArgs
+		public class MySocketAsyncEventArgs : SocketAsyncEventArgs
 		{
 			/// <summary>
 			/// Raises the Completed event.

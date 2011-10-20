@@ -4,7 +4,7 @@ namespace NLog.Internal.NetworkSenders
 	/// <summary>
 	/// Creates instances of <see cref="NetworkSender"/> objects for given URLs.
 	/// </summary>
-	internal interface INetworkSenderFactory
+	public interface INetworkSenderFactory //TODO: change namespace
 	{
 		/// <summary>
 		/// Creates a new instance of the network sender based on a network URL.
