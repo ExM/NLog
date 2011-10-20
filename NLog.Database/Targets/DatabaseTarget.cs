@@ -190,12 +190,12 @@ namespace NLog.Targets
 		[ArrayParameter(typeof(DatabaseParameterInfo), "parameter")]
 		public IList<DatabaseParameterInfo> Parameters { get; private set; }
 
-		internal DbProviderFactory ProviderFactory { get; set; }
+		public DbProviderFactory ProviderFactory { get; set; }
 
 		// this is so we can mock the connection string without creating sub-processes
-		internal ConnectionStringSettingsCollection ConnectionStringsSettings { get; set;  }
+		public ConnectionStringSettingsCollection ConnectionStringsSettings { get; set; }
 
-		internal Type ConnectionType { get; set; }
+		public Type ConnectionType { get; set; }
 
 		/// <summary>
 		/// Performs installation which requires administrative permissions.
@@ -227,7 +227,7 @@ namespace NLog.Targets
 			return null;
 		}
 
-		internal IDbConnection OpenConnection(string connectionString)
+		public IDbConnection OpenConnection(string connectionString)
 		{
 			IDbConnection connection;
 

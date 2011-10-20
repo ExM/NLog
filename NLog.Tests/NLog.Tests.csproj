@@ -41,9 +41,17 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <ProjectReference Include="..\NLog.AspNet\NLog.AspNet.csproj">
+      <Project>{5861CE4C-7130-4B7B-AAF5-640A13EAF1DA}</Project>
+      <Name>NLog.AspNet</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NLog\NLog.csproj">
       <Project>{CB8BE551-CB33-44A6-B793-1B266862EB25}</Project>
       <Name>NLog</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SampleExtensions\SampleExtensions.csproj">
+      <Project>{48394EBB-8564-4E62-8F24-C55D873763B3}</Project>
+      <Name>SampleExtensions</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -102,16 +110,12 @@
     <Compile Include="Layouts\SimpleLayoutOutputTests.cs" />
     <Compile Include="Layouts\SimpleLayoutParserTests.cs" />
     <Compile Include="Layouts\ThreadAgnosticTests.cs" />
-    <Compile Include="LogReceiverService\LogReceiverServiceTests.cs" />
     <Compile Include="Targets\ConcurrentFileTargetTests.cs" />
     <Compile Include="Targets\ConsoleTargetTests.cs" />
-    <Compile Include="Targets\DatabaseTargetTests.cs" />
     <Compile Include="Targets\EventLogTests.cs" />
     <Compile Include="Targets\FileTargetTests.cs" />
-    <Compile Include="Targets\LogReceiverWebServiceTargetTests.cs" />
     <Compile Include="Targets\MailTargetTests.cs" />
     <Compile Include="Targets\NetworkTargetTests.cs" />
-    <Compile Include="Targets\RichTextBoxTargetTests.cs" />
     <Compile Include="Targets\TargetTests.cs" />
     <Compile Include="Targets\Wrappers\AsyncRequestQueueTests.cs" />
     <Compile Include="Targets\Wrappers\AsyncTargetWrapperTests.cs" />

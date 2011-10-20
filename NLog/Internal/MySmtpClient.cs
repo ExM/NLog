@@ -6,7 +6,7 @@ namespace NLog.Internal
 	/// <summary>
 	/// Supports mocking of SMTP Client code.
 	/// </summary>
-	internal class MySmtpClient : SmtpClient, ISmtpClient
+	public class MySmtpClient : SmtpClient, ISmtpClient
 	{
 #if NET3_5 || NET2_0 || NETCF2_0 || NETCF3_5 || MONO
 		/// <summary>

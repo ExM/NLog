@@ -84,7 +84,7 @@ namespace NLog.UnitTests
 
 			// make sure we got timeout exception
 			Assert.AreEqual(1, exceptions.Count);
-			Assert.IsInstanceOfType(typeof(TimeoutException), exceptions[0]);
+			Assert.IsInstanceOf<TimeoutException>(exceptions[0]);
 			Assert.AreEqual("Timeout.", exceptions[0].Message);
 
 			// those will be ignored
@@ -411,7 +411,7 @@ namespace NLog.UnitTests
 				finalContinuationInvoked.WaitOne();
 				Assert.AreEqual(55, sum);
 				Assert.IsNotNull(lastException);
-				Assert.IsInstanceOfType(typeof(InvalidOperationException), lastException);
+				Assert.IsInstanceOf<InvalidOperationException>(lastException);
 				Assert.AreEqual("Some failure.", lastException.Message);
 			}
 		}
@@ -445,7 +445,7 @@ namespace NLog.UnitTests
 			finalContinuationInvoked.WaitOne();
 			Assert.AreEqual(55, sum);
 			Assert.IsNotNull(lastException);
-			Assert.IsInstanceOfType(typeof(NLogRuntimeException), lastException);
+			Assert.IsInstanceOf<NLogRuntimeException>(lastException);
 			Assert.IsTrue(lastException.Message.StartsWith("Got multiple exceptions:\r\n"));
 		}
 

@@ -89,7 +89,7 @@ namespace NLog.Targets
 		/// <param name="events">The events.</param>
 		/// <param name="asyncContinuations">The async continuations.</param>
 		/// <returns>True if events should be sent, false to stop processing them.</returns>
-		protected internal virtual bool OnSend(NLogEvents events, IEnumerable<AsyncLogEventInfo> asyncContinuations)
+		protected virtual bool OnSend(NLogEvents events, IEnumerable<AsyncLogEventInfo> asyncContinuations)
 		{
 			return true;
 		}

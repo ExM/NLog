@@ -7,9 +7,9 @@ namespace NLog.Internal
 	/// <summary>
 	/// Safe way to get environment variables.
 	/// </summary>
-	internal static class EnvironmentHelper
+	public static class EnvironmentHelper
 	{
-		internal static string NewLine
+		public static string NewLine
 		{
 			get
 			{

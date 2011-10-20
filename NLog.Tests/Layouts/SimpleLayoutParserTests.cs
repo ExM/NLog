@@ -15,7 +15,7 @@ namespace NLog.UnitTests.Layouts
 		{
 			SimpleLayout l = "${message}";
 			Assert.AreEqual(1, l.Renderers.Count);
-			Assert.IsInstanceOfType(typeof(MessageLayoutRenderer), l.Renderers[0]);
+			Assert.IsInstanceOf<MessageLayoutRenderer>(l.Renderers[0]);
 		}
 
 		[Test]

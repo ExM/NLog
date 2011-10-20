@@ -106,7 +106,7 @@ namespace NLog.LayoutRenderers
 		/// <summary>
 		/// Closes this instance.
 		/// </summary>
-		internal void Close()
+		public void Close()
 		{
 			if (this.isInitialized)
 			{

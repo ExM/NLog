@@ -329,7 +329,7 @@ namespace NLog.UnitTests.Targets
 		{
 			var mailTarget = new MailTarget();
 			var client = mailTarget.CreateSmtpClient();
-			Assert.IsInstanceOfType(typeof(MySmtpClient), client);
+			Assert.IsInstanceOf<MySmtpClient>(client);
 		}
 
 		public class MockSmtpClient : ISmtpClient
@@ -363,7 +363,7 @@ namespace NLog.UnitTests.Targets
 		{
 			public List<MockSmtpClient> CreatedMocks = new List<MockSmtpClient>();
 
-			internal override ISmtpClient CreateSmtpClient()
+			public override ISmtpClient CreateSmtpClient()
 			{
 				var mock = new MockSmtpClient();
 				CreatedMocks.Add(mock);

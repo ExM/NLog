@@ -29,7 +29,7 @@ namespace NLog.UnitTests.Conditions
 		{
 			ConditionExpression cond = "true and true";
 
-			Assert.IsInstanceOfType(typeof(ConditionAndExpression), cond);
+			Assert.IsInstanceOf<ConditionAndExpression>(cond);
 		}
 
 		[Test]
@@ -90,9 +90,9 @@ namespace NLog.UnitTests.Conditions
 			SimpleLayout sl = cle.Layout as SimpleLayout;
 			Assert.IsNotNull(sl);
 			Assert.AreEqual(3, sl.Renderers.Count);
-			Assert.IsInstanceOfType(typeof(MessageLayoutRenderer), sl.Renderers[0]);
-			Assert.IsInstanceOfType(typeof(LiteralLayoutRenderer), sl.Renderers[1]);
-			Assert.IsInstanceOfType(typeof(LevelLayoutRenderer), sl.Renderers[2]);
+			Assert.IsInstanceOf<MessageLayoutRenderer>(sl.Renderers[0]);
+			Assert.IsInstanceOf<LiteralLayoutRenderer>(sl.Renderers[1]);
+			Assert.IsInstanceOf<LevelLayoutRenderer>(sl.Renderers[2]);
 
 		}
 
@@ -140,7 +140,7 @@ namespace NLog.UnitTests.Conditions
 		public void MessageTest()
 		{
 			var result = ConditionParser.ParseExpression("message");
-			Assert.IsInstanceOfType(typeof(ConditionMessageExpression), result);
+			Assert.IsInstanceOf<ConditionMessageExpression>(result);
 			Assert.AreEqual("message", result.ToString());
 		}
 
@@ -148,7 +148,7 @@ namespace NLog.UnitTests.Conditions
 		public void LevelTest()
 		{
 			var result = ConditionParser.ParseExpression("level");
-			Assert.IsInstanceOfType(typeof(ConditionLevelExpression), result);
+			Assert.IsInstanceOf<ConditionLevelExpression>(result);
 			Assert.AreEqual("level", result.ToString());
 		}
 
@@ -156,7 +156,7 @@ namespace NLog.UnitTests.Conditions
 		public void LoggerTest()
 		{
 			var result = ConditionParser.ParseExpression("logger");
-			Assert.IsInstanceOfType(typeof(ConditionLoggerNameExpression), result);
+			Assert.IsInstanceOf<ConditionLoggerNameExpression>(result);
 			Assert.AreEqual("logger", result.ToString());
 		}
 

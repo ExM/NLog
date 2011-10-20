@@ -4,7 +4,7 @@ namespace NLog.Conditions
 	/// <summary>
 	/// Condition logger name expression (represented by the <b>logger</b> keyword).
 	/// </summary>
-	internal sealed class ConditionLoggerNameExpression : ConditionExpression
+	public sealed class ConditionLoggerNameExpression : ConditionExpression
 	{
 		/// <summary>
 		/// Returns a string representation of this expression.

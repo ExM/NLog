@@ -79,7 +79,7 @@ namespace NLog.Config
 		/// </summary>
 		/// <param name="element">The XML element.</param>
 		/// <param name="fileName">Name of the XML file.</param>
-		internal XmlLoggingConfiguration(XmlElement element, string fileName)
+		public XmlLoggingConfiguration(XmlElement element, string fileName)
 		{
 			using (var stringReader = new StringReader(element.OuterXml))
 			{

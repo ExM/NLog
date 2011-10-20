@@ -10,7 +10,7 @@ namespace NLog.Internal
 	/// <summary>
 	/// Reflection helpers.
 	/// </summary>
-	internal static class ReflectionHelpers
+	public static class ReflectionHelpers
 	{
 		/// <summary>
 		/// Gets all usable exported types from the given assembly.

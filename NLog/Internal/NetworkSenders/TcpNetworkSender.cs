@@ -39,7 +39,7 @@ namespace NLog.Internal.NetworkSenders
 		/// <param name="socketType">Type of the socket.</param>
 		/// <param name="protocolType">Type of the protocol.</param>
 		/// <returns>Instance of <see cref="ISocket" /> which represents the socket.</returns>
-		protected internal virtual ISocket CreateSocket(AddressFamily addressFamily, SocketType socketType, ProtocolType protocolType)
+		public virtual ISocket CreateSocket(AddressFamily addressFamily, SocketType socketType, ProtocolType protocolType)
 		{
 			return new SocketProxy(addressFamily, socketType, protocolType);
 		}

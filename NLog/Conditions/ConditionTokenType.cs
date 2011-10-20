@@ -4,7 +4,7 @@ namespace NLog.Conditions
 	/// <summary>
 	/// Token types for condition expressions.
 	/// </summary>
-	internal enum ConditionTokenType
+	public enum ConditionTokenType
 	{
 		EndOfInput,
 

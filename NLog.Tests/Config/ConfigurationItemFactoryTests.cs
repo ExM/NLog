@@ -15,7 +15,7 @@ namespace NLog.UnitTests.Config
 		public void ConfigurationItemFactoryDefaultTest()
 		{
 			var cif = new ConfigurationItemFactory();
-			Assert.IsInstanceOfType(typeof(DebugTarget), cif.CreateInstance(typeof(DebugTarget)));
+			Assert.IsInstanceOf<DebugTarget>(cif.CreateInstance(typeof(DebugTarget)));
 		}
 
 		[Test]

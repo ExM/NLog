@@ -132,7 +132,7 @@ namespace NLog.LogReceiverService
 		[IgnoreDataMember]
 #endif
 		[XmlIgnore]
-		internal IList<int> ValueIndexes { get; private set; }
+		public IList<int> ValueIndexes { get; private set; }
 
 		/// <summary>
 		/// Converts the <see cref="NLogEvent"/> to <see cref="LogEventInfo"/>.

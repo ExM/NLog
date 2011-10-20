@@ -169,7 +169,7 @@ namespace NLog.Targets
 		[DefaultValue(25)]
 		public int SmtpPort { get; set; }
 
-		internal virtual ISmtpClient CreateSmtpClient()
+		public virtual ISmtpClient CreateSmtpClient()
 		{
 			return new MySmtpClient();
 		}

@@ -131,7 +131,7 @@ namespace NLog.Targets
 		[DefaultValue("utf-8")]
 		public Encoding Encoding { get; set; }
 
-		internal INetworkSenderFactory SenderFactory { get; set; }
+		public INetworkSenderFactory SenderFactory { get; set; }
 
 		/// <summary>
 		/// Flush any pending log messages asynchronously (in case of asynchronous targets).

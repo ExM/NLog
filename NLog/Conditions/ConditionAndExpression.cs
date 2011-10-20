@@ -4,7 +4,7 @@ namespace NLog.Conditions
 	/// <summary>
 	/// Condition <b>and</b> expression.
 	/// </summary>
-	internal sealed class ConditionAndExpression : ConditionExpression
+	public sealed class ConditionAndExpression : ConditionExpression
 	{
 		private static readonly object boxedFalse = false;
 		private static readonly object boxedTrue = true;

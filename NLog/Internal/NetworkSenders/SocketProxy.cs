@@ -9,7 +9,7 @@ namespace NLog.Internal.NetworkSenders
 	/// <summary>
 	/// Socket proxy for mocking Socket code.
 	/// </summary>
-	internal sealed class SocketProxy : ISocket, IDisposable
+	public sealed class SocketProxy : ISocket, IDisposable
 	{
 		private readonly Socket socket;
 

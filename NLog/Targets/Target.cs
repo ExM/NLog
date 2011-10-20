@@ -241,7 +241,7 @@ namespace NLog.Targets
 		/// Initializes this instance.
 		/// </summary>
 		/// <param name="configuration">The configuration.</param>
-		internal void Initialize(LoggingConfiguration configuration)
+		public void Initialize(LoggingConfiguration configuration)
 		{
 			lock (this.SyncRoot)
 			{
@@ -274,7 +274,7 @@ namespace NLog.Targets
 		/// <summary>
 		/// Closes this instance.
 		/// </summary>
-		internal void Close()
+		public void Close()
 		{
 			lock (this.SyncRoot)
 			{

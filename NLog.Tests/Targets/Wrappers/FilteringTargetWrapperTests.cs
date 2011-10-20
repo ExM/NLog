@@ -111,7 +111,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 
 			continuationHit.WaitOne();
 			Assert.IsNotNull(lastException);
-			Assert.IsInstanceOfType(typeof(InvalidOperationException), lastException);
+			Assert.IsInstanceOf<InvalidOperationException>(lastException);
 
 			Assert.AreEqual(1, myTarget.WriteCount);
 			Assert.AreEqual(1, myMockCondition.CallCount);
@@ -121,7 +121,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 			wrapper.WriteAsyncLogEvent(logEvent.WithContinuation(continuation));
 			continuationHit.WaitOne();
 			Assert.IsNotNull(lastException);
-			Assert.IsInstanceOfType(typeof(InvalidOperationException), lastException);
+			Assert.IsInstanceOf<InvalidOperationException>(lastException);
 			Assert.AreEqual(2, myTarget.WriteCount);
 			Assert.AreEqual(2, myMockCondition.CallCount);
 		}

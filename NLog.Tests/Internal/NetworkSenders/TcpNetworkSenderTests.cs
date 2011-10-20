@@ -106,7 +106,7 @@ close
 		{
 			var sender = new TcpNetworkSender("tcp://foo:1234", AddressFamily.Unspecified);
 			var socket = sender.CreateSocket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-			Assert.IsInstanceOfType(typeof(SocketProxy), socket);
+			Assert.IsInstanceOf<SocketProxy>(socket);
 		}
 
 		[Test]
@@ -232,7 +232,7 @@ close
 				this.Log = new StringWriter();
 			}
 
-			protected internal override ISocket CreateSocket(AddressFamily addressFamily, SocketType socketType, ProtocolType protocolType)
+			public override ISocket CreateSocket(AddressFamily addressFamily, SocketType socketType, ProtocolType protocolType)
 			{
 				return new MockSocket(addressFamily, socketType, protocolType, this);
 			}
