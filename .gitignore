@@ -4,4 +4,5 @@ Release/
 Debug/
 *.userprefs
 *.pidb
+test-results/
 
