@@ -1,13 +1,11 @@
-
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net.Sockets;
+using NLog.Common;
 
 namespace NLog.Internal.NetworkSenders
 {
-	using System;
-	using System.Collections.Generic;
-	using System.IO;
-	using System.Net.Sockets;
-	using NLog.Common;
-
 	/// <summary>
 	/// Sends messages over a TCP network connection.
 	/// </summary>

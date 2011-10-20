@@ -9,13 +9,6 @@ namespace NLog.UnitTests.LogReceiverService
 	using System.Xml;
 	using System.Xml.Serialization;
 	using NUnit.Framework;
-
-#if !NUNIT
-	using SetUp = Microsoft.VisualStudio.TestTools.UnitTesting.TestInitializeAttribute;
-	using TestFixture = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
-	using Test = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
-	using TearDown =  Microsoft.VisualStudio.TestTools.UnitTesting.TestCleanupAttribute;
-#endif
 	using NLog.Layouts;
 	using NLog.LogReceiverService;
 

@@ -1,25 +1,15 @@
-
-#if !WINDOWS_PHONE_7
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading;
+using NUnit.Framework;
+using NLog.Internal.NetworkSenders;
 
 namespace NLog.UnitTests.Internal.NetworkSenders
 {
-	using System;
-	using System.Collections.Generic;
-	using System.IO;
-	using System.Net;
-	using System.Net.Sockets;
-	using System.Text;
-	using System.Threading;
-	using NUnit.Framework;
-
-#if !NUNIT
-	using SetUp = Microsoft.VisualStudio.TestTools.UnitTesting.TestInitializeAttribute;
-	using TestFixture = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
-	using Test = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
-	using TearDown =  Microsoft.VisualStudio.TestTools.UnitTesting.TestCleanupAttribute;
-#endif
-	using NLog.Internal.NetworkSenders;
-
 	[TestFixture]
 	public class TcpNetworkSenderTests : NLogTestBase
 	{
@@ -150,19 +140,12 @@ close
 					});
 			}
 
-#if SILVERLIGHT
-			Assert.IsTrue(allSent.WaitOne(3000));
-#else
 			Assert.IsTrue(allSent.WaitOne(3000, false));
-#endif
 
 			var mre = new ManualResetEvent(false);
 			sender.FlushAsync(ex => mre.Set());
-#if SILVERLIGHT
-			mre.WaitOne(3000);
-#else
 			mre.WaitOne(3000, false);
-#endif
+
 			string expectedLog = @"Parse endpoint address tcp://hostname:123/ Unspecified
 create socket 10000 Stream Tcp
 connect async to {mock end point: tcp://hostname:123/}
@@ -387,5 +370,3 @@ close
 		}
 	}
 }
-
-#endif

@@ -1,31 +1,19 @@
+using System;
+using System.IO;
+using NUnit.Framework;
+using MyExtensionNamespace;
+using NLog.Filters;
+using NLog.Layouts;
+using NLog.Targets;
 
 namespace NLog.UnitTests.Config
 {
-	using System;
-	using System.IO;
-	using NUnit.Framework;
-
-#if !NUNIT
-	using SetUp = Microsoft.VisualStudio.TestTools.UnitTesting.TestInitializeAttribute;
-	using TestFixture = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
-	using Test = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
-	using TearDown =  Microsoft.VisualStudio.TestTools.UnitTesting.TestCleanupAttribute;
-#endif
-	using MyExtensionNamespace;
-	using NLog.Filters;
-	using NLog.Layouts;
-	using NLog.Targets;
 
 	[TestFixture]
 	public class ExtensionTests : NLogTestBase
 	{
-#if !WINDOWS_PHONE
 		private string extensionAssemblyName1 = "SampleExtensions";
-#if SILVERLIGHT || NET_CF
-		private string extensionAssemblyFullPath1 = "SampleExtensions.dll";
-#else
 		private string extensionAssemblyFullPath1 = Path.GetFullPath("SampleExtensions.dll");
-#endif
 		
 		[Test]
 		public void ExtensionTest1()
@@ -161,7 +149,6 @@ namespace NLog.UnitTests.Config
 			Assert.AreEqual(1, configuration.LoggingRules[0].Filters.Count);
 			Assert.AreEqual("MyExtensionNamespace.WhenFooFilter", configuration.LoggingRules[0].Filters[0].GetType().FullName);
 		}
-#endif
 
 		[Test]
 		public void ExtensionTest4()
