@@ -9,9 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLog.WebServices", "NLog.We
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLog.Database", "NLog.Database\NLog.Database.csproj", "{BACDB92F-A795-4631-8FC7-C6599D96B1BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLog.Tests", "NLog.Tests\NLog.Tests.csproj", "{d0625344-3ef4-46aa-b793-0500c3e41316}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLog.Tests", "NLog.Tests\NLog.Tests.csproj", "{D0625344-3EF4-46AA-B793-0500C3E41316}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleExtensions", "SampleExtensions\SampleExtensions.csproj", "{48394ebb-8564-4e62-8f24-c55d873763b3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleExtensions", "SampleExtensions\SampleExtensions.csproj", "{48394EBB-8564-4E62-8F24-C55D873763B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,35 +19,33 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{48394ebb-8564-4e62-8f24-c55d873763b3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{48394ebb-8564-4e62-8f24-c55d873763b3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{48394ebb-8564-4e62-8f24-c55d873763b3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{48394ebb-8564-4e62-8f24-c55d873763b3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BACDB92F-A795-4631-8FC7-C6599D96B1BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BACDB92F-A795-4631-8FC7-C6599D96B1BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BACDB92F-A795-4631-8FC7-C6599D96B1BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BACDB92F-A795-4631-8FC7-C6599D96B1BE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CB8BE551-CB33-44A6-B793-1B266862EB25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CB8BE551-CB33-44A6-B793-1B266862EB25}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CB8BE551-CB33-44A6-B793-1B266862EB25}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CB8BE551-CB33-44A6-B793-1B266862EB25}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D0268955-8365-4FCE-B434-4A539E3356F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D0268955-8365-4FCE-B434-4A539E3356F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D0268955-8365-4FCE-B434-4A539E3356F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D0268955-8365-4FCE-B434-4A539E3356F9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{d0625344-3ef4-46aa-b793-0500c3e41316}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{d0625344-3ef4-46aa-b793-0500c3e41316}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{d0625344-3ef4-46aa-b793-0500c3e41316}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{d0625344-3ef4-46aa-b793-0500c3e41316}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D77119C2-746D-4A2D-B06B-AB2157F226E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D77119C2-746D-4A2D-B06B-AB2157F226E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D77119C2-746D-4A2D-B06B-AB2157F226E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D77119C2-746D-4A2D-B06B-AB2157F226E1}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = NLog\NLog.csproj
+		{D0268955-8365-4FCE-B434-4A539E3356F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0268955-8365-4FCE-B434-4A539E3356F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0268955-8365-4FCE-B434-4A539E3356F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0268955-8365-4FCE-B434-4A539E3356F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BACDB92F-A795-4631-8FC7-C6599D96B1BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BACDB92F-A795-4631-8FC7-C6599D96B1BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BACDB92F-A795-4631-8FC7-C6599D96B1BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BACDB92F-A795-4631-8FC7-C6599D96B1BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0625344-3EF4-46AA-B793-0500C3E41316}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0625344-3EF4-46AA-B793-0500C3E41316}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0625344-3EF4-46AA-B793-0500C3E41316}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48394EBB-8564-4E62-8F24-C55D873763B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48394EBB-8564-4E62-8F24-C55D873763B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48394EBB-8564-4E62-8F24-C55D873763B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = NLog\NLog.csproj
 	EndGlobalSection
 EndGlobal

@@ -1,18 +1,10 @@
 
-#if !SILVERLIGHT
 
 namespace NLog.UnitTests.Targets
 {
 	using System;
 	using System.IO;
 	using NUnit.Framework;
-
-#if !NUNIT
-	using SetUp = Microsoft.VisualStudio.TestTools.UnitTesting.TestInitializeAttribute;
-	using TestFixture = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
-	using Test = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
-	using TearDown =  Microsoft.VisualStudio.TestTools.UnitTesting.TestCleanupAttribute;
-#endif
 	using NLog.Targets;
 	using System.Collections.Generic;
 
@@ -64,7 +56,6 @@ Logger1 message6
 			Assert.AreEqual(expectedResult, consoleOutWriter.ToString());
 		}
 
-#if !NET_CF
 		[Test]
 		public void ConsoleErrorTest()
 		{
@@ -110,8 +101,5 @@ Logger1 message6
 ";
 			Assert.AreEqual(expectedResult, consoleErrorWriter.ToString());
 		}
-#endif
 	}
 }
-
-#endif

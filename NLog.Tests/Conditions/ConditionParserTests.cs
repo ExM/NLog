@@ -3,14 +3,6 @@ namespace NLog.UnitTests.Conditions
 {
 	using NLog.Internal;
 	using NUnit.Framework;
-
-#if !NUNIT
-	using SetUp = Microsoft.VisualStudio.TestTools.UnitTesting.TestInitializeAttribute;
-	using TestFixture = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
-	using Test = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
-	using TearDown =  Microsoft.VisualStudio.TestTools.UnitTesting.TestCleanupAttribute;
-	using ExpectedException = Microsoft.VisualStudio.TestTools.UnitTesting.ExpectedExceptionAttribute;
-#endif
 	using NLog.Conditions;
 	using NLog.Config;
 	using NLog.LayoutRenderers;

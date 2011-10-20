@@ -1,28 +1,15 @@
-
 using System.IO;
 using System.Text;
 using NUnit.Framework;
-
-#if !NUNIT
-	using SetUp = Microsoft.VisualStudio.TestTools.UnitTesting.TestInitializeAttribute;
-	using TestFixture = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
-	using Test = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
-	using TearDown =  Microsoft.VisualStudio.TestTools.UnitTesting.TestCleanupAttribute;
-#endif
 using NLog.Layouts;
 using NLog.Config;
-#if SILVERLIGHT
-using System.Xml.Linq;
-#else
 using System.Xml;
-#endif
+using System;
+using NLog.Internal;
+using NLog.Common;
 
 namespace NLog.UnitTests
 {
-	using System;
-	using NLog.Internal;
-	using NLog.Common;
-
 	public abstract class NLogTestBase
 	{
 		public void AssertDebugCounter(string targetName, int val)
@@ -87,21 +74,9 @@ namespace NLog.UnitTests
 
 		protected XmlLoggingConfiguration CreateConfigurationFromString(string configXml)
 		{
-#if SILVERLIGHT
-			XElement element = XElement.Parse(configXml);
-			return new XmlLoggingConfiguration(element.CreateReader(), null);
-#else
 			XmlDocument doc = new XmlDocument();
 			doc.LoadXml(configXml);
-
-#if NET_CF
-			Console.WriteLine(CompactFrameworkHelper.GetExeBaseDir());
-			return new XmlLoggingConfiguration(doc.DocumentElement, ".");
-#else
 			return new XmlLoggingConfiguration(doc.DocumentElement, Environment.CurrentDirectory);
-#endif
-
-#endif
 		}
 
 		protected string RunAndCaptureInternalLog(SyncAction action, LogLevel internalLogLevel)
@@ -135,9 +110,7 @@ namespace NLog.UnitTests
 			private readonly LogLevel logLevel;
 			private readonly bool logToConsole;
 			private readonly bool includeTimestamp;
-#if !NET_CF
 			private readonly bool logToConsoleError;
-#endif
 			private readonly LogLevel globalThreshold;
 			private readonly bool throwExceptions;
 
@@ -147,9 +120,7 @@ namespace NLog.UnitTests
 				this.logLevel = InternalLogger.LogLevel;
 				this.logToConsole = InternalLogger.LogToConsole;
 				this.includeTimestamp = InternalLogger.IncludeTimestamp;
-#if !NET_CF
 				this.logToConsoleError = InternalLogger.LogToConsoleError;
-#endif
 				this.globalThreshold = LogManager.GlobalThreshold;
 				this.throwExceptions = LogManager.ThrowExceptions;
 			}
@@ -160,9 +131,7 @@ namespace NLog.UnitTests
 				InternalLogger.LogLevel = this.logLevel;
 				InternalLogger.LogToConsole = this.logToConsole;
 				InternalLogger.IncludeTimestamp = this.includeTimestamp;
-#if !NET_CF
 				InternalLogger.LogToConsoleError = this.logToConsoleError;
-#endif
 				LogManager.GlobalThreshold = this.globalThreshold;
 				LogManager.ThrowExceptions = this.throwExceptions;
 			}

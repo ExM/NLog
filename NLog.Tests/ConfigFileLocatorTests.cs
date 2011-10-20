@@ -1,20 +1,10 @@
-﻿
-#if !SILVERLIGHT && !NET_CF
-
-using System;
+﻿using System;
 using System.CodeDom.Compiler;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
 using Microsoft.CSharp;
 using NUnit.Framework;
-
-#if !NUNIT
-	using SetUp = Microsoft.VisualStudio.TestTools.UnitTesting.TestInitializeAttribute;
-	using TestFixture = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
-	using Test = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
-	using TearDown =  Microsoft.VisualStudio.TestTools.UnitTesting.TestCleanupAttribute;
-#endif
 
 namespace NLog.UnitTests
 {
@@ -314,5 +304,3 @@ class C1
 		}
 	}
 }
-
-#endif

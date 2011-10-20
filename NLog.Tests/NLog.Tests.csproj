@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{d0625344-3ef4-46aa-b793-0500c3e41316}</ProjectGuid>
+    <ProjectGuid>{D0625344-3EF4-46AA-B793-0500C3E41316}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>NLog.Tests</RootNamespace>
     <AssemblyName>NLog.Tests</AssemblyName>
@@ -44,10 +44,6 @@
     <ProjectReference Include="..\NLog\NLog.csproj">
       <Project>{CB8BE551-CB33-44A6-B793-1B266862EB25}</Project>
       <Name>NLog</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SampleExtensions\SampleExtensions.csproj">
-      <Project>{48394ebb-8564-4e62-8f24-c55d873763b3}</Project>
-      <Name>SampleExtensions</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -142,11 +138,9 @@
     <Compile Include="LogManagerTests.cs" />
     <Compile Include="NLogTestBase.cs" />
     <Compile Include="NLogTraceListenerTests.cs" />
-    <Compile Include="NUnitAdapter.cs" />
     <Compile Include="ProcessRunner.cs" />
     <Compile Include="RegressionTests.cs" />
     <Compile Include="RoutingTests.cs" />
-    <Compile Include="SourceCodeTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ConfigFiles\included.nlog" />

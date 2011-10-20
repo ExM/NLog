@@ -6,19 +6,11 @@ namespace NLog.UnitTests.Layouts
 	using System.Globalization;
 	using System.IO;
 	using NUnit.Framework;
-
-#if !NUNIT
-	using SetUp = Microsoft.VisualStudio.TestTools.UnitTesting.TestInitializeAttribute;
-	using TestFixture = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
-	using Test = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
-	using TearDown =  Microsoft.VisualStudio.TestTools.UnitTesting.TestCleanupAttribute;
-#endif
 	using NLog.Layouts;
 
 	[TestFixture]
 	public class CsvLayoutTests : NLogTestBase
 	{
-#if !SILVERLIGHT
 		[Test]
 		public void EndToEndTest()
 		{
@@ -83,7 +75,6 @@ namespace NLog.UnitTests.Layouts
 				Assert.AreEqual("Warn,\"Message with, a comma\",3", sr.ReadLine());
 			}
 		}
-#endif
 
 		[Test]
 		public void CsvLayoutRenderingNoQuoting()

@@ -1,6 +1,3 @@
-
-#if !SILVERLIGHT
-
 #define DEBUG
 
 namespace NLog.UnitTests
@@ -8,13 +5,6 @@ namespace NLog.UnitTests
 	using System;
 	using System.Diagnostics;
 	using NUnit.Framework;
-
-#if !NUNIT
-	using SetUp = Microsoft.VisualStudio.TestTools.UnitTesting.TestInitializeAttribute;
-	using TestFixture = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
-	using Test = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
-	using TearDown =  Microsoft.VisualStudio.TestTools.UnitTesting.TestCleanupAttribute;
-#endif
 
 	[TestFixture]
 	public class NLogTraceListenerTests : NLogTestBase
@@ -91,7 +81,6 @@ namespace NLog.UnitTests
 			AssertDebugLastMessage("debug", "Logger1 Trace Hello");
 		}
 
-#if !NET_CF
 		[Test]
 		public void TraceConfiguration()
 		{
@@ -258,9 +247,5 @@ namespace NLog.UnitTests
 #endif
 			return ts;
 		}
-
-#endif
 	}
 }
-
-#endif

@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{48394ebb-8564-4e62-8f24-c55d873763b3}</ProjectGuid>
+    <ProjectGuid>{48394EBB-8564-4E62-8F24-C55D873763B3}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>NLog</RootNamespace>
-    <AssemblyName>NLog</AssemblyName>
+    <RootNamespace>SampleExtensions</RootNamespace>
+    <AssemblyName>SampleExtensions</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

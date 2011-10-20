@@ -5,13 +5,6 @@ namespace NLog.UnitTests.Contexts
 {
 	using NUnit.Framework;
 
-#if !NUNIT
-	using SetUp = Microsoft.VisualStudio.TestTools.UnitTesting.TestInitializeAttribute;
-	using TestFixture = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
-	using Test = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
-	using TearDown =  Microsoft.VisualStudio.TestTools.UnitTesting.TestCleanupAttribute;
-#endif
-
 	[TestFixture]
 	public class GlobalDiagnosticsContextTests
 	{
