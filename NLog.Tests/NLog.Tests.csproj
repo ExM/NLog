@@ -112,7 +112,6 @@
     <Compile Include="Layouts\ThreadAgnosticTests.cs" />
     <Compile Include="Targets\ConcurrentFileTargetTests.cs" />
     <Compile Include="Targets\ConsoleTargetTests.cs" />
-    <Compile Include="Targets\EventLogTests.cs" />
     <Compile Include="Targets\FileTargetTests.cs" />
     <Compile Include="Targets\MailTargetTests.cs" />
     <Compile Include="Targets\NetworkTargetTests.cs" />
@@ -132,7 +131,6 @@
     <Compile Include="Targets\Wrappers\SplitGroupTargetTests.cs" />
     <Compile Include="Targets\Wrappers\WrapperTargetBaseTests.cs" />
     <Compile Include="ApiTests.cs" />
-    <Compile Include="App.xaml.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="AsyncHelperTests.cs" />
     <Compile Include="ConfigFileLocatorTests.cs" />

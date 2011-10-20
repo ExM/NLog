@@ -80,12 +80,10 @@ namespace NLog.UnitTests.LayoutRenderers
 								Assert.AreEqual("baz3::baz2::baz1", reader.Value);
 								break;
 
-#if !NET_CF
 							case "locationInfo":
 								Assert.AreEqual(MethodBase.GetCurrentMethod().DeclaringType.FullName, reader.GetAttribute("class"));
 								Assert.AreEqual(MethodBase.GetCurrentMethod().ToString(), reader.GetAttribute("method"));
 								break;
-#endif
 
 							case "properties":
 								break;
@@ -97,23 +95,11 @@ namespace NLog.UnitTests.LayoutRenderers
 								switch (name)
 								{
 									case "log4japp":
-#if SILVERLIGHT
-										Assert.AreEqual("Silverlight Application", value);
-#elif NET_CF
-										Assert.AreEqual(".NET CF Application", value);
-#else
 										Assert.AreEqual(AppDomain.CurrentDomain.FriendlyName + "(" + Process.GetCurrentProcess().Id + ")", value);
-#endif
 										break;
 
 									case "log4jmachinename":
-#if NET_CF
-										Assert.AreEqual("netcf", value);
-#elif SILVERLIGHT
-										Assert.AreEqual("silverlight", value);
-#else
 										Assert.AreEqual(Environment.MachineName, value);
-#endif
 										break;
 
 									case "foo1":

@@ -140,24 +140,6 @@ namespace NLog
 		public string LoggerName { get; set; }
 
 		/// <summary>
-		/// Gets the logger short name.
-		/// </summary>
-		[Obsolete("This property should not be used.")]
-		public string LoggerShortName
-		{
-			get
-			{
-				int lastDot = this.LoggerName.LastIndexOf('.');
-				if (lastDot >= 0)
-				{
-					return this.LoggerName.Substring(lastDot + 1);
-				}
-
-				return this.LoggerName;
-			}
-		}
-
-		/// <summary>
 		/// Gets or sets the log message including any parameter placeholders.
 		/// </summary>
 		public string Message { get; set; }
@@ -202,23 +184,6 @@ namespace NLog
 				}
 
 				return this.properties;
-			}
-		}
-
-		/// <summary>
-		/// Gets the dictionary of per-event context properties.
-		/// </summary>
-		[Obsolete("Use LogEventInfo.Properties instead.", true)]
-		public IDictionary Context
-		{
-			get
-			{
-				if (this.eventContextAdapter == null)
-				{
-					this.InitEventContext();
-				}
-
-				return this.eventContextAdapter;
 			}
 		}
 

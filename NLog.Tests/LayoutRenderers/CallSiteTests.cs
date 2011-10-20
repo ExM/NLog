@@ -12,7 +12,6 @@ namespace NLog.UnitTests.LayoutRenderers
 	[TestFixture]
 	public class CallSiteTests : NLogTestBase
 	{
-#if !SILVERLIGHT
 		[Test]
 		public void LineNumberTest()
 		{
@@ -33,7 +32,6 @@ namespace NLog.UnitTests.LayoutRenderers
 			Assert.IsTrue(lastMessage.IndexOf("callsitetests.cs:10000", StringComparison.OrdinalIgnoreCase) >= 0, "Invalid line number. Expected prefix of 10000, got: " + lastMessage);
 #line default
 		}
-#endif
 
 		[Test]
 		public void MethodNameTest()

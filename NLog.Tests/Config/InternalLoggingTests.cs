@@ -16,12 +16,10 @@ namespace NLog.UnitTests.Config
 				CreateConfigurationFromString(@"
 <nlog internalLogFile='c:\file.txt' internalLogLevel='Trace' internalLogToConsole='true' internalLogToConsoleError='true' globalThreshold='Warn' throwExceptions='true'>
 </nlog>");
-
+				//TODO: c:\file.txt
 				Assert.AreSame(LogLevel.Trace, InternalLogger.LogLevel);
 				Assert.IsTrue(InternalLogger.LogToConsole);
-#if !NET_CF
 				Assert.IsTrue(InternalLogger.LogToConsoleError);
-#endif
 				Assert.AreSame(LogLevel.Warn, LogManager.GlobalThreshold);
 				Assert.IsTrue(LogManager.ThrowExceptions);
 			}
@@ -34,9 +32,7 @@ namespace NLog.UnitTests.Config
 			{
 				InternalLogger.LogLevel = LogLevel.Error;
 				InternalLogger.LogToConsole = true;
-#if !NET_CF
 				InternalLogger.LogToConsoleError = true;
-#endif
 				LogManager.GlobalThreshold = LogLevel.Fatal;
 				LogManager.ThrowExceptions = true;
 
@@ -46,9 +42,7 @@ namespace NLog.UnitTests.Config
 
 				Assert.AreSame(LogLevel.Error, InternalLogger.LogLevel);
 				Assert.IsTrue(InternalLogger.LogToConsole);
-#if !NET_CF
 				Assert.IsTrue(InternalLogger.LogToConsoleError);
-#endif
 				Assert.AreSame(LogLevel.Fatal, LogManager.GlobalThreshold);
 				Assert.IsTrue(LogManager.ThrowExceptions);
 			}

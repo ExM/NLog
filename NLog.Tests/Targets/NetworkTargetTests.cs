@@ -524,7 +524,6 @@ namespace NLog.UnitTests.Targets
 			Assert.AreEqual(expectedLog, senderFactory.Log.ToString());
 		}
 
-#if !SILVERLIGHT
 		[Test]
 		public void NetworkTargetTcpTest()
 		{
@@ -760,7 +759,6 @@ namespace NLog.UnitTests.Targets
 
 			Thread.Sleep(1000);
 		}
-#endif
 
 		[Test]
 		public void NetworkTargetSendFailureWithoutKeepAliveTests()

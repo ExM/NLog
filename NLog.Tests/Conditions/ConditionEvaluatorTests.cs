@@ -239,7 +239,6 @@ namespace NLog.UnitTests.Conditions
 			Assert.AreSame(inner, ex1.InnerException);
 		}
 
-#if !SILVERLIGHT && !NET_CF
 		[Test]
 		public void ExceptionTest4()
 		{
@@ -254,7 +253,6 @@ namespace NLog.UnitTests.Conditions
 			Assert.AreEqual("msg", ex2.Message);
 			Assert.AreEqual("f", ex2.InnerException.Message);
 		}
-#endif
 
 		[Test]
 		public void ExceptionTest11()
@@ -279,7 +277,6 @@ namespace NLog.UnitTests.Conditions
 			Assert.AreSame(inner, ex1.InnerException);
 		}
 
-#if !SILVERLIGHT && !NET_CF
 		[Test]
 		public void ExceptionTest14()
 		{
@@ -294,7 +291,6 @@ namespace NLog.UnitTests.Conditions
 			Assert.AreEqual("msg", ex2.Message);
 			Assert.AreEqual("f", ex2.InnerException.Message);
 		}
-#endif
 
 		private static ConfigurationItemFactory SetupConditionMethods()
 		{

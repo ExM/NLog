@@ -140,11 +140,7 @@ namespace NLog.UnitTests.LayoutRenderers
 
 			var ex = new InvalidOperationException("Exception message.");
 			logger.DebugException("Foo", ex);
-#if !SILVERLIGHT && !NET_CF
 			string newline = Environment.NewLine;
-#else
-			string newline = "\r\n";
-#endif
 
 			AssertDebugLastMessage("debug", "Foo" + newline + ex.ToString());
 		}

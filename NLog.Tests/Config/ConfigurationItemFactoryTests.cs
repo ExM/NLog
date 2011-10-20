@@ -40,7 +40,6 @@ namespace NLog.UnitTests.Config
 			Assert.AreEqual(typeof(DebugTarget), resolvedTypes[0]);
 		}
 
-#if !SILVERLIGHT && !NET_CF
 		// this is just to force reference to NLog.Extended.dll
 		public Type ForceExtendedReference = typeof(MessageQueueTarget).DeclaringType;
 
@@ -72,6 +71,5 @@ namespace NLog.UnitTests.Config
 		{
 			Assert.AreEqual(expectedTypeName, targets.CreateInstance(itemName).GetType().Name);
 		}
-#endif
 	}
 }

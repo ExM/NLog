@@ -1,5 +1,5 @@
 
-#if !NET_CF && !SILVERLIGHT && !MONO
+#if !MONO
 
 namespace NLog.UnitTests.Targets.Wrappers
 {

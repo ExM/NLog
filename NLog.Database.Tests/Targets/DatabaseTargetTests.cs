@@ -1,22 +1,19 @@
-
-#if !SILVERLIGHT
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.Common;
+using System.Globalization;
+using NUnit.Framework;
+using NLog.Targets;
 
 namespace NLog.UnitTests.Targets
 {
-	using System;
-	using System.Collections;
-	using System.Collections.Generic;
-	using System.Configuration;
-	using System.Data;
-	using System.Data.Common;
-	using System.Globalization;
-	using NUnit.Framework;
-	using NLog.Targets;
-
 	[TestFixture]
 	public class DatabaseTargetTests : NLogTestBase
 	{
-#if !NET_CF && !MONO
+#if !MONO
 		static DatabaseTargetTests()
 		{
 			var data = (DataSet)ConfigurationManager.GetSection("system.data");
@@ -602,7 +599,6 @@ Close()
 			AssertLog(expectedLog);
 		}
 
-#if !NET_CF
 		[Test]
 		public void ConnectionStringNameInitTest()
 		{
@@ -704,7 +700,6 @@ Close()
 			dt.Initialize(null);
 			Assert.AreEqual(typeof(System.Data.Odbc.OdbcConnection), dt.ConnectionType);
 		}
-#endif
 		
 		private static void AssertLog(string expectedLog)
 		{
@@ -1092,7 +1087,6 @@ Close()
 			}
 		}
 
-#if !NET_CF
 		public class MockDbFactory : DbProviderFactory
 		{
 			public static readonly MockDbFactory Instance = new MockDbFactory();
@@ -1157,8 +1151,6 @@ Close()
 				get { throw new NotImplementedException(); }
 			}
 		}
-#endif
 	}
 }
 
-#endif

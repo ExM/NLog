@@ -30,28 +30,5 @@ namespace NLog.UnitTests.Contexts
 			Assert.IsTrue(GlobalDiagnosticsContext.Contains("foo2"));
 			Assert.AreEqual("bar2", GlobalDiagnosticsContext.Get("foo2"));
 		}
-
-		[Test]
-		public void GDCTest2()
-		{
-			GDC.Clear();
-			Assert.IsFalse(GDC.Contains("foo"));
-			Assert.AreEqual(string.Empty, GDC.Get("foo"));
-			Assert.IsFalse(GDC.Contains("foo2"));
-			Assert.AreEqual(string.Empty, GDC.Get("foo2"));
-
-			GDC.Set("foo", "bar");
-			GDC.Set("foo2", "bar2");
-
-			Assert.IsTrue(GDC.Contains("foo"));
-			Assert.AreEqual("bar", GDC.Get("foo"));
-
-			GDC.Remove("foo");
-			Assert.IsFalse(GDC.Contains("foo"));
-			Assert.AreEqual(string.Empty, GDC.Get("foo"));
-
-			Assert.IsTrue(GDC.Contains("foo2"));
-			Assert.AreEqual("bar2", GDC.Get("foo2"));
-		}
 	}
 }

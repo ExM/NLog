@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -97,9 +97,7 @@
     <Compile Include="Filters\WhenEqualFilter.cs" />
     <Compile Include="Filters\WhenNotContainsFilter.cs" />
     <Compile Include="Filters\WhenNotEqualFilter.cs" />
-    <Compile Include="GDC.cs" />
     <Compile Include="GlobalDiagnosticsContext.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Internal\AspHelper.cs" />
     <Compile Include="Internal\CompilerAttributes.cs" />
     <Compile Include="Internal\CurrentTimeGetter.cs" />
@@ -237,8 +235,6 @@
     <Compile Include="LogManager.cs" />
     <Compile Include="LogMessageGenerator.cs" />
     <Compile Include="MappedDiagnosticsContext.cs" />
-    <Compile Include="MDC.cs" />
-    <Compile Include="NDC.cs" />
     <Compile Include="NestedDiagnosticsContext.cs" />
     <Compile Include="NLogConfigurationException.cs" />
     <Compile Include="NLogRuntimeException.cs" />

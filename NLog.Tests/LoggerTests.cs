@@ -136,7 +136,6 @@ namespace NLog.UnitTests
 				logger.Trace(CultureInfo.InvariantCulture, "message{0}", (double)2.5);
 				if (enabled == 1) AssertDebugLastMessage("debug", "message2.5");
 
-#if !NET_CF
 				CultureInfo oldCulture = System.Threading.Thread.CurrentThread.CurrentCulture;
 				System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo("pl-PL");
 
@@ -156,7 +155,6 @@ namespace NLog.UnitTests
 				if (enabled == 1) AssertDebugLastMessage("debug", "message1,5");
 				
 				System.Threading.Thread.CurrentThread.CurrentCulture = oldCulture;
-#endif
 
 				logger.Trace(CultureInfo.InvariantCulture, "message{0}", (decimal)2.5);
 				if (enabled == 1) AssertDebugLastMessage("debug", "message2.5");
@@ -298,7 +296,6 @@ namespace NLog.UnitTests
 				logger.Debug(CultureInfo.InvariantCulture, "message{0}", (double)2.5);
 				if (enabled == 1) AssertDebugLastMessage("debug", "message2.5");
 
-#if !NET_CF
 				CultureInfo oldCulture = System.Threading.Thread.CurrentThread.CurrentCulture;
 				System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo("pl-PL");
 
@@ -318,7 +315,7 @@ namespace NLog.UnitTests
 				if (enabled == 1) AssertDebugLastMessage("debug", "message1,5");
 
 				System.Threading.Thread.CurrentThread.CurrentCulture = oldCulture;
-#endif
+
 				logger.Debug(CultureInfo.InvariantCulture, "message{0}", (decimal)2.5);
 				if (enabled == 1) AssertDebugLastMessage("debug", "message2.5");
 
@@ -459,7 +456,6 @@ namespace NLog.UnitTests
 				logger.Info(CultureInfo.InvariantCulture, "message{0}", (double)2.5);
 				if (enabled == 1) AssertDebugLastMessage("debug", "message2.5");
 
-#if !NET_CF
 				CultureInfo oldCulture = System.Threading.Thread.CurrentThread.CurrentCulture;
 				System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo("pl-PL");
 
@@ -479,7 +475,6 @@ namespace NLog.UnitTests
 				if (enabled == 1) AssertDebugLastMessage("debug", "message1,5");
 
 				System.Threading.Thread.CurrentThread.CurrentCulture = oldCulture;
-#endif
 
 				logger.Info(CultureInfo.InvariantCulture, "message{0}", (decimal)2.5);
 				if (enabled == 1) AssertDebugLastMessage("debug", "message2.5");
@@ -621,7 +616,6 @@ namespace NLog.UnitTests
 				logger.Warn(CultureInfo.InvariantCulture, "message{0}", (double)2.5);
 				if (enabled == 1) AssertDebugLastMessage("debug", "message2.5");
 
-#if !NET_CF
 				CultureInfo oldCulture = System.Threading.Thread.CurrentThread.CurrentCulture;
 				System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo("pl-PL");
 
@@ -641,7 +635,6 @@ namespace NLog.UnitTests
 				if (enabled == 1) AssertDebugLastMessage("debug", "message1,5");
 
 				System.Threading.Thread.CurrentThread.CurrentCulture = oldCulture;
-#endif
 
 				logger.Warn(CultureInfo.InvariantCulture, "message{0}", (decimal)2.5);
 				if (enabled == 1) AssertDebugLastMessage("debug", "message2.5");
@@ -783,7 +776,6 @@ namespace NLog.UnitTests
 				logger.Error(CultureInfo.InvariantCulture, "message{0}", (double)2.5);
 				if (enabled == 1) AssertDebugLastMessage("debug", "message2.5");
 
-#if !NET_CF
 				CultureInfo oldCulture = System.Threading.Thread.CurrentThread.CurrentCulture;
 				System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo("pl-PL");
 
@@ -800,7 +792,6 @@ namespace NLog.UnitTests
 				if (enabled == 1) AssertDebugLastMessage("debug", "message1,5");
 
 				System.Threading.Thread.CurrentThread.CurrentCulture = oldCulture;
-#endif
 
 				logger.Error(CultureInfo.InvariantCulture, "message{0}", (decimal)2.5);
 				if (enabled == 1) AssertDebugLastMessage("debug", "message2.5");
@@ -942,7 +933,6 @@ namespace NLog.UnitTests
 				logger.Fatal(CultureInfo.InvariantCulture, "message{0}", (double)2.5);
 				if (enabled == 1) AssertDebugLastMessage("debug", "message2.5");
 
-#if !NET_CF
 				CultureInfo oldCulture = System.Threading.Thread.CurrentThread.CurrentCulture;
 				System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo("pl-PL");
 
@@ -959,7 +949,6 @@ namespace NLog.UnitTests
 				if (enabled == 1) AssertDebugLastMessage("debug", "message1,5");
 
 				System.Threading.Thread.CurrentThread.CurrentCulture = oldCulture;
-#endif
 
 				logger.Fatal(CultureInfo.InvariantCulture, "message{0}", (decimal)2.5);
 				if (enabled == 1) AssertDebugLastMessage("debug", "message2.5");
@@ -1105,7 +1094,6 @@ namespace NLog.UnitTests
 					logger.Log(level, CultureInfo.InvariantCulture, "message{0}", (double)2.5);
 					if (enabled == 1) AssertDebugLastMessage("debug", "message2.5");
 
-#if !NET_CF
 					CultureInfo oldCulture = System.Threading.Thread.CurrentThread.CurrentCulture;
 					System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo("pl-PL");
 
@@ -1125,7 +1113,6 @@ namespace NLog.UnitTests
 					if (enabled == 1) AssertDebugLastMessage("debug", "message1,5");
 
 					System.Threading.Thread.CurrentThread.CurrentCulture = oldCulture;
-#endif
 
 					logger.Log(level, CultureInfo.InvariantCulture, "message{0}", (decimal)2.5);
 					if (enabled == 1) AssertDebugLastMessage("debug", "message2.5");

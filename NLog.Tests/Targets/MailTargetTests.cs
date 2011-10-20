@@ -1,6 +1,5 @@
 
 
-#if !SILVERLIGHT && !NET_CF
 
 namespace NLog.UnitTests.Targets
 {
@@ -372,5 +371,3 @@ namespace NLog.UnitTests.Targets
 		}
 	}
 }
-
-#endif

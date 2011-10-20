@@ -1,7 +1,6 @@
 
 using System.Diagnostics;
 
-#if !SILVERLIGHT
 
 namespace NLog.UnitTests.Targets
 {
@@ -502,5 +501,3 @@ namespace NLog.UnitTests.Targets
 		}
 	}
 }
-
-#endif
