@@ -278,19 +278,19 @@ class C1
 
 		public static string RunAndRedirectOutput(string exeFile)
 		{
-			var sb = new StringBuilder();
-#if MONO
-			sb.AppendFormat("\"{0}\" ", exeFile);
-#endif
+//			var sb = new StringBuilder();
+//#if MONO
+//			sb.AppendFormat("\"{0}\" ", exeFile);
+//#endif
 
 			using (var proc = new Process())
 			{
-				proc.StartInfo.Arguments = sb.ToString();
-#if MONO
-				proc.StartInfo.FileName = "mono";
-#else
+				proc.StartInfo.Arguments = "";//sb.ToString();
+//#if MONO
+//				proc.StartInfo.FileName = "mono";
+//#else
 				proc.StartInfo.FileName = exeFile;
-#endif
+//#endif
 				proc.StartInfo.UseShellExecute = false;
 				proc.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
 				proc.StartInfo.RedirectStandardInput = false;
@@ -298,7 +298,13 @@ class C1
 				proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
 				proc.StartInfo.CreateNoWindow = true;
 				proc.Start();
-				proc.WaitForExit();
+				
+				if(!proc.WaitForExit(10000))
+				{
+					proc.Kill();
+					Assert.Fail("process hung");
+				}
+				
 				return proc.StandardOutput.ReadToEnd().Replace("\r", "").Replace("\n", "|");
 			}
 		}
