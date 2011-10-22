@@ -255,7 +255,8 @@ namespace NLog
 			// reset logging configuration to null
 			// this causes old configuration (if any) to be closed.
 			InternalLogger.Info("Shutting down logging...");
-			Configuration = null;
+			//Configuration = null;
+			globalFactory.Shutdown();
 			InternalLogger.Info("Logger has been shut down.");
 		}
 	}

@@ -537,6 +537,29 @@ namespace NLog
 			_reloadTimer.Dispose();
 			_reloadTimer = null;
 		}
+		
+		internal void Shutdown()
+		{
+			_watcher.StopWatching();
+			
+			lock(_sync)
+			{
+				if (_config == null)
+					return;
+				
+				InternalLogger.Info("Closing configuration.");
+				
+				
+				_config.FlushAllTargets2((ex) =>
+				{
+					if(ex != null)
+						InternalLogger.Error("Flush all targets error: {0}", ex);
+				});
+				
+				_config.Close();
+				_config = null;
+			}
+		}
 
 		private static IEnumerable<string> GetCandidateFileNames()
 		{

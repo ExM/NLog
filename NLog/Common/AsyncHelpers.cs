@@ -260,7 +260,7 @@ namespace NLog.Common
 			};
 		}
 
-		private static AsynchronousAction<T> ExceptionGuard<T>(AsynchronousAction<T> action)
+		internal static AsynchronousAction<T> ExceptionGuard<T>(AsynchronousAction<T> action)
 		{
 			return (T argument, AsyncContinuation cont) =>
 			{
