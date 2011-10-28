@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -98,7 +98,6 @@
     <Compile Include="Filters\WhenNotEqualFilter.cs" />
     <Compile Include="GlobalDiagnosticsContext.cs" />
     <Compile Include="Internal\AspHelper.cs" />
-    <Compile Include="Internal\CompilerAttributes.cs" />
     <Compile Include="Internal\CurrentTimeGetter.cs" />
     <Compile Include="Internal\DictionaryAdapter.cs" />
     <Compile Include="Internal\EnumerableHelpers.cs" />

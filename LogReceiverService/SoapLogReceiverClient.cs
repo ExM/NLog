@@ -1,14 +1,11 @@
-
-#if !WCF_SUPPORTED
+using System;
+using System.Web.Services;
+using System.Web.Services.Description;
+using System.Web.Services.Protocols;
+using System.Xml.Serialization;
 
 namespace NLog.LogReceiverService
 {
-	using System;
-	using System.Web.Services;
-	using System.Web.Services.Description;
-	using System.Web.Services.Protocols;
-	using System.Xml.Serialization;
-
 	/// <summary>
 	/// Log Receiver Client using legacy SOAP client.
 	/// </summary>
@@ -21,7 +18,7 @@ namespace NLog.LogReceiverService
 		/// <param name="url">The service URL.</param>
 		public SoapLogReceiverClient(string url)
 		{
-			this.Url = url;
+			Url = url;
 		}
 
 		/// <summary>
@@ -35,7 +32,7 @@ namespace NLog.LogReceiverService
 			ParameterStyle = SoapParameterStyle.Wrapped)]
 		public void ProcessLogMessages(NLogEvents events)
 		{
-			this.Invoke("ProcessLogMessages", new object[] { events });
+			Invoke("ProcessLogMessages", new object[] { events });
 		}
 
 		/// <summary>
@@ -49,7 +46,7 @@ namespace NLog.LogReceiverService
 		/// </returns>
 		public IAsyncResult BeginProcessLogMessages(NLogEvents events, AsyncCallback callback, object asyncState)
 		{
-			return this.BeginInvoke("ProcessLogMessages", new object[] { events }, callback, asyncState);
+			return BeginInvoke("ProcessLogMessages", new object[] { events }, callback, asyncState);
 		}
 
 		/// <summary>
@@ -58,9 +55,7 @@ namespace NLog.LogReceiverService
 		/// <param name="result">The result.</param>
 		public void EndProcessLogMessages(IAsyncResult result)
 		{
-			this.EndInvoke(result);
+			EndInvoke(result);
 		}
 	}
 }
-
-#endif

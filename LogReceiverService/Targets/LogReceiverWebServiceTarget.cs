@@ -1,24 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Threading;
+using NLog.Common;
+using NLog.Config;
+using NLog.Internal;
+using NLog.Layouts;
+using NLog.LogReceiverService;
 
 namespace NLog.Targets
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Globalization;
-#if WCF_SUPPORTED
-	using System.ServiceModel;
-	using System.ServiceModel.Channels;
-#endif
-	using System.Threading;
-#if SILVERLIGHT
-	using System.Windows;
-	using System.Windows.Threading;
-#endif
-	using NLog.Common;
-	using NLog.Config;
-	using NLog.Internal;
-	using NLog.Layouts;
-	using NLog.LogReceiverService;
-
 	/// <summary>
 	/// Sends log messages to a NLog Receiver Service (using WCF or Web Services).
 	/// </summary>
@@ -44,23 +35,6 @@ namespace NLog.Targets
 		/// <docgen category='Connection Options' order='10' />
 		[RequiredParameter]
 		public string EndpointAddress { get; set; }
-
-#if WCF_SUPPORTED
-		/// <summary>
-		/// Gets or sets the name of the endpoint configuration in WCF configuration file.
-		/// </summary>
-		/// <value>The name of the endpoint configuration.</value>
-		/// <docgen category='Connection Options' order='10' />
-		public string EndpointConfigurationName { get; set; }
-
-#if !SILVERLIGHT2
-		/// <summary>
-		/// Gets or sets a value indicating whether to use binary message encoding.
-		/// </summary>
-		/// <docgen category='Payload Options' order='10' />
-		public bool UseBinaryEncoding { get; set; }
-#endif
-#endif
 
 		/// <summary>
 		/// Gets or sets the client ID.
@@ -202,58 +176,6 @@ namespace NLog.Targets
 				return;
 			}
 
-#if WCF_SUPPORTED
-			WcfLogReceiverClient client;
-
-			if (string.IsNullOrEmpty(this.EndpointConfigurationName))
-			{
-				// endpoint not specified - use BasicHttpBinding
-				Binding binding;
-
-#if !SILVERLIGHT2
-				if (this.UseBinaryEncoding)
-				{
-					binding = new CustomBinding(new BinaryMessageEncodingBindingElement(), new HttpTransportBindingElement());
-				}
-				else
-#endif
-				{
-					binding = new BasicHttpBinding();
-				 }
-
-				client = new WcfLogReceiverClient(binding, new EndpointAddress(this.EndpointAddress));
-			}
-			else
-			{
-				client = new WcfLogReceiverClient(this.EndpointConfigurationName, new EndpointAddress(this.EndpointAddress));
-			}
-
-			client.ProcessLogMessagesCompleted += (sender, e) =>
-				{
-					// report error to the callers
-					foreach (var ev in asyncContinuations)
-					{
-						ev.Continuation(e.Error);
-					}
-
-					// send any buffered events
-					this.SendBufferedEvents();
-				};
-
-			this.inCall = true;
-#if SILVERLIGHT
-			if (!Deployment.Current.Dispatcher.CheckAccess())
-			{
-				Deployment.Current.Dispatcher.BeginInvoke(() => client.ProcessLogMessagesAsync(events));
-			}
-			else
-			{
-				client.ProcessLogMessagesAsync(events);
-			}
-#else
-			client.ProcessLogMessagesAsync(events);
-#endif
-#else
 			var client = new SoapLogReceiverClient(this.EndpointAddress);
 			this.inCall = true;
 			client.BeginProcessLogMessages(
@@ -286,7 +208,6 @@ namespace NLog.Targets
 						this.SendBufferedEvents();
 					},
 				null);
-#endif
 		}
 
 		private void SendBufferedEvents()

@@ -278,19 +278,11 @@ class C1
 
 		public static string RunAndRedirectOutput(string exeFile)
 		{
-//			var sb = new StringBuilder();
-//#if MONO
-//			sb.AppendFormat("\"{0}\" ", exeFile);
-//#endif
-
 			using (var proc = new Process())
 			{
-				proc.StartInfo.Arguments = "";//sb.ToString();
-//#if MONO
-//				proc.StartInfo.FileName = "mono";
-//#else
+				proc.StartInfo.Arguments = "";
 				proc.StartInfo.FileName = exeFile;
-//#endif
+
 				proc.StartInfo.UseShellExecute = false;
 				proc.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
 				proc.StartInfo.RedirectStandardInput = false;

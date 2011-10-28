@@ -1,17 +1,14 @@
-
-#if WCF_SUPPORTED
+using System;
+using System.Collections.Generic;
 
 namespace NLog.LogReceiverService
 {
-	using System;
-	using System.Collections.Generic;
-
 	/// <summary>
 	/// Implementation of <see cref="ILogReceiverServer" /> which forwards received logs through <see cref="LogManager"/> or a given <see cref="LogFactory"/>.
 	/// </summary>
 	public class LogReceiverForwardingService : ILogReceiverServer
 	{
-		private readonly LogFactory logFactory;
+		private readonly LogFactory _logFactory;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LogReceiverForwardingService"/> class.
@@ -27,7 +24,7 @@ namespace NLog.LogReceiverService
 		/// <param name="logFactory">The log factory.</param>
 		public LogReceiverForwardingService(LogFactory logFactory)
 		{
-			this.logFactory = logFactory;
+			_logFactory = logFactory;
 		}
 
 		/// <summary>
@@ -60,7 +57,7 @@ namespace NLog.LogReceiverService
 				logEvents[j] = logEventInfo;
 			}
 
-			this.ProcessLogMessages(logEvents);
+			ProcessLogMessages(logEvents);
 		}
 
 		/// <summary>
@@ -76,9 +73,9 @@ namespace NLog.LogReceiverService
 			{
 				if (ev.LoggerName != lastLoggerName)
 				{
-					if (this.logFactory != null)
+					if (_logFactory != null)
 					{
-						logger = this.logFactory.GetLogger(ev.LoggerName);
+						logger = _logFactory.GetLogger(ev.LoggerName);
 					}
 					else
 					{
@@ -93,5 +90,3 @@ namespace NLog.LogReceiverService
 		}
 	}
 }
-
-#endif

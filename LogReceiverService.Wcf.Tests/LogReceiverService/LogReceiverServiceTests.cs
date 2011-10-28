@@ -1,18 +1,15 @@
+using System;
+using System.IO;
+//using System.Runtime.Serialization;
+using System.Xml;
+using System.Xml.Serialization;
+using NUnit.Framework;
+using NLog.Layouts;
+using NLog.LogReceiverService;
+using System.Runtime.Serialization;
 
 namespace NLog.UnitTests.LogReceiverService
 {
-	using System;
-	using System.IO;
-#if WCF_SUPPORTED
-	using System.Runtime.Serialization;
-#endif
-	using System.Xml;
-	using System.Xml.Serialization;
-	using NUnit.Framework;
-	using NLog.Layouts;
-	using NLog.LogReceiverService;
-	using System.Runtime.Serialization;
-
 	[TestFixture]
 	public class LogReceiverServiceTests : NLogTestBase
 	{

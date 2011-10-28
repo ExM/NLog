@@ -1,14 +1,11 @@
-
-#if WCF_SUPPORTED
+using System;
+using System.ComponentModel;
+using System.Net;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
 
 namespace NLog.LogReceiverService
 {
-	using System;
-	using System.ComponentModel;
-	using System.Net;
-	using System.ServiceModel;
-	using System.ServiceModel.Channels;
-
 	/// <summary>
 	/// Log Receiver Client using WCF.
 	/// </summary>
@@ -75,44 +72,12 @@ namespace NLog.LogReceiverService
 		/// </summary>
 		public event EventHandler<AsyncCompletedEventArgs> CloseCompleted;
 
-#if SILVERLIGHT && !SILVERLIGHT2
-		/// <summary>
-		/// Gets or sets the cookie container.
-		/// </summary>
-		/// <value>The cookie container.</value>
-		public CookieContainer CookieContainer
-		{
-			get
-			{
-				var httpCookieContainerManager = this.InnerChannel.GetProperty<IHttpCookieContainerManager>();
-				if (httpCookieContainerManager != null)
-				{
-					return httpCookieContainerManager.CookieContainer;
-				}
-
-				return null;
-			}
-			set
-			{
-				var httpCookieContainerManager = this.InnerChannel.GetProperty<IHttpCookieContainerManager>();
-				if (httpCookieContainerManager != null)
-				{
-					httpCookieContainerManager.CookieContainer = value;
-				}
-				else
-				{
-					throw new InvalidOperationException("Unable to set the CookieContainer. Please make sure the binding contains an HttpCookieContainerBindingElement.");
-				}
-			}
-		}
-#endif
-
 		/// <summary>
 		/// Opens the client asynchronously.
 		/// </summary>
 		public void OpenAsync()
 		{
-			this.OpenAsync(null);
+			OpenAsync(null);
 		}
 
 		/// <summary>
@@ -121,7 +86,7 @@ namespace NLog.LogReceiverService
 		/// <param name="userState">User-specific state.</param>
 		public void OpenAsync(object userState)
 		{
-			this.InvokeAsync(this.OnBeginOpen, null, this.OnEndOpen, this.OnOpenCompleted, userState);
+			InvokeAsync(OnBeginOpen, null, OnEndOpen, OnOpenCompleted, userState);
 		}
 
 		/// <summary>
@@ -129,7 +94,7 @@ namespace NLog.LogReceiverService
 		/// </summary>
 		public void CloseAsync()
 		{
-			this.CloseAsync(null);
+			CloseAsync(null);
 		}
 
 		/// <summary>
@@ -138,7 +103,7 @@ namespace NLog.LogReceiverService
 		/// <param name="userState">User-specific state.</param>
 		public void CloseAsync(object userState)
 		{
-			this.InvokeAsync(this.OnBeginClose, null, this.OnEndClose, this.OnCloseCompleted, userState);
+			InvokeAsync(OnBeginClose, null, OnEndClose, OnCloseCompleted, userState);
 		}
 
 		/// <summary>
@@ -147,7 +112,7 @@ namespace NLog.LogReceiverService
 		/// <param name="events">The events to send.</param>
 		public void ProcessLogMessagesAsync(NLogEvents events)
 		{
-			this.ProcessLogMessagesAsync(events, null);
+			ProcessLogMessagesAsync(events, null);
 		}
 
 		/// <summary>
@@ -157,11 +122,11 @@ namespace NLog.LogReceiverService
 		/// <param name="userState">User-specific state.</param>
 		public void ProcessLogMessagesAsync(NLogEvents events, object userState)
 		{
-			this.InvokeAsync(
-				this.OnBeginProcessLogMessages,
+			InvokeAsync(
+				OnBeginProcessLogMessages,
 				new object[] { events },
-				this.OnEndProcessLogMessages,
-				this.OnProcessLogMessagesCompleted,
+				OnEndProcessLogMessages,
+				OnProcessLogMessagesCompleted,
 				userState);
 		}
 
@@ -176,7 +141,7 @@ namespace NLog.LogReceiverService
 		/// </returns>
 		IAsyncResult ILogReceiverClient.BeginProcessLogMessages(NLogEvents events, AsyncCallback callback, object asyncState)
 		{
-			return this.Channel.BeginProcessLogMessages(events, callback, asyncState);
+			return Channel.BeginProcessLogMessages(events, callback, asyncState);
 		}
 
 		/// <summary>
@@ -185,22 +150,8 @@ namespace NLog.LogReceiverService
 		/// <param name="result">The result.</param>
 		void ILogReceiverClient.EndProcessLogMessages(IAsyncResult result)
 		{
-			this.Channel.EndProcessLogMessages(result);
+			Channel.EndProcessLogMessages(result);
 		}
-
-#if SILVERLIGHT
-		/// <summary>
-		/// Returns a new channel from the client to the service.
-		/// </summary>
-		/// <returns>
-		/// A channel of type <see cref="ILogReceiverClient"/> that identifies the type 
-		/// of service contract encapsulated by this client object (proxy).
-		/// </returns>
-		protected override ILogReceiverClient CreateChannel()
-		{
-			return new LogReceiverServerClientChannel(this);
-		}
-#endif
 
 		private IAsyncResult OnBeginProcessLogMessages(object[] inValues, AsyncCallback callback, object asyncState)
 		{
@@ -216,11 +167,11 @@ namespace NLog.LogReceiverService
 
 		private void OnProcessLogMessagesCompleted(object state)
 		{
-			if (this.ProcessLogMessagesCompleted != null)
+			if (ProcessLogMessagesCompleted != null)
 			{
 				var e = (InvokeAsyncCompletedEventArgs)state;
 
-				this.ProcessLogMessagesCompleted(this, new AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+				ProcessLogMessagesCompleted(this, new AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
 			}
 		}
 
@@ -237,11 +188,11 @@ namespace NLog.LogReceiverService
 
 		private void OnOpenCompleted(object state)
 		{
-			if (this.OpenCompleted != null)
+			if (OpenCompleted != null)
 			{
 				var e = (InvokeAsyncCompletedEventArgs)state;
 
-				this.OpenCompleted(this, new AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+				OpenCompleted(this, new AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
 			}
 		}
 
@@ -258,41 +209,12 @@ namespace NLog.LogReceiverService
 
 		private void OnCloseCompleted(object state)
 		{
-			if (this.CloseCompleted != null)
+			if (CloseCompleted != null)
 			{
 				var e = (InvokeAsyncCompletedEventArgs)state;
 
-				this.CloseCompleted(this, new AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+				CloseCompleted(this, new AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
 			}
 		}
-
-#if SILVERLIGHT
-		private class LogReceiverServerClientChannel : ChannelBase<ILogReceiverClient>, ILogReceiverClient
-		{
-			public LogReceiverServerClientChannel(ClientBase<ILogReceiverClient> client) :
-				base(client)
-			{
-			}
-
-			public IAsyncResult BeginProcessLogMessages(NLogEvents events, AsyncCallback callback, object asyncState)
-			{
-				return this.BeginInvoke(
-					"ProcessLogMessages", 
-					new object[] { events }, 
-					callback, 
-					asyncState);
-			}
-
-			public void EndProcessLogMessages(IAsyncResult result)
-			{
-				this.EndInvoke(
-					"ProcessLogMessages", 
-					new object[] { }, 
-					result);
-			}
-		}
-#endif
 	}
 }
-
-#endif

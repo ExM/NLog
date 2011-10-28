@@ -1,22 +1,16 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.Serialization;
+using System.ServiceModel;
+using System.Xml.Serialization;
 
 namespace NLog.LogReceiverService
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Diagnostics;
-
-#if WCF_SUPPORTED
-	using System.Runtime.Serialization;
-	using System.ServiceModel;
-#endif
-	using System.Xml.Serialization;
-
 	/// <summary>
 	/// Wire format for NLog event package.
 	/// </summary>
-#if WCF_SUPPORTED
 	[DataContract(Name = "events", Namespace = LogReceiverServiceConfig.WebServiceNamespace)]
-#endif
 	[XmlType(Namespace = LogReceiverServiceConfig.WebServiceNamespace)]
 	[XmlRoot("events", Namespace = LogReceiverServiceConfig.WebServiceNamespace)]
 	[DebuggerDisplay("Count = {Events.Length}")]
@@ -26,9 +20,7 @@ namespace NLog.LogReceiverService
 		/// Gets or sets the name of the client.
 		/// </summary>
 		/// <value>The name of the client.</value>
-#if WCF_SUPPORTED
 		[DataMember(Name = "cli", Order = 0)]
-#endif
 		[XmlElement("cli", Order = 0)]
 		public string ClientName { get; set; }
 
@@ -36,9 +28,7 @@ namespace NLog.LogReceiverService
 		/// Gets or sets the base time (UTC ticks) for all events in the package.
 		/// </summary>
 		/// <value>The base time UTC.</value>
-#if WCF_SUPPORTED
 		[DataMember(Name = "bts", Order = 1)]
-#endif
 		[XmlElement("bts", Order = 1)]
 		public long BaseTimeUtc { get; set; }
 
@@ -46,9 +36,7 @@ namespace NLog.LogReceiverService
 		/// Gets or sets the collection of layout names which are shared among all events.
 		/// </summary>
 		/// <value>The layout names.</value>
-#if WCF_SUPPORTED
 		[DataMember(Name = "lts", Order = 100)]
-#endif
 		[XmlArray("lts", Order = 100)]
 		[XmlArrayItem("l")]
 		public StringCollection LayoutNames { get; set; }
@@ -57,9 +45,7 @@ namespace NLog.LogReceiverService
 		/// Gets or sets the collection of logger names.
 		/// </summary>
 		/// <value>The logger names.</value>
-#if WCF_SUPPORTED
 		[DataMember(Name = "str", Order = 200)]
-#endif
 		[XmlArray("str", Order = 200)]
 		[XmlArrayItem("l")]
 		public StringCollection Strings { get; set; }
@@ -68,9 +54,7 @@ namespace NLog.LogReceiverService
 		/// Gets or sets the list of events.
 		/// </summary>
 		/// <value>The events.</value>
-#if WCF_SUPPORTED
 		[DataMember(Name = "ev", Order = 1000)]
-#endif
 		[XmlArray("ev", Order = 1000)]
 		[XmlArrayItem("e")]
 		public NLogEvent[] Events { get; set; }
@@ -84,11 +68,11 @@ namespace NLog.LogReceiverService
 		/// </returns>
 		public IList<LogEventInfo> ToEventInfo(string loggerNamePrefix)
 		{
-			var result = new LogEventInfo[this.Events.Length];
+			var result = new LogEventInfo[Events.Length];
 
 			for (int i = 0; i < result.Length; ++i)
 			{
-				result[i] = this.Events[i].ToEventInfo(this, loggerNamePrefix);
+				result[i] = Events[i].ToEventInfo(this, loggerNamePrefix);
 			}
 
 			return result;
@@ -102,7 +86,7 @@ namespace NLog.LogReceiverService
 		/// </returns>
 		public IList<LogEventInfo> ToEventInfo()
 		{
-			return this.ToEventInfo(string.Empty);
+			return ToEventInfo(string.Empty);
 		}
 	}
 }

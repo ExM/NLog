@@ -1,10 +1,7 @@
-
-#if WCF_SUPPORTED
+using System.ServiceModel;
 
 namespace NLog.LogReceiverService
 {
-	using System.ServiceModel;
-
 	/// <summary>
 	/// Service contract for Log Receiver server.
 	/// </summary>
@@ -19,5 +16,3 @@ namespace NLog.LogReceiverService
 		void ProcessLogMessages(NLogEvents events);
 	}
 }
-
-#endif
