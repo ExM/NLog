@@ -8,6 +8,7 @@ using NUnit.Framework;
 namespace NLog.UnitTests.LayoutRenderers
 {
 	using NLog.LayoutRenderers;
+	using System.Globalization;
 
 	[TestFixture]
 	public class DateTests : NLogTestBase
@@ -24,7 +25,7 @@ namespace NLog.UnitTests.LayoutRenderers
 			</nlog>");
 
 			LogManager.GetLogger("d").Debug("zzz");
-			DateTime dt = DateTime.Parse(GetDebugLastMessage("debug"));
+			DateTime dt = DateTime.Parse(GetDebugLastMessage("debug"), CultureInfo.InvariantCulture);
 			DateTime now = DateTime.Now;
 
 			Assert.IsTrue(Math.Abs((dt - now).TotalSeconds) < 5);
