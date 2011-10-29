@@ -41,10 +41,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\NLog.AspNet\NLog.AspNet.csproj">
-      <Project>{5861CE4C-7130-4B7B-AAF5-640A13EAF1DA}</Project>
-      <Name>NLog.AspNet</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NLog\NLog.csproj">
       <Project>{CB8BE551-CB33-44A6-B793-1B266862EB25}</Project>
       <Name>NLog</Name>
@@ -149,8 +145,8 @@
     <None Include="ConfigFiles\main.nlog" />
     <None Include="ConfigFiles\referencemissingfile.nlog" />
     <None Include="ConfigFiles\referencemissingfileignored.nlog" />
-    <None Include="Properties\AppManifest.xml" />
-    <None Include="Properties\OutOfBrowserSettings.xml" />
-    <None Include="Properties\WMAppManifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
 </Project>

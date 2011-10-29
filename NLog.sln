@@ -15,8 +15,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLog.WinForm.Tests", "NLog.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLog.Database.Tests", "NLog.Database.Tests\NLog.Database.Tests.csproj", "{4819D4E4-5AD9-44E0-B73B-9697288EECBC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLog.AspNet", "NLog.AspNet\NLog.AspNet.csproj", "{5861CE4C-7130-4B7B-AAF5-640A13EAF1DA}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogReceiverService", "LogReceiverService\LogReceiverService.csproj", "{D0268955-8365-4FCE-B434-4A539E3356F9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogReceiverService.Wcf", "LogReceiverService.Wcf\LogReceiverService.Wcf.csproj", "{F753CDF8-D013-439A-A64F-872DD29C4E2C}"
@@ -24,6 +22,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogReceiverService.Tests", "LogReceiverService.Tests\LogReceiverService.Tests.csproj", "{097B8618-B864-4C32-9012-0AECB9A889D0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogReceiverService.Wcf.Tests", "LogReceiverService.Wcf.Tests\LogReceiverService.Wcf.Tests.csproj", "{CFE0139D-9C47-43FA-B5A0-DB4261824894}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNet", "AspNet\AspNet.csproj", "{5861CE4C-7130-4B7B-AAF5-640A13EAF1DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNet.Tests", "AspNet.Tests\AspNet.Tests.csproj", "{5C76FD54-6416-4AC4-A360-BE4A9E580053}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,10 +59,6 @@ Global
 		{4819D4E4-5AD9-44E0-B73B-9697288EECBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4819D4E4-5AD9-44E0-B73B-9697288EECBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4819D4E4-5AD9-44E0-B73B-9697288EECBC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5861CE4C-7130-4B7B-AAF5-640A13EAF1DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5861CE4C-7130-4B7B-AAF5-640A13EAF1DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5861CE4C-7130-4B7B-AAF5-640A13EAF1DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5861CE4C-7130-4B7B-AAF5-640A13EAF1DA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D0268955-8365-4FCE-B434-4A539E3356F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D0268955-8365-4FCE-B434-4A539E3356F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0268955-8365-4FCE-B434-4A539E3356F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -77,6 +75,14 @@ Global
 		{CFE0139D-9C47-43FA-B5A0-DB4261824894}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFE0139D-9C47-43FA-B5A0-DB4261824894}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CFE0139D-9C47-43FA-B5A0-DB4261824894}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5861CE4C-7130-4B7B-AAF5-640A13EAF1DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5861CE4C-7130-4B7B-AAF5-640A13EAF1DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5861CE4C-7130-4B7B-AAF5-640A13EAF1DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5861CE4C-7130-4B7B-AAF5-640A13EAF1DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C76FD54-6416-4AC4-A360-BE4A9E580053}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C76FD54-6416-4AC4-A360-BE4A9E580053}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C76FD54-6416-4AC4-A360-BE4A9E580053}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C76FD54-6416-4AC4-A360-BE4A9E580053}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
