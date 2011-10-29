@@ -56,6 +56,9 @@ namespace NLog.UnitTests.LayoutRenderers
 			AssertDebugLastMessage("debug", "a 10 4");
 		}
 
+		private static int staticCounterA = 0;
+		private static int staticCounterB = 0;
+
 		[Test]
 		public void NamedCounterTest()
 		{
@@ -74,11 +77,19 @@ namespace NLog.UnitTests.LayoutRenderers
 			</nlog>");
 
 			LogManager.GetLogger("debug1").Debug("a");
-			AssertDebugLastMessage("debug1", "a 1");
+			staticCounterA++;
+
+			AssertDebugLastMessage("debug1", "a " + staticCounterA.ToString());
+
 			LogManager.GetLogger("debug2").Debug("a");
-			AssertDebugLastMessage("debug2", "a 1");
+			staticCounterB++;
+
+			AssertDebugLastMessage("debug2", "a " + staticCounterB.ToString());
+
 			LogManager.GetLogger("debug3").Debug("a");
-			AssertDebugLastMessage("debug3", "a 2");
+			staticCounterA++;
+
+			AssertDebugLastMessage("debug3", "a " + staticCounterA.ToString());
 		}
 	}
 }
