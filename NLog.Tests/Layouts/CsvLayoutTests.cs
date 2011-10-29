@@ -1,24 +1,27 @@
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using NUnit.Framework;
+using NLog.Layouts;
 
 namespace NLog.UnitTests.Layouts
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Globalization;
-	using System.IO;
-	using NUnit.Framework;
-	using NLog.Layouts;
-
 	[TestFixture]
 	public class CsvLayoutTests : NLogTestBase
 	{
 		[Test]
 		public void EndToEndTest()
 		{
+			File.Delete("CSVLayoutEndToEnd1.txt");
+			Assert.IsFalse(File.Exists("CSVLayoutEndToEnd1.txt"));
+
 			LogManager.Configuration = CreateConfigurationFromString(@"
 			<nlog>
 				<targets>
 				  <target name='f' type='File' fileName='CSVLayoutEndToEnd1.txt'>
 					<layout type='CSVLayout'>
+					  <Delimiter>Comma</Delimiter>
 					  <column name='level' layout='${level}' />
 					  <column name='message' layout='${message}' />
 					  <column name='counter' layout='${counter}' />
@@ -47,11 +50,15 @@ namespace NLog.UnitTests.Layouts
 		[Test]
 		public void NoHeadersTest()
 		{
+			File.Delete("CSVLayoutEndToEnd2.txt");
+			Assert.IsFalse(File.Exists("CSVLayoutEndToEnd2.txt"));
+
 			LogManager.Configuration = CreateConfigurationFromString(@"
 			<nlog>
 				<targets>
 				  <target name='f' type='File' fileName='CSVLayoutEndToEnd2.txt'>
 					<layout type='CSVLayout' withHeader='false'>
+					  <Delimiter>Comma</Delimiter>
 					  <column name='level' layout='${level}' />
 					  <column name='message' layout='${message}' />
 					  <column name='counter' layout='${counter}' />
