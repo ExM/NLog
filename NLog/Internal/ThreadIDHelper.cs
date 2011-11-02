@@ -1,54 +1,51 @@
-
+using NLog.Config;
+using System.Diagnostics;
+using System.Threading;
+using System;
+using System.IO;
 
 namespace NLog.Internal
 {
-	using NLog.Config;
-
 	/// <summary>
 	/// Returns details about current process and thread in a portable manner.
 	/// </summary>
-	internal abstract class ThreadIDHelper
+	internal static class ThreadIDHelper
 	{
-		/// <summary>
-		/// Initializes static members of the ThreadIDHelper class.
-		/// </summary>
-		static ThreadIDHelper()
-		{
-			if (PlatformDetector.IsWin32)
-			{
-				Instance = new Win32ThreadIDHelper();
-			}
-			else
-			{
-				Instance = new PortableThreadIDHelper();
-			}
-		}
-
-		/// <summary>
-		/// Gets the singleton instance of PortableThreadIDHelper or
-		/// Win32ThreadIDHelper depending on runtime environment.
-		/// </summary>
-		/// <value>The instance.</value>
-		public static ThreadIDHelper Instance { get; private set; }
-
-		/// <summary>
-		/// Gets current thread ID.
-		/// </summary>
-		public abstract int CurrentThreadID { get; }
-
 		/// <summary>
 		/// Gets current process ID.
 		/// </summary>
-		public abstract int CurrentProcessID { get; }
+		public static readonly int CurrentProcessID;
 
 		/// <summary>
 		/// Gets current process name.
 		/// </summary>
-		public abstract string CurrentProcessName { get; }
+		public static readonly string CurrentProcessName;
 
 		/// <summary>
 		/// Gets current process name (excluding filename extension, if any).
 		/// </summary>
-		public abstract string CurrentProcessBaseName { get; }
+		public static readonly string CurrentProcessBaseName;
+
+		static ThreadIDHelper()
+		{
+			CurrentProcessID = Process.GetCurrentProcess().Id;
+			CurrentProcessName = GetProcessName();
+			CurrentProcessBaseName = Path.GetFileNameWithoutExtension(CurrentProcessName);
+		}
+		
+		private static string GetProcessName()
+		{
+			try
+			{
+				return Process.GetCurrentProcess().MainModule.FileName;
+			}
+			catch (Exception exception)
+			{
+				if (exception.MustBeRethrown())
+					throw;
+
+				return "<unknown>";
+			}
+		}
 	}
 }

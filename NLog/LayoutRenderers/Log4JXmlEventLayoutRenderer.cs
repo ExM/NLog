@@ -36,7 +36,7 @@ namespace NLog.LayoutRenderers
 				CultureInfo.InvariantCulture,
 				"{0}({1})", 
 				AppDomain.CurrentDomain.FriendlyName, 
-				ThreadIDHelper.Instance.CurrentProcessID);
+				ThreadIDHelper.CurrentProcessID);
 			this.Parameters = new List<NLogViewerParameterInfo>();
 		}
 

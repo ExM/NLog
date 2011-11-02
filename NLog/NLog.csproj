@@ -117,7 +117,6 @@
     <Compile Include="Internal\LoggerConfiguration.cs" />
     <Compile Include="Internal\MultiFileWatcher.cs" />
     <Compile Include="Internal\MySmtpClient.cs" />
-    <Compile Include="Internal\NativeMethods.cs" />
     <Compile Include="Internal\NetworkSenders\HttpNetworkSender.cs" />
     <Compile Include="Internal\NetworkSenders\INetworkSenderFactory.cs" />
     <Compile Include="Internal\NetworkSenders\ISocket.cs" />
@@ -130,7 +129,6 @@
     <Compile Include="Internal\ParameterUtils.cs" />
     <Compile Include="Internal\PlatformDetector.cs" />
     <Compile Include="Internal\PortableFileInfoHelper.cs" />
-    <Compile Include="Internal\PortableThreadIDHelper.cs" />
     <Compile Include="Internal\PropertyHelper.cs" />
     <Compile Include="Internal\ReflectionHelpers.cs" />
     <Compile Include="Internal\RuntimeOS.cs" />
@@ -145,7 +143,6 @@
     <Compile Include="Internal\UrlHelper.cs" />
     <Compile Include="Internal\Win32FileInfoHelper.cs" />
     <Compile Include="Internal\Win32FileNativeMethods.cs" />
-    <Compile Include="Internal\Win32ThreadIDHelper.cs" />
     <Compile Include="LayoutRenderers\AmbientPropertyAttribute.cs" />
     <Compile Include="LayoutRenderers\BaseDirLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\CallSiteLayoutRenderer.cs" />

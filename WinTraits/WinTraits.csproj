@@ -34,6 +34,9 @@
   <ItemGroup>
     <Compile Include="Internal\NativeMethods.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Internal\ThreadIDHelper.cs" />
+    <Compile Include="LayoutRenderers\ProcessIdLayoutRenderer.cs" />
+    <Compile Include="LayoutRenderers\ProcessNameLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\QueryPerformanceCounterLayoutRenderer.cs" />
     <Compile Include="Targets\OutputDebugStringTarget.cs" />
   </ItemGroup>
