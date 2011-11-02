@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Text;
 using NLog.Internal;
-using System.Diagnostics;
 
 namespace NLog.LayoutRenderers
 {
@@ -14,8 +13,8 @@ namespace NLog.LayoutRenderers
 	public class QueryPerformanceCounterLayoutRenderer : LayoutRenderer
 	{
 		private bool _raw;
-		private long _firstQpcValue;
-		private long _lastQpcValue;
+		private ulong _firstQpcValue;
+		private ulong _lastQpcValue;
 		private double _frequency = 1;
 
 		/// <summary>
@@ -84,11 +83,15 @@ namespace NLog.LayoutRenderers
 		{
 			base.InitializeLayoutRenderer();
 
-			if (!Stopwatch.IsHighResolution)
-				throw new InvalidOperationException("Cannot determine high-performance counter.");
+			ulong performanceFrequency;
 
-			long performanceFrequency = Stopwatch.Frequency;
-			long qpcValue = Stopwatch.GetTimestamp();
+			if (!NativeMethods.QueryPerformanceFrequency(out performanceFrequency))
+				throw new InvalidOperationException("Cannot determine high-performance counter frequency.");
+
+			ulong qpcValue;
+
+			if (!NativeMethods.QueryPerformanceCounter(out qpcValue))
+				throw new InvalidOperationException("Cannot determine high-performance counter value.");
 
 			_frequency = performanceFrequency;
 			_firstQpcValue = qpcValue;
@@ -102,9 +105,12 @@ namespace NLog.LayoutRenderers
 		/// <param name="logEvent">Logging event.</param>
 		protected override void Append(StringBuilder builder, LogEventInfo logEvent)
 		{
-			long qpcValue = Stopwatch.GetTimestamp();
+			ulong qpcValue;
 
-			long v = qpcValue;
+			if (!NativeMethods.QueryPerformanceCounter(out qpcValue))
+				return;
+
+			ulong v = qpcValue;
 
 			if (Difference)
 				qpcValue -= _lastQpcValue;
@@ -120,7 +126,7 @@ namespace NLog.LayoutRenderers
 				double val = Math.Round(qpcValue / _frequency, Precision);
 
 				stringValue = Convert.ToString(val, CultureInfo.InvariantCulture);
-				if(AlignDecimalPoint)
+				if (AlignDecimalPoint)
 				{
 					int p = stringValue.IndexOf('.');
 					if (p == -1)

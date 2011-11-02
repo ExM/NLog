@@ -255,7 +255,6 @@
     <Compile Include="Targets\NLogViewerParameterInfo.cs" />
     <Compile Include="Targets\NLogViewerTarget.cs" />
     <Compile Include="Targets\NullTarget.cs" />
-    <Compile Include="Targets\OutputDebugStringTarget.cs" />
     <Compile Include="Targets\PerformanceCounterTarget.cs" />
     <Compile Include="Targets\SmtpAuthenticationMode.cs" />
     <Compile Include="Targets\Target.cs" />
