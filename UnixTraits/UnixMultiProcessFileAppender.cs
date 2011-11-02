@@ -18,16 +18,6 @@ namespace NLog.Internal.FileAppenders
 	{
 		private UnixStream file;
 
-		public static readonly IFileAppenderFactory TheFactory = new Factory();
-
-		public class Factory : IFileAppenderFactory
-		{
-			public BaseFileAppender Open(string fileName, ICreateFileParameters parameters)
-			{
-				return new UnixMultiProcessFileAppender(fileName, parameters);
-			}
-		}
-
 		public UnixMultiProcessFileAppender(string fileName, ICreateFileParameters parameters) : base(fileName, parameters)
 		{
 			int fd = Syscall.open(fileName, OpenFlags.O_CREAT | OpenFlags.O_WRONLY | OpenFlags.O_APPEND, (FilePermissions)(6 | (6 << 3) | (6 << 6)));

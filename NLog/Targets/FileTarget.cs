@@ -26,7 +26,7 @@ namespace NLog.Targets
 		private readonly Dictionary<string, DateTime> initializedFiles = new Dictionary<string, DateTime>();
 
 		private LineEndingMode lineEndingMode = LineEndingMode.Default;
-		private IFileAppenderFactory appenderFactory;
+		private Func<string, ICreateFileParameters, BaseFileAppender> appenderFactory;
 		private BaseFileAppender[] recentAppenders;
 		private Timer autoClosingTimer;
 		private int initializedFilesCounter;
@@ -401,22 +401,22 @@ namespace NLog.Targets
 				asyncContinuation(exception);
 			}
 		}
-		
-		protected virtual IFileAppenderFactory ResolveFileAppenderFactory()
+
+		protected virtual Func<string, ICreateFileParameters, BaseFileAppender> ResolveFileAppenderFactory()
 		{
 			if (!KeepFileOpen)
-				return RetryingMultiProcessFileAppender.TheFactory;
+				return (f, p) => new RetryingMultiProcessFileAppender(f, p);
 			
 			if (NetworkWrites) // && KeepFileOpen
-				return RetryingMultiProcessFileAppender.TheFactory;
+				return (f, p) => new RetryingMultiProcessFileAppender(f, p);
 			
 			if (ConcurrentWrites) // && !NetworkWrites && KeepFileOpen
-				return MutexMultiProcessFileAppender.TheFactory;
+				return (f, p) => new MutexMultiProcessFileAppender(f, p);
 			
 			if (this.ArchiveAboveSize != -1 || ArchiveEvery != FileArchivePeriod.None)
-				return CountingSingleProcessFileAppender.TheFactory;
+				return (f, p) => new CountingSingleProcessFileAppender(f, p);
 			else
-				return SingleProcessFileAppender.TheFactory;
+				return (f, p) => new SingleProcessFileAppender(f, p);
 		}
 
 		/// <summary>
@@ -965,7 +965,7 @@ namespace NLog.Targets
 
 			if (appenderToWrite == null)
 			{
-				BaseFileAppender newAppender = this.appenderFactory.Open(fileName, this);
+				BaseFileAppender newAppender = appenderFactory(fileName, this);
 
 				if (this.recentAppenders[freeSpot] != null)
 				{

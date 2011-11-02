@@ -1,5 +1,6 @@
 using NLog.Internal.FileAppenders;
 using NLog.Targets;
+using System;
 
 namespace NLog.UnixTraits.Targets
 {
@@ -10,10 +11,10 @@ namespace NLog.UnixTraits.Targets
 	[Target("File")]
 	public class FileTarget : NLog.Targets.FileTarget
 	{
-		protected override IFileAppenderFactory ResolveFileAppenderFactory()
+		protected override Func<string, ICreateFileParameters, BaseFileAppender> ResolveFileAppenderFactory()
 		{
 			if(ConcurrentWrites && !NetworkWrites && KeepFileOpen)
-				return UnixMultiProcessFileAppender.TheFactory;
+				return (f, p) => new UnixMultiProcessFileAppender(f, p);
 			
 			return base.ResolveFileAppenderFactory();
 		}

@@ -21,8 +21,6 @@ namespace NLog.Internal.FileAppenders
 	/// </remarks>
 	internal class MutexMultiProcessFileAppender : BaseFileAppender
 	{
-		public static readonly IFileAppenderFactory TheFactory = new Factory();
-
 		private FileStream file;
 		private Mutex mutex;
 
@@ -170,25 +168,6 @@ namespace NLog.Internal.FileAppenders
 			canonicalName = canonicalName.Replace(':', '_');
 
 			return "filelock-mutex-" + canonicalName;
-		}
-
-		/// <summary>
-		/// Factory class.
-		/// </summary>
-		private class Factory : IFileAppenderFactory
-		{
-			/// <summary>
-			/// Opens the appender for given file name and parameters.
-			/// </summary>
-			/// <param name="fileName">Name of the file.</param>
-			/// <param name="parameters">Creation parameters.</param>
-			/// <returns>
-			/// Instance of <see cref="BaseFileAppender"/> which can be used to write to the file.
-			/// </returns>
-			BaseFileAppender IFileAppenderFactory.Open(string fileName, ICreateFileParameters parameters)
-			{
-				return new MutexMultiProcessFileAppender(fileName, parameters);
-			}
 		}
 	}
 }

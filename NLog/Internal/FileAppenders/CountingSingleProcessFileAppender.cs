@@ -10,8 +10,6 @@ namespace NLog.Internal.FileAppenders
 	/// </summary>
 	internal class CountingSingleProcessFileAppender : BaseFileAppender
 	{
-		public static readonly IFileAppenderFactory TheFactory = new Factory();
-
 		private FileStream file;
 
 		private long currentFileLength;
@@ -92,25 +90,6 @@ namespace NLog.Internal.FileAppenders
 			this.currentFileLength += bytes.Length;
 			this.file.Write(bytes, 0, bytes.Length);
 			this.FileTouched();
-		}
-
-		/// <summary>
-		/// Factory class which creates <see cref="CountingSingleProcessFileAppender"/> objects.
-		/// </summary>
-		private class Factory : IFileAppenderFactory
-		{
-			/// <summary>
-			/// Opens the appender for given file name and parameters.
-			/// </summary>
-			/// <param name="fileName">Name of the file.</param>
-			/// <param name="parameters">Creation parameters.</param>
-			/// <returns>
-			/// Instance of <see cref="BaseFileAppender"/> which can be used to write to the file.
-			/// </returns>
-			BaseFileAppender IFileAppenderFactory.Open(string fileName, ICreateFileParameters parameters)
-			{
-				return new CountingSingleProcessFileAppender(fileName, parameters);
-			}
 		}
 	}
 }

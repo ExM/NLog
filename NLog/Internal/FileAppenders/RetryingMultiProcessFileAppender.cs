@@ -10,8 +10,6 @@ namespace NLog.Internal.FileAppenders
 	/// </summary>
 	internal class RetryingMultiProcessFileAppender : BaseFileAppender
 	{
-		public static readonly IFileAppenderFactory TheFactory = new Factory();
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RetryingMultiProcessFileAppender" /> class.
 		/// </summary>
@@ -73,25 +71,6 @@ namespace NLog.Internal.FileAppenders
 				fileLength = -1;
 				lastWriteTime = DateTime.MinValue;
 				return false;
-			}
-		}
-
-		/// <summary>
-		/// Factory class.
-		/// </summary>
-		private class Factory : IFileAppenderFactory
-		{
-			/// <summary>
-			/// Opens the appender for given file name and parameters.
-			/// </summary>
-			/// <param name="fileName">Name of the file.</param>
-			/// <param name="parameters">Creation parameters.</param>
-			/// <returns>
-			/// Instance of <see cref="BaseFileAppender"/> which can be used to write to the file.
-			/// </returns>
-			BaseFileAppender IFileAppenderFactory.Open(string fileName, ICreateFileParameters parameters)
-			{
-				return new RetryingMultiProcessFileAppender(fileName, parameters);
 			}
 		}
 	}

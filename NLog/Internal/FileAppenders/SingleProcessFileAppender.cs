@@ -10,8 +10,6 @@ namespace NLog.Internal.FileAppenders
 	/// </summary>
 	internal class SingleProcessFileAppender : BaseFileAppender
 	{
-		public static readonly IFileAppenderFactory TheFactory = new Factory();
-
 		private FileStream file;
 
 		/// <summary>
@@ -79,25 +77,6 @@ namespace NLog.Internal.FileAppenders
 		public override bool GetFileInfo(out DateTime lastWriteTime, out long fileLength)
 		{
 			throw new NotSupportedException();
-		}
-
-		/// <summary>
-		/// Factory class.
-		/// </summary>
-		private class Factory : IFileAppenderFactory
-		{
-			/// <summary>
-			/// Opens the appender for given file name and parameters.
-			/// </summary>
-			/// <param name="fileName">Name of the file.</param>
-			/// <param name="parameters">Creation parameters.</param>
-			/// <returns>
-			/// Instance of <see cref="BaseFileAppender"/> which can be used to write to the file.
-			/// </returns>
-			BaseFileAppender IFileAppenderFactory.Open(string fileName, ICreateFileParameters parameters)
-			{
-				return new SingleProcessFileAppender(fileName, parameters);
-			}
 		}
 	}
 }
