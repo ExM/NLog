@@ -4,7 +4,7 @@ namespace NLog.Internal.FileAppenders
 	/// <summary>
 	/// Interface implemented by all factories capable of creating file appenders.
 	/// </summary>
-	internal interface IFileAppenderFactory
+	public interface IFileAppenderFactory
 	{
 		/// <summary>
 		/// Opens the appender for given file name and parameters.

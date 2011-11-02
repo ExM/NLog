@@ -1,20 +1,5 @@
-
-#if MONO
-
 using System;
-using System.Xml;
 using System.IO;
-using System.Threading;
-using System.Text;
-using System.Collections;
-using System.Collections.Specialized;
-
-using NLog;
-using NLog.Config;
-using NLog.Common;
-
-using NLog.Internal;
-
 using Mono.Unix;
 using Mono.Unix.Native;
 
@@ -62,7 +47,7 @@ namespace NLog.Internal.FileAppenders
 
 			try
 			{
-				this.file = new UnixStream(fd, true);
+				file = new UnixStream(fd, true);
 			}
 			catch
 			{
@@ -73,19 +58,19 @@ namespace NLog.Internal.FileAppenders
 
 		public override void Write(byte[] bytes)
 		{
-			if (this.file == null)
+			if(file == null)
 				return;
-			this.file.Write(bytes, 0, bytes.Length);
+			file.Write(bytes, 0, bytes.Length);
 			FileTouched();
 		}
 
 		public override void Close()
 		{
-			if (this.file == null)
+			if(file == null)
 				return;
 			InternalLogger.Trace("Closing '{0}'", FileName);
-			this.file.Close();
-			this.file = null;
+			file.Close();
+			file = null;
 			FileTouched();
 		}
 
@@ -112,5 +97,3 @@ namespace NLog.Internal.FileAppenders
 		}
 	}
 }
-
-#endif

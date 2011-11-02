@@ -6,7 +6,7 @@ namespace NLog.Internal.FileAppenders
 	/// <summary>
 	/// Interface that provides parameters for create file function.
 	/// </summary>
-	internal interface ICreateFileParameters
+	public interface ICreateFileParameters
 	{
 		int ConcurrentWriteAttemptDelay { get; }
 

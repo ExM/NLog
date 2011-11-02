@@ -401,6 +401,23 @@ namespace NLog.Targets
 				asyncContinuation(exception);
 			}
 		}
+		
+		protected virtual IFileAppenderFactory ResolveFileAppenderFactory()
+		{
+			if (!KeepFileOpen)
+				return RetryingMultiProcessFileAppender.TheFactory;
+			
+			if (NetworkWrites) // && KeepFileOpen
+				return RetryingMultiProcessFileAppender.TheFactory;
+			
+			if (ConcurrentWrites) // && !NetworkWrites && KeepFileOpen
+				return MutexMultiProcessFileAppender.TheFactory;
+			
+			if (this.ArchiveAboveSize != -1 || ArchiveEvery != FileArchivePeriod.None)
+				return CountingSingleProcessFileAppender.TheFactory;
+			else
+				return SingleProcessFileAppender.TheFactory;
+		}
 
 		/// <summary>
 		/// Initializes file logging by creating data structures that
@@ -410,81 +427,16 @@ namespace NLog.Targets
 		{
 			base.InitializeTarget();
 
-			if (!this.KeepFileOpen)
-			{
-				this.appenderFactory = RetryingMultiProcessFileAppender.TheFactory;
-			}
-			else
-			{
-				if (this.ArchiveAboveSize != -1 || this.ArchiveEvery != FileArchivePeriod.None)
-				{
-					if (this.NetworkWrites)
-					{
-						this.appenderFactory = RetryingMultiProcessFileAppender.TheFactory;
-					}
-					else if (this.ConcurrentWrites)
-					{
-#if MONO
-						//
-						// mono on Windows uses mutexes, on Unix - special appender
-						//
-						if (PlatformDetector.IsUnix)
-						{
-							this.appenderFactory = UnixMultiProcessFileAppender.TheFactory;
-						}
-						else
-						{
-							this.appenderFactory = MutexMultiProcessFileAppender.TheFactory;
-						}
-#else
-						this.appenderFactory = MutexMultiProcessFileAppender.TheFactory;
-#endif
-					}
-					else
-					{
-						this.appenderFactory = CountingSingleProcessFileAppender.TheFactory;
-					}
-				}
-				else
-				{
-					if (this.NetworkWrites)
-					{
-						this.appenderFactory = RetryingMultiProcessFileAppender.TheFactory;
-					}
-					else if (this.ConcurrentWrites)
-					{
-#if MONO
-						//
-						// mono on Windows uses mutexes, on Unix - special appender
-						//
-						if (PlatformDetector.IsUnix)
-						{
-							this.appenderFactory = UnixMultiProcessFileAppender.TheFactory;
-						}
-						else
-						{
-							this.appenderFactory = MutexMultiProcessFileAppender.TheFactory;
-						}
-#else
-						this.appenderFactory = MutexMultiProcessFileAppender.TheFactory;
-#endif
-					}
-					else
-					{
-						this.appenderFactory = SingleProcessFileAppender.TheFactory;
-					}
-				}
-			}
-			
-			this.recentAppenders = new BaseFileAppender[this.OpenFileCacheSize];
+			appenderFactory = ResolveFileAppenderFactory();
+			recentAppenders = new BaseFileAppender[OpenFileCacheSize];
 
-			if ((this.OpenFileCacheSize > 0 || this.EnableFileDelete) && this.OpenFileCacheTimeout > 0)
+			if ((OpenFileCacheSize > 0 || EnableFileDelete) && OpenFileCacheTimeout > 0)
 			{
-				this.autoClosingTimer = new Timer(
-					this.AutoClosingTimerCallback,
+				autoClosingTimer = new Timer(
+					AutoClosingTimerCallback,
 					null,
-					this.OpenFileCacheTimeout * 1000,
-					this.OpenFileCacheTimeout * 1000);
+					OpenFileCacheTimeout * 1000,
+					OpenFileCacheTimeout * 1000);
 			}
 
 			// Console.Error.WriteLine("Name: {0} Factory: {1}", this.Name, this.appenderFactory.GetType().FullName);

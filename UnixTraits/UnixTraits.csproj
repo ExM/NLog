@@ -5,24 +5,24 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{48394EBB-8564-4E62-8F24-C55D873763B3}</ProjectGuid>
+    <ProjectGuid>{F9C8FFF2-E346-4497-9168-52F1BA389CFE}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>SampleExtensions</RootNamespace>
-    <AssemblyName>SampleExtensions</AssemblyName>
+    <RootNamespace>NLog.UnixTraits</RootNamespace>
+    <AssemblyName>NLog.UnixTraits</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG</DefineConstants>
+    <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -30,16 +30,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml" />
+    <Reference Include="Mono.Posix" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Targets\FileTarget.cs" />
+    <Compile Include="UnixMultiProcessFileAppender.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Compile Include="FooLayout.cs" />
-    <Compile Include="FooLayoutRenderer.cs" />
-    <Compile Include="MyConditionMethods.cs" />
-    <Compile Include="MyTarget.cs" />
-    <Compile Include="WhenFooFilter.cs" />
+    <Folder Include="Targets\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NLog\NLog.csproj">
