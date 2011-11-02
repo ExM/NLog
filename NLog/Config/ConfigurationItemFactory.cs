@@ -180,40 +180,7 @@ namespace NLog.Config
 		/// <returns>Default factory.</returns>
 		private static ConfigurationItemFactory BuildDefaultFactory()
 		{
-			var factory = new ConfigurationItemFactory(typeof(Logger).Assembly);
-			factory.RegisterExtendedItems();
-
-			return factory;
-		}
-
-		/// <summary>
-		/// Registers items in NLog.Extended.dll using late-bound types, so that we don't need a reference to NLog.Extended.dll.
-		/// </summary>
-		private void RegisterExtendedItems()
-		{
-			string suffix = typeof(Logger).AssemblyQualifiedName;
-			string myAssemblyName = "NLog,";
-			string extendedAssemblyName = "NLog.Extended,";
-			int p = suffix.IndexOf(myAssemblyName, StringComparison.OrdinalIgnoreCase);
-			if (p >= 0)
-			{
-				suffix = ", " + extendedAssemblyName + suffix.Substring(p + myAssemblyName.Length);
-
-				// register types
-				string targetsNamespace = typeof(DebugTarget).Namespace;
-				this.targets.RegisterNamedType("AspNetTrace", targetsNamespace + ".AspNetTraceTarget" + suffix);
-				this.targets.RegisterNamedType("MSMQ", targetsNamespace + ".MessageQueueTarget" + suffix);
-				this.targets.RegisterNamedType("AspNetBufferingWrapper", targetsNamespace + ".Wrappers.AspNetBufferingTargetWrapper" + suffix);
-
-				// register layout renderers
-				string layoutRenderersNamespace = typeof(MessageLayoutRenderer).Namespace;
-				this.layoutRenderers.RegisterNamedType("aspnet-application", layoutRenderersNamespace + ".AspNetApplicationValueLayoutRenderer" + suffix);
-				this.layoutRenderers.RegisterNamedType("aspnet-request", layoutRenderersNamespace + ".AspNetRequestValueLayoutRenderer" + suffix);
-				this.layoutRenderers.RegisterNamedType("aspnet-sessionid", layoutRenderersNamespace + ".AspNetSessionIDLayoutRenderer" + suffix);
-				this.layoutRenderers.RegisterNamedType("aspnet-session", layoutRenderersNamespace + ".AspNetSessionValueLayoutRenderer" + suffix);
-				this.layoutRenderers.RegisterNamedType("aspnet-user-authtype", layoutRenderersNamespace + ".AspNetUserAuthTypeLayoutRenderer" + suffix);
-				this.layoutRenderers.RegisterNamedType("aspnet-user-identity", layoutRenderersNamespace + ".AspNetUserIdentityLayoutRenderer" + suffix);
-			}
+			return new ConfigurationItemFactory(typeof(Logger).Assembly);
 		}
 	}
 }
