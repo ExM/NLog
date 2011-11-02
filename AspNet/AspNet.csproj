@@ -48,6 +48,12 @@
     <Compile Include="Targets\MessageQueueTarget.cs" />
     <Compile Include="Targets\Wrappers\AspNetBufferingTargetWrapper.cs" />
     <Compile Include="Web\NLogHttpModule.cs" />
+    <Compile Include="Internal\AspHelper.cs" />
+    <Compile Include="LayoutRenderers\AspApplicationValueLayoutRenderer.cs" />
+    <Compile Include="LayoutRenderers\AspRequestValueLayoutRenderer.cs" />
+    <Compile Include="LayoutRenderers\AspSessionValueLayoutRenderer.cs" />
+    <Compile Include="Targets\AspResponseTarget.cs" />
+    <Compile Include="Internal\NativeMethods.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NLog\NLog.csproj">
@@ -63,4 +69,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Folder Include="Internal\" />
+  </ItemGroup>
 </Project>

@@ -1,4 +1,5 @@
 using NLog.Internal.FileAppenders;
+using NLog.Targets;
 
 namespace NLog.UnixTraits.Targets
 {

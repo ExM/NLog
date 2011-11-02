@@ -68,7 +68,7 @@ namespace NLog.Internal.FileAppenders
 		{
 			if(file == null)
 				return;
-			InternalLogger.Trace("Closing '{0}'", FileName);
+			//InternalLogger.Trace("Closing '{0}'", FileName);
 			file.Close();
 			file = null;
 			FileTouched();

@@ -64,9 +64,6 @@ class C1
 			string assemblyName = type.Assembly.FullName;
 			string typename = type.FullName;
 			StringBuilder sb = new StringBuilder();
-#if MONO
-			sb.AppendFormat("\"{0}\" ", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Runner.exe"));
-#endif
 			sb.AppendFormat("\"{0}\" \"{1}\" \"{2}\"", assemblyName, typename, methodName);
 			foreach (string s in p)
 			{
@@ -78,11 +75,7 @@ class C1
 
 			Process proc = new Process();
 			proc.StartInfo.Arguments = sb.ToString();
-#if MONO
-			proc.StartInfo.FileName = "mono";
-#else
 			proc.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Runner.exe");
-#endif
 			proc.StartInfo.UseShellExecute = false;
 			proc.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
 			proc.StartInfo.RedirectStandardInput = false;
