@@ -111,29 +111,9 @@ namespace NLog.UnitTests
 			_reloadCounter++;
 		}
 
-		private bool IsMacOsX()
-		{
-#if MONO
-			// just an approximation, to detect Mac OS X
-			if (Environment.OSVersion.Platform == PlatformID.Unix && Environment.OSVersion.Version.Major == 10)
-			{
-				return true;
-			}
-
-#endif
-			return false;
-		}
-
 		[Test]
 		public void AutoReloadTest()
 		{
-			if (IsMacOsX())
-			{
-				// skip this on Mac OS, since it requires root permissions for
-				// filesystem watcher
-				return;
-			}
-			
 			using (new InternalLoggerScope())
 			{
 				string fileName = Path.GetTempFileName();
