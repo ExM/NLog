@@ -11,10 +11,10 @@ namespace NLog.UnixTraits.Targets
 	[Target("File")]
 	public class FileTarget : NLog.Targets.FileTarget
 	{
-		protected override Func<string, ICreateFileParameters, BaseFileAppender> ResolveFileAppenderFactory()
+		protected override Func<string, BaseFileAppender> ResolveFileAppenderFactory()
 		{
 			if(ConcurrentWrites && !NetworkWrites && KeepFileOpen)
-				return (f, p) => new UnixMultiProcessFileAppender(f, p);
+				return (f) => new UnixMultiProcessFileAppender(f, this);
 			
 			return base.ResolveFileAppenderFactory();
 		}

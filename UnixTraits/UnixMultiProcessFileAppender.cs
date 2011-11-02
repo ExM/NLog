@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Mono.Unix;
 using Mono.Unix.Native;
+using NLog.UnixTraits.Targets;
 
 namespace NLog.Internal.FileAppenders
 {
@@ -18,7 +19,8 @@ namespace NLog.Internal.FileAppenders
 	{
 		private UnixStream file;
 
-		public UnixMultiProcessFileAppender(string fileName, ICreateFileParameters parameters) : base(fileName, parameters)
+		public UnixMultiProcessFileAppender(string fileName, FileTarget parameters)
+			: base(fileName)
 		{
 			int fd = Syscall.open(fileName, OpenFlags.O_CREAT | OpenFlags.O_WRONLY | OpenFlags.O_APPEND, (FilePermissions)(6 | (6 << 3) | (6 << 6)));
 			if (fd == -1)
@@ -58,7 +60,8 @@ namespace NLog.Internal.FileAppenders
 		{
 			if(file == null)
 				return;
-			//InternalLogger.Trace("Closing '{0}'", FileName);
+			//HACK: public internal logger?
+			//InternalLogger.Trace("Closing '{0}'", FileName); 
 			file.Close();
 			file = null;
 			FileTouched();

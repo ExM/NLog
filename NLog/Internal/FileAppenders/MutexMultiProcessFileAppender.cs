@@ -7,6 +7,7 @@ namespace NLog.Internal.FileAppenders
 	using System.IO;
 	using System.Threading;
 	using NLog.Common;
+	using NLog.Targets;
 
 	/// <summary>
 	/// Provides a multiprocess-safe atomic file appends while
@@ -28,13 +29,14 @@ namespace NLog.Internal.FileAppenders
 		/// Initializes a new instance of the <see cref="MutexMultiProcessFileAppender" /> class.
 		/// </summary>
 		/// <param name="fileName">Name of the file.</param>
-		/// <param name="parameters">The parameters.</param>
-		public MutexMultiProcessFileAppender(string fileName, ICreateFileParameters parameters) : base(fileName, parameters)
+		/// <param name="target">The file target.</param>
+		public MutexMultiProcessFileAppender(string fileName, FileTarget target)
+			: base(fileName)
 		{
 			try
 			{
 				this.mutex = new Mutex(false, GetMutexName(fileName));
-				this.file = CreateFileStream(true);
+				this.file = target.CreateFileStream(fileName, true);
 			}
 			catch
 			{

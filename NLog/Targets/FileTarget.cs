@@ -15,18 +15,19 @@ namespace NLog.Targets
 	using NLog.Internal;
 	using NLog.Internal.FileAppenders;
 	using NLog.Layouts;
+	using System.Runtime.InteropServices;
 
 	/// <summary>
 	/// Writes log messages to one or more files.
 	/// </summary>
 	/// <seealso href="http://nlog-project.org/wiki/File_target">Documentation on NLog Wiki</seealso>
 	[Target("File")]
-	public class FileTarget : TargetWithLayoutHeaderAndFooter, ICreateFileParameters
+	public class FileTarget : TargetWithLayoutHeaderAndFooter
 	{
 		private readonly Dictionary<string, DateTime> initializedFiles = new Dictionary<string, DateTime>();
 
 		private LineEndingMode lineEndingMode = LineEndingMode.Default;
-		private Func<string, ICreateFileParameters, BaseFileAppender> appenderFactory;
+		private Func<string, BaseFileAppender> appenderFactory;
 		private BaseFileAppender[] recentAppenders;
 		private Timer autoClosingTimer;
 		private int initializedFilesCounter;
@@ -402,21 +403,21 @@ namespace NLog.Targets
 			}
 		}
 
-		protected virtual Func<string, ICreateFileParameters, BaseFileAppender> ResolveFileAppenderFactory()
+		protected virtual Func<string, BaseFileAppender> ResolveFileAppenderFactory()
 		{
 			if (!KeepFileOpen)
-				return (f, p) => new RetryingMultiProcessFileAppender(f, p);
+				return (f) => new RetryingMultiProcessFileAppender(f, this);
 			
 			if (NetworkWrites) // && KeepFileOpen
-				return (f, p) => new RetryingMultiProcessFileAppender(f, p);
+				return (f) => new RetryingMultiProcessFileAppender(f, this);
 			
 			if (ConcurrentWrites) // && !NetworkWrites && KeepFileOpen
-				return (f, p) => new MutexMultiProcessFileAppender(f, p);
+				return (f) => new MutexMultiProcessFileAppender(f, this);
 			
 			if (this.ArchiveAboveSize != -1 || ArchiveEvery != FileArchivePeriod.None)
-				return (f, p) => new CountingSingleProcessFileAppender(f, p);
+				return (f) => new CountingSingleProcessFileAppender(f, this);
 			else
-				return (f, p) => new SingleProcessFileAppender(f, p);
+				return (f) => new SingleProcessFileAppender(f, this);
 		}
 
 		/// <summary>
@@ -965,7 +966,7 @@ namespace NLog.Targets
 
 			if (appenderToWrite == null)
 			{
-				BaseFileAppender newAppender = appenderFactory(fileName, this);
+				BaseFileAppender newAppender = appenderFactory(fileName);
 
 				if (this.recentAppenders[freeSpot] != null)
 				{
@@ -1043,6 +1044,7 @@ namespace NLog.Targets
 				{
 					this.recentAppenders[i].GetFileInfo(out lastWriteTime, out fileLength);
 					return true;
+					//HACK: may be    return this.recentAppenders[i].GetFileInfo(out lastWriteTime, out fileLength);
 				}
 			}
 
@@ -1082,6 +1084,111 @@ namespace NLog.Targets
 					break;
 				}
 			}
+		}
+
+		private readonly Random random = new Random();
+
+		/// <summary>
+		/// Creates the file stream.
+		/// </summary>
+		/// <param name="allowConcurrentWrite">If set to <c>true</c> allow concurrent writes.</param>
+		/// <returns>A <see cref="FileStream"/> object which can be used to write to the file.</returns>
+		public FileStream CreateFileStream(string fileName, bool allowConcurrentWrite)
+		{
+			int currentDelay = ConcurrentWriteAttemptDelay;
+
+			InternalLogger.Trace("Opening {0} with concurrentWrite={1}", fileName, allowConcurrentWrite);
+			for (int i = 0; i < ConcurrentWriteAttempts; ++i)
+			{
+				try
+				{
+					try
+					{
+						return this.TryCreateFileStream(fileName, allowConcurrentWrite);
+					}
+					catch (DirectoryNotFoundException)
+					{
+						if (!CreateDirs)
+							throw;
+
+						Directory.CreateDirectory(Path.GetDirectoryName(fileName));
+						return this.TryCreateFileStream(fileName, allowConcurrentWrite);
+					}
+				}
+				catch (IOException)
+				{
+					if (!ConcurrentWrites || !allowConcurrentWrite || i + 1 == ConcurrentWriteAttempts)
+						throw;
+
+					int actualDelay = this.random.Next(currentDelay);
+					InternalLogger.Warn("Attempt #{0} to open {1} failed. Sleeping for {2}ms", i, this.FileName, actualDelay);
+					currentDelay *= 2;
+					System.Threading.Thread.Sleep(actualDelay);
+				}
+			}
+
+			throw new InvalidOperationException("Should not be reached.");
+		}
+
+		private FileStream WindowsCreateFile(string fileName, bool allowConcurrentWrite)
+		{
+			int fileShare = Win32FileNativeMethods.FILE_SHARE_READ;
+
+			if (allowConcurrentWrite)
+			{
+				fileShare |= Win32FileNativeMethods.FILE_SHARE_WRITE;
+			}
+
+			if (EnableFileDelete && PlatformDetector.CurrentOS != RuntimeOS.Windows)
+			{
+				fileShare |= Win32FileNativeMethods.FILE_SHARE_DELETE;
+			}
+
+			IntPtr handle = Win32FileNativeMethods.CreateFile(
+				fileName,
+				Win32FileNativeMethods.FileAccess.GenericWrite,
+				fileShare,
+				IntPtr.Zero,
+				Win32FileNativeMethods.CreationDisposition.OpenAlways,
+				FileAttributes,
+				IntPtr.Zero);
+
+			if (handle.ToInt32() == -1)
+			{
+				Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
+			}
+
+			var safeHandle = new Microsoft.Win32.SafeHandles.SafeFileHandle(handle, true);
+			var returnValue = new FileStream(safeHandle, FileAccess.Write, BufferSize);
+			returnValue.Seek(0, SeekOrigin.End);
+			return returnValue;
+		}
+
+		private FileStream TryCreateFileStream(string fileName, bool allowConcurrentWrite)
+		{
+			FileShare fileShare = FileShare.Read;
+
+			if (allowConcurrentWrite)
+			{
+				fileShare = FileShare.ReadWrite;
+			}
+
+			if (EnableFileDelete && PlatformDetector.CurrentOS != RuntimeOS.Windows)
+			{
+				fileShare |= FileShare.Delete;
+			}
+
+			if (PlatformDetector.IsDesktopWin32)
+			{
+				return this.WindowsCreateFile(fileName, allowConcurrentWrite);
+			}
+
+			return new FileStream(
+				fileName,
+				FileMode.Append,
+				FileAccess.Write,
+				fileShare,
+				BufferSize);
 		}
 	}
 }

@@ -3,6 +3,7 @@ namespace NLog.Internal.FileAppenders
 {
 	using System;
 	using System.IO;
+	using NLog.Targets;
 
 	/// <summary>
 	/// Implementation of <see cref="BaseFileAppender"/> which caches 
@@ -18,9 +19,9 @@ namespace NLog.Internal.FileAppenders
 		/// Initializes a new instance of the <see cref="CountingSingleProcessFileAppender" /> class.
 		/// </summary>
 		/// <param name="fileName">Name of the file.</param>
-		/// <param name="parameters">The parameters.</param>
-		public CountingSingleProcessFileAppender(string fileName, ICreateFileParameters parameters)
-			: base(fileName, parameters)
+		/// <param name="target">The file target.</param>
+		public CountingSingleProcessFileAppender(string fileName, FileTarget target)
+			: base(fileName)
 		{
 			var fi = new FileInfo(fileName);
 			if (fi.Exists)
@@ -34,7 +35,7 @@ namespace NLog.Internal.FileAppenders
 				this.currentFileLength = 0;
 			}
 
-			this.file = this.CreateFileStream(false);
+			this.file = target.CreateFileStream(fileName, false);
 		}
 
 		/// <summary>

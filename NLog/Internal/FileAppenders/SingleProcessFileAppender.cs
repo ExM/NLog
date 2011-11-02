@@ -4,6 +4,7 @@ namespace NLog.Internal.FileAppenders
 	using System;
 	using System.IO;
 	using NLog.Common;
+	using NLog.Targets;
 
 	/// <summary>
 	/// Optimized single-process file appender which keeps the file open for exclusive write.
@@ -16,10 +17,11 @@ namespace NLog.Internal.FileAppenders
 		/// Initializes a new instance of the <see cref="SingleProcessFileAppender" /> class.
 		/// </summary>
 		/// <param name="fileName">Name of the file.</param>
-		/// <param name="parameters">The parameters.</param>
-		public SingleProcessFileAppender(string fileName, ICreateFileParameters parameters) : base(fileName, parameters)
+		/// <param name="target">The file target.</param>
+		public SingleProcessFileAppender(string fileName, FileTarget target)
+			: base(fileName)
 		{
-			this.file = CreateFileStream(false);
+			this.file = target.CreateFileStream(fileName, false);
 		}
 
 		/// <summary>
