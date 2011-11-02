@@ -1,11 +1,12 @@
-#define DEBUG
+#define DEBUG 
+#define TRACE
+
+using System;
+using System.Diagnostics;
+using NUnit.Framework;
 
 namespace NLog.UnitTests
 {
-	using System;
-	using System.Diagnostics;
-	using NUnit.Framework;
-
 	[TestFixture]
 	public class NLogTraceListenerTests : NLogTestBase
 	{
@@ -29,11 +30,14 @@ namespace NLog.UnitTests
 			Debug.Write("Hello", "Cat1");
 			AssertDebugLastMessage("debug", "Logger1 Debug Cat1: Hello");
 
-			Debug.Write(3.1415);
-			AssertDebugLastMessage("debug", "Logger1 Debug 3.1415");
+			using (ThCulture.Use())
+			{
+				Debug.Write(3.1415);
+				AssertDebugLastMessage("debug", "Logger1 Debug 3.1415");
 
-			Debug.Write(3.1415, "Cat2");
-			AssertDebugLastMessage("debug", "Logger1 Debug Cat2: 3.1415");
+				Debug.Write(3.1415, "Cat2");
+				AssertDebugLastMessage("debug", "Logger1 Debug Cat2: 3.1415");
+			}
 		}
 
 		[Test]
@@ -56,11 +60,14 @@ namespace NLog.UnitTests
 			Debug.WriteLine("Hello", "Cat1");
 			AssertDebugLastMessage("debug", "Logger1 Debug Cat1: Hello");
 
-			Debug.WriteLine(3.1415);
-			AssertDebugLastMessage("debug", "Logger1 Debug 3.1415");
+			using (ThCulture.Use())
+			{
+				Debug.WriteLine(3.1415);
+				AssertDebugLastMessage("debug", "Logger1 Debug 3.1415");
 
-			Debug.WriteLine(3.1415, "Cat2");
-			AssertDebugLastMessage("debug", "Logger1 Debug Cat2: 3.1415");
+				Debug.WriteLine(3.1415, "Cat2");
+				AssertDebugLastMessage("debug", "Logger1 Debug Cat2: 3.1415");
+			}
 		}
 
 		[Test]
@@ -147,11 +154,14 @@ namespace NLog.UnitTests
 			TraceSource ts = CreateTraceSource();
 			ts.Listeners.Add(new NLogTraceListener { Name = "Logger1", DefaultLogLevel = LogLevel.Trace });
 
-			ts.TraceData(TraceEventType.Critical, 123, 42);
-			AssertDebugLastMessage("debug", "MySource1 Fatal 42 123");
+			using (ThCulture.Use())
+			{
+				ts.TraceData(TraceEventType.Critical, 123, 42);
+				AssertDebugLastMessage("debug", "MySource1 Fatal 42 123");
 
-			ts.TraceData(TraceEventType.Critical, 145, 42, 3.14, "foo");
-			AssertDebugLastMessage("debug", "MySource1 Fatal 42, 3.14, foo 145");
+				ts.TraceData(TraceEventType.Critical, 145, 42, 3.14, "foo");
+				AssertDebugLastMessage("debug", "MySource1 Fatal 42, 3.14, foo 145");
+			}
 		}
 		
 		[Test]
@@ -226,6 +236,8 @@ namespace NLog.UnitTests
 				</nlog>");
 
 			TraceSource ts = CreateTraceSource();
+			ts.Listeners.Add(new System.Diagnostics.ConsoleTraceListener());
+
 			ts.Listeners.Add(new NLogTraceListener { Name = "Logger1", DefaultLogLevel = LogLevel.Trace, ForceLogLevel = LogLevel.Warn });
 
 			// force all logs to be Warn, DefaultLogLevel has no effect on TraceSource
