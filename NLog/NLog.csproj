@@ -104,7 +104,6 @@
     <Compile Include="Internal\FactoryHelper.cs" />
     <Compile Include="Internal\FileAppenders\BaseFileAppender.cs" />
     <Compile Include="Internal\FileAppenders\CountingSingleProcessFileAppender.cs" />
-    <Compile Include="Internal\FileAppenders\MutexMultiProcessFileAppender.cs" />
     <Compile Include="Internal\FileAppenders\RetryingMultiProcessFileAppender.cs" />
     <Compile Include="Internal\FileAppenders\SingleProcessFileAppender.cs" />
     <Compile Include="Internal\IRenderable.cs" />
@@ -137,7 +136,6 @@
     <Compile Include="Internal\ThreadLocalStorageHelper.cs" />
     <Compile Include="Internal\TimeoutContinuation.cs" />
     <Compile Include="Internal\UrlHelper.cs" />
-    <Compile Include="Internal\Win32FileNativeMethods.cs" />
     <Compile Include="LayoutRenderers\AmbientPropertyAttribute.cs" />
     <Compile Include="LayoutRenderers\BaseDirLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\CallSiteLayoutRenderer.cs" />
@@ -256,7 +254,6 @@
     <Compile Include="Targets\TraceTarget.cs" />
     <Compile Include="Targets\WebServiceProtocol.cs" />
     <Compile Include="Targets\WebServiceTarget.cs" />
-    <Compile Include="Targets\Win32FileAttributes.cs" />
     <Compile Include="Targets\Wrappers\AsyncRequestQueue-T.cs" />
     <Compile Include="Targets\Wrappers\AsyncTargetWrapper.cs" />
     <Compile Include="Targets\Wrappers\AsyncTargetWrapperOverflowAction.cs" />

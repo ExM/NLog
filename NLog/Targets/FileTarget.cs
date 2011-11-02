@@ -50,7 +50,6 @@ namespace NLog.Targets
 			this.Encoding = Encoding.Default;
 			this.BufferSize = 32768;
 			this.AutoFlush = true;
-			this.FileAttributes = Win32FileAttributes.Normal;
 			this.NewLineChars = EnvironmentHelper.NewLine;
 			this.EnableFileDelete = true;
 			this.OpenFileCacheTimeout = -1;
@@ -122,13 +121,6 @@ namespace NLog.Targets
 		/// <docgen category='Output Options' order='10' />
 		[DefaultValue(true)]
 		public bool EnableFileDelete { get; set; }
-
-		/// <summary>
-		/// Gets or sets the file attributes (Windows only).
-		/// </summary>
-		/// <docgen category='Output Options' order='10' />
-		[Advanced]
-		public Win32FileAttributes FileAttributes { get; set; }
 
 		/// <summary>
 		/// Gets or sets the line ending mode.
@@ -405,19 +397,13 @@ namespace NLog.Targets
 
 		protected virtual Func<string, BaseFileAppender> ResolveFileAppenderFactory()
 		{
-			if (!KeepFileOpen)
+			if (!KeepFileOpen || NetworkWrites || ConcurrentWrites)
 				return (f) => new RetryingMultiProcessFileAppender(f, this);
-			
-			if (NetworkWrites) // && KeepFileOpen
-				return (f) => new RetryingMultiProcessFileAppender(f, this);
-			
-			if (ConcurrentWrites) // && !NetworkWrites && KeepFileOpen
-				return (f) => new MutexMultiProcessFileAppender(f, this);
 			
 			if (this.ArchiveAboveSize != -1 || ArchiveEvery != FileArchivePeriod.None)
 				return (f) => new CountingSingleProcessFileAppender(f, this);
-			else
-				return (f) => new SingleProcessFileAppender(f, this);
+			
+			return (f) => new SingleProcessFileAppender(f, this);
 		}
 
 		/// <summary>
@@ -1130,65 +1116,14 @@ namespace NLog.Targets
 			throw new InvalidOperationException("Should not be reached.");
 		}
 
-		private FileStream WindowsCreateFile(string fileName, bool allowConcurrentWrite)
+		protected virtual FileStream TryCreateFileStream(string fileName, bool allowConcurrentWrite)
 		{
-			int fileShare = Win32FileNativeMethods.FILE_SHARE_READ;
-
-			if (allowConcurrentWrite)
-			{
-				fileShare |= Win32FileNativeMethods.FILE_SHARE_WRITE;
-			}
+			FileShare fileShare = allowConcurrentWrite ? FileShare.ReadWrite : FileShare.Read;
 
 			if (EnableFileDelete && PlatformDetector.CurrentOS != RuntimeOS.Windows)
-			{
-				fileShare |= Win32FileNativeMethods.FILE_SHARE_DELETE;
-			}
-
-			IntPtr handle = Win32FileNativeMethods.CreateFile(
-				fileName,
-				Win32FileNativeMethods.FileAccess.GenericWrite,
-				fileShare,
-				IntPtr.Zero,
-				Win32FileNativeMethods.CreationDisposition.OpenAlways,
-				FileAttributes,
-				IntPtr.Zero);
-
-			if (handle.ToInt32() == -1)
-			{
-				Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
-			}
-
-			var safeHandle = new Microsoft.Win32.SafeHandles.SafeFileHandle(handle, true);
-			var returnValue = new FileStream(safeHandle, FileAccess.Write, BufferSize);
-			returnValue.Seek(0, SeekOrigin.End);
-			return returnValue;
-		}
-
-		private FileStream TryCreateFileStream(string fileName, bool allowConcurrentWrite)
-		{
-			FileShare fileShare = FileShare.Read;
-
-			if (allowConcurrentWrite)
-			{
-				fileShare = FileShare.ReadWrite;
-			}
-
-			if (EnableFileDelete && PlatformDetector.CurrentOS != RuntimeOS.Windows)
-			{
 				fileShare |= FileShare.Delete;
-			}
 
-			if (PlatformDetector.IsDesktopWin32)
-			{
-				return this.WindowsCreateFile(fileName, allowConcurrentWrite);
-			}
-
-			return new FileStream(
-				fileName,
-				FileMode.Append,
-				FileAccess.Write,
-				fileShare,
-				BufferSize);
+			return new FileStream(fileName, FileMode.Append, FileAccess.Write, fileShare, BufferSize);
 		}
 	}
 }

@@ -32,13 +32,17 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Internal\FileAppenders\MutexMultiProcessFileAppender.cs" />
     <Compile Include="Internal\NativeMethods.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Internal\ThreadIDHelper.cs" />
+    <Compile Include="Internal\Win32FileNativeMethods.cs" />
     <Compile Include="LayoutRenderers\ProcessIdLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\ProcessNameLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\QueryPerformanceCounterLayoutRenderer.cs" />
+    <Compile Include="Targets\FileTarget.cs" />
     <Compile Include="Targets\OutputDebugStringTarget.cs" />
+    <Compile Include="Targets\Win32FileAttributes.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

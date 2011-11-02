@@ -18,7 +18,7 @@ namespace NLog.UnitTests.Targets
 
 		private void ConfigureSharedFile(string mode)
 		{
-			FileTarget ft = new FileTarget();
+			FileTarget ft = new NLog.WinTraits.Targets.FileTarget();
 			ft.FileName = "${basedir}/file.txt";
 			ft.Layout = "${threadname} ${message}";
 			ft.KeepFileOpen = true;
@@ -125,7 +125,6 @@ namespace NLog.UnitTests.Targets
 		[Test]
 		public void SimpleConcurrentTest()
 		{
-			Assert.Pass("this is need detect OS"); //TODO: this is need detect OS
 			DoConcurrentTest("none");
 		}
 

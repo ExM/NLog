@@ -8,7 +8,7 @@ using NUnit.Framework;
 
 namespace NLog.UnitTests
 {
-	static class ProcessRunner
+	public static class ProcessRunner
 	{
 		static ProcessRunner()
 		{
