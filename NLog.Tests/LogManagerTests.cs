@@ -36,17 +36,6 @@ namespace NLog.UnitTests
 		}
 
 		[Test]
-		public void GarbageCollection2Test()
-		{
-			string uniqueLoggerName = Guid.NewGuid().ToString();
-			WeakReference wr = new WeakReference(LogManager.GetLogger(uniqueLoggerName));
-
-			// nobody's holding a reference to this Logger anymore, so GC.Collect(2) should free it
-			GC.Collect();
-			Assert.IsFalse(wr.IsAlive);
-		}
-
-		[Test]
 		public void NullLoggerTest()
 		{
 			Logger l = LogManager.CreateNullLogger();
