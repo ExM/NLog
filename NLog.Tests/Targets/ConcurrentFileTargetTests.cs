@@ -125,7 +125,7 @@ namespace NLog.UnitTests.Targets
 		[Test]
 		public void SimpleConcurrentTest()
 		{
-			Assert.Pass("this is need detect OS"); //TODO: this is need detect OS
+			Assert.Ignore("this is need detect OS"); //TODO: this is need detect OS
 			DoConcurrentTest("none");
 		}
 
