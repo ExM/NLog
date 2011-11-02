@@ -109,7 +109,6 @@
     <Compile Include="Internal\FileAppenders\MutexMultiProcessFileAppender.cs" />
     <Compile Include="Internal\FileAppenders\RetryingMultiProcessFileAppender.cs" />
     <Compile Include="Internal\FileAppenders\SingleProcessFileAppender.cs" />
-    <Compile Include="Internal\FileInfoHelper.cs" />
     <Compile Include="Internal\IRenderable.cs" />
     <Compile Include="Internal\ISmtpClient.cs" />
     <Compile Include="Internal\ISupportsInitialize.cs" />
@@ -128,7 +127,6 @@
     <Compile Include="Internal\ObjectGraphScanner.cs" />
     <Compile Include="Internal\ParameterUtils.cs" />
     <Compile Include="Internal\PlatformDetector.cs" />
-    <Compile Include="Internal\PortableFileInfoHelper.cs" />
     <Compile Include="Internal\PropertyHelper.cs" />
     <Compile Include="Internal\ReflectionHelpers.cs" />
     <Compile Include="Internal\RuntimeOS.cs" />
@@ -141,7 +139,6 @@
     <Compile Include="Internal\ThreadLocalStorageHelper.cs" />
     <Compile Include="Internal\TimeoutContinuation.cs" />
     <Compile Include="Internal\UrlHelper.cs" />
-    <Compile Include="Internal\Win32FileInfoHelper.cs" />
     <Compile Include="Internal\Win32FileNativeMethods.cs" />
     <Compile Include="LayoutRenderers\AmbientPropertyAttribute.cs" />
     <Compile Include="LayoutRenderers\BaseDirLayoutRenderer.cs" />
