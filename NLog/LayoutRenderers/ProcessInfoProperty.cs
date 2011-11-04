@@ -1,6 +1,3 @@
-
-#if !MONO
-
 namespace NLog.LayoutRenderers
 {
 	/// <summary>
@@ -204,5 +201,3 @@ namespace NLog.LayoutRenderers
 		WorkingSet64,
 	}
 }
-
-#endif

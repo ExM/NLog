@@ -1,16 +1,13 @@
-
-#if !MONO
+using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Globalization;
+using System.Reflection;
+using System.Text;
+using NLog.Config;
 
 namespace NLog.LayoutRenderers
 {
-	using System;
-	using System.ComponentModel;
-	using System.Diagnostics;
-	using System.Globalization;
-	using System.Reflection;
-	using System.Text;
-	using NLog.Config;
-
 	/// <summary>
 	/// The information about the running process.
 	/// </summary>
@@ -26,7 +23,7 @@ namespace NLog.LayoutRenderers
 		/// </summary>
 		public ProcessInfoLayoutRenderer()
 		{
-			this.Property = ProcessInfoProperty.Id;
+			Property = ProcessInfoProperty.Id;
 		}
 
 		/// <summary>
@@ -42,13 +39,13 @@ namespace NLog.LayoutRenderers
 		protected override void InitializeLayoutRenderer()
 		{
 			base.InitializeLayoutRenderer();
-			this.propertyInfo = typeof(Process).GetProperty(this.Property.ToString());
-			if (this.propertyInfo == null)
+			propertyInfo = typeof(Process).GetProperty(Property.ToString());
+			if (propertyInfo == null)
 			{
-				throw new ArgumentException("Property '" + this.propertyInfo + "' not found in System.Diagnostics.Process");
+				throw new ArgumentException("Property '" + propertyInfo + "' not found in System.Diagnostics.Process");
 			}
 
-			this.process = Process.GetCurrentProcess();
+			process = Process.GetCurrentProcess();
 		}
 
 		/// <summary>
@@ -56,10 +53,10 @@ namespace NLog.LayoutRenderers
 		/// </summary>
 		protected override void CloseLayoutRenderer()
 		{
-			if (this.process != null)
+			if (process != null)
 			{
-				this.process.Close();
-				this.process = null;
+				process.Close();
+				process = null;
 			}
 
 			base.CloseLayoutRenderer();
@@ -72,12 +69,11 @@ namespace NLog.LayoutRenderers
 		/// <param name="logEvent">Logging event.</param>
 		protected override void Append(StringBuilder builder, LogEventInfo logEvent)
 		{
-			if (this.propertyInfo != null)
+			if (propertyInfo != null)
 			{
-				builder.Append(Convert.ToString(this.propertyInfo.GetValue(this.process, null), CultureInfo.InvariantCulture));
+				builder.Append(Convert.ToString(propertyInfo.GetValue(process, null), CultureInfo.InvariantCulture));
 			}
 		}
 	}
 }
 
-#endif

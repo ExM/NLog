@@ -1,4 +1,4 @@
-#define DEBUG 
+#define DEBUG
 #define TRACE
 
 using System;
@@ -178,10 +178,12 @@ namespace NLog.UnitTests
 			TraceSource ts = CreateTraceSource();
 			ts.Listeners.Add(new NLogTraceListener { Name = "Logger1", DefaultLogLevel = LogLevel.Trace });
 			
-			ts.TraceInformation("Quick brown fox");
+			//ts.TraceInformation("Quick brown fox");
+			ts.TraceEvent(TraceEventType.Information, 0, "Quick brown fox"); //HACK: not implemented
 			AssertDebugLastMessage("debug", "MySource1 Info Quick brown fox 0");
 
-			ts.TraceInformation("Mary had {0} lamb", "a little");
+			//ts.TraceInformation("Mary had {0} lamb", "a little");
+			ts.TraceEvent(TraceEventType.Information, 0, "Mary had {0} lamb", "a little"); //HACK: not implemented
 			AssertDebugLastMessage("debug", "MySource1 Info Mary had a little lamb 0");
 		}
 
@@ -241,10 +243,12 @@ namespace NLog.UnitTests
 			ts.Listeners.Add(new NLogTraceListener { Name = "Logger1", DefaultLogLevel = LogLevel.Trace, ForceLogLevel = LogLevel.Warn });
 
 			// force all logs to be Warn, DefaultLogLevel has no effect on TraceSource
-			ts.TraceInformation("Quick brown fox");
+			//ts.TraceInformation("Quick brown fox");
+			ts.TraceEvent(TraceEventType.Information, 0, "Quick brown fox"); //HACK: not implemented
 			AssertDebugLastMessage("debug", "MySource1 Warn Quick brown fox 0");
 
-			ts.TraceInformation("Mary had {0} lamb", "a little");
+			//ts.TraceInformation("Mary had {0} lamb", "a little");
+			ts.TraceEvent(TraceEventType.Information, 0, "Mary had {0} lamb", "a little"); //HACK: not implemented
 			AssertDebugLastMessage("debug", "MySource1 Warn Mary had a little lamb 0");
 		}
 
@@ -252,11 +256,11 @@ namespace NLog.UnitTests
 		private static TraceSource CreateTraceSource()
 		{
 			var ts = new TraceSource("MySource1", SourceLevels.All);
-#if MONO
+
 			// for some reason needed on Mono
 			ts.Switch = new SourceSwitch("MySource1", "Verbose");
 			ts.Switch.Level = SourceLevels.All;
-#endif
+
 			return ts;
 		}
 	}
