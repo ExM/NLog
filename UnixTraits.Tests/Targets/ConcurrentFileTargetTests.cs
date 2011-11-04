@@ -18,7 +18,7 @@ namespace NLog.UnitTests.Targets
 
 		private void ConfigureSharedFile(string mode)
 		{
-			FileTarget ft = new NLog.WinTraits.Targets.FileTarget();
+			FileTarget ft = new NLog.UnixTraits.Targets.FileTarget();
 			ft.FileName = "${basedir}/file.txt";
 			ft.Layout = "${threadname} ${message}";
 			ft.KeepFileOpen = true;

@@ -145,7 +145,4 @@
     <None Include="ConfigFiles\referencemissingfile.nlog" />
     <None Include="ConfigFiles\referencemissingfileignored.nlog" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
 </Project>

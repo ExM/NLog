@@ -115,19 +115,16 @@ namespace NLog.UnitTests.Targets
 			}
 		}
 
-		private void DoConcurrentTest(string mode)
-		{
-			DoConcurrentTest(2, 10000, mode);
-			DoConcurrentTest(5, 4000, mode);
-			DoConcurrentTest(10, 2000, mode);
-		}
-
+		//HACK: possible to ensure a concurrent write
+		/*
 		[Test]
 		public void SimpleConcurrentTest()
 		{
-			Assert.Ignore("this is need detect OS"); //TODO: this is need detect OS
-			DoConcurrentTest("none");
+			DoConcurrentTest(2, 10000, "none");
+			DoConcurrentTest(5, 4000, "none");
+			DoConcurrentTest(10, 2000, "none");
 		}
+		*/
 
 		[Test]
 		public void AsyncConcurrentTest()
