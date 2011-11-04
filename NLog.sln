@@ -3,17 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLog", "NLog\NLog.csproj", "{CB8BE551-CB33-44A6-B793-1B266862EB25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLog.WinForm", "NLog.WinForm\NLog.WinForm.csproj", "{D77119C2-746D-4A2D-B06B-AB2157F226E1}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLog.Database", "NLog.Database\NLog.Database.csproj", "{BACDB92F-A795-4631-8FC7-C6599D96B1BE}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLog.Tests", "NLog.Tests\NLog.Tests.csproj", "{D0625344-3EF4-46AA-B793-0500C3E41316}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleExtensions", "SampleExtensions\SampleExtensions.csproj", "{48394EBB-8564-4E62-8F24-C55D873763B3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLog.WinForm.Tests", "NLog.WinForm.Tests\NLog.WinForm.Tests.csproj", "{2CD07A9E-6744-4AA4-891B-D7E653697DD7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLog.Database.Tests", "NLog.Database.Tests\NLog.Database.Tests.csproj", "{4819D4E4-5AD9-44E0-B73B-9697288EECBC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogReceiverService", "LogReceiverService\LogReceiverService.csproj", "{D0268955-8365-4FCE-B434-4A539E3356F9}"
 EndProject
@@ -38,6 +30,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Network", "Network\Network.csproj", "{C20B5498-5E79-40F9-B41F-3D74D4558E92}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Network.Tests", "Network.Tests\Network.Tests.csproj", "{F94A8436-778C-4251-AEA9-C9D98D8058FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{BACDB92F-A795-4631-8FC7-C6599D96B1BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database.Tests", "Database.Tests\Database.Tests.csproj", "{4819D4E4-5AD9-44E0-B73B-9697288EECBC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinForm", "WinForm\WinForm.csproj", "{D77119C2-746D-4A2D-B06B-AB2157F226E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinForm.Tests", "WinForm.Tests\WinForm.Tests.csproj", "{2CD07A9E-6744-4AA4-891B-D7E653697DD7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
