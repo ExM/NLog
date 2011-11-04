@@ -137,6 +137,7 @@
     <Compile Include="RoutingTests.cs" />
     <Compile Include="ThCulture.cs" />
     <Compile Include="LayoutRenderers\ProcessInfoTests.cs" />
+    <Compile Include="LayoutRenderers\GarbageCollectorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ConfigFiles\included.nlog" />

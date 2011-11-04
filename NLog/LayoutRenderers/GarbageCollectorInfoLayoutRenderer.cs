@@ -1,13 +1,10 @@
-
-#if !MONO
+using System;
+using System.ComponentModel;
+using System.Globalization;
+using System.Text;
 
 namespace NLog.LayoutRenderers
 {
-	using System;
-	using System.ComponentModel;
-	using System.Globalization;
-	using System.Text;
-
 	/// <summary>
 	/// The information about the garbage collector.
 	/// </summary>
@@ -19,7 +16,7 @@ namespace NLog.LayoutRenderers
 		/// </summary>
 		public GarbageCollectorInfoLayoutRenderer()
 		{
-			this.Property = GarbageCollectorProperty.TotalMemory;
+			Property = GarbageCollectorProperty.TotalMemory;
 		}
 
 		/// <summary>
@@ -36,38 +33,34 @@ namespace NLog.LayoutRenderers
 		/// <param name="logEvent">Logging event.</param>
 		protected override void Append(StringBuilder builder, LogEventInfo logEvent)
 		{
-			object value = null;
+			builder.Append(GetValue());
+		}
 
-			switch (this.Property)
+		private string GetValue()
+		{
+			switch (Property)
 			{
 				case GarbageCollectorProperty.TotalMemory:
-					value = GC.GetTotalMemory(false);
-					break;
-
+					return GC.GetTotalMemory(false).ToString(CultureInfo.InvariantCulture);
+			
 				case GarbageCollectorProperty.TotalMemoryForceCollection:
-					value = GC.GetTotalMemory(true);
-					break;
-
+					return GC.GetTotalMemory(true).ToString(CultureInfo.InvariantCulture);
+			
 				case GarbageCollectorProperty.CollectionCount0:
-					value = GC.CollectionCount(0);
-					break;
-
+					return GC.CollectionCount(0).ToString(CultureInfo.InvariantCulture);
+			
 				case GarbageCollectorProperty.CollectionCount1:
-					value = GC.CollectionCount(1);
-					break;
-
+					return GC.CollectionCount(1).ToString(CultureInfo.InvariantCulture);
+			
 				case GarbageCollectorProperty.CollectionCount2:
-					value = GC.CollectionCount(2);
-					break;
+					return GC.CollectionCount(2).ToString(CultureInfo.InvariantCulture);
 				
 				case GarbageCollectorProperty.MaxGeneration:
-					value = GC.MaxGeneration;
-					break;
+					return GC.MaxGeneration.ToString(CultureInfo.InvariantCulture);
+					
+				default:
+					throw new ArgumentException("Property '" + Property + "' not found");
 			}
-
-			builder.Append(Convert.ToString(value, CultureInfo.InvariantCulture));
 		}
 	}
 }
-
-#endif
