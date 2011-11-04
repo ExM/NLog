@@ -278,7 +278,7 @@ namespace NLog
 			this.UserStackFrameNumber = userStackFrame;
 		}
 
-		internal string AddCachedLayoutValue(Layout layout, string value)
+		public string AddCachedLayoutValue(Layout layout, string value)
 		{
 			if (this.layoutCache == null)
 			{
@@ -289,7 +289,7 @@ namespace NLog
 			return value;
 		}
 
-		internal bool TryGetCachedLayoutValue(Layout layout, out string value)
+		public bool TryGetCachedLayoutValue(Layout layout, out string value)
 		{
 			if (this.layoutCache == null)
 			{

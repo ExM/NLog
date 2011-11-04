@@ -5,10 +5,10 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{D4C12028-88A8-4954-94DA-BAD26DAE52D7}</ProjectGuid>
+    <ProjectGuid>{F94A8436-778C-4251-AEA9-C9D98D8058FF}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>NLog.UnixTraits.Tests</RootNamespace>
-    <AssemblyName>NLog.UnixTraits.Tests</AssemblyName>
+    <RootNamespace>NLog.Network.Tests</RootNamespace>
+    <AssemblyName>NLog.Network.Tests</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,10 +33,15 @@
     <Reference Include="nunit.framework">
       <HintPath>..\lib\NUnit\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Targets\ConcurrentFileTargetTests.cs" />
+    <Compile Include="Targets\MailTargetTests.cs" />
+    <Compile Include="Targets\NetworkTargetTests.cs" />
+    <Compile Include="Internal\NetworkSenders\TcpNetworkSenderTests.cs" />
+    <Compile Include="RegressionTests.cs" />
+    <Compile Include="LayoutRenderers\Log4JXmlTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -44,9 +49,9 @@
       <Project>{CB8BE551-CB33-44A6-B793-1B266862EB25}</Project>
       <Name>NLog</Name>
     </ProjectReference>
-    <ProjectReference Include="..\UnixTraits\UnixTraits.csproj">
-      <Project>{F9C8FFF2-E346-4497-9168-52F1BA389CFE}</Project>
-      <Name>UnixTraits</Name>
+    <ProjectReference Include="..\Network\Network.csproj">
+      <Project>{C20B5498-5E79-40F9-B41F-3D74D4558E92}</Project>
+      <Name>Network</Name>
     </ProjectReference>
     <ProjectReference Include="..\NLog.Tests\NLog.Tests.csproj">
       <Project>{D0625344-3EF4-46AA-B793-0500C3E41316}</Project>
@@ -55,5 +60,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Targets\" />
+    <Folder Include="LayoutRenderers\" />
   </ItemGroup>
 </Project>

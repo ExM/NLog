@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C20B5498-5E79-40F9-B41F-3D74D4558E92}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>NLog.Network</RootNamespace>
+    <AssemblyName>NLog.Network</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Targets\MailTarget.cs" />
+    <Compile Include="Targets\NetworkTarget.cs" />
+    <Compile Include="Targets\NetworkTargetOverflowAction.cs" />
+    <Compile Include="Targets\SmtpAuthenticationMode.cs" />
+    <Compile Include="Targets\WebServiceProtocol.cs" />
+    <Compile Include="Targets\WebServiceTarget.cs" />
+    <Compile Include="Targets\NLogViewerParameterInfo.cs" />
+    <Compile Include="Targets\NLogViewerTarget.cs" />
+    <Compile Include="Targets\ChainsawTarget.cs" />
+    <Compile Include="LayoutRenderers\Log4JXmlEventLayoutRenderer.cs" />
+    <Compile Include="Layouts\Log4JXmlEventLayout.cs" />
+    <Compile Include="Internal\ThreadIDHelper.cs" />
+    <Compile Include="Internal\NetworkSenders\HttpNetworkSender.cs" />
+    <Compile Include="Internal\NetworkSenders\INetworkSenderFactory.cs" />
+    <Compile Include="Internal\NetworkSenders\ISocket.cs" />
+    <Compile Include="Internal\NetworkSenders\NetworkSender.cs" />
+    <Compile Include="Internal\NetworkSenders\NetworkSenderFactory.cs" />
+    <Compile Include="Internal\NetworkSenders\SocketProxy.cs" />
+    <Compile Include="Internal\NetworkSenders\TcpNetworkSender.cs" />
+    <Compile Include="Internal\NetworkSenders\UdpNetworkSender.cs" />
+    <Compile Include="Internal\UrlHelper.cs" />
+    <Compile Include="Internal\SortHelpers.cs" />
+    <Compile Include="Internal\ISmtpClient.cs" />
+    <Compile Include="Internal\MySmtpClient.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Targets\" />
+    <Folder Include="LayoutRenderers\" />
+    <Folder Include="Layouts\" />
+    <Folder Include="Internal\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NLog\NLog.csproj">
+      <Project>{CB8BE551-CB33-44A6-B793-1B266862EB25}</Project>
+      <Name>NLog</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

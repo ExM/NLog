@@ -15,7 +15,7 @@ namespace NLog
 	{
 		private static readonly object dataSlot = ThreadLocalStorageHelper.AllocateDataSlot();
 
-		internal static IDictionary<string, string> ThreadDictionary
+		public static IDictionary<string, string> ThreadDictionary
 		{
 			get { return ThreadLocalStorageHelper.GetDataForSlot<Dictionary<string, string>>(dataSlot); }
 		}

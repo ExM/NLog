@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -107,20 +107,9 @@
     <Compile Include="Internal\FileAppenders\RetryingMultiProcessFileAppender.cs" />
     <Compile Include="Internal\FileAppenders\SingleProcessFileAppender.cs" />
     <Compile Include="Internal\IRenderable.cs" />
-    <Compile Include="Internal\ISmtpClient.cs" />
     <Compile Include="Internal\ISupportsInitialize.cs" />
-    <Compile Include="Internal\IUsesStackTrace.cs" />
     <Compile Include="Internal\LoggerConfiguration.cs" />
     <Compile Include="Internal\MultiFileWatcher.cs" />
-    <Compile Include="Internal\MySmtpClient.cs" />
-    <Compile Include="Internal\NetworkSenders\HttpNetworkSender.cs" />
-    <Compile Include="Internal\NetworkSenders\INetworkSenderFactory.cs" />
-    <Compile Include="Internal\NetworkSenders\ISocket.cs" />
-    <Compile Include="Internal\NetworkSenders\NetworkSender.cs" />
-    <Compile Include="Internal\NetworkSenders\NetworkSenderFactory.cs" />
-    <Compile Include="Internal\NetworkSenders\SocketProxy.cs" />
-    <Compile Include="Internal\NetworkSenders\TcpNetworkSender.cs" />
-    <Compile Include="Internal\NetworkSenders\UdpNetworkSender.cs" />
     <Compile Include="Internal\ObjectGraphScanner.cs" />
     <Compile Include="Internal\ParameterUtils.cs" />
     <Compile Include="Internal\PlatformDetector.cs" />
@@ -135,7 +124,6 @@
     <Compile Include="Internal\ThreadIDHelper.cs" />
     <Compile Include="Internal\ThreadLocalStorageHelper.cs" />
     <Compile Include="Internal\TimeoutContinuation.cs" />
-    <Compile Include="Internal\UrlHelper.cs" />
     <Compile Include="LayoutRenderers\AmbientPropertyAttribute.cs" />
     <Compile Include="LayoutRenderers\BaseDirLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\CallSiteLayoutRenderer.cs" />
@@ -155,7 +143,6 @@
     <Compile Include="LayoutRenderers\LayoutRendererAttribute.cs" />
     <Compile Include="LayoutRenderers\LevelLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\LiteralLayoutRenderer.cs" />
-    <Compile Include="LayoutRenderers\Log4JXmlEventLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\LoggerNameLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\LongDateLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\MachineNameLayoutRenderer.cs" />
@@ -205,7 +192,6 @@
     <Compile Include="Layouts\LayoutAttribute.cs" />
     <Compile Include="Layouts\LayoutParser.cs" />
     <Compile Include="Layouts\LayoutWithHeaderAndFooter.cs" />
-    <Compile Include="Layouts\Log4JXmlEventLayout.cs" />
     <Compile Include="Layouts\SimpleLayout.cs" />
     <Compile Include="LogEventInfo.cs" />
     <Compile Include="LogFactory-T.cs" />
@@ -223,7 +209,6 @@
     <Compile Include="NLogTraceListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Targets\ArchiveNumberingMode.cs" />
-    <Compile Include="Targets\ChainsawTarget.cs" />
     <Compile Include="Targets\ColoredConsoleTarget.cs" />
     <Compile Include="Targets\ConsoleOutputColor.cs" />
     <Compile Include="Targets\ConsoleRowHighlightingRule.cs" />
@@ -235,25 +220,17 @@
     <Compile Include="Targets\FileArchivePeriod.cs" />
     <Compile Include="Targets\FileTarget.cs" />
     <Compile Include="Targets\LineEndingMode.cs" />
-    <Compile Include="Targets\MailTarget.cs" />
     <Compile Include="Targets\MemoryTarget.cs" />
     <Compile Include="Targets\MethodCallParameter.cs" />
     <Compile Include="Targets\MethodCallTarget.cs" />
     <Compile Include="Targets\MethodCallTargetBase.cs" />
-    <Compile Include="Targets\NetworkTarget.cs" />
-    <Compile Include="Targets\NetworkTargetOverflowAction.cs" />
-    <Compile Include="Targets\NLogViewerParameterInfo.cs" />
-    <Compile Include="Targets\NLogViewerTarget.cs" />
     <Compile Include="Targets\NullTarget.cs" />
     <Compile Include="Targets\PerformanceCounterTarget.cs" />
-    <Compile Include="Targets\SmtpAuthenticationMode.cs" />
     <Compile Include="Targets\Target.cs" />
     <Compile Include="Targets\TargetAttribute.cs" />
     <Compile Include="Targets\TargetWithLayout.cs" />
     <Compile Include="Targets\TargetWithLayoutHeaderAndFooter.cs" />
     <Compile Include="Targets\TraceTarget.cs" />
-    <Compile Include="Targets\WebServiceProtocol.cs" />
-    <Compile Include="Targets\WebServiceTarget.cs" />
     <Compile Include="Targets\Wrappers\AsyncRequestQueue-T.cs" />
     <Compile Include="Targets\Wrappers\AsyncTargetWrapper.cs" />
     <Compile Include="Targets\Wrappers\AsyncTargetWrapperOverflowAction.cs" />
@@ -270,6 +247,8 @@
     <Compile Include="Targets\Wrappers\RoundRobinGroupTarget.cs" />
     <Compile Include="Targets\Wrappers\SplitGroupTarget.cs" />
     <Compile Include="Targets\Wrappers\WrapperTargetBase.cs" />
+    <Compile Include="Internal\IUsesStackTrace.cs" />
+    <Compile Include="Internal\UrlHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

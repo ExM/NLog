@@ -18,15 +18,19 @@ namespace NLog.UnitTests.LayoutRenderers
 		[Test]
 		public void Log4JXmlTest()
 		{
-			LogManager.Configuration = CreateConfigurationFromString(@"
-			<nlog throwExceptions='true'>
-				<targets>
-		<target name='debug' type='Debug' layout='${log4jxmlevent:includeCallSite=true:includeSourceInfo=true:includeMdc=true:includendc=true:ndcItemSeparator=\:\::includenlogdata=true}' />
-	   </targets>
-				<rules>
-					<logger name='*' minlevel='Debug' writeTo='debug' />
-				</rules>
-			</nlog>");
+			LogManager.Configuration = CreateConfigurationFromString(
+@"
+<nlog throwExceptions='true'>
+  <extensions> 
+	<add assembly='NLog.Network'/> 
+  </extensions>
+  <targets>
+	<target name='debug' type='Debug' layout='${log4jxmlevent:includeCallSite=true:includeSourceInfo=true:includeMdc=true:includendc=true:ndcItemSeparator=\:\::includenlogdata=true}' />
+  </targets>
+  <rules>
+	<logger name='*' minlevel='Debug' writeTo='debug' />
+  </rules>
+  </nlog>");
 
 			MappedDiagnosticsContext.Clear();
 			NestedDiagnosticsContext.Clear();

@@ -67,7 +67,6 @@
     <Compile Include="Filters\WhenEqualTests.cs" />
     <Compile Include="Filters\WhenNotContainsTests.cs" />
     <Compile Include="Filters\WhenNotEqualTests.cs" />
-    <Compile Include="Internal\NetworkSenders\TcpNetworkSenderTests.cs" />
     <Compile Include="LayoutRenderers\BaseDirTests.cs" />
     <Compile Include="LayoutRenderers\CallSiteTests.cs" />
     <Compile Include="LayoutRenderers\CounterTests.cs" />
@@ -79,7 +78,6 @@
     <Compile Include="LayoutRenderers\GDCTests.cs" />
     <Compile Include="LayoutRenderers\IdentityTests.cs" />
     <Compile Include="LayoutRenderers\LiteralTests.cs" />
-    <Compile Include="LayoutRenderers\Log4JXmlTests.cs" />
     <Compile Include="LayoutRenderers\LoggerNameTests.cs" />
     <Compile Include="LayoutRenderers\LogLevelTests.cs" />
     <Compile Include="LayoutRenderers\LongDateTests.cs" />
@@ -106,8 +104,6 @@
     <Compile Include="Targets\ConcurrentFileTargetTests.cs" />
     <Compile Include="Targets\ConsoleTargetTests.cs" />
     <Compile Include="Targets\FileTargetTests.cs" />
-    <Compile Include="Targets\MailTargetTests.cs" />
-    <Compile Include="Targets\NetworkTargetTests.cs" />
     <Compile Include="Targets\TargetTests.cs" />
     <Compile Include="Targets\Wrappers\AsyncRequestQueueTests.cs" />
     <Compile Include="Targets\Wrappers\AsyncTargetWrapperTests.cs" />
