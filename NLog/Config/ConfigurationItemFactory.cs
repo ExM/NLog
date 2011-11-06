@@ -72,7 +72,7 @@ namespace NLog.Config
 		/// <remarks>
 		/// By overriding this property, one can enable dependency injection or interception for created objects.
 		/// </remarks>
-		public ConfigurationItemCreator CreateInstance { get; set; }
+		public Func<Type, object> CreateInstance { get; set; }
 
 		/// <summary>
 		/// Gets the <see cref="Target"/> factory.
