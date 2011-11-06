@@ -29,7 +29,7 @@ namespace NLog.Config
 		/// </summary>
 		static ConfigurationItemFactory()
 		{
-			Default = BuildDefaultFactory();
+			RestoreDefault();
 		}
 
 		/// <summary>
@@ -60,11 +60,27 @@ namespace NLog.Config
 				this.RegisterItemsFromAssembly(asm);
 			}
 		}
+		
+		private static volatile ConfigurationItemFactory _default;
 
 		/// <summary>
 		/// Gets or sets default singleton instance of <see cref="ConfigurationItemFactory"/>.
 		/// </summary>
-		public static ConfigurationItemFactory Default { get; set; }
+		public static ConfigurationItemFactory Default
+		{
+			get
+			{
+				return _default;
+			}
+		}
+		
+		/// <summary>
+		/// Restores the default configuration item factory.
+		/// </summary>
+		public static void RestoreDefault()
+		{
+			_default = new ConfigurationItemFactory(typeof(Logger).Assembly);
+		}
 
 		/// <summary>
 		/// Gets or sets the creator delegate used to instantiate configuration objects.
@@ -72,7 +88,7 @@ namespace NLog.Config
 		/// <remarks>
 		/// By overriding this property, one can enable dependency injection or interception for created objects.
 		/// </remarks>
-		public ConfigurationItemCreator CreateInstance { get; set; }
+		public Func<Type, object> CreateInstance { get; set; }
 
 		/// <summary>
 		/// Gets the <see cref="Target"/> factory.
@@ -172,15 +188,6 @@ namespace NLog.Config
 			{
 				f.RegisterType(type, itemNamePrefix);
 			}
-		}
-
-		/// <summary>
-		/// Builds the default configuration item factory.
-		/// </summary>
-		/// <returns>Default factory.</returns>
-		private static ConfigurationItemFactory BuildDefaultFactory()
-		{
-			return new ConfigurationItemFactory(typeof(Logger).Assembly);
 		}
 	}
 }

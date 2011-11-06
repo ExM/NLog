@@ -65,7 +65,6 @@
     <Compile Include="Config\AppDomainFixedOutputAttribute.cs" />
     <Compile Include="Config\ArrayParameterAttribute.cs" />
     <Compile Include="Config\ConfigSectionHandler.cs" />
-    <Compile Include="Config\ConfigurationItemCreator.cs" />
     <Compile Include="Config\ConfigurationItemFactory.cs" />
     <Compile Include="Config\DefaultParameterAttribute.cs" />
     <Compile Include="Config\Factory.cs" />
@@ -112,10 +111,8 @@
     <Compile Include="Internal\MultiFileWatcher.cs" />
     <Compile Include="Internal\ObjectGraphScanner.cs" />
     <Compile Include="Internal\ParameterUtils.cs" />
-    <Compile Include="Internal\PlatformDetector.cs" />
     <Compile Include="Internal\PropertyHelper.cs" />
     <Compile Include="Internal\ReflectionHelpers.cs" />
-    <Compile Include="Internal\RuntimeOS.cs" />
     <Compile Include="Internal\SimpleStringReader.cs" />
     <Compile Include="Internal\SingleCallContinuation.cs" />
     <Compile Include="Internal\SortHelpers.cs" />
@@ -249,6 +246,7 @@
     <Compile Include="Internal\IUsesStackTrace.cs" />
     <Compile Include="Internal\UrlHelper.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Internal\Platform.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

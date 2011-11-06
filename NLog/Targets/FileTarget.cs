@@ -1120,7 +1120,7 @@ namespace NLog.Targets
 		{
 			FileShare fileShare = allowConcurrentWrite ? FileShare.ReadWrite : FileShare.Read;
 
-			if (EnableFileDelete && PlatformDetector.CurrentOS != RuntimeOS.Windows)
+			if (EnableFileDelete && Platform.CurrentOS != PlatformID.Win32Windows)
 				fileShare |= FileShare.Delete;
 
 			return new FileStream(fileName, FileMode.Append, FileAccess.Write, fileShare, BufferSize);

@@ -75,8 +75,15 @@ namespace NLog
 		/// </summary>
 		public static LoggingConfiguration Configuration
 		{
-			get { return globalFactory.Configuration; }
-			set { globalFactory.Configuration = value; }
+			get
+			{
+				return globalFactory.Configuration;
+			}
+			set
+			{
+				ConfigurationItemFactory.RestoreDefault();
+				globalFactory.Configuration = value;
+			}
 		}
 
 		/// <summary>
