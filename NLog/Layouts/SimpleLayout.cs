@@ -156,7 +156,7 @@ namespace NLog.Layouts
 			return "'" + this.Text + "'";
 		}
 
-		internal void SetRenderers(LayoutRenderer[] renderers, string text)
+		private void SetRenderers(LayoutRenderer[] renderers, string text)
 		{
 			this.Renderers = new ReadOnlyCollection<LayoutRenderer>(renderers);
 			if (this.Renderers.Count == 1 && this.Renderers[0] is LiteralLayoutRenderer)

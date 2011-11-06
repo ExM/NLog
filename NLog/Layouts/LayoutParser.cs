@@ -225,11 +225,9 @@ namespace NLog.Layouts
 					{
 						if (typeof(Layout).IsAssignableFrom(pi.PropertyType))
 						{
-							var nestedLayout = new SimpleLayout();
 							string txt;
 							LayoutRenderer[] renderers = CompileLayout(configurationItemFactory, sr, true, out txt);
-
-							nestedLayout.SetRenderers(renderers, txt);
+							var nestedLayout = new SimpleLayout(renderers, txt, configurationItemFactory);
 							pi.SetValue(parameterTarget, nestedLayout, null);
 						}
 						else if (typeof(ConditionExpression).IsAssignableFrom(pi.PropertyType))

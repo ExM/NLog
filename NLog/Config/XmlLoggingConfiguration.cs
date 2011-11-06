@@ -1,30 +1,28 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Reflection;
+using System.Xml;
+using NLog.Common;
+using NLog.Filters;
+using NLog.Internal;
+using NLog.Layouts;
+using NLog.Targets;
+using NLog.Targets.Wrappers;
 
 namespace NLog.Config
 {
-	using System;
-	using System.Collections;
-	using System.Collections.Generic;
-	using System.Diagnostics;
-	using System.Globalization;
-	using System.IO;
-	using System.Reflection;
-	using System.Xml;
-	using NLog.Common;
-	using NLog.Filters;
-	using NLog.Internal;
-	using NLog.Layouts;
-	using NLog.Targets;
-	using NLog.Targets.Wrappers;
-
 	/// <summary>
 	/// A class for configuring NLog through an XML configuration file 
 	/// (App.config style or App.nlog style).
 	/// </summary>
 	public class XmlLoggingConfiguration : LoggingConfiguration
 	{
-		private readonly ConfigurationItemFactory configurationItemFactory = ConfigurationItemFactory.Default;
-		private readonly Dictionary<string, bool> visitedFile = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
-		private readonly Dictionary<string, string> variables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+		private readonly Dictionary<string, bool> _visitedFile = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
+		private readonly Dictionary<string, string> _variables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
 		private string originalFileName;
 
@@ -135,7 +133,7 @@ namespace NLog.Config
 			{
 				if (this.AutoReload)
 				{
-					return this.visitedFile.Keys;
+					return this._visitedFile.Keys;
 				}
 				
 				return new string[0];
@@ -199,7 +197,7 @@ namespace NLog.Config
 				{
 					InternalLogger.Info("Configuring from an XML element in {0}...", fileName);
 					string key = Path.GetFullPath(fileName);
-					this.visitedFile[key] = true;
+					this._visitedFile[key] = true;
 					this.originalFileName = fileName;
 					this.ParseTopLevel(content, Path.GetDirectoryName(fileName));
 				}
@@ -226,12 +224,12 @@ namespace NLog.Config
 		private void ConfigureFromFile(string fileName)
 		{
 			string key = Path.GetFullPath(fileName);
-			if (this.visitedFile.ContainsKey(key))
+			if (this._visitedFile.ContainsKey(key))
 			{
 				return;
 			}
 
-			this.visitedFile[key] = true;
+			this._visitedFile[key] = true;
 
 			this.ParseTopLevel(new NLogXmlElement(fileName), Path.GetDirectoryName(fileName));
 		}
@@ -421,7 +419,7 @@ namespace NLog.Config
 			{
 				string name = filterElement.LocalName;
 
-				Filter filter = this.configurationItemFactory.Filters.CreateInstance(name);
+				Filter filter = ItemFactory.Filters.CreateInstance(name);
 				this.ConfigureObjectFromAttributes(filter, filterElement, false);
 				rule.Filters.Add(filter);
 			}
@@ -434,7 +432,7 @@ namespace NLog.Config
 			string name = variableElement.GetRequiredAttribute("name");
 			string value = this.ExpandVariables(variableElement.GetRequiredAttribute("value"));
 
-			this.variables[name] = value;
+			this._variables[name] = value;
 		}
 
 		private void ParseTargetsElement(NLogXmlElement targetsElement)
@@ -475,7 +473,7 @@ namespace NLog.Config
 							throw new NLogConfigurationException("Missing 'type' attribute on <" + name + "/>.");
 						}
 
-						Target newTarget = this.configurationItemFactory.Targets.CreateInstance(type);
+						Target newTarget = ItemFactory.Targets.CreateInstance(type);
 
 						NLogXmlElement defaults;
 						if (typeNameToDefaultTargetParameters.TryGetValue(type, out defaults))
@@ -532,7 +530,7 @@ namespace NLog.Config
 					{
 						string type = childElement.GetRequiredAttribute("type");
 
-						Target newTarget = this.configurationItemFactory.Targets.CreateInstance(type);
+						Target newTarget = ItemFactory.Targets.CreateInstance(type);
 						if (newTarget != null)
 						{
 							this.ParseTargetElement(newTarget, childElement);
@@ -568,7 +566,7 @@ namespace NLog.Config
 					{
 						string type = childElement.GetRequiredAttribute("type");
 
-						Target newTarget = this.configurationItemFactory.Targets.CreateInstance(type);
+						Target newTarget = ItemFactory.Targets.CreateInstance(type);
 						if (newTarget != null)
 						{
 							this.ParseTargetElement(newTarget, childElement);
@@ -610,7 +608,7 @@ namespace NLog.Config
 				string type = addElement.GetOptionalAttribute("type", null);
 				if (type != null)
 				{
-					this.configurationItemFactory.RegisterType(Type.GetType(type, true), prefix);
+					ItemFactory.RegisterType(Type.GetType(type, true), prefix);
 				}
 
 				string assemblyFile = addElement.GetOptionalAttribute("assemblyFile", null);
@@ -621,7 +619,7 @@ namespace NLog.Config
 						string fullFileName = Path.Combine(baseDirectory, assemblyFile);
 						InternalLogger.Info("Loading assembly file: {0}", fullFileName);
 						Assembly asm = Assembly.LoadFrom(fullFileName);
-						this.configurationItemFactory.RegisterItemsFromAssembly(asm, prefix);
+						ItemFactory.RegisterItemsFromAssembly(asm, prefix);
 					}
 					catch (Exception exception)
 					{
@@ -647,7 +645,7 @@ namespace NLog.Config
 					{
 						InternalLogger.Info("Loading assembly name: {0}", assemblyName);
 						Assembly asm = Assembly.Load(assemblyName);
-						this.configurationItemFactory.RegisterItemsFromAssembly(asm, prefix);
+						ItemFactory.RegisterItemsFromAssembly(asm, prefix);
 					}
 					catch (Exception exception)
 					{
@@ -723,7 +721,7 @@ namespace NLog.Config
 				return;
 			}
 
-			PropertyHelper.SetPropertyFromString(o, element.LocalName, this.ExpandVariables(element.Value), this.configurationItemFactory);
+			PropertyHelper.SetPropertyFromString(o, element.LocalName, this.ExpandVariables(element.Value), ItemFactory);
 		}
 
 		private bool AddArrayItemFromElement(object o, NLogXmlElement element)
@@ -762,7 +760,7 @@ namespace NLog.Config
 					continue;
 				}
 
-				PropertyHelper.SetPropertyFromString(targetObject, childName, this.ExpandVariables(childValue), this.configurationItemFactory);
+				PropertyHelper.SetPropertyFromString(targetObject, childName, this.ExpandVariables(childValue), ItemFactory);
 			}
 		}
 
@@ -783,7 +781,7 @@ namespace NLog.Config
 					if (layoutTypeName != null)
 					{
 						// configure it from current element
-						Layout layout = this.configurationItemFactory.Layouts.CreateInstance(this.ExpandVariables(layoutTypeName));
+						Layout layout = ItemFactory.Layouts.CreateInstance(this.ExpandVariables(layoutTypeName));
 						this.ConfigureObjectFromAttributes(layout, layoutElement, true);
 						this.ConfigureObjectFromElement(layout, layoutElement);
 						targetPropertyInfo.SetValue(o, layout, null);
@@ -807,7 +805,7 @@ namespace NLog.Config
 		{
 			string wrapperType = defaultParameters.GetRequiredAttribute("type");
 
-			Target wrapperTargetInstance = this.configurationItemFactory.Targets.CreateInstance(wrapperType);
+			Target wrapperTargetInstance = ItemFactory.Targets.CreateInstance(wrapperType);
 			WrapperTargetBase wtb = wrapperTargetInstance as WrapperTargetBase;
 			if (wtb == null)
 			{
@@ -837,7 +835,7 @@ namespace NLog.Config
 			string output = input;
 
 			// TODO - make this case-insensitive, will probably require a different approach
-			foreach (var kvp in this.variables)
+			foreach (var kvp in this._variables)
 			{
 				output = output.Replace("${" + kvp.Key + "}", kvp.Value);
 			}

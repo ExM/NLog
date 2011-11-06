@@ -14,7 +14,7 @@ namespace NLog.UnitTests.Config
 			using (var scope = new InternalLoggerScope())
 			{
 				CreateConfigurationFromString(@"
-<nlog internalLogFile=internalLog.txt' internalLogLevel='Trace' internalLogToConsole='true' internalLogToConsoleError='true' globalThreshold='Warn' throwExceptions='true'>
+<nlog internalLogFile='internalLog.txt' internalLogLevel='Trace' internalLogToConsole='true' internalLogToConsoleError='true' globalThreshold='Warn' throwExceptions='true'>
 </nlog>");
 				Assert.AreSame(LogLevel.Trace, InternalLogger.LogLevel);
 				Assert.IsTrue(InternalLogger.LogToConsole);
