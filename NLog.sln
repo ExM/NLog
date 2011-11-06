@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinForm", "WinForm\WinForm.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinForm.Tests", "WinForm.Tests\WinForm.Tests.csproj", "{2CD07A9E-6744-4AA4-891B-D7E653697DD7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OverrideExtension", "OverrideExtension\OverrideExtension.csproj", "{6465E3D8-54F4-4DCC-B118-FBDAD4EB1D19}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -76,6 +78,10 @@ Global
 		{5C76FD54-6416-4AC4-A360-BE4A9E580053}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C76FD54-6416-4AC4-A360-BE4A9E580053}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C76FD54-6416-4AC4-A360-BE4A9E580053}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6465E3D8-54F4-4DCC-B118-FBDAD4EB1D19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6465E3D8-54F4-4DCC-B118-FBDAD4EB1D19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6465E3D8-54F4-4DCC-B118-FBDAD4EB1D19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6465E3D8-54F4-4DCC-B118-FBDAD4EB1D19}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BACDB92F-A795-4631-8FC7-C6599D96B1BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BACDB92F-A795-4631-8FC7-C6599D96B1BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BACDB92F-A795-4631-8FC7-C6599D96B1BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
