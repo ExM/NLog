@@ -43,7 +43,6 @@
     <Compile Include="LayoutRenderers\AspNetSessionValueLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\AspNetUserAuthTypeLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\AspNetUserIdentityLayoutRenderer.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Targets\AspNetTraceTarget.cs" />
     <Compile Include="Targets\MessageQueueTarget.cs" />
     <Compile Include="Targets\Wrappers\AspNetBufferingTargetWrapper.cs" />
@@ -54,6 +53,7 @@
     <Compile Include="LayoutRenderers\AspSessionValueLayoutRenderer.cs" />
     <Compile Include="Targets\AspResponseTarget.cs" />
     <Compile Include="Internal\NativeMethods.cs" />
+    <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NLog\NLog.csproj">

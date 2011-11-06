@@ -38,10 +38,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Internal\SortHelpers.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Targets\DatabaseCommandInfo.cs" />
     <Compile Include="Targets\DatabaseParameterInfo.cs" />
     <Compile Include="Targets\DatabaseTarget.cs" />
+    <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NLog\NLog.csproj">

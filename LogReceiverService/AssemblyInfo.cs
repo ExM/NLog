@@ -1,8 +1,8 @@
-using System;
+﻿using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("NLog.UnixTraits.Tests")]
+[assembly: AssemblyTitle("NLog.LogReceiverService")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]

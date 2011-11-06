@@ -44,8 +44,8 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="StringCollection.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Targets\LogReceiverWebServiceTarget.cs" />
+    <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NLog\NLog.csproj">
