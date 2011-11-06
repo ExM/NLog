@@ -81,7 +81,6 @@ namespace NLog
 			}
 			set
 			{
-				ConfigurationItemFactory.RestoreDefault();
 				globalFactory.Configuration = value;
 			}
 		}

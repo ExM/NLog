@@ -29,7 +29,6 @@ namespace NLog.Config
 		/// </summary>
 		static ConfigurationItemFactory()
 		{
-			RestoreDefault();
 		}
 
 		/// <summary>
@@ -60,26 +59,25 @@ namespace NLog.Config
 				this.RegisterItemsFromAssembly(asm);
 			}
 		}
-		
-		private static volatile ConfigurationItemFactory _default;
 
 		/// <summary>
 		/// Gets or sets default singleton instance of <see cref="ConfigurationItemFactory"/>.
 		/// </summary>
+		[Obsolete()]
 		public static ConfigurationItemFactory Default
 		{
 			get
 			{
-				return _default;
+				return LogManager.Configuration.ItemFactory;
 			}
 		}
 		
 		/// <summary>
-		/// Restores the default configuration item factory.
+		/// Create the default configuration item factory.
 		/// </summary>
-		public static void RestoreDefault()
+		public static ConfigurationItemFactory CreateDefault()
 		{
-			_default = new ConfigurationItemFactory(typeof(Logger).Assembly);
+			return new ConfigurationItemFactory(typeof(Logger).Assembly);
 		}
 
 		/// <summary>

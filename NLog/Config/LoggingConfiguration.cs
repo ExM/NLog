@@ -1,23 +1,22 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading;
-
+using NLog.Common;
+using NLog.Internal;
+using NLog.Targets;
+	
 namespace NLog.Config
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Collections.ObjectModel;
-	using System.Reflection;
-
-	using NLog.Common;
-	using NLog.Internal;
-	using NLog.Targets;
-
 	/// <summary>
 	/// Keeps logging configuration and provides simple API
 	/// to modify it.
 	/// </summary>
 	public class LoggingConfiguration
 	{
-		private readonly IDictionary<string, Target> targets =
+		private readonly ConfigurationItemFactory _configurationItemFactory = ConfigurationItemFactory.CreateDefault();
+
+		private readonly IDictionary<string, Target> _targets =
 			new Dictionary<string, Target>(StringComparer.OrdinalIgnoreCase);
 
 		private object[] configItems;
@@ -28,6 +27,14 @@ namespace NLog.Config
 		public LoggingConfiguration()
 		{
 			this.LoggingRules = new List<LoggingRule>();
+		}
+		
+		public ConfigurationItemFactory ItemFactory
+		{
+			get
+			{
+				return _configurationItemFactory;
+			}
 		}
 
 		/// <summary>
@@ -41,7 +48,7 @@ namespace NLog.Config
 		/// </remarks>
 		public ReadOnlyCollection<Target> ConfiguredNamedTargets
 		{
-			get { return new List<Target>(this.targets.Values).AsReadOnly(); }
+			get { return new List<Target>(this._targets.Values).AsReadOnly(); }
 		}
 
 		/// <summary>
@@ -82,7 +89,7 @@ namespace NLog.Config
 			}
 
 			InternalLogger.Debug("Registering target {0}: {1}", name, target.GetType().FullName);
-			this.targets[name] = target;
+			this._targets[name] = target;
 		}
 
 		/// <summary>
@@ -98,7 +105,7 @@ namespace NLog.Config
 		{
 			Target value;
 
-			if (!this.targets.TryGetValue(name, out value))
+			if (!this._targets.TryGetValue(name, out value))
 			{
 				return null;
 			}
@@ -125,7 +132,7 @@ namespace NLog.Config
 		/// </param>
 		public void RemoveTarget(string name)
 		{
-			this.targets.Remove(name);
+			this._targets.Remove(name);
 		}
 
 		/// <summary>
@@ -232,7 +239,7 @@ namespace NLog.Config
 		{
 			InternalLogger.Debug("--- NLog configuration dump. ---");
 			InternalLogger.Debug("Targets:");
-			foreach (Target target in this.targets.Values)
+			foreach (Target target in this._targets.Values)
 			{
 				InternalLogger.Info("{0}", target);
 			}
@@ -332,7 +339,7 @@ namespace NLog.Config
 				roots.Add(r);
 			}
 
-			foreach (Target target in this.targets.Values)
+			foreach (Target target in this._targets.Values)
 			{
 				roots.Add(target);
 			}
