@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using NUnit.Framework;
-using MyExtensionNamespace;
 using NLog.Filters;
 using NLog.Layouts;
 using NLog.Targets;
@@ -18,8 +17,6 @@ namespace NLog.UnitTests.Config
 		[Test]
 		public void ExtensionTest1()
 		{
-			Assert.IsNotNull(typeof(FooLayout));
-
 			var configuration = CreateConfigurationFromString(@"
 <nlog throwExceptions='true'>
 	<extensions>
@@ -58,6 +55,29 @@ namespace NLog.UnitTests.Config
 
 			Assert.AreEqual(1, configuration.LoggingRules[0].Filters.Count);
 			Assert.AreEqual("MyExtensionNamespace.WhenFooFilter", configuration.LoggingRules[0].Filters[0].GetType().FullName);
+		}
+		
+		[Test]
+		public void Override()
+		{
+			var configuration = CreateConfigurationFromString(@"
+<nlog throwExceptions='true'>
+	<extensions>
+		<add assemblyFile='" + Path.GetFullPath("SampleExtensions.dll") + @"' />
+		<add assemblyFile='" + Path.GetFullPath("OverrideExtension.dll") + @"' />
+	</extensions>
+
+	<targets>
+		<target name='t' type='MyTarget' />
+	</targets>
+
+	<rules>
+	  <logger name='*' writeTo='t'/>
+	</rules>
+</nlog>");
+
+			Target myTarget = configuration.FindTargetByName("t");
+			Assert.AreEqual("MyOverrideExNamespace.MyTarget", myTarget.GetType().FullName);
 		}
 
 		[Test]
@@ -153,15 +173,13 @@ namespace NLog.UnitTests.Config
 		[Test]
 		public void ExtensionTest4()
 		{
-			Assert.IsNotNull(typeof(FooLayout));
-
 			var configuration = CreateConfigurationFromString(@"
 <nlog throwExceptions='true'>
 	<extensions>
-		<add type='" + typeof(MyTarget).AssemblyQualifiedName + @"' />
-		<add type='" + typeof(FooLayout).AssemblyQualifiedName + @"' />
-		<add type='" + typeof(FooLayoutRenderer).AssemblyQualifiedName + @"' />
-		<add type='" + typeof(WhenFooFilter).AssemblyQualifiedName + @"' />
+		<add type='MyExtensionNamespace.MyTarget, SampleExtensions, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null' />
+		<add type='MyExtensionNamespace.FooLayout, SampleExtensions, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null' />
+		<add type='MyExtensionNamespace.FooLayoutRenderer, SampleExtensions, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null' />
+		<add type='MyExtensionNamespace.WhenFooFilter, SampleExtensions, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null' />
 	</extensions>
 
 	<targets>

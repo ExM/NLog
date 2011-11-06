@@ -14,7 +14,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
+    <OutputPath>..\bin\Debug</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -22,7 +22,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
+    <OutputPath>..\bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -41,10 +41,6 @@
     <ProjectReference Include="..\NLog\NLog.csproj">
       <Project>{CB8BE551-CB33-44A6-B793-1B266862EB25}</Project>
       <Name>NLog</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SampleExtensions\SampleExtensions.csproj">
-      <Project>{48394EBB-8564-4E62-8F24-C55D873763B3}</Project>
-      <Name>SampleExtensions</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
