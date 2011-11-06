@@ -58,7 +58,7 @@ namespace NLog.UnitTests.Config
 		}
 		
 		[Test]
-		public void Override()
+		public void OverrideExtention()
 		{
 			var configuration = CreateConfigurationFromString(@"
 <nlog throwExceptions='true'>
@@ -78,6 +78,28 @@ namespace NLog.UnitTests.Config
 
 			Target myTarget = configuration.FindTargetByName("t");
 			Assert.AreEqual("MyOverrideExNamespace.MyTarget", myTarget.GetType().FullName);
+		}
+		
+		[Test]
+		public void OverrideDefault()
+		{
+			var configuration = CreateConfigurationFromString(@"
+<nlog throwExceptions='true'>
+	<extensions>
+		<add assemblyFile='" + Path.GetFullPath("OverrideExtension.dll") + @"' />
+	</extensions>
+
+	<targets>
+		<target name='t' type='File' />
+	</targets>
+
+	<rules>
+	  <logger name='*' writeTo='t'/>
+	</rules>
+</nlog>");
+
+			Target myTarget = configuration.FindTargetByName("t");
+			Assert.AreEqual("MyOverrideExNamespace.MyFile", myTarget.GetType().FullName);
 		}
 
 		[Test]
