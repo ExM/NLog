@@ -1,14 +1,13 @@
+using System;
+using System.Collections.ObjectModel;
+using System.Text;
+using NLog.Common;
+using NLog.Config;
+using NLog.Internal;
+using NLog.LayoutRenderers;
 
 namespace NLog.Layouts
 {
-	using System;
-	using System.Collections.ObjectModel;
-	using System.Text;
-	using NLog.Common;
-	using NLog.Config;
-	using NLog.Internal;
-	using NLog.LayoutRenderers;
-
 	/// <summary>
 	/// Represents a string with embedded placeholders that can render contextual information.
 	/// </summary>
@@ -22,11 +21,11 @@ namespace NLog.Layouts
 	public class SimpleLayout : Layout
 	{
 		private const int MaxInitialRenderBufferLength = 16384;
-		private int maxRenderedLength;
+		private int _maxRenderedLength;
 
-		private string fixedText;
-		private string layoutText;
-		private ConfigurationItemFactory configurationItemFactory;
+		private string _fixedText;
+		private string _layoutText;
+		private ConfigurationItemFactory _configurationItemFactory;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SimpleLayout" /> class.
@@ -52,14 +51,14 @@ namespace NLog.Layouts
 		/// <param name="configurationItemFactory">The NLog factories to use when creating references to layout renderers.</param>
 		public SimpleLayout(string txt, ConfigurationItemFactory configurationItemFactory)
 		{
-			this.configurationItemFactory = configurationItemFactory;
-			this.Text = txt;
+			_configurationItemFactory = configurationItemFactory;
+			Text = txt;
 		}
 
 		public SimpleLayout(LayoutRenderer[] renderers, string text, ConfigurationItemFactory configurationItemFactory)
 		{
-			this.configurationItemFactory = configurationItemFactory;
-			this.SetRenderers(renderers, text);
+			_configurationItemFactory = configurationItemFactory;
+			SetRenderers(renderers, text);
 		}
 
 		/// <summary>
@@ -70,7 +69,7 @@ namespace NLog.Layouts
 		{
 			get
 			{
-				return this.layoutText;
+				return _layoutText;
 			}
 
 			set
@@ -79,12 +78,12 @@ namespace NLog.Layouts
 				string txt;
 
 				renderers = LayoutParser.CompileLayout(
-					this.configurationItemFactory,
+					_configurationItemFactory,
 					new SimpleStringReader(value),
 					false,
 					out txt);
 
-				this.SetRenderers(renderers, txt);
+				SetRenderers(renderers, txt);
 			}
 		}
 
@@ -153,22 +152,22 @@ namespace NLog.Layouts
 		/// </returns>
 		public override string ToString()
 		{
-			return "'" + this.Text + "'";
+			return "'" + Text + "'";
 		}
 
 		private void SetRenderers(LayoutRenderer[] renderers, string text)
 		{
-			this.Renderers = new ReadOnlyCollection<LayoutRenderer>(renderers);
-			if (this.Renderers.Count == 1 && this.Renderers[0] is LiteralLayoutRenderer)
+			Renderers = new ReadOnlyCollection<LayoutRenderer>(renderers);
+			if (Renderers.Count == 1 && this.Renderers[0] is LiteralLayoutRenderer)
 			{
-				this.fixedText = ((LiteralLayoutRenderer)this.Renderers[0]).Text;
+				_fixedText = ((LiteralLayoutRenderer)Renderers[0]).Text;
 			}
 			else
 			{
-				this.fixedText = null;
+				_fixedText = null;
 			}
 
-			this.layoutText = text;
+			_layoutText = text;
 		}
 
 		/// <summary>
@@ -179,27 +178,21 @@ namespace NLog.Layouts
 		/// <returns>The rendered layout.</returns>
 		protected override string GetFormattedMessage(LogEventInfo logEvent)
 		{
-			if (this.fixedText != null)
-			{
-				return this.fixedText;
-			}
+			if (_fixedText != null)
+				return _fixedText;
 
 			string cachedValue;
 
 			if (logEvent.TryGetCachedLayoutValue(this, out cachedValue))
-			{
 				return cachedValue;
-			}
 
-			int initialSize = this.maxRenderedLength;
+			int initialSize = _maxRenderedLength;
 			if (initialSize > MaxInitialRenderBufferLength)
-			{
 				initialSize = MaxInitialRenderBufferLength;
-			}
 
 			var builder = new StringBuilder(initialSize);
 
-			foreach (LayoutRenderer renderer in this.Renderers)
+			foreach (LayoutRenderer renderer in Renderers)
 			{
 				try
 				{
@@ -208,21 +201,15 @@ namespace NLog.Layouts
 				catch (Exception exception)
 				{
 					if (exception.MustBeRethrown())
-					{
 						throw;
-					}
 
 					if (InternalLogger.IsWarnEnabled)
-					{
 						InternalLogger.Warn("Exception in {0}.Append(): {1}.", renderer.GetType().FullName, exception);
-					}
 				}
 			}
 
-			if (builder.Length > this.maxRenderedLength)
-			{
-				this.maxRenderedLength = builder.Length;
-			}
+			if (builder.Length > _maxRenderedLength)
+				_maxRenderedLength = builder.Length;
 
 			string value = builder.ToString();
 			logEvent.AddCachedLayoutValue(this, value);
