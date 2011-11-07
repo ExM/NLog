@@ -64,6 +64,7 @@ namespace NLog.Config
 		/// <summary>
 		/// Gets or sets default singleton instance of <see cref="ConfigurationItemFactory"/>.
 		/// </summary>
+		[Obsolete("use LoggingConfiguration.ItemFactory")]
 		public static ConfigurationItemFactory Default { get; set; }
 
 		/// <summary>

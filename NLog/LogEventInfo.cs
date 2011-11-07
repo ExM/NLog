@@ -27,7 +27,6 @@ namespace NLog
 		private string formattedMessage;
 		private IDictionary<Layout, string> layoutCache;
 		private IDictionary<object, object> properties;
-		private IDictionary eventContextAdapter;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LogEventInfo" /> class.
@@ -377,7 +376,6 @@ namespace NLog
 		private void InitEventContext()
 		{
 			this.properties = new Dictionary<object, object>();
-			this.eventContextAdapter = new DictionaryAdapter<object, object>(this.properties);
 		}
 	}
 }

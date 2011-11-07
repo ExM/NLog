@@ -382,10 +382,5 @@ namespace NLog.Config
 				}
 			}
 		}
-
-		internal void EnsureInitialized()
-		{
-			this.InitializeAll();
-		}
 	}
 }

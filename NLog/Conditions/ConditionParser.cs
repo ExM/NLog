@@ -155,7 +155,7 @@ namespace NLog.Conditions
 
 			if (this.tokenizer.TokenType == ConditionTokenType.String)
 			{
-				ConditionExpression e = new ConditionLayoutExpression(Layout.FromString(this.tokenizer.StringTokenValue, this.configurationItemFactory));
+				ConditionExpression e = new ConditionLayoutExpression(new SimpleLayout(tokenizer.StringTokenValue, configurationItemFactory));
 				this.tokenizer.GetNextToken();
 				return e;
 			}

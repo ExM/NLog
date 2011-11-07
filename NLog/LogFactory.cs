@@ -23,7 +23,7 @@ namespace NLog
 		private readonly MultiFileWatcher _watcher;
 		private const int ReconfigAfterFileChangedTimeout = 1000;
 
-		private readonly Dictionary<LoggerCacheKey, WeakReference> loggerCache = new Dictionary<LoggerCacheKey, WeakReference>();
+		private readonly Dictionary<LoggerCacheKey, WeakReference> _loggerCache = new Dictionary<LoggerCacheKey, WeakReference>();
 
 		private static TimeSpan _defaultFlushTimeout = TimeSpan.FromSeconds(15);
 
@@ -428,17 +428,13 @@ namespace NLog
 		internal void ReconfigExistingLoggers(LoggingConfiguration configuration)
 		{
 			if (configuration != null)
-			{
-				configuration.EnsureInitialized();
-			}
+				configuration.InitializeAll();
 
-			foreach (var loggerWrapper in this.loggerCache.Values.ToList())
+			foreach (var loggerWrapper in _loggerCache.Values.ToList())
 			{
 				Logger logger = loggerWrapper.Target as Logger;
 				if (logger != null)
-				{
-					logger.SetConfiguration(this.GetConfigurationForLogger(logger.Name, configuration));
-				}
+					logger.SetConfiguration(GetConfigurationForLogger(logger.Name, configuration));
 			}
 		}
 
@@ -600,7 +596,7 @@ namespace NLog
 			{
 				WeakReference l;
 
-				if (this.loggerCache.TryGetValue(cacheKey, out l))
+				if (this._loggerCache.TryGetValue(cacheKey, out l))
 				{
 					Logger existingLogger = l.Target as Logger;
 					if (existingLogger != null)
@@ -626,7 +622,7 @@ namespace NLog
 					newLogger.Initialize(cacheKey.Name, this.GetConfigurationForLogger(cacheKey.Name, this.Configuration), this);
 				}
 
-				this.loggerCache[cacheKey] = new WeakReference(newLogger);
+				this._loggerCache[cacheKey] = new WeakReference(newLogger);
 				return newLogger;
 			}
 		}

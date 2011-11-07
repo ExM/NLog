@@ -39,28 +39,7 @@ namespace NLog.Layouts
 		/// <returns><see cref="SimpleLayout"/> object represented by the text.</returns>
 		public static implicit operator Layout([Localizable(false)] string text)
 		{
-			return FromString(text);
-		}
-
-		/// <summary>
-		/// Implicitly converts the specified string to a <see cref="SimpleLayout"/>.
-		/// </summary>
-		/// <param name="layoutText">The layout string.</param>
-		/// <returns>Instance of <see cref="SimpleLayout"/>.</returns>
-		public static Layout FromString(string layoutText)
-		{
-			return FromString(layoutText, ConfigurationItemFactory.Default);
-		}
-
-		/// <summary>
-		/// Implicitly converts the specified string to a <see cref="SimpleLayout"/>.
-		/// </summary>
-		/// <param name="layoutText">The layout string.</param>
-		/// <param name="configurationItemFactory">The NLog factories to use when resolving layout renderers.</param>
-		/// <returns>Instance of <see cref="SimpleLayout"/>.</returns>
-		public static Layout FromString(string layoutText, ConfigurationItemFactory configurationItemFactory)
-		{
-			return new SimpleLayout(layoutText, configurationItemFactory);
+			return new SimpleLayout(text);
 		}
 
 		/// <summary>
