@@ -31,7 +31,7 @@ namespace NLog.Layouts
 			this.Quoting = CsvQuotingMode.Auto;
 			this.QuoteChar = "\"";
 			this.Layout = this;
-			this.Header = new CsvHeaderLayout(this);
+			this.Header = null;
 			this.Footer = null;
 		}
 
@@ -82,10 +82,8 @@ namespace NLog.Layouts
 		protected override void InitializeLayout()
 		{
 			base.InitializeLayout();
-			if (!this.WithHeader)
-			{
-				this.Header = null;
-			}
+			if (WithHeader && Header == null)
+				Header = new CsvHeaderLayout(this);
 
 			switch (this.Delimiter)
 			{

@@ -66,7 +66,7 @@ namespace NLog.UnitTests
 
 		protected void AssertLayoutRendererOutput(Layout l, string expected)
 		{
-			l.Initialize(null);
+			l.Initialize(new LoggingConfiguration());
 			string actual = l.Render(LogEventInfo.Create(LogLevel.Info, "loggername", "message"));
 			l.Close();
 			Assert.AreEqual(expected, actual);

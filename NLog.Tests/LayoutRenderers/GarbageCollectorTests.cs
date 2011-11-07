@@ -21,8 +21,14 @@ namespace NLog.UnitTests.LayoutRenderers
 			</nlog>");
 
 			LogManager.GetLogger("d").Debug("zzz");
-			AssertDebugLastMessage("debug",
-				Convert.ToString(GC.GetTotalMemory(false), CultureInfo.InvariantCulture));
+			IsNumber(GetDebugLastMessage("debug"));
+		}
+
+		private void IsNumber(string text)
+		{
+			foreach (var ch in text)
+				if (!Char.IsDigit(ch))
+					Assert.Fail("`{0}' not a number", text);
 		}
 		
 		[Test]
@@ -37,8 +43,7 @@ namespace NLog.UnitTests.LayoutRenderers
 			</nlog>");
 
 			LogManager.GetLogger("d").Debug("zzz");
-			AssertDebugLastMessage("debug",
-				Convert.ToString(GC.CollectionCount(2), CultureInfo.InvariantCulture));
+			IsNumber(GetDebugLastMessage("debug"));
 		}
 		
 		[Test]
@@ -53,8 +58,7 @@ namespace NLog.UnitTests.LayoutRenderers
 			</nlog>");
 
 			LogManager.GetLogger("d").Debug("zzz");
-			AssertDebugLastMessage("debug",
-				Convert.ToString(GC.MaxGeneration, CultureInfo.InvariantCulture));
+			IsNumber(GetDebugLastMessage("debug"));
 		}
 	}
 }
