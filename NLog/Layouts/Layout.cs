@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using NLog.Config;
 using NLog.Internal;
+using System;
 
 namespace NLog.Layouts
 {
@@ -70,10 +71,11 @@ namespace NLog.Layouts
 		public string Render(LogEventInfo logEvent)
 		{
 			if (!isInitialized)
-			{
-				isInitialized = true;
-				InitializeLayout();
-			}
+				throw new InvalidOperationException("required run Initialize method");
+			//{
+			//	isInitialized = true;
+			//	InitializeLayout();
+			//}
 
 			return GetFormattedMessage(logEvent);
 		}
@@ -123,8 +125,8 @@ namespace NLog.Layouts
 		/// </summary>
 		protected virtual void InitializeLayout()
 		{
-			if(LoggingConfiguration == null)
-				LoggingConfiguration = new LoggingConfiguration(); //TODO: remove after fix all tests (used ConfigurationItemFactory.Default)
+			//if(LoggingConfiguration == null)
+			//	LoggingConfiguration = new LoggingConfiguration(); //TODO: remove after fix all tests (used ConfigurationItemFactory.Default)
 		}
 
 		/// <summary>

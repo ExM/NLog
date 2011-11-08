@@ -4,12 +4,21 @@ using System.Globalization;
 using System.IO;
 using NUnit.Framework;
 using NLog.Layouts;
+using NLog.Config;
 
 namespace NLog.UnitTests.Layouts
 {
 	[TestFixture]
 	public class CsvLayoutTests : NLogTestBase
 	{
+		LoggingConfiguration cfg;
+
+		[TestFixtureSetUp]
+		public void SetUp()
+		{
+			cfg = new LoggingConfiguration();
+		}
+
 		[Test]
 		public void EndToEndTest()
 		{
@@ -118,6 +127,8 @@ namespace NLog.UnitTests.Layouts
 				ev.Message = "hello, world";
 
 				string sep = delim.Value;
+				csvLayout.Initialize(cfg);
+
 				Assert.AreEqual("2010-01-01 12:34:56.0000" + sep + "Info" + sep + "hello, world", csvLayout.Render(ev));
 				Assert.AreEqual("date" + sep + "level" + sep + "message;text", csvLayout.Header.Render(ev));
 			}
@@ -159,6 +170,8 @@ namespace NLog.UnitTests.Layouts
 				ev.Message = "hello, world";
 
 				string sep = delim.Value;
+				csvLayout.Initialize(cfg);
+
 				Assert.AreEqual("'2010-01-01 12:34:56.0000'" + sep + "'Info'" + sep + "'hello, world'", csvLayout.Render(ev));
 				Assert.AreEqual("'date'" + sep + "'level'" + sep + "'message;text'", csvLayout.Header.Render(ev));
 			}
@@ -179,6 +192,8 @@ namespace NLog.UnitTests.Layouts
 				QuoteChar = "'",
 				Delimiter = CsvColumnDelimiterMode.Semicolon,
 			};
+
+			csvLayout.Initialize(cfg);
 
 			// no quoting
 			Assert.AreEqual(
@@ -252,6 +267,8 @@ namespace NLog.UnitTests.Layouts
 				Level = LogLevel.Info,
 				Message = "hello, world"
 			};
+
+			csvLayout.Initialize(cfg);
 
 			var r11 = csvLayout.Render(e1);
 			var r12 = csvLayout.Render(e1);

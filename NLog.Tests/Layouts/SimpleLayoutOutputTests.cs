@@ -14,12 +14,22 @@ namespace NLog.UnitTests.Layouts
 	[TestFixture]
 	public class SimpleLayoutOutputTests : NLogTestBase
 	{
+		LoggingConfiguration cfg;
+
+		[TestFixtureSetUp]
+		public void SetUp()
+		{
+			cfg = new LoggingConfiguration();
+		}
+
 		[Test]
 		public void VeryLongRendererOutput()
 		{
 			int stringLength = 100000;
 
 			SimpleLayout l = new string('x', stringLength) + "${message}";
+			l.Initialize(cfg);
+
 			string output = l.Render(LogEventInfo.CreateNullEvent());
 			Assert.AreEqual(new string('x', stringLength), output);
 			string output2 = l.Render(LogEventInfo.CreateNullEvent());
@@ -34,6 +44,7 @@ namespace NLog.UnitTests.Layouts
 			configurationItemFactory.LayoutRenderers.RegisterDefinition("throwsException", typeof(ThrowsExceptionRenderer));
 			
 			SimpleLayout l = new SimpleLayout("xx${throwsException}yy", configurationItemFactory);
+			l.Initialize(cfg);
 			string output = l.Render(LogEventInfo.CreateNullEvent());
 			Assert.AreEqual("xxyy", output);
 		}
@@ -43,6 +54,7 @@ namespace NLog.UnitTests.Layouts
 		{
 			var l = new SimpleLayout("xx${level}yy");
 			var ev = LogEventInfo.CreateNullEvent();
+			l.Initialize(cfg);
 			string output1 = l.Render(ev);
 			string output2 = l.Render(ev);
 			Assert.AreSame(output1, output2);
@@ -68,6 +80,7 @@ namespace NLog.UnitTests.Layouts
 						configurationItemFactory.LayoutRenderers.RegisterDefinition("throwsException", typeof(ThrowsExceptionRenderer));
 
 						SimpleLayout l = new SimpleLayout("xx${throwsException:msg1}yy${throwsException:msg2}zz", configurationItemFactory);
+						l.Initialize(cfg);
 						string output = l.Render(LogEventInfo.CreateNullEvent());
 						Assert.AreEqual("xxyyzz", output);
 					}, 
@@ -85,6 +98,7 @@ namespace NLog.UnitTests.Layouts
 			Assert.AreEqual(0, lr.CloseCount);
 
 			// make sure render will call Init
+			lr.Initialize(cfg);
 			lr.Render(LogEventInfo.CreateNullEvent());
 			Assert.AreEqual(1, lr.InitCount);
 			Assert.AreEqual(0, lr.CloseCount);
@@ -111,7 +125,7 @@ namespace NLog.UnitTests.Layouts
 			Assert.AreEqual(0, lr.InitCount);
 			Assert.AreEqual(0, lr.CloseCount);
 
-			lr.Initialize(null);
+			lr.Initialize(cfg);
 			Assert.AreEqual(1, lr.InitCount);
 
 			// make sure render will not call another Init
