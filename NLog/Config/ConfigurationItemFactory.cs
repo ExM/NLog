@@ -25,14 +25,6 @@ namespace NLog.Config
 		private readonly Factory<LayoutRenderer, AmbientPropertyAttribute> ambientProperties;
 
 		/// <summary>
-		/// Initializes static members of the <see cref="ConfigurationItemFactory"/> class.
-		/// </summary>
-		static ConfigurationItemFactory()
-		{
-			Default = BuildDefaultFactory();
-		}
-
-		/// <summary>
 		/// Initializes a new instance of the <see cref="ConfigurationItemFactory"/> class.
 		/// </summary>
 		/// <param name="assemblies">The assemblies to scan for named items.</param>
@@ -60,12 +52,6 @@ namespace NLog.Config
 				this.RegisterItemsFromAssembly(asm);
 			}
 		}
-
-		/// <summary>
-		/// Gets or sets default singleton instance of <see cref="ConfigurationItemFactory"/>.
-		/// </summary>
-		[Obsolete("use LoggingConfiguration.ItemFactory")]
-		public static ConfigurationItemFactory Default { get; set; }
 
 		/// <summary>
 		/// Gets or sets the creator delegate used to instantiate configuration objects.
@@ -173,15 +159,6 @@ namespace NLog.Config
 			{
 				f.RegisterType(type, itemNamePrefix);
 			}
-		}
-
-		/// <summary>
-		/// Builds the default configuration item factory.
-		/// </summary>
-		/// <returns>Default factory.</returns>
-		private static ConfigurationItemFactory BuildDefaultFactory()
-		{
-			return new ConfigurationItemFactory(typeof(Logger).Assembly);
 		}
 	}
 }

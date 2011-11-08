@@ -13,13 +13,13 @@ namespace NLog.UnitTests.Config
 		[SetUp]
 		public void LoadExtensionAssembly()
 		{
-			ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(MessageQueueTarget).Assembly);
+			CommonCfg.ItemFactory.RegisterItemsFromAssembly(typeof(MessageQueueTarget).Assembly);
 		}
 
 		[Test]
 		public void ExtendedTargetTest()
 		{
-			var targets = ConfigurationItemFactory.Default.Targets;
+			var targets = CommonCfg.ItemFactory.Targets;
 
 			AssertInstance(targets, "MSMQ", "MessageQueueTarget");
 			AssertInstance(targets, "AspNetTrace", "AspNetTraceTarget");
@@ -29,7 +29,7 @@ namespace NLog.UnitTests.Config
 		[Test]
 		public void ExtendedLayoutRendererTest()
 		{
-			var layoutRenderers = ConfigurationItemFactory.Default.LayoutRenderers;
+			var layoutRenderers = CommonCfg.ItemFactory.LayoutRenderers;
 
 			AssertInstance(layoutRenderers, "aspnet-application", "AspNetApplicationValueLayoutRenderer");
 			AssertInstance(layoutRenderers, "aspnet-request", "AspNetRequestValueLayoutRenderer");

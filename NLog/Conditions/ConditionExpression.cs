@@ -26,7 +26,7 @@ namespace NLog.Conditions
 		/// <returns>Condition expression tree.</returns>
 		public static implicit operator ConditionExpression(string conditionExpressionText)
 		{
-			return ConditionParser.ParseExpression(conditionExpressionText);
+			return new ConditionLazyExpression(conditionExpressionText); // ConditionParser.ParseExpression(conditionExpressionText);
 		}
 
 		/// <summary>

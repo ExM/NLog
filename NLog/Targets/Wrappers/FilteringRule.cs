@@ -3,13 +3,22 @@ namespace NLog.Targets.Wrappers
 {
 	using NLog.Conditions;
 	using NLog.Config;
+	using System.ComponentModel;
+	using NLog.Internal;
 
 	/// <summary>
 	/// Filtering rule for <see cref="PostFilteringTargetWrapper"/>.
 	/// </summary>
 	[NLogConfigurationItem]
-	public class FilteringRule
+	public class FilteringRule : ISupportsInitialize
 	{
+		private bool isInitialized;
+
+		/// <summary>
+		/// Gets the logging configuration this target is part of.
+		/// </summary>
+		protected LoggingConfiguration LoggingConfiguration { get; private set; }
+
 		/// <summary>
 		/// Initializes a new instance of the FilteringRule class.
 		/// </summary>
@@ -42,5 +51,51 @@ namespace NLog.Targets.Wrappers
 		/// <docgen category='Filtering Options' order='10' />
 		[RequiredParameter]
 		public ConditionExpression Filter { get; set; }
+
+		/// <summary>
+		/// Initializes this instance.
+		/// </summary>
+		/// <param name="configuration">The configuration.</param>
+		public void Initialize(LoggingConfiguration configuration)
+		{
+			if (isInitialized)
+				return;
+
+			LoggingConfiguration = configuration;
+			isInitialized = true;
+			InitializeRule();
+		}
+
+		/// <summary>
+		/// Closes this instance.
+		/// </summary>
+		public void Close()
+		{
+			if (isInitialized)
+			{
+				LoggingConfiguration = null;
+				isInitialized = false;
+				CloseRule();
+			}
+		}
+
+		/// <summary>
+		/// Initializes the condition.
+		/// </summary>
+		protected virtual void InitializeRule()
+		{
+			if (Exists != null)
+				Exists.Initialize(LoggingConfiguration);
+			if (Filter != null)
+				Filter.Initialize(LoggingConfiguration);
+		}
+
+		/// <summary>
+		/// Closes the condition.
+		/// </summary>
+		protected virtual void CloseRule()
+		{
+		}
+
 	}
 }

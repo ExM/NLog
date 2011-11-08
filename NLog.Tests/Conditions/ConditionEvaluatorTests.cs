@@ -320,7 +320,7 @@ namespace NLog.UnitTests.Conditions
 
 		private void AssertEvaluationResult(object expectedResult, string conditionText)
 		{
-			ConditionExpression condition = ConditionParser.ParseExpression(conditionText);
+			ConditionExpression condition = ConditionParser.ParseExpression(conditionText, CommonCfg.ItemFactory);
 			condition.Initialize(CommonCfg);
 			LogEventInfo context = CreateWellKnownContext();
 			object actualResult = condition.Evaluate(context);

@@ -356,7 +356,7 @@ namespace NLog.Targets
 			allLayouts = new List<Layout> (ObjectGraphScanner.FindReachableObjects<Layout> (this));
 			InternalLogger.Trace ("{0} has {1} layouts", this, this.allLayouts.Count);
 			
-			foreach(var item in allLayouts.OfType<ISupportsInitialize>())
+			foreach(var item in ObjectGraphScanner.FindReachableObjects<ISupportsInitialize>(this))
 				item.Initialize(LoggingConfiguration);
 		}
 
