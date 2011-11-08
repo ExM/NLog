@@ -49,27 +49,25 @@ namespace NLog.Layouts
 		/// <param name="text">The layout string to parse.</param>
 		/// <param name="configurationItemFactory">The NLog factories to use when creating references to layout renderers.</param>
 		public SimpleLayout(string text, ConfigurationItemFactory configurationItemFactory)
+			:this(text, LayoutParser.CompileLayout(configurationItemFactory, text))
 		{
-			_layoutText = text;
-			LayoutRenderer[] renderers = LayoutParser.CompileLayout(configurationItemFactory, _layoutText);
-			SetRenderers (renderers);
 		}
 
-		public SimpleLayout(LayoutRenderer[] renderers, string text, ConfigurationItemFactory configurationItemFactory)
+		public SimpleLayout(string text, LayoutRenderer[] renderers)
 		{
 			_layoutText = text;
 			SetRenderers(renderers);
 		}
 		
-		protected override void InitializeLayout ()
+		protected override void InitializeLayout()
 		{
 			base.InitializeLayout();
 			
-			if(Renderers != null)
-				return;
-			
-			LayoutRenderer[] renderers = LayoutParser.CompileLayout(LoggingConfiguration.ItemFactory, _layoutText);
-			SetRenderers (renderers);
+			if(Renderers == null)
+				SetRenderers(LayoutParser.CompileLayout(LoggingConfiguration.ItemFactory, _layoutText));
+
+			foreach (LayoutRenderer renderer in Renderers)
+				renderer.Initialize(LoggingConfiguration);
 		}
 
 		/// <summary>

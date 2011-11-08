@@ -1,9 +1,8 @@
+using NLog.Config;
+using NLog.Internal;
 
 namespace NLog.Layouts
 {
-	using NLog.Config;
-	using NLog.Internal;
-
 	/// <summary>
 	/// A specialized layout that supports header and footer.
 	/// </summary>
@@ -36,7 +35,7 @@ namespace NLog.Layouts
 		/// <returns>The rendered layout.</returns>
 		protected override string GetFormattedMessage(LogEventInfo logEvent)
 		{
-			return this.Layout.Render(logEvent);
+			return Layout.Render(logEvent);
 		}
 		
 		protected override void InitializeLayout ()

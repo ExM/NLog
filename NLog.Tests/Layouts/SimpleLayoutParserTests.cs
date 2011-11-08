@@ -11,11 +11,19 @@ namespace NLog.UnitTests.Layouts
 	[TestFixture]
 	public class SimpleLayoutParserTests : NLogTestBase
 	{
+		LoggingConfiguration cfg;
+
+		[TestFixtureSetUp]
+		public void SetUp()
+		{
+			cfg = new LoggingConfiguration();
+		}
+		
 		[Test]
 		public void SimpleTest()
 		{
 			SimpleLayout l = "${message}";
-			l.Initialize (new LoggingConfiguration ());
+			l.Initialize(cfg);
 			Assert.AreEqual(1, l.Renderers.Count);
 			Assert.IsInstanceOf<MessageLayoutRenderer>(l.Renderers[0]);
 		}
@@ -30,7 +38,7 @@ namespace NLog.UnitTests.Layouts
 		public void SingleParamTest()
 		{
 			SimpleLayout l = "${mdc:item=AAA}";
-			l.Initialize (new LoggingConfiguration ());
+			l.Initialize(cfg);
 			Assert.AreEqual(1, l.Renderers.Count);
 			MdcLayoutRenderer mdc = l.Renderers[0] as MdcLayoutRenderer;
 			Assert.IsNotNull(mdc);
@@ -41,7 +49,7 @@ namespace NLog.UnitTests.Layouts
 		public void ValueWithColonTest()
 		{
 			SimpleLayout l = "${mdc:item=AAA\\:}";
-			l.Initialize (new LoggingConfiguration ());
+			l.Initialize(cfg);
 			Assert.AreEqual(1, l.Renderers.Count);
 			MdcLayoutRenderer mdc = l.Renderers[0] as MdcLayoutRenderer;
 			Assert.IsNotNull(mdc);
@@ -52,7 +60,7 @@ namespace NLog.UnitTests.Layouts
 		public void ValueWithBracketTest()
 		{
 			SimpleLayout l = "${mdc:item=AAA\\}\\:}";
-			l.Initialize (new LoggingConfiguration ());
+			l.Initialize(cfg);
 			Assert.AreEqual("${mdc:item=AAA\\}\\:}", l.Text);
 			Assert.AreEqual(1, l.Renderers.Count);
 			MdcLayoutRenderer mdc = l.Renderers[0] as MdcLayoutRenderer;
@@ -64,7 +72,7 @@ namespace NLog.UnitTests.Layouts
 		public void DefaultValueTest()
 		{
 			SimpleLayout l = "${mdc:BBB}";
-			l.Initialize(new LoggingConfiguration());
+			l.Initialize(cfg);
 			Assert.AreEqual(1, l.Renderers.Count);
 			MdcLayoutRenderer mdc = l.Renderers[0] as MdcLayoutRenderer;
 			Assert.IsNotNull(mdc);
@@ -75,7 +83,7 @@ namespace NLog.UnitTests.Layouts
 		public void DefaultValueWithBracketTest()
 		{
 			SimpleLayout l = "${mdc:AAA\\}\\:}";
-			l.Initialize (new LoggingConfiguration ());
+			l.Initialize(cfg);
 			Assert.AreEqual(l.Text, "${mdc:AAA\\}\\:}");
 			Assert.AreEqual(1, l.Renderers.Count);
 			MdcLayoutRenderer mdc = l.Renderers[0] as MdcLayoutRenderer;
@@ -87,7 +95,7 @@ namespace NLog.UnitTests.Layouts
 		public void DefaultValueWithOtherParametersTest()
 		{
 			SimpleLayout l = "${exception:message,type:separator=x}";
-			l.Initialize (new LoggingConfiguration ());
+			l.Initialize(cfg);
 			Assert.AreEqual(1, l.Renderers.Count);
 			ExceptionLayoutRenderer elr = l.Renderers[0] as ExceptionLayoutRenderer;
 			Assert.IsNotNull(elr);
@@ -99,7 +107,7 @@ namespace NLog.UnitTests.Layouts
 		public void EmptyValueTest()
 		{
 			SimpleLayout l = "${mdc:item=}";
-			l.Initialize (new LoggingConfiguration ());
+			l.Initialize(cfg);
 			Assert.AreEqual(1, l.Renderers.Count);
 			MdcLayoutRenderer mdc = l.Renderers[0] as MdcLayoutRenderer;
 			Assert.IsNotNull(mdc);
@@ -110,7 +118,7 @@ namespace NLog.UnitTests.Layouts
 		public void NestedLayoutTest()
 		{
 			SimpleLayout l = "${rot13:inner=${ndc:topFrames=3:separator=x}}";
-			l.Initialize (new LoggingConfiguration ());
+			l.Initialize(cfg);
 			Assert.AreEqual(1, l.Renderers.Count);
 			var lr = l.Renderers[0] as Rot13LayoutRendererWrapper;
 			Assert.IsNotNull(lr);
@@ -128,7 +136,7 @@ namespace NLog.UnitTests.Layouts
 		public void DoubleNestedLayoutTest()
 		{
 			SimpleLayout l = "${rot13:inner=${rot13:inner=${ndc:topFrames=3:separator=x}}}";
-			l.Initialize (new LoggingConfiguration ());
+			l.Initialize(cfg);
 			Assert.AreEqual(1, l.Renderers.Count);
 			var lr = l.Renderers[0] as Rot13LayoutRendererWrapper;
 			Assert.IsNotNull(lr);
@@ -150,7 +158,7 @@ namespace NLog.UnitTests.Layouts
 		public void DoubleNestedLayoutWithDefaultLayoutParametersTest()
 		{
 			SimpleLayout l = "${rot13:${rot13:${ndc:topFrames=3:separator=x}}}";
-			l.Initialize (new LoggingConfiguration ());
+			l.Initialize(cfg);
 			Assert.AreEqual(1, l.Renderers.Count);
 			var lr = l.Renderers[0] as Rot13LayoutRendererWrapper;
 			Assert.IsNotNull(lr);
@@ -172,7 +180,7 @@ namespace NLog.UnitTests.Layouts
 		public void AmbientPropertyTest()
 		{
 			SimpleLayout l = "${message:padding=10}";
-			l.Initialize(new LoggingConfiguration());
+			l.Initialize(cfg);
 			Assert.AreEqual(1, l.Renderers.Count);
 			var pad = l.Renderers[0] as PaddingLayoutRendererWrapper;
 			Assert.IsNotNull(pad);
@@ -185,14 +193,14 @@ namespace NLog.UnitTests.Layouts
 		public void MissingLayoutRendererTest()
 		{
 			SimpleLayout l = "${rot13:${foobar}}";
-			Assert.IsNull(l);
+			l.Initialize(cfg);
 		}
 
 		[Test]
 		public void DoubleAmbientPropertyTest()
 		{
 			SimpleLayout l = "${message:uppercase=true:padding=10}";
-			l.Initialize (new LoggingConfiguration());
+			l.Initialize(cfg);
 			Assert.AreEqual(1, l.Renderers.Count);
 			var upperCase = l.Renderers[0] as UppercaseLayoutRendererWrapper;
 			Assert.IsNotNull(upperCase);
@@ -206,7 +214,7 @@ namespace NLog.UnitTests.Layouts
 		public void ReverseDoubleAmbientPropertyTest()
 		{
 			SimpleLayout l = "${message:padding=10:uppercase=true}";
-			l.Initialize (new LoggingConfiguration ());
+			l.Initialize(cfg);
 			Assert.AreEqual(1, l.Renderers.Count);
 			var pad = ((SimpleLayout)l).Renderers[0] as PaddingLayoutRendererWrapper;
 			Assert.IsNotNull(pad);
@@ -232,7 +240,6 @@ namespace NLog.UnitTests.Layouts
 		[Test]
 		public void EvaluateTest()
 		{
-			var cfg = new LoggingConfiguration();
 			var logEventInfo = LogEventInfo.CreateNullEvent();
 			logEventInfo.Level = LogLevel.Warn;
 			Assert.AreEqual("Warn", SimpleLayout.Evaluate(cfg, "${level}", logEventInfo));
@@ -241,16 +248,16 @@ namespace NLog.UnitTests.Layouts
 		[Test]
 		public void EvaluateTest2()
 		{
-			var cfg = new LoggingConfiguration ();
 			Assert.AreEqual("Off", SimpleLayout.Evaluate(cfg, "${level}"));
 			Assert.AreEqual(string.Empty, SimpleLayout.Evaluate(cfg, "${message}"));
 			Assert.AreEqual(string.Empty, SimpleLayout.Evaluate(cfg, "${logger}"));
 		}
 
-		private static void AssertEscapeRoundTrips(string originalString)
+		private void AssertEscapeRoundTrips(string originalString)
 		{
 			string escapedString = SimpleLayout.Escape(originalString);
 			SimpleLayout l = escapedString;
+			l.Initialize(cfg);
 			string renderedString = l.Render(LogEventInfo.CreateNullEvent());
 			Assert.AreEqual(originalString, renderedString);
 		}

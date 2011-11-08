@@ -1,13 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
+using System.Text;
+using NLog.Config;
 
 namespace NLog.Layouts
 {
-	using System;
-	using System.Collections.Generic;
-	using System.ComponentModel;
-	using System.Globalization;
-	using System.Text;
-	using NLog.Config;
-
 	/// <summary>
 	/// A specialized layout that renders CSV-formatted events.
 	/// </summary>
@@ -25,14 +24,14 @@ namespace NLog.Layouts
 		/// </summary>
 		public CsvLayout()
 		{
-			this.Columns = new List<CsvColumn>();
-			this.WithHeader = true;
-			this.Delimiter = CsvColumnDelimiterMode.Auto;
-			this.Quoting = CsvQuotingMode.Auto;
-			this.QuoteChar = "\"";
-			this.Layout = this;
-			this.Header = null;
-			this.Footer = null;
+			Columns = new List<CsvColumn>();
+			WithHeader = true;
+			Delimiter = CsvColumnDelimiterMode.Auto;
+			Quoting = CsvQuotingMode.Auto;
+			QuoteChar = "\"";
+			Layout = this;
+			Header = null;
+			Footer = null;
 		}
 
 		/// <summary>
@@ -91,39 +90,39 @@ namespace NLog.Layouts
 			foreach (CsvColumn col in this.Columns)
 				col.Layout.Initialize(LoggingConfiguration);
 
-			switch (this.Delimiter)
+			switch(Delimiter)
 			{
 				case CsvColumnDelimiterMode.Auto:
-					this.actualColumnDelimiter = CultureInfo.CurrentCulture.TextInfo.ListSeparator;
+					actualColumnDelimiter = CultureInfo.CurrentCulture.TextInfo.ListSeparator;
 					break;
 
 				case CsvColumnDelimiterMode.Comma:
-					this.actualColumnDelimiter = ",";
+					actualColumnDelimiter = ",";
 					break;
 
 				case CsvColumnDelimiterMode.Semicolon:
-					this.actualColumnDelimiter = ";";
+					actualColumnDelimiter = ";";
 					break;
 
 				case CsvColumnDelimiterMode.Pipe:
-					this.actualColumnDelimiter = "|";
+					actualColumnDelimiter = "|";
 					break;
 
 				case CsvColumnDelimiterMode.Tab:
-					this.actualColumnDelimiter = "\t";
+					actualColumnDelimiter = "\t";
 					break;
 
 				case CsvColumnDelimiterMode.Space:
-					this.actualColumnDelimiter = " ";
+					actualColumnDelimiter = " ";
 					break;
 
 				case CsvColumnDelimiterMode.Custom:
-					this.actualColumnDelimiter = this.CustomColumnDelimiter;
+					actualColumnDelimiter = CustomColumnDelimiter;
 					break;
 			}
 
-			this.quotableCharacters = (this.QuoteChar + "\r\n" + this.actualColumnDelimiter).ToCharArray();
-			this.doubleQuoteChar = this.QuoteChar + this.QuoteChar;
+			quotableCharacters = (QuoteChar + "\r\n" + actualColumnDelimiter).ToCharArray();
+			doubleQuoteChar = QuoteChar + QuoteChar;
 		}
 
 		/// <summary>
@@ -136,26 +135,22 @@ namespace NLog.Layouts
 			string cachedValue;
 
 			if (logEvent.TryGetCachedLayoutValue(this, out cachedValue))
-			{
 				return cachedValue;
-			}
 
 			var sb = new StringBuilder();
 			bool first = true;
 
-			foreach (CsvColumn col in this.Columns)
+			foreach (CsvColumn col in Columns)
 			{
 				if (!first)
-				{
-					sb.Append(this.actualColumnDelimiter);
-				}
+					sb.Append(actualColumnDelimiter);
 
 				first = false;
 
 				bool useQuoting;
 				string text = col.Layout.Render(logEvent);
 
-				switch (this.Quoting)
+				switch(Quoting)
 				{
 					case CsvQuotingMode.Nothing:
 						useQuoting = false;
@@ -167,36 +162,18 @@ namespace NLog.Layouts
 
 					default:
 					case CsvQuotingMode.Auto:
-						if (text.IndexOfAny(this.quotableCharacters) >= 0)
-						{
-							useQuoting = true;
-						}
-						else
-						{
-							useQuoting = false;
-						}
-
+							useQuoting = text.IndexOfAny(quotableCharacters) >= 0;
 						break;
 				}
 
 				if (useQuoting)
 				{
-					sb.Append(this.QuoteChar);
-				}
-
-				if (useQuoting)
-				{
-					sb.Append(text.Replace(this.QuoteChar, this.doubleQuoteChar));
+					sb.Append(QuoteChar);
+					sb.Append(text.Replace(QuoteChar, doubleQuoteChar));
+					sb.Append(QuoteChar);
 				}
 				else
-				{
 					sb.Append(text);
-				}
-
-				if (useQuoting)
-				{
-					sb.Append(this.QuoteChar);
-				}
 			}
 
 			return logEvent.AddCachedLayoutValue(this, sb.ToString());
@@ -208,19 +185,17 @@ namespace NLog.Layouts
 
 			bool first = true;
 
-			foreach (CsvColumn col in this.Columns)
+			foreach (CsvColumn col in Columns)
 			{
 				if (!first)
-				{
-					sb.Append(this.actualColumnDelimiter);
-				}
+					sb.Append(actualColumnDelimiter);
 
 				first = false;
 
 				bool useQuoting;
 				string text = col.Name;
 
-				switch (this.Quoting)
+				switch (Quoting)
 				{
 					case CsvQuotingMode.Nothing:
 						useQuoting = false;
@@ -232,36 +207,18 @@ namespace NLog.Layouts
 
 					default:
 					case CsvQuotingMode.Auto:
-						if (text.IndexOfAny(this.quotableCharacters) >= 0)
-						{
-							useQuoting = true;
-						}
-						else
-						{
-							useQuoting = false;
-						}
-
+							useQuoting = text.IndexOfAny(quotableCharacters) >= 0;
 						break;
 				}
 
 				if (useQuoting)
 				{
-					sb.Append(this.QuoteChar);
-				}
-
-				if (useQuoting)
-				{
-					sb.Append(text.Replace(this.QuoteChar, this.doubleQuoteChar));
+					sb.Append(QuoteChar);
+					sb.Append(text.Replace(QuoteChar, doubleQuoteChar));
+					sb.Append(QuoteChar);
 				}
 				else
-				{
 					sb.Append(text);
-				}
-
-				if (useQuoting)
-				{
-					sb.Append(this.QuoteChar);
-				}
 			}
 
 			return sb.ToString();
@@ -273,7 +230,7 @@ namespace NLog.Layouts
 		[ThreadAgnostic]
 		private class CsvHeaderLayout : Layout
 		{
-			private CsvLayout parent;
+			private CsvLayout _parent;
 
 			/// <summary>
 			/// Initializes a new instance of the <see cref="CsvHeaderLayout"/> class.
@@ -281,7 +238,7 @@ namespace NLog.Layouts
 			/// <param name="parent">The parent.</param>
 			public CsvHeaderLayout(CsvLayout parent)
 			{
-				this.parent = parent;
+				_parent = parent;
 			}
 
 			/// <summary>
@@ -294,11 +251,9 @@ namespace NLog.Layouts
 				string cached;
 
 				if (logEvent.TryGetCachedLayoutValue(this, out cached))
-				{
 					return cached;
-				}
 
-				return logEvent.AddCachedLayoutValue(this, this.parent.GetHeader());
+				return logEvent.AddCachedLayoutValue(this, _parent.GetHeader());
 			}
 		}
 	}

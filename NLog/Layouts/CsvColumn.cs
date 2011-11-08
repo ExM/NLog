@@ -1,14 +1,13 @@
+using NLog.Config;
 
 namespace NLog.Layouts
 {
-	using NLog.Config;
-
 	/// <summary>
 	/// A column in the CSV.
 	/// </summary>
 	[NLogConfigurationItem]
 	[ThreadAgnostic]
-	public class CsvColumn 
+	public class CsvColumn
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CsvColumn" /> class.
@@ -25,8 +24,8 @@ namespace NLog.Layouts
 		/// <param name="layout">The layout of the column.</param>
 		public CsvColumn(string name, Layout layout)
 		{
-			this.Name = name;
-			this.Layout = layout;
+			Name = name;
+			Layout = layout;
 		}
 
 		/// <summary>

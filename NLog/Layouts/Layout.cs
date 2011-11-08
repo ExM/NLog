@@ -1,10 +1,9 @@
+using System.ComponentModel;
+using NLog.Config;
+using NLog.Internal;
 
 namespace NLog.Layouts
 {
-	using System.ComponentModel;
-	using NLog.Config;
-	using NLog.Internal;
-
 	/// <summary>
 	/// Abstract interface that layouts must implement.
 	/// </summary>
@@ -24,7 +23,10 @@ namespace NLog.Layouts
 		/// </remarks>
 		public bool IsThreadAgnostic
 		{
-			get { return this.threadAgnostic; }
+			get
+			{
+				return threadAgnostic;
+			}
 		}
 
 		/// <summary>
@@ -54,10 +56,10 @@ namespace NLog.Layouts
 		/// </remarks>
 		public virtual void Precalculate(LogEventInfo logEvent)
 		{
-			if (!this.threadAgnostic)
-			{
-				this.Render(logEvent);
-			}
+			if (threadAgnostic)
+				return;
+
+			Render(logEvent);
 		}
 
 		/// <summary>
@@ -67,30 +69,13 @@ namespace NLog.Layouts
 		/// <returns>String representing log event.</returns>
 		public string Render(LogEventInfo logEvent)
 		{
-			if (!this.isInitialized)
+			if (!isInitialized)
 			{
-				this.isInitialized = true;
-				this.InitializeLayout();
+				isInitialized = true;
+				InitializeLayout();
 			}
 
-			return this.GetFormattedMessage(logEvent);
-		}
-
-		/// <summary>
-		/// Initializes this instance.
-		/// </summary>
-		/// <param name="configuration">The configuration.</param>
-		void ISupportsInitialize.Initialize(LoggingConfiguration configuration)
-		{
-			this.Initialize(configuration);
-		}
-
-		/// <summary>
-		/// Closes this instance.
-		/// </summary>
-		void ISupportsInitialize.Close()
-		{
-			this.Close();
+			return GetFormattedMessage(logEvent);
 		}
 
 		/// <summary>
@@ -99,26 +84,24 @@ namespace NLog.Layouts
 		/// <param name="configuration">The configuration.</param>
 		public void Initialize(LoggingConfiguration configuration)
 		{
-			if (!this.isInitialized)
+			if (isInitialized)
+				return;
+			
+			LoggingConfiguration = configuration;
+			isInitialized = true;
+			InitializeLayout();
+			
+			// determine whether the layout is thread-agnostic
+			// layout is thread agnostic if it is thread-agnostic and 
+			// all its nested objects are thread-agnostic.
+			threadAgnostic = true;
+			foreach(object item in ObjectGraphScanner.FindReachableObjects<object>(this))
 			{
-				this.LoggingConfiguration = configuration;
-				this.isInitialized = true;
-				this.InitializeLayout ();
-				
-				// determine whether the layout is thread-agnostic
-				// layout is thread agnostic if it is thread-agnostic and 
-				// all its nested objects are thread-agnostic.
-				this.threadAgnostic = true;
-				foreach (object item in ObjectGraphScanner.FindReachableObjects<object>(this))
+				if (!item.GetType().IsDefined(typeof(ThreadAgnosticAttribute), true))
 				{
-					if (!item.GetType().IsDefined(typeof(ThreadAgnosticAttribute), true))
-					{
-						this.threadAgnostic = false;
-						break;
-					}
+					threadAgnostic = false;
+					break;
 				}
-
-				
 			}
 		}
 
@@ -127,11 +110,11 @@ namespace NLog.Layouts
 		/// </summary>
 		public void Close()
 		{
-			if (this.isInitialized)
+			if (isInitialized)
 			{
-				this.LoggingConfiguration = null;
-				this.isInitialized = false;
-				this.CloseLayout();
+				LoggingConfiguration = null;
+				isInitialized = false;
+				CloseLayout();
 			}
 		}
 

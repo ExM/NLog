@@ -235,7 +235,7 @@ namespace NLog.Layouts
 						{
 							string txt;
 							LayoutRenderer[] renderers = CompileLayout(configurationItemFactory, sr, true, out txt);
-							var nestedLayout = new SimpleLayout(renderers, txt, configurationItemFactory);
+							var nestedLayout = new SimpleLayout(txt, renderers);
 							pi.SetValue(parameterTarget, nestedLayout, null);
 						}
 						else if (typeof(ConditionExpression).IsAssignableFrom(pi.PropertyType))
@@ -277,12 +277,12 @@ namespace NLog.Layouts
 				ch = sr.Read();
 			}
 
-			lr = ApplyWrappers(configurationItemFactory, lr, orderedWrappers);
+			lr = ApplyWrappers(lr, orderedWrappers);
 
 			return lr;
 		}
 
-		private static LayoutRenderer ApplyWrappers(ConfigurationItemFactory configurationItemFactory, LayoutRenderer lr, List<LayoutRenderer> orderedWrappers)
+		private static LayoutRenderer ApplyWrappers(LayoutRenderer lr, List<LayoutRenderer> orderedWrappers)
 		{
 			for (int i = orderedWrappers.Count - 1; i >= 0; --i)
 			{
@@ -293,7 +293,7 @@ namespace NLog.Layouts
 					lr = ConvertToLiteral(lr);
 				}
 
-				newRenderer.Inner = new SimpleLayout(new[] { lr }, string.Empty, configurationItemFactory);
+				newRenderer.Inner = new SimpleLayout(string.Empty, new[] { lr });
 				lr = newRenderer;
 			}
 

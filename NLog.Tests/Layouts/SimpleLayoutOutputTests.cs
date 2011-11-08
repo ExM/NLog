@@ -54,7 +54,7 @@ namespace NLog.UnitTests.Layouts
 			var l = new SimpleLayout("xx${level}yy");
 			Assert.AreEqual("'xx${level}yy'", l.ToString());
 
-			var l2 = new SimpleLayout(new LayoutRenderer[0], "someFakeText", ConfigurationItemFactory.Default);
+			var l2 = new SimpleLayout("someFakeText", new LayoutRenderer[0]);
 			Assert.AreEqual("'someFakeText'", l2.ToString());
 		}
 
