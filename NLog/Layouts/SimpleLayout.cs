@@ -25,7 +25,6 @@ namespace NLog.Layouts
 
 		private string _fixedText;
 		private string _layoutText;
-		private ConfigurationItemFactory _configurationItemFactory;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SimpleLayout" /> class.
@@ -38,31 +37,39 @@ namespace NLog.Layouts
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SimpleLayout" /> class.
 		/// </summary>
-		/// <param name="txt">The layout string to parse.</param>
-		public SimpleLayout(string txt)
-			: this(txt, ConfigurationItemFactory.Default)
+		/// <param name="text">The layout string to parse.</param>
+		public SimpleLayout(string text)
 		{
+			_layoutText = text;
 		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SimpleLayout"/> class.
 		/// </summary>
-		/// <param name="txt">The layout string to parse.</param>
+		/// <param name="text">The layout string to parse.</param>
 		/// <param name="configurationItemFactory">The NLog factories to use when creating references to layout renderers.</param>
 		public SimpleLayout(string text, ConfigurationItemFactory configurationItemFactory)
 		{
-			_configurationItemFactory = configurationItemFactory;
-
 			_layoutText = text;
-			LayoutRenderer[] renderers = LayoutParser.CompileLayout (_configurationItemFactory, _layoutText);
+			LayoutRenderer[] renderers = LayoutParser.CompileLayout(configurationItemFactory, _layoutText);
 			SetRenderers (renderers);
 		}
 
 		public SimpleLayout(LayoutRenderer[] renderers, string text, ConfigurationItemFactory configurationItemFactory)
 		{
-			_configurationItemFactory = configurationItemFactory;
 			_layoutText = text;
 			SetRenderers(renderers);
+		}
+		
+		protected override void InitializeLayout ()
+		{
+			base.InitializeLayout();
+			
+			if(Renderers != null)
+				return;
+			
+			LayoutRenderer[] renderers = LayoutParser.CompileLayout(LoggingConfiguration.ItemFactory, _layoutText);
+			SetRenderers (renderers);
 		}
 
 		/// <summary>
@@ -79,8 +86,6 @@ namespace NLog.Layouts
 			set
 			{
 				_layoutText = value;
-				LayoutRenderer[] renderers = LayoutParser.CompileLayout(_configurationItemFactory, _layoutText);
-				SetRenderers(renderers);
 			}
 		}
 
@@ -123,9 +128,10 @@ namespace NLog.Layouts
 		/// <param name="logEvent">Log event to be used for evaluation.</param>
 		/// <returns>The input text with all occurences of ${} replaced with
 		/// values provided by the appropriate layout renderers.</returns>
-		public static string Evaluate(string text, LogEventInfo logEvent)
+		public static string Evaluate(LoggingConfiguration cfg, string text, LogEventInfo logEvent)
 		{
 			var l = new SimpleLayout(text);
+			l.Initialize(cfg);
 			return l.Render(logEvent);
 		}
 
@@ -136,9 +142,9 @@ namespace NLog.Layouts
 		/// <param name="text">The text to be evaluated.</param>
 		/// <returns>The input text with all occurences of ${} replaced with
 		/// values provided by the appropriate layout renderers.</returns>
-		public static string Evaluate(string text)
+		public static string Evaluate(LoggingConfiguration cfg, string text)
 		{
-			return Evaluate(text, LogEventInfo.CreateNullEvent());
+			return Evaluate(cfg, text, LogEventInfo.CreateNullEvent());
 		}
 
 		/// <summary>

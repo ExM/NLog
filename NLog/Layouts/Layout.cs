@@ -103,7 +103,8 @@ namespace NLog.Layouts
 			{
 				this.LoggingConfiguration = configuration;
 				this.isInitialized = true;
-
+				this.InitializeLayout ();
+				
 				// determine whether the layout is thread-agnostic
 				// layout is thread agnostic if it is thread-agnostic and 
 				// all its nested objects are thread-agnostic.
@@ -117,7 +118,7 @@ namespace NLog.Layouts
 					}
 				}
 
-				this.InitializeLayout();
+				
 			}
 		}
 
@@ -140,7 +141,7 @@ namespace NLog.Layouts
 		protected virtual void InitializeLayout()
 		{
 			if(LoggingConfiguration == null)
-				LoggingConfiguration = new LoggingConfiguration(); //TODO: remove after fix all tests
+				LoggingConfiguration = new LoggingConfiguration(); //TODO: remove after fix all tests (used ConfigurationItemFactory.Default)
 		}
 
 		/// <summary>

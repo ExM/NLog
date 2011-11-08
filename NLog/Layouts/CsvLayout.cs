@@ -83,7 +83,13 @@ namespace NLog.Layouts
 		{
 			base.InitializeLayout();
 			if (WithHeader && Header == null)
+			{
 				Header = new CsvHeaderLayout(this);
+				Header.Initialize(LoggingConfiguration);
+			}
+			
+			foreach (CsvColumn col in this.Columns)
+				col.Layout.Initialize(LoggingConfiguration);
 
 			switch (this.Delimiter)
 			{

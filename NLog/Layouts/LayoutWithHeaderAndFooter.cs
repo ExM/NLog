@@ -38,5 +38,16 @@ namespace NLog.Layouts
 		{
 			return this.Layout.Render(logEvent);
 		}
+		
+		protected override void InitializeLayout ()
+		{
+			base.InitializeLayout ();
+			if(Layout != null)
+				Layout.Initialize(LoggingConfiguration);
+			if(Header != null)
+				Header.Initialize(LoggingConfiguration);
+			if(Footer != null)
+				Footer.Initialize(LoggingConfiguration);
+		}
 	}
 }
