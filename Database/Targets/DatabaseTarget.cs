@@ -264,7 +264,9 @@ namespace NLog.Targets
 					throw new NLogConfigurationException("Connection string '" + this.ConnectionStringName + "' is not declared in <connectionStrings /> section.");
 				}
 
-				this.ConnectionString = SimpleLayout.Escape(cs.ConnectionString);
+				ConnectionString = SimpleLayout.Escape(cs.ConnectionString);
+				ConnectionString.Initialize(LoggingConfiguration);
+
 				this.ProviderFactory = DbProviderFactories.GetFactory(cs.ProviderName);
 				foundProvider = true;
 			}

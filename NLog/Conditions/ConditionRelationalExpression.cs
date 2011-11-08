@@ -197,5 +197,12 @@ namespace NLog.Conditions
 					throw new NotSupportedException("Relational operator " + this.RelationalOperator + " is not supported.");
 			}
 		}
+
+		protected override void InitializeCondition()
+		{
+			base.InitializeCondition();
+			LeftExpression.Initialize(LoggingConfiguration);
+			RightExpression.Initialize(LoggingConfiguration);
+		}
 	}
 }

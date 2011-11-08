@@ -10,8 +10,15 @@ namespace NLog.Conditions
 	/// </summary>
 	[NLogConfigurationItem]
 	[ThreadAgnostic]
-	public abstract class ConditionExpression
+	public abstract class ConditionExpression : ISupportsInitialize
 	{
+		private bool isInitialized;
+
+		/// <summary>
+		/// Gets the logging configuration this target is part of.
+		/// </summary>
+		protected LoggingConfiguration LoggingConfiguration { get; private set; }
+
 		/// <summary>
 		/// Converts condition text to a condition expression tree.
 		/// </summary>
@@ -58,5 +65,46 @@ namespace NLog.Conditions
 		/// <param name="context">Evaluation context.</param>
 		/// <returns>Expression result.</returns>
 		protected abstract object EvaluateNode(LogEventInfo context);
+
+		/// <summary>
+		/// Initializes this instance.
+		/// </summary>
+		/// <param name="configuration">The configuration.</param>
+		public void Initialize(LoggingConfiguration configuration)
+		{
+			if (isInitialized)
+				return;
+
+			LoggingConfiguration = configuration;
+			isInitialized = true;
+			InitializeCondition();
+		}
+
+		/// <summary>
+		/// Closes this instance.
+		/// </summary>
+		public void Close()
+		{
+			if (isInitialized)
+			{
+				LoggingConfiguration = null;
+				isInitialized = false;
+				CloseCondition();
+			}
+		}
+
+		/// <summary>
+		/// Initializes the condition.
+		/// </summary>
+		protected virtual void InitializeCondition()
+		{
+		}
+
+		/// <summary>
+		/// Closes the condition.
+		/// </summary>
+		protected virtual void CloseCondition()
+		{
+		}
 	}
 }

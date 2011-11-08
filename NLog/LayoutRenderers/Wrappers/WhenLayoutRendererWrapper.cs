@@ -22,9 +22,8 @@ namespace NLog.LayoutRenderers.Wrappers
 		protected override void InitializeLayoutRenderer()
 		{
 			base.InitializeLayoutRenderer();
-			//if (When != null)
-			//	When.Initialize(LoggingConfiguration);
-			//TODO: ConditionExpression must be realize ISupportsInitialize
+			if (When != null)
+				When.Initialize(LoggingConfiguration);
 		}
 
 		/// <summary>

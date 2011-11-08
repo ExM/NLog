@@ -64,12 +64,15 @@ namespace NLog.UnitTests.LogReceiverService
 			Layout barLayout = "${event-context:bar}";
 			Layout bazLayout = "${event-context:baz}";
 
+			fooLayout.Initialize(CommonCfg);
 			Assert.AreEqual("logger1", fooLayout.Render(converted[0]));
 			Assert.AreEqual("logger1", fooLayout.Render(converted[1]));
 
+			barLayout.Initialize(CommonCfg);
 			Assert.AreEqual("logger2", barLayout.Render(converted[0]));
 			Assert.AreEqual("logger2", barLayout.Render(converted[1]));
 
+			bazLayout.Initialize(CommonCfg);
 			Assert.AreEqual("logger3", bazLayout.Render(converted[0]));
 			Assert.AreEqual("zzz", bazLayout.Render(converted[1]));
 		}

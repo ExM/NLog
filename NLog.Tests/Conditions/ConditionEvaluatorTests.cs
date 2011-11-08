@@ -167,36 +167,47 @@ namespace NLog.UnitTests.Conditions
 		{
 			var factories = SetupConditionMethods();
 
-			Assert.AreEqual(true, ConditionParser.ParseExpression("ToDateTime('2010/01/01') == '2010/01/01'", factories).Evaluate(CreateWellKnownContext()));
-			Assert.AreEqual(true, ConditionParser.ParseExpression("ToInt64(1) == ToInt32(1)", factories).Evaluate(CreateWellKnownContext()));
-			Assert.AreEqual(true, ConditionParser.ParseExpression("'42' == 42", factories).Evaluate(CreateWellKnownContext()));
-			Assert.AreEqual(true, ConditionParser.ParseExpression("42 == '42'", factories).Evaluate(CreateWellKnownContext()));
-			Assert.AreEqual(true, ConditionParser.ParseExpression("ToDouble(3) == 3", factories).Evaluate(CreateWellKnownContext()));
-			Assert.AreEqual(true, ConditionParser.ParseExpression("3 == ToDouble(3)", factories).Evaluate(CreateWellKnownContext()));
-			Assert.AreEqual(true, ConditionParser.ParseExpression("ToSingle(3) == 3", factories).Evaluate(CreateWellKnownContext()));
-			Assert.AreEqual(true, ConditionParser.ParseExpression("3 == ToSingle(3)", factories).Evaluate(CreateWellKnownContext()));
-			Assert.AreEqual(true, ConditionParser.ParseExpression("ToDecimal(3) == 3", factories).Evaluate(CreateWellKnownContext()));
-			Assert.AreEqual(true, ConditionParser.ParseExpression("3 == ToDecimal(3)", factories).Evaluate(CreateWellKnownContext()));
-			Assert.AreEqual(true, ConditionParser.ParseExpression("ToInt32(3) == ToInt16(3)", factories).Evaluate(CreateWellKnownContext()));
-			Assert.AreEqual(true, ConditionParser.ParseExpression("ToInt16(3) == ToInt32(3)", factories).Evaluate(CreateWellKnownContext()));
-			Assert.AreEqual(true, ConditionParser.ParseExpression("true == ToInt16(1)", factories).Evaluate(CreateWellKnownContext()));
-			Assert.AreEqual(true, ConditionParser.ParseExpression("ToInt16(1) == true", factories).Evaluate(CreateWellKnownContext()));
+			AssertTypePromotionTest(true, "ToDateTime('2010/01/01') == '2010/01/01'", factories);
+			AssertTypePromotionTest(true, "ToInt64(1) == ToInt32(1)", factories);
+			AssertTypePromotionTest(true, "'42' == 42", factories);
+			AssertTypePromotionTest(true, "42 == '42'", factories);
+			AssertTypePromotionTest(true, "ToDouble(3) == 3", factories);
+			AssertTypePromotionTest(true, "3 == ToDouble(3)", factories);
+			AssertTypePromotionTest(true, "ToSingle(3) == 3", factories);
+			AssertTypePromotionTest(true, "3 == ToSingle(3)", factories);
+			AssertTypePromotionTest(true, "ToDecimal(3) == 3", factories);
+			AssertTypePromotionTest(true, "3 == ToDecimal(3)", factories);
+			AssertTypePromotionTest(true, "ToInt32(3) == ToInt16(3)", factories);
+			AssertTypePromotionTest(true, "ToInt16(3) == ToInt32(3)", factories);
+			AssertTypePromotionTest(true, "true == ToInt16(1)", factories);
+			AssertTypePromotionTest(true, "ToInt16(1) == true", factories);
 
-			Assert.AreEqual(false, ConditionParser.ParseExpression("ToDateTime('2010/01/01') == '2010/01/02'", factories).Evaluate(CreateWellKnownContext()));
-			Assert.AreEqual(false, ConditionParser.ParseExpression("ToInt64(1) == ToInt32(2)", factories).Evaluate(CreateWellKnownContext()));
-			Assert.AreEqual(false, ConditionParser.ParseExpression("'42' == 43", factories).Evaluate(CreateWellKnownContext()));
-			Assert.AreEqual(false, ConditionParser.ParseExpression("42 == '43'", factories).Evaluate(CreateWellKnownContext()));
-			Assert.AreEqual(false, ConditionParser.ParseExpression("ToDouble(3) == 4", factories).Evaluate(CreateWellKnownContext()));
-			Assert.AreEqual(false, ConditionParser.ParseExpression("3 == ToDouble(4)", factories).Evaluate(CreateWellKnownContext()));
-			Assert.AreEqual(false, ConditionParser.ParseExpression("ToSingle(3) == 4", factories).Evaluate(CreateWellKnownContext()));
-			Assert.AreEqual(false, ConditionParser.ParseExpression("3 == ToSingle(4)", factories).Evaluate(CreateWellKnownContext()));
-			Assert.AreEqual(false, ConditionParser.ParseExpression("ToDecimal(3) == 4", factories).Evaluate(CreateWellKnownContext()));
-			Assert.AreEqual(false, ConditionParser.ParseExpression("3 == ToDecimal(4)", factories).Evaluate(CreateWellKnownContext()));
-			Assert.AreEqual(false, ConditionParser.ParseExpression("ToInt32(3) == ToInt16(4)", factories).Evaluate(CreateWellKnownContext()));
-			Assert.AreEqual(false, ConditionParser.ParseExpression("ToInt16(3) == ToInt32(4)", factories).Evaluate(CreateWellKnownContext()));
-			Assert.AreEqual(false, ConditionParser.ParseExpression("false == ToInt16(4)", factories).Evaluate(CreateWellKnownContext()));
-			Assert.AreEqual(false, ConditionParser.ParseExpression("ToInt16(1) == false", factories).Evaluate(CreateWellKnownContext()));
+			AssertTypePromotionTest(false, "ToDateTime('2010/01/01') == '2010/01/02'", factories);
+			AssertTypePromotionTest(false, "ToInt64(1) == ToInt32(2)", factories);
+			AssertTypePromotionTest(false, "'42' == 43", factories);
+			AssertTypePromotionTest(false, "42 == '43'", factories);
+			AssertTypePromotionTest(false, "ToDouble(3) == 4", factories);
+			AssertTypePromotionTest(false, "3 == ToDouble(4)", factories);
+			AssertTypePromotionTest(false, "ToSingle(3) == 4", factories);
+			AssertTypePromotionTest(false, "3 == ToSingle(4)", factories);
+			AssertTypePromotionTest(false, "ToDecimal(3) == 4", factories);
+			AssertTypePromotionTest(false, "3 == ToDecimal(4)", factories);
+			AssertTypePromotionTest(false, "ToInt32(3) == ToInt16(4)", factories);
+			AssertTypePromotionTest(false, "ToInt16(3) == ToInt32(4)", factories);
+			AssertTypePromotionTest(false, "false == ToInt16(4)", factories);
+			AssertTypePromotionTest(false, "ToInt16(1) == false", factories);
 		}
+
+		private void AssertTypePromotionTest(bool expected, string text, ConfigurationItemFactory factories)
+		{
+			ConditionExpression condition = ConditionParser.ParseExpression(text, factories);
+			condition.Initialize(CommonCfg);
+			LogEventInfo context = CreateWellKnownContext();
+			object actualResult = condition.Evaluate(context);
+			Assert.AreEqual(expected, actualResult);
+		}
+
+
 
 		[Test]
 		[ExpectedException(typeof(ConditionEvaluationException))]
@@ -307,9 +318,10 @@ namespace NLog.UnitTests.Conditions
 			return factories;
 		}
 
-		private static void AssertEvaluationResult(object expectedResult, string conditionText)
+		private void AssertEvaluationResult(object expectedResult, string conditionText)
 		{
 			ConditionExpression condition = ConditionParser.ParseExpression(conditionText);
+			condition.Initialize(CommonCfg);
 			LogEventInfo context = CreateWellKnownContext();
 			object actualResult = condition.Evaluate(context);
 			Assert.AreEqual(expectedResult, actualResult);

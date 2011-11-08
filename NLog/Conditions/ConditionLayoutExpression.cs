@@ -43,5 +43,11 @@ namespace NLog.Conditions
 		{
 			return this.Layout.Render(context);
 		}
+
+		protected override void InitializeCondition()
+		{
+			base.InitializeCondition();
+			Layout.Initialize(LoggingConfiguration);
+		}
 	}
 }

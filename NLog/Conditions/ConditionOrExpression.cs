@@ -64,5 +64,13 @@ namespace NLog.Conditions
 
 			return boxedFalse;
 		}
+
+		protected override void InitializeCondition()
+		{
+			base.InitializeCondition();
+			LeftExpression.Initialize(LoggingConfiguration);
+			RightExpression.Initialize(LoggingConfiguration);
+		}
+
 	}
 }
