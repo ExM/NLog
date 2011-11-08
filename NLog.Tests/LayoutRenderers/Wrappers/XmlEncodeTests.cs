@@ -14,7 +14,7 @@ namespace NLog.UnitTests.LayoutRenderers.Wrappers
 			MappedDiagnosticsContext.Clear();
 			MappedDiagnosticsContext.Set("foo", " abc<>&'\"def ");
 			SimpleLayout l = "${xml-encode:${mdc:foo}}";
-
+			l.Initialize(CommonCfg);
 			Assert.AreEqual(" abc&lt;&gt;&amp;&apos;&quot;def ", l.Render(LogEventInfo.CreateNullEvent()));
 		}
 	}

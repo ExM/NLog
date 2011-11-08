@@ -15,7 +15,7 @@ namespace NLog.UnitTests.LayoutRenderers.Wrappers
 			MappedDiagnosticsContext.Clear();
 			MappedDiagnosticsContext.Set("foo", "  bar  ");
 			SimpleLayout l = "${trim-whitespace:${mdc:foo}}";
-			
+			l.Initialize(CommonCfg);
 			Assert.AreEqual("bar", l.Render(LogEventInfo.CreateNullEvent()));
 
 			MappedDiagnosticsContext.Set("foo", "");

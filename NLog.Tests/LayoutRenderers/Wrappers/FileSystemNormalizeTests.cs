@@ -13,7 +13,7 @@ namespace NLog.UnitTests.LayoutRenderers.Wrappers
 			MappedDiagnosticsContext.Clear();
 			MappedDiagnosticsContext.Set("foo", "abc.log");
 			SimpleLayout l = "${filesystem-normalize:${mdc:foo}}";
-			
+			l.Initialize(CommonCfg);
 			Assert.AreEqual("abc.log", l.Render(LogEventInfo.CreateNullEvent()));
 
 			MappedDiagnosticsContext.Set("foo", "");
@@ -33,7 +33,7 @@ namespace NLog.UnitTests.LayoutRenderers.Wrappers
 			MappedDiagnosticsContext.Clear();
 			MappedDiagnosticsContext.Set("foo", "abc.log");
 			SimpleLayout l = "${mdc:foo:fsnormalize=true}";
-
+			l.Initialize(CommonCfg);
 			Assert.AreEqual("abc.log", l.Render(LogEventInfo.CreateNullEvent()));
 
 			MappedDiagnosticsContext.Set("foo", "");

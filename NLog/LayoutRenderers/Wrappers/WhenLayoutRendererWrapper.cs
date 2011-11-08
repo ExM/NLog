@@ -19,6 +19,14 @@ namespace NLog.LayoutRenderers.Wrappers
 		[RequiredParameter]
 		public ConditionExpression When { get; set; }
 
+		protected override void InitializeLayoutRenderer()
+		{
+			base.InitializeLayoutRenderer();
+			//if (When != null)
+			//	When.Initialize(LoggingConfiguration);
+			//TODO: ConditionExpression must be realize ISupportsInitialize
+		}
+
 		/// <summary>
 		/// Transforms the output of another layout.
 		/// </summary>
