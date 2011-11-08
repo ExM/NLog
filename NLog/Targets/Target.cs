@@ -353,7 +353,11 @@ namespace NLog.Targets
 		/// </summary>
 		protected virtual void InitializeTarget()
 		{
-			this.GetAllLayouts();
+			allLayouts = new List<Layout> (ObjectGraphScanner.FindReachableObjects<Layout> (this));
+			InternalLogger.Trace ("{0} has {1} layouts", this, this.allLayouts.Count);
+			
+			foreach(var item in allLayouts.OfType<ISupportsInitialize>())
+				item.Initialize(LoggingConfiguration);
 		}
 
 		/// <summary>
@@ -424,12 +428,6 @@ namespace NLog.Targets
 		private Exception CreateInitException()
 		{
 			return new NLogRuntimeException("Target " + this + " failed to initialize.", this.initializeException);
-		}
-
-		private void GetAllLayouts()
-		{
-			this.allLayouts = new List<Layout>(ObjectGraphScanner.FindReachableObjects<Layout>(this));
-			InternalLogger.Trace("{0} has {1} layouts", this, this.allLayouts.Count);
 		}
 	}
 }

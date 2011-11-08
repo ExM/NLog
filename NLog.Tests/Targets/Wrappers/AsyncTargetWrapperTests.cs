@@ -1,3 +1,4 @@
+using NLog.Config;
 
 namespace NLog.UnitTests.Targets.Wrappers
 {
@@ -261,7 +262,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 				WrappedTarget = new DebugTarget(),
 			};
 
-			targetWrapper.Initialize(null);
+			targetWrapper.Initialize(new LoggingConfiguration());
 
 			// null out wrapped target - will cause exception on the timer thread
 			targetWrapper.WrappedTarget = null;

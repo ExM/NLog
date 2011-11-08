@@ -18,7 +18,15 @@ namespace NLog.Layouts
 	/// </summary>
 	internal sealed class LayoutParser
 	{
-		internal static LayoutRenderer[] CompileLayout(ConfigurationItemFactory configurationItemFactory, SimpleStringReader sr, bool isNested, out string text)
+		internal static LayoutRenderer[] CompileLayout(ConfigurationItemFactory configurationItemFactory, string text)
+		{
+			string parsed;
+			
+			return CompileLayout(configurationItemFactory, new SimpleStringReader(text), false, out parsed);
+		}
+
+	
+		private static LayoutRenderer[] CompileLayout(ConfigurationItemFactory configurationItemFactory, SimpleStringReader sr, bool isNested, out string text)
 		{
 			var result = new List<LayoutRenderer>();
 			var literalBuf = new StringBuilder();

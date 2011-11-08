@@ -49,16 +49,20 @@ namespace NLog.Layouts
 		/// </summary>
 		/// <param name="txt">The layout string to parse.</param>
 		/// <param name="configurationItemFactory">The NLog factories to use when creating references to layout renderers.</param>
-		public SimpleLayout(string txt, ConfigurationItemFactory configurationItemFactory)
+		public SimpleLayout(string text, ConfigurationItemFactory configurationItemFactory)
 		{
 			_configurationItemFactory = configurationItemFactory;
-			Text = txt;
+
+			_layoutText = text;
+			LayoutRenderer[] renderers = LayoutParser.CompileLayout (_configurationItemFactory, _layoutText);
+			SetRenderers (renderers);
 		}
 
 		public SimpleLayout(LayoutRenderer[] renderers, string text, ConfigurationItemFactory configurationItemFactory)
 		{
 			_configurationItemFactory = configurationItemFactory;
-			SetRenderers(renderers, text);
+			_layoutText = text;
+			SetRenderers(renderers);
 		}
 
 		/// <summary>
@@ -74,16 +78,9 @@ namespace NLog.Layouts
 
 			set
 			{
-				LayoutRenderer[] renderers;
-				string txt;
-
-				renderers = LayoutParser.CompileLayout(
-					_configurationItemFactory,
-					new SimpleStringReader(value),
-					false,
-					out txt);
-
-				SetRenderers(renderers, txt);
+				_layoutText = value;
+				LayoutRenderer[] renderers = LayoutParser.CompileLayout(_configurationItemFactory, _layoutText);
+				SetRenderers(renderers);
 			}
 		}
 
@@ -155,19 +152,13 @@ namespace NLog.Layouts
 			return "'" + Text + "'";
 		}
 
-		private void SetRenderers(LayoutRenderer[] renderers, string text)
+		private void SetRenderers(LayoutRenderer[] renderers)
 		{
 			Renderers = new ReadOnlyCollection<LayoutRenderer>(renderers);
 			if (Renderers.Count == 1 && this.Renderers[0] is LiteralLayoutRenderer)
-			{
 				_fixedText = ((LiteralLayoutRenderer)Renderers[0]).Text;
-			}
 			else
-			{
 				_fixedText = null;
-			}
-
-			_layoutText = text;
 		}
 
 		/// <summary>

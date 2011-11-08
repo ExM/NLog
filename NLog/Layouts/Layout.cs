@@ -139,6 +139,8 @@ namespace NLog.Layouts
 		/// </summary>
 		protected virtual void InitializeLayout()
 		{
+			if(LoggingConfiguration == null)
+				LoggingConfiguration = new LoggingConfiguration(); //TODO: remove after fix all tests
 		}
 
 		/// <summary>
