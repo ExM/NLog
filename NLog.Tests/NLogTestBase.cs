@@ -12,6 +12,14 @@ namespace NLog.UnitTests
 {
 	public abstract class NLogTestBase
 	{
+		protected LoggingConfiguration CommonCfg { get; private set; }
+
+		[TestFixtureSetUp]
+		public void ConfigSetUp()
+		{
+			CommonCfg = new LoggingConfiguration();
+		}
+
 		public void AssertDebugCounter(string targetName, int val)
 		{
 			var debugTarget = (NLog.Targets.DebugTarget)LogManager.Configuration.FindTargetByName(targetName);

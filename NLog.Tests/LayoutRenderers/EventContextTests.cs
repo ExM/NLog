@@ -17,7 +17,7 @@ namespace NLog.UnitTests.LayoutRenderers
 		{
 			Layout l = "${event-context:aaa}";
 			LogEventInfo lei = LogEventInfo.Create(LogLevel.Info, "aaa", "bbb");
-
+			l.Initialize(CommonCfg);
 			// empty
 			Assert.AreEqual("", l.Render(lei));
 		}
@@ -28,7 +28,7 @@ namespace NLog.UnitTests.LayoutRenderers
 			Layout l = "${event-context:aaa}";
 			LogEventInfo lei = LogEventInfo.Create(LogLevel.Info, "aaa", "bbb");
 			lei.Properties["aaa"] = "bbb";
-
+			l.Initialize(CommonCfg);
 			// empty
 			Assert.AreEqual("bbb", l.Render(lei));
 		}

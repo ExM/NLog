@@ -13,7 +13,7 @@ namespace NLog.UnitTests.LayoutRenderers.Wrappers
 		public void CachedLayoutRendererWrapper()
 		{
 			SimpleLayout l = "${guid}";
-			
+			l.Initialize(CommonCfg);
 			string s1 = l.Render(LogEventInfo.CreateNullEvent());
 			string s2 = l.Render(LogEventInfo.CreateNullEvent());
 			string s3;
@@ -23,6 +23,7 @@ namespace NLog.UnitTests.LayoutRenderers.Wrappers
 
 			// but when you apply ${cached}, the guid will only be generated once
 			l = "${cached:${guid}:cached=true}";
+			l.Initialize(CommonCfg);
 			s1 = l.Render(LogEventInfo.CreateNullEvent());
 			s2 = l.Render(LogEventInfo.CreateNullEvent());
 			Assert.AreEqual(s1, s2);
@@ -39,12 +40,14 @@ namespace NLog.UnitTests.LayoutRenderers.Wrappers
 
 			// another way to achieve the same thing is using cached=true
 			l = "${guid:cached=true}";
+			l.Initialize(CommonCfg);
 			s1 = l.Render(LogEventInfo.CreateNullEvent());
 			s2 = l.Render(LogEventInfo.CreateNullEvent());
 			Assert.AreEqual(s1, s2);
 
 			// another way to achieve the same thing is using cached=true
 			l = "${guid:cached=false}";
+			l.Initialize(CommonCfg);
 			s1 = l.Render(LogEventInfo.CreateNullEvent());
 			s2 = l.Render(LogEventInfo.CreateNullEvent());
 			Assert.AreNotEqual(s1, s2);

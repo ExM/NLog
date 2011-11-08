@@ -15,14 +15,6 @@ namespace NLog.UnitTests.Layouts
 	[TestFixture]
 	public class ThreadAgnosticTests : NLogTestBase
 	{
-		LoggingConfiguration cfg;
-
-		[TestFixtureSetUp]
-		public void SetUp()
-		{
-			cfg = new LoggingConfiguration();
-		}
-
 		[Test]
 		public void ThreadAgnosticAttributeTest()
 		{
@@ -45,7 +37,7 @@ namespace NLog.UnitTests.Layouts
 		public void ThreadAgnosticTest()
 		{
 			Layout l = new SimpleLayout("${message}");
-			l.Initialize(cfg);
+			l.Initialize(CommonCfg);
 			Assert.IsTrue(l.IsThreadAgnostic);
 		}
 
@@ -53,7 +45,7 @@ namespace NLog.UnitTests.Layouts
 		public void NonThreadAgnosticTest()
 		{
 			Layout l = new SimpleLayout("${threadname}");
-			l.Initialize(cfg);
+			l.Initialize(CommonCfg);
 			Assert.IsFalse(l.IsThreadAgnostic);
 		}
 
@@ -61,7 +53,7 @@ namespace NLog.UnitTests.Layouts
 		public void AgnosticPlusNonAgnostic()
 		{
 			Layout l = new SimpleLayout("${message}${threadname}");
-			l.Initialize(cfg);
+			l.Initialize(CommonCfg);
 			Assert.IsFalse(l.IsThreadAgnostic);
 		}
 
@@ -69,7 +61,7 @@ namespace NLog.UnitTests.Layouts
 		public void AgnosticPlusAgnostic()
 		{
 			Layout l = new SimpleLayout("${message}${level}${logger}");
-			l.Initialize(cfg);
+			l.Initialize(CommonCfg);
 			Assert.IsTrue(l.IsThreadAgnostic);
 		}
 
@@ -77,7 +69,7 @@ namespace NLog.UnitTests.Layouts
 		public void WrapperOverAgnostic()
 		{
 			Layout l = new SimpleLayout("${rot13:${message}}");
-			l.Initialize(cfg);
+			l.Initialize(CommonCfg);
 			Assert.IsTrue(l.IsThreadAgnostic);
 		}
 
@@ -85,7 +77,7 @@ namespace NLog.UnitTests.Layouts
 		public void DoubleWrapperOverAgnostic()
 		{
 			Layout l = new SimpleLayout("${lowercase:${rot13:${message}}}");
-			l.Initialize(cfg);
+			l.Initialize(CommonCfg);
 			Assert.IsTrue(l.IsThreadAgnostic);
 		}
 
@@ -93,7 +85,7 @@ namespace NLog.UnitTests.Layouts
 		public void TripleWrapperOverAgnostic()
 		{
 			Layout l = new SimpleLayout("${uppercase:${lowercase:${rot13:${message}}}}");
-			l.Initialize(cfg);
+			l.Initialize(CommonCfg);
 			Assert.IsTrue(l.IsThreadAgnostic);
 		}
 
@@ -101,7 +93,7 @@ namespace NLog.UnitTests.Layouts
 		public void TripleWrapperOverNonAgnostic()
 		{
 			Layout l = new SimpleLayout("${uppercase:${lowercase:${rot13:${message}${threadname}}}}");
-			l.Initialize(cfg);
+			l.Initialize(CommonCfg);
 			Assert.IsFalse(l.IsThreadAgnostic);
 		}
 
@@ -109,7 +101,7 @@ namespace NLog.UnitTests.Layouts
 		public void ComplexAgnosticWithCondition()
 		{
 			Layout l = @"${message:padding=-10:padCharacter=Y:when='${pad:${logger}:padding=10:padCharacter=X}'=='XXXXlogger'}";
-			l.Initialize(cfg);
+			l.Initialize(CommonCfg);
 			Assert.IsTrue(l.IsThreadAgnostic);
 		}
 
@@ -117,7 +109,7 @@ namespace NLog.UnitTests.Layouts
 		public void ComplexNonAgnosticWithCondition()
 		{
 			Layout l = @"${message:padding=-10:padCharacter=Y:when='${pad:${threadname}:padding=10:padCharacter=X}'=='XXXXlogger'}";
-			l.Initialize(cfg);
+			l.Initialize(CommonCfg);
 			Assert.IsFalse(l.IsThreadAgnostic);
 		}
 
@@ -134,7 +126,7 @@ namespace NLog.UnitTests.Layouts
 				},
 			};
 
-			l.Initialize(cfg);
+			l.Initialize(CommonCfg);
 			Assert.IsTrue(l.IsThreadAgnostic);
 		}
 
@@ -151,7 +143,7 @@ namespace NLog.UnitTests.Layouts
 				},
 			};
 
-			l.Initialize(cfg);
+			l.Initialize(CommonCfg);
 			Assert.IsFalse(l.IsThreadAgnostic);
 		}
 
@@ -163,7 +155,7 @@ namespace NLog.UnitTests.Layouts
 
 			Layout l = new SimpleLayout("${customNotAgnostic}", cif);
 
-			l.Initialize(cfg);
+			l.Initialize(CommonCfg);
 			Assert.IsFalse(l.IsThreadAgnostic);
 		}
 
@@ -175,7 +167,7 @@ namespace NLog.UnitTests.Layouts
 
 			Layout l = new SimpleLayout("${customAgnostic}", cif);
 
-			l.Initialize(cfg);
+			l.Initialize(CommonCfg);
 			Assert.IsTrue(l.IsThreadAgnostic);
 		}
 
