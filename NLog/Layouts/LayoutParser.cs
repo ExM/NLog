@@ -302,17 +302,13 @@ namespace NLog.Layouts
 
 		private static bool CanBeConvertedToLiteral(LayoutRenderer lr)
 		{
-			foreach (IRenderable renderable in ObjectGraphScanner.FindReachableObjects<IRenderable>(lr))
+			foreach(IRenderable renderable in ObjectGraph.AllChilds<IRenderable>(lr))
 			{
 				if (renderable.GetType() == typeof(SimpleLayout))
-				{
 					continue;
-				}
 
 				if (!renderable.GetType().IsDefined(typeof(AppDomainFixedOutputAttribute), false))
-				{
 					return false;
-				}
 			}
 
 			return true;

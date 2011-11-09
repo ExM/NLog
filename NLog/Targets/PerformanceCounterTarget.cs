@@ -1,15 +1,16 @@
+using System;
+using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Globalization;
+using NLog.Common;
+using NLog.Config;
+using NLog.Internal;
 
 namespace NLog.Targets
 {
-	using System;
-	using System.Collections;
-	using System.Collections.Generic;
-	using System.ComponentModel;
-	using System.Diagnostics;
-	using System.Globalization;
-	using NLog.Common;
-	using NLog.Config;
-	using NLog.Internal;
 
 	/// <summary>
 	/// Increments specified performance counter on each write.

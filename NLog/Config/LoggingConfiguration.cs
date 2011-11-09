@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
@@ -69,7 +70,10 @@ namespace NLog.Config
 		/// </summary>
 		public ReadOnlyCollection<Target> AllTargets
 		{
-			get { return this.configItems.OfType<Target>().ToList().AsReadOnly(); }
+			get
+			{
+				return configItems.OfType<Target>().ToList().AsReadOnly();
+			}
 		}
 
 		/// <summary>
@@ -150,7 +154,7 @@ namespace NLog.Config
 			}
 
 			this.InitializeAll();
-			foreach (IInstallable installable in EnumerableHelpers.OfType<IInstallable>(this.configItems))
+			foreach (IInstallable installable in configItems.OfType<IInstallable>())
 			{
 				installationContext.Info("Installing '{0}'", installable);
 
@@ -187,7 +191,7 @@ namespace NLog.Config
 
 			this.InitializeAll();
 
-			foreach (IInstallable installable in EnumerableHelpers.OfType<IInstallable>(this.configItems))
+			foreach (IInstallable installable in configItems.OfType<IInstallable>())
 			{
 				installationContext.Info("Uninstalling '{0}'", installable);
 
@@ -344,7 +348,7 @@ namespace NLog.Config
 				roots.Add(target);
 			}
 
-			this.configItems = ObjectGraphScanner.FindReachableObjects<object>(roots.ToArray());
+			this.configItems = ObjectGraph.AllChilds<object>(roots).ToArray();
 
 			// initialize all config items starting from most nested first
 			// so that whenever the container is initialized its children have already been
@@ -360,7 +364,7 @@ namespace NLog.Config
 		{
 			this.ValidateConfig();
 
-			foreach (ISupportsInitialize initialize in this.configItems.OfType<ISupportsInitialize>().Reverse())
+			foreach (ISupportsInitialize initialize in configItems.OfType<ISupportsInitialize>().Reverse())
 			{
 				InternalLogger.Trace("Initializing {0}", initialize);
 

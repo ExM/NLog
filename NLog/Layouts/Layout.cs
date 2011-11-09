@@ -82,19 +82,7 @@ namespace NLog.Layouts
 
 			_isInitialized = true;
 			InternalInit(cfg);
-			
-			// determine whether the layout is thread-agnostic
-			// layout is thread agnostic if it is thread-agnostic and 
-			// all its nested objects are thread-agnostic.
-			_threadAgnostic = true;
-			foreach(object item in ObjectGraphScanner.FindReachableObjects<object>(this))
-			{
-				if (!item.GetType().IsDefined(typeof(ThreadAgnosticAttribute), true))
-				{
-					_threadAgnostic = false;
-					break;
-				}
-			}
+			_threadAgnostic = ObjectGraph.ResolveThreadAgnostic(this);
 		}
 
 		/// <summary>

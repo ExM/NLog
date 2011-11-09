@@ -1,11 +1,10 @@
+using System.Collections.Generic;
+using NLog.Config;
+using NLog.Filters;
+using NLog.Targets;
 
 namespace NLog.Internal
 {
-	using System.Collections.Generic;
-	using NLog.Config;
-	using NLog.Filters;
-	using NLog.Targets;
-
 	/// <summary>
 	/// Represents target with a chain of filters which determine
 	/// whether logging should happen.
@@ -22,9 +21,9 @@ namespace NLog.Internal
 		/// <param name="filterChain">The filter chain.</param>
 		public TargetWithFilterChain(Target target, IList<Filter> filterChain)
 		{
-			this.Target = target;
-			this.FilterChain = filterChain;
-			this.stackTraceUsage = StackTraceUsage.None;
+			Target = target;
+			FilterChain = filterChain;
+			stackTraceUsage = StackTraceUsage.None;
 		}
 
 		/// <summary>
@@ -51,29 +50,12 @@ namespace NLog.Internal
 		/// <returns>A <see cref="StackTraceUsage" /> value that determines stack trace handling.</returns>
 		public StackTraceUsage GetStackTraceUsage()
 		{
-			return this.stackTraceUsage;
+			return stackTraceUsage;
 		}
 
 		internal void PrecalculateStackTraceUsage()
 		{
-			this.stackTraceUsage = StackTraceUsage.None;
-
-			// find all objects which may need stack trace
-			// and determine maximum
-			foreach (var item in ObjectGraphScanner.FindReachableObjects<IUsesStackTrace>(this))
-			{
-				var stu = item.StackTraceUsage;
-
-				if (stu > this.stackTraceUsage)
-				{
-					this.stackTraceUsage = stu;
-
-					if (this.stackTraceUsage >= StackTraceUsage.Max)
-					{
-						break;
-					}
-				}
-			}
+			stackTraceUsage = ObjectGraph.PrecalculateStackTraceUsage(this);
 		}
 	}
 }
