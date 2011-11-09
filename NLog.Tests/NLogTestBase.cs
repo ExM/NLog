@@ -19,6 +19,14 @@ namespace NLog.UnitTests
 		{
 			CommonCfg = new LoggingConfiguration();
 		}
+		
+		public static bool InMono
+		{
+			get
+			{
+				return Type.GetType ("Mono.Runtime") != null;
+			}
+		}
 
 		public void AssertDebugCounter(string targetName, int val)
 		{

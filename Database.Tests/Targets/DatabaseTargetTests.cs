@@ -13,15 +13,16 @@ namespace NLog.UnitTests.Targets
 	[TestFixture]
 	public class DatabaseTargetTests : NLogTestBase
 	{
-#if !MONO
 		static DatabaseTargetTests()
 		{
+			if(InMono)
+				return;
+			
 			var data = (DataSet)ConfigurationManager.GetSection("system.data");
 			var providerFactories = data.Tables["DBProviderFactories"];
 			providerFactories.Rows.Add("MockDb Provider", "MockDb Provider", "MockDb", typeof(MockDbFactory).AssemblyQualifiedName);
 			providerFactories.AcceptChanges();
 		}
-#endif
 
 		[Test]
 		public void SimpleDatabaseTest()
