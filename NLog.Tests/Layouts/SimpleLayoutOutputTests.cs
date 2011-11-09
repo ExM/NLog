@@ -153,15 +153,15 @@ namespace NLog.UnitTests.Layouts
 
 			public int CloseCount { get; set; }
 
-			protected override void InitializeLayout()
+			protected override void InternalInit(LoggingConfiguration cfg)
 			{
-				base.InitializeLayout();
+				base.InternalInit(cfg);
 				this.InitCount++;
 			}
 
-			protected override void CloseLayout()
+			protected override void InternalClose()
 			{
-				base.CloseLayout();
+				base.InternalClose();
 				this.CloseCount++;
 			}
 

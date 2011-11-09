@@ -59,15 +59,23 @@ namespace NLog.Layouts
 			SetRenderers(renderers);
 		}
 		
-		protected override void InitializeLayout()
+		protected override void InternalInit(LoggingConfiguration cfg)
 		{
-			base.InitializeLayout();
+			base.InternalInit(cfg);
 			
 			if(Renderers == null)
-				SetRenderers(LayoutParser.CompileLayout(LoggingConfiguration.ItemFactory, _layoutText));
+				SetRenderers(LayoutParser.CompileLayout(cfg.ItemFactory, _layoutText));
 
 			foreach (LayoutRenderer renderer in Renderers)
-				renderer.Initialize(LoggingConfiguration);
+				renderer.Initialize(cfg);
+		}
+		
+		protected override void InternalClose()
+		{
+			base.InternalClose();
+			
+			foreach (LayoutRenderer renderer in Renderers)
+				renderer.Close();
 		}
 
 		/// <summary>

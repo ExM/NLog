@@ -11,8 +11,8 @@ namespace NLog.Layouts
 	[NLogConfigurationItem]
 	public abstract class Layout : ISupportsInitialize, IRenderable
 	{
-		private bool isInitialized;
-		private bool threadAgnostic;
+		private bool _isInitialized;
+		private bool _threadAgnostic;
 
 		/// <summary>
 		/// Gets a value indicating whether this layout is thread-agnostic (can be rendered on any thread).
@@ -26,14 +26,9 @@ namespace NLog.Layouts
 		{
 			get
 			{
-				return threadAgnostic;
+				return _threadAgnostic;
 			}
 		}
-
-		/// <summary>
-		/// Gets the logging configuration this target is part of.
-		/// </summary>
-		protected LoggingConfiguration LoggingConfiguration { get; private set; }
 
 		/// <summary>
 		/// Converts a given text to a <see cref="Layout" />.
@@ -57,7 +52,7 @@ namespace NLog.Layouts
 		/// </remarks>
 		public virtual void Precalculate(LogEventInfo logEvent)
 		{
-			if (threadAgnostic)
+			if (_threadAgnostic)
 				return;
 
 			Render(logEvent);
@@ -70,7 +65,7 @@ namespace NLog.Layouts
 		/// <returns>String representing log event.</returns>
 		public string Render(LogEventInfo logEvent)
 		{
-			if (!isInitialized)
+			if (!_isInitialized)
 				throw new InvalidOperationException("required run Initialize method");
 
 			return GetFormattedMessage(logEvent);
@@ -79,25 +74,24 @@ namespace NLog.Layouts
 		/// <summary>
 		/// Initializes this instance.
 		/// </summary>
-		/// <param name="configuration">The configuration.</param>
-		public void Initialize(LoggingConfiguration configuration)
+		/// <param name="cfg">The configuration.</param>
+		public void Initialize(LoggingConfiguration cfg)
 		{
-			if (isInitialized)
+			if(_isInitialized)
 				return;
-			
-			LoggingConfiguration = configuration;
-			isInitialized = true;
-			InitializeLayout();
+
+			_isInitialized = true;
+			InternalInit(cfg);
 			
 			// determine whether the layout is thread-agnostic
 			// layout is thread agnostic if it is thread-agnostic and 
 			// all its nested objects are thread-agnostic.
-			threadAgnostic = true;
+			_threadAgnostic = true;
 			foreach(object item in ObjectGraphScanner.FindReachableObjects<object>(this))
 			{
 				if (!item.GetType().IsDefined(typeof(ThreadAgnosticAttribute), true))
 				{
-					threadAgnostic = false;
+					_threadAgnostic = false;
 					break;
 				}
 			}
@@ -108,25 +102,25 @@ namespace NLog.Layouts
 		/// </summary>
 		public void Close()
 		{
-			if (isInitialized)
+			if (_isInitialized)
 			{
-				LoggingConfiguration = null;
-				isInitialized = false;
-				CloseLayout();
+				_isInitialized = false;
+				InternalClose();
 			}
 		}
 
 		/// <summary>
 		/// Initializes the layout.
 		/// </summary>
-		protected virtual void InitializeLayout()
+		/// <param name="cfg">The configuration.</param>
+		protected virtual void InternalInit(LoggingConfiguration cfg)
 		{
 		}
 
 		/// <summary>
 		/// Closes the layout.
 		/// </summary>
-		protected virtual void CloseLayout()
+		protected virtual void InternalClose()
 		{
 		}
 

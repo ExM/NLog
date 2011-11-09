@@ -78,17 +78,17 @@ namespace NLog.Layouts
 		/// <summary>
 		/// Initializes the layout.
 		/// </summary>
-		protected override void InitializeLayout()
+		protected override void InternalInit(LoggingConfiguration cfg)
 		{
-			base.InitializeLayout();
+			base.InternalInit(cfg);
 			if (WithHeader && Header == null)
 			{
 				Header = new CsvHeaderLayout(this);
-				Header.Initialize(LoggingConfiguration);
+				Header.Initialize(cfg);
 			}
 			
 			foreach (CsvColumn col in this.Columns)
-				col.Layout.Initialize(LoggingConfiguration);
+				col.Layout.Initialize(cfg);
 
 			switch(Delimiter)
 			{
@@ -123,6 +123,13 @@ namespace NLog.Layouts
 
 			quotableCharacters = (QuoteChar + "\r\n" + actualColumnDelimiter).ToCharArray();
 			doubleQuoteChar = QuoteChar + QuoteChar;
+		}
+		
+		protected override void InternalClose()
+		{
+			base.InternalClose();
+			foreach(CsvColumn col in this.Columns)
+				col.Layout.Close();
 		}
 
 		/// <summary>
