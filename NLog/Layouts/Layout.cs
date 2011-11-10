@@ -82,6 +82,11 @@ namespace NLog.Layouts
 
 			_isInitialized = true;
 			InternalInit(cfg);
+			
+//			foreach (var item in ObjectGraph.AllChilds<ISupportsInitialize>(this))
+			foreach (var item in ObjectGraph.OneLevelChilds<ISupportsInitialize>(this))
+				item.Initialize(cfg);
+			
 			_threadAgnostic = ObjectGraph.ResolveThreadAgnostic(this);
 		}
 

@@ -70,14 +70,17 @@ namespace NLog.Conditions
 		/// Initializes this instance.
 		/// </summary>
 		/// <param name="configuration">The configuration.</param>
-		public void Initialize(LoggingConfiguration configuration)
+		public void Initialize(LoggingConfiguration cfg)
 		{
 			if (isInitialized)
 				return;
 
-			LoggingConfiguration = configuration;
+			LoggingConfiguration = cfg;
 			isInitialized = true;
 			InitializeCondition();
+			
+			foreach(var item in ObjectGraph.OneLevelChilds<ISupportsInitialize>(this))
+				item.Initialize(cfg);
 		}
 
 		/// <summary>

@@ -333,8 +333,8 @@ namespace NLog.Targets
 			foreach (var item in ObjectGraph.AllChilds<ISupportsInitialize>(this))
 				item.Initialize(LoggingConfiguration);
 
-			//foreach(var item in ObjectGraph.OneLevelChilds<ISupportsInitialize>(this))
-			//	item.Initialize(LoggingConfiguration);
+			foreach(var item in ObjectGraph.OneLevelChilds<ISupportsInitialize>(this))
+				item.Initialize(LoggingConfiguration);
 		}
 
 		/// <summary>
