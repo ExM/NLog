@@ -1,4 +1,5 @@
 using NLog.Config;
+using NLog.Internal;
 
 namespace NLog.Layouts
 {
@@ -7,7 +8,7 @@ namespace NLog.Layouts
 	/// </summary>
 	[NLogConfigurationItem]
 	[ThreadAgnostic]
-	public class CsvColumn
+	public sealed class CsvColumn: ISupportsInitialize
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CsvColumn" /> class.
@@ -40,5 +41,15 @@ namespace NLog.Layouts
 		/// <docgen category='CSV Column Options' order='10' />
 		[RequiredParameter]
 		public Layout Layout { get; set; }
+		
+		public void Initialize(LoggingConfiguration cfg)
+		{
+			Layout.Initialize(cfg);
+		}
+
+		public void Close()
+		{
+			Layout.Close();
+		}
 	}
 }

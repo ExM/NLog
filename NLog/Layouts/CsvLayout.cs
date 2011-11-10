@@ -81,14 +81,8 @@ namespace NLog.Layouts
 		protected override void InternalInit(LoggingConfiguration cfg)
 		{
 			base.InternalInit(cfg);
-			if (WithHeader && Header == null)
-			{
+			if(WithHeader && Header == null)
 				Header = new CsvHeaderLayout(this);
-				Header.Initialize(cfg);
-			}
-			
-			foreach (CsvColumn col in this.Columns)
-				col.Layout.Initialize(cfg);
 
 			switch(Delimiter)
 			{
@@ -123,13 +117,6 @@ namespace NLog.Layouts
 
 			quotableCharacters = (QuoteChar + "\r\n" + actualColumnDelimiter).ToCharArray();
 			doubleQuoteChar = QuoteChar + QuoteChar;
-		}
-		
-		protected override void InternalClose()
-		{
-			base.InternalClose();
-			foreach(CsvColumn col in this.Columns)
-				col.Layout.Close();
 		}
 
 		/// <summary>

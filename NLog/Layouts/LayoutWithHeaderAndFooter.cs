@@ -37,27 +37,5 @@ namespace NLog.Layouts
 		{
 			return Layout.Render(logEvent);
 		}
-		
-		protected override void InternalInit(LoggingConfiguration cfg)
-		{
-			base.InternalInit(cfg);
-			if(Layout != null)
-				Layout.Initialize(cfg);
-			if(Header != null)
-				Header.Initialize(cfg);
-			if(Footer != null)
-				Footer.Initialize(cfg);
-		}
-		
-		protected override void InternalClose()
-		{
-			base.InternalClose();
-			if(Layout != null)
-				Layout.Close();
-			if(Header != null)
-				Header.Close();
-			if(Footer != null)
-				Footer.Close();
-		}
 	}
 }
