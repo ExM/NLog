@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -64,6 +64,7 @@
     <Compile Include="Filters\WhenNotContainsTests.cs" />
     <Compile Include="Filters\WhenNotEqualTests.cs" />
     <Compile Include="LayoutRenderers\BaseDirTests.cs" />
+    <Compile Include="LayoutRenderers\GuidTests.cs" />
     <Compile Include="LayoutRenderers\CallSiteTests.cs" />
     <Compile Include="LayoutRenderers\CounterTests.cs" />
     <Compile Include="LayoutRenderers\DateTests.cs" />

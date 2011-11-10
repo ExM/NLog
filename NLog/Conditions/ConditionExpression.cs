@@ -71,7 +71,7 @@ namespace NLog.Conditions
 		/// </summary>
 		/// <param name="configuration">The configuration.</param>
 		public void Initialize(LoggingConfiguration cfg)
-		{
+		{ // TODO: need refactoring
 			if (isInitialized)
 				return;
 

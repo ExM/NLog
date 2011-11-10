@@ -107,7 +107,7 @@ namespace NLog.UnitTests
 
 		private void OnConfigReloaded(object sender, LoggingConfigurationReloadedEventArgs e)
 		{
-			Console.WriteLine("OnConfigReloaded success={0}", e.Succeeded);
+			//Console.WriteLine("OnConfigReloaded success={0}", e.Succeeded);
 			_reloadCounter++;
 		}
 
