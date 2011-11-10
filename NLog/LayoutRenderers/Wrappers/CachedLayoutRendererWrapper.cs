@@ -35,18 +35,18 @@ namespace NLog.LayoutRenderers.Wrappers
 		/// <summary>
 		/// Initializes the layout renderer.
 		/// </summary>
-		protected override void InitializeLayoutRenderer()
+		protected override void InternalInit(LoggingConfiguration cfg)
 		{
-			base.InitializeLayoutRenderer();
+			base.InternalInit(cfg);
 			this.cachedValue = null;
 		}
 
 		/// <summary>
 		/// Closes the layout renderer.
 		/// </summary>
-		protected override void CloseLayoutRenderer()
+		protected override void InternalClose()
 		{
-			base.CloseLayoutRenderer();
+			base.InternalClose();
 			this.cachedValue = null;
 		}
 

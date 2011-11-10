@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Text;
 using NLog.Internal;
 using System.Diagnostics;
+using NLog.Config;
 
 namespace NLog.LayoutRenderers
 {
@@ -80,9 +81,9 @@ namespace NLog.LayoutRenderers
 		/// <summary>
 		/// Initializes the layout renderer.
 		/// </summary>
-		protected override void InitializeLayoutRenderer()
+		protected override void InternalInit(LoggingConfiguration cfg)
 		{
-			base.InitializeLayoutRenderer();
+			base.InternalInit(cfg);
 
 			if (!Stopwatch.IsHighResolution)
 				throw new InvalidOperationException("Cannot determine high-performance counter.");

@@ -43,9 +43,9 @@ namespace NLog.LayoutRenderers
 		/// <summary>
 		/// Initializes the layout renderer.
 		/// </summary>
-		protected override void InitializeLayoutRenderer()
+		protected override void InternalInit(LoggingConfiguration cfg)
 		{
-			base.InitializeLayoutRenderer();
+			base.InternalInit(cfg);
 
 			if (this.MachineName != null)
 			{
@@ -60,9 +60,9 @@ namespace NLog.LayoutRenderers
 		/// <summary>
 		/// Closes the layout renderer.
 		/// </summary>
-		protected override void CloseLayoutRenderer()
+		protected override void InternalClose()
 		{
-			base.CloseLayoutRenderer();
+			base.InternalClose();
 			if (this.perfCounter != null)
 			{
 				this.perfCounter.Close();

@@ -159,49 +159,51 @@ namespace NLog.UnitTests.Conditions
 		public void MethodWithLogEventInfoTest()
 		{
 			var factories = SetupConditionMethods();
-			Assert.AreEqual(true, ConditionParser.ParseExpression("IsValid()", factories).Evaluate(CreateWellKnownContext()));
+			LoggingConfiguration cfg = new LoggingConfiguration(factories);
+			Assert.AreEqual(true, ConditionParser.ParseExpression("IsValid()", cfg).Evaluate(CreateWellKnownContext()));
 		}
 
 		[Test]
 		public void TypePromotionTest()
 		{
 			var factories = SetupConditionMethods();
+			LoggingConfiguration cfg = new LoggingConfiguration(factories);
 
-			AssertTypePromotionTest(true, "ToDateTime('2010/01/01') == '2010/01/01'", factories);
-			AssertTypePromotionTest(true, "ToInt64(1) == ToInt32(1)", factories);
-			AssertTypePromotionTest(true, "'42' == 42", factories);
-			AssertTypePromotionTest(true, "42 == '42'", factories);
-			AssertTypePromotionTest(true, "ToDouble(3) == 3", factories);
-			AssertTypePromotionTest(true, "3 == ToDouble(3)", factories);
-			AssertTypePromotionTest(true, "ToSingle(3) == 3", factories);
-			AssertTypePromotionTest(true, "3 == ToSingle(3)", factories);
-			AssertTypePromotionTest(true, "ToDecimal(3) == 3", factories);
-			AssertTypePromotionTest(true, "3 == ToDecimal(3)", factories);
-			AssertTypePromotionTest(true, "ToInt32(3) == ToInt16(3)", factories);
-			AssertTypePromotionTest(true, "ToInt16(3) == ToInt32(3)", factories);
-			AssertTypePromotionTest(true, "true == ToInt16(1)", factories);
-			AssertTypePromotionTest(true, "ToInt16(1) == true", factories);
+			AssertTypePromotionTest(true, "ToDateTime('2010/01/01') == '2010/01/01'", cfg);
+			AssertTypePromotionTest(true, "ToInt64(1) == ToInt32(1)", cfg);
+			AssertTypePromotionTest(true, "'42' == 42", cfg);
+			AssertTypePromotionTest(true, "42 == '42'", cfg);
+			AssertTypePromotionTest(true, "ToDouble(3) == 3", cfg);
+			AssertTypePromotionTest(true, "3 == ToDouble(3)", cfg);
+			AssertTypePromotionTest(true, "ToSingle(3) == 3", cfg);
+			AssertTypePromotionTest(true, "3 == ToSingle(3)", cfg);
+			AssertTypePromotionTest(true, "ToDecimal(3) == 3", cfg);
+			AssertTypePromotionTest(true, "3 == ToDecimal(3)", cfg);
+			AssertTypePromotionTest(true, "ToInt32(3) == ToInt16(3)", cfg);
+			AssertTypePromotionTest(true, "ToInt16(3) == ToInt32(3)", cfg);
+			AssertTypePromotionTest(true, "true == ToInt16(1)", cfg);
+			AssertTypePromotionTest(true, "ToInt16(1) == true", cfg);
 
-			AssertTypePromotionTest(false, "ToDateTime('2010/01/01') == '2010/01/02'", factories);
-			AssertTypePromotionTest(false, "ToInt64(1) == ToInt32(2)", factories);
-			AssertTypePromotionTest(false, "'42' == 43", factories);
-			AssertTypePromotionTest(false, "42 == '43'", factories);
-			AssertTypePromotionTest(false, "ToDouble(3) == 4", factories);
-			AssertTypePromotionTest(false, "3 == ToDouble(4)", factories);
-			AssertTypePromotionTest(false, "ToSingle(3) == 4", factories);
-			AssertTypePromotionTest(false, "3 == ToSingle(4)", factories);
-			AssertTypePromotionTest(false, "ToDecimal(3) == 4", factories);
-			AssertTypePromotionTest(false, "3 == ToDecimal(4)", factories);
-			AssertTypePromotionTest(false, "ToInt32(3) == ToInt16(4)", factories);
-			AssertTypePromotionTest(false, "ToInt16(3) == ToInt32(4)", factories);
-			AssertTypePromotionTest(false, "false == ToInt16(4)", factories);
-			AssertTypePromotionTest(false, "ToInt16(1) == false", factories);
+			AssertTypePromotionTest(false, "ToDateTime('2010/01/01') == '2010/01/02'", cfg);
+			AssertTypePromotionTest(false, "ToInt64(1) == ToInt32(2)", cfg);
+			AssertTypePromotionTest(false, "'42' == 43", cfg);
+			AssertTypePromotionTest(false, "42 == '43'", cfg);
+			AssertTypePromotionTest(false, "ToDouble(3) == 4", cfg);
+			AssertTypePromotionTest(false, "3 == ToDouble(4)", cfg);
+			AssertTypePromotionTest(false, "ToSingle(3) == 4", cfg);
+			AssertTypePromotionTest(false, "3 == ToSingle(4)", cfg);
+			AssertTypePromotionTest(false, "ToDecimal(3) == 4", cfg);
+			AssertTypePromotionTest(false, "3 == ToDecimal(4)", cfg);
+			AssertTypePromotionTest(false, "ToInt32(3) == ToInt16(4)", cfg);
+			AssertTypePromotionTest(false, "ToInt16(3) == ToInt32(4)", cfg);
+			AssertTypePromotionTest(false, "false == ToInt16(4)", cfg);
+			AssertTypePromotionTest(false, "ToInt16(1) == false", cfg);
 		}
 
-		private void AssertTypePromotionTest(bool expected, string text, ConfigurationItemFactory factories)
+		private void AssertTypePromotionTest(bool expected, string text, LoggingConfiguration cfg)
 		{
-			ConditionExpression condition = ConditionParser.ParseExpression(text, factories);
-			condition.Initialize(CommonCfg);
+			ConditionExpression condition = ConditionParser.ParseExpression(text, cfg);
+			condition.Initialize(cfg);
 			LogEventInfo context = CreateWellKnownContext();
 			object actualResult = condition.Evaluate(context);
 			Assert.AreEqual(expected, actualResult);
@@ -214,8 +216,9 @@ namespace NLog.UnitTests.Conditions
 		public void TypePromotionNegativeTest1()
 		{
 			var factories = SetupConditionMethods();
+			LoggingConfiguration cfg = new LoggingConfiguration(factories);
 
-			Assert.AreEqual(true, ConditionParser.ParseExpression("ToDateTime('2010/01/01') == '20xx/01/01'", factories).Evaluate(CreateWellKnownContext()));
+			Assert.AreEqual(true, ConditionParser.ParseExpression("ToDateTime('2010/01/01') == '20xx/01/01'", cfg).Evaluate(CreateWellKnownContext()));
 		}
 
 		[Test]
@@ -223,8 +226,9 @@ namespace NLog.UnitTests.Conditions
 		public void TypePromotionNegativeTest2()
 		{
 			var factories = SetupConditionMethods();
+			LoggingConfiguration cfg = new LoggingConfiguration(factories);
 
-			Assert.AreEqual(true, ConditionParser.ParseExpression("GetGuid() == ToInt16(1)", factories).Evaluate(CreateWellKnownContext()));
+			Assert.AreEqual(true, ConditionParser.ParseExpression("GetGuid() == ToInt16(1)", cfg).Evaluate(CreateWellKnownContext()));
 		}
 
 		[Test]
@@ -320,7 +324,7 @@ namespace NLog.UnitTests.Conditions
 
 		private void AssertEvaluationResult(object expectedResult, string conditionText)
 		{
-			ConditionExpression condition = ConditionParser.ParseExpression(conditionText, CommonCfg.ItemFactory);
+			ConditionExpression condition = ConditionParser.ParseExpression(conditionText, CommonCfg);
 			condition.Initialize(CommonCfg);
 			LogEventInfo context = CreateWellKnownContext();
 			object actualResult = condition.Evaluate(context);

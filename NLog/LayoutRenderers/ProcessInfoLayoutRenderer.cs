@@ -36,9 +36,9 @@ namespace NLog.LayoutRenderers
 		/// <summary>
 		/// Initializes the layout renderer.
 		/// </summary>
-		protected override void InitializeLayoutRenderer()
+		protected override void InternalInit(LoggingConfiguration cfg)
 		{
-			base.InitializeLayoutRenderer();
+			base.InternalInit(cfg);
 			propertyInfo = typeof(Process).GetProperty(Property.ToString());
 			if (propertyInfo == null)
 			{
@@ -51,15 +51,15 @@ namespace NLog.LayoutRenderers
 		/// <summary>
 		/// Closes the layout renderer.
 		/// </summary>
-		protected override void CloseLayoutRenderer()
+		protected override void InternalClose()
 		{
+			base.InternalClose();
+		
 			if (process != null)
 			{
 				process.Close();
 				process = null;
 			}
-
-			base.CloseLayoutRenderer();
 		}
 
 		/// <summary>

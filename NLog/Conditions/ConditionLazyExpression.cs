@@ -45,7 +45,7 @@ namespace NLog.Conditions
 		protected override void InitializeCondition()
 		{
 			base.InitializeCondition();
-			_condEx = ConditionParser.ParseExpression(Text, LoggingConfiguration.ItemFactory);
+			_condEx = ConditionParser.ParseExpression(Text, LoggingConfiguration);
 			_condEx.Initialize(LoggingConfiguration);
 		}
 	}

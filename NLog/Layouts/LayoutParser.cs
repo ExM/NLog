@@ -18,15 +18,15 @@ namespace NLog.Layouts
 	/// </summary>
 	internal sealed class LayoutParser
 	{
-		internal static LayoutRenderer[] CompileLayout(ConfigurationItemFactory configurationItemFactory, string text)
+		internal static LayoutRenderer[] CompileLayout(LoggingConfiguration cfg, string text)
 		{
 			string parsed;
 			
-			return CompileLayout(configurationItemFactory, new SimpleStringReader(text), false, out parsed);
+			return CompileLayout(cfg, new SimpleStringReader(text), false, out parsed);
 		}
 
 	
-		private static LayoutRenderer[] CompileLayout(ConfigurationItemFactory configurationItemFactory, SimpleStringReader sr, bool isNested, out string text)
+		private static LayoutRenderer[] CompileLayout(LoggingConfiguration cfg, SimpleStringReader sr, bool isNested, out string text)
 		{
 			var result = new List<LayoutRenderer>();
 			var literalBuf = new StringBuilder();
@@ -52,10 +52,10 @@ namespace NLog.Layouts
 						literalBuf.Length = 0;
 					}
 
-					LayoutRenderer newLayoutRenderer = ParseLayoutRenderer(configurationItemFactory, sr);
+					LayoutRenderer newLayoutRenderer = ParseLayoutRenderer(cfg, sr);
 					if (CanBeConvertedToLiteral(newLayoutRenderer))
 					{
-						newLayoutRenderer = ConvertToLiteral(newLayoutRenderer);
+						newLayoutRenderer = ConvertToLiteral(cfg, newLayoutRenderer);
 					}
 
 					// layout renderer
@@ -178,13 +178,13 @@ namespace NLog.Layouts
 			return nameBuf.ToString();
 		}
 
-		private static LayoutRenderer ParseLayoutRenderer(ConfigurationItemFactory configurationItemFactory, SimpleStringReader sr)
+		private static LayoutRenderer ParseLayoutRenderer(LoggingConfiguration cfg, SimpleStringReader sr)
 		{
 			int ch = sr.Read();
 			Debug.Assert(ch == '{', "'{' expected in layout specification");
 
 			string name = ParseLayoutRendererName(sr);
-			LayoutRenderer lr = configurationItemFactory.LayoutRenderers.CreateInstance(name);
+			LayoutRenderer lr = cfg.ItemFactory.LayoutRenderers.CreateInstance(name);
 
 			var wrappers = new Dictionary<Type, LayoutRenderer>();
 			var orderedWrappers = new List<LayoutRenderer>();
@@ -203,13 +203,13 @@ namespace NLog.Layouts
 					{
 						Type wrapperType;
 
-						if (configurationItemFactory.AmbientProperties.TryGetDefinition(parameterName, out wrapperType))
+						if (cfg.ItemFactory.AmbientProperties.TryGetDefinition(parameterName, out wrapperType))
 						{
 							LayoutRenderer wrapperRenderer;
 
 							if (!wrappers.TryGetValue(wrapperType, out wrapperRenderer))
 							{
-								wrapperRenderer = configurationItemFactory.AmbientProperties.CreateInstance(parameterName);
+								wrapperRenderer = cfg.ItemFactory.AmbientProperties.CreateInstance(parameterName);
 								wrappers[wrapperType] = wrapperRenderer;
 								orderedWrappers.Add(wrapperRenderer);
 							}
@@ -234,19 +234,19 @@ namespace NLog.Layouts
 						if (typeof(Layout).IsAssignableFrom(pi.PropertyType))
 						{
 							string txt;
-							LayoutRenderer[] renderers = CompileLayout(configurationItemFactory, sr, true, out txt);
+							LayoutRenderer[] renderers = CompileLayout(cfg, sr, true, out txt);
 							var nestedLayout = new SimpleLayout(txt, renderers);
 							pi.SetValue(parameterTarget, nestedLayout, null);
 						}
 						else if (typeof(ConditionExpression).IsAssignableFrom(pi.PropertyType))
 						{
-							var conditionExpression = ConditionParser.ParseExpression(sr, configurationItemFactory);
+							var conditionExpression = ConditionParser.ParseExpression(sr, cfg);
 							pi.SetValue(parameterTarget, conditionExpression, null);
 						}
 						else
 						{
 							string value = ParseParameterValue(sr);
-							PropertyHelper.SetPropertyFromString(parameterTarget, parameterName, value, configurationItemFactory);
+							PropertyHelper.SetPropertyFromString(parameterTarget, parameterName, value, cfg);
 						}
 					}
 				}
@@ -265,7 +265,7 @@ namespace NLog.Layouts
 						else
 						{
 							string value = parameterName;
-							PropertyHelper.SetPropertyFromString(lr, pi.Name, value, configurationItemFactory);
+							PropertyHelper.SetPropertyFromString(lr, pi.Name, value, cfg);
 						}
 					}
 					else
@@ -277,12 +277,12 @@ namespace NLog.Layouts
 				ch = sr.Read();
 			}
 
-			lr = ApplyWrappers(lr, orderedWrappers);
+			lr = ApplyWrappers(cfg, lr, orderedWrappers);
 
 			return lr;
 		}
 
-		private static LayoutRenderer ApplyWrappers(LayoutRenderer lr, List<LayoutRenderer> orderedWrappers)
+		private static LayoutRenderer ApplyWrappers(LoggingConfiguration cfg, LayoutRenderer lr, List<LayoutRenderer> orderedWrappers)
 		{
 			for (int i = orderedWrappers.Count - 1; i >= 0; --i)
 			{
@@ -290,7 +290,7 @@ namespace NLog.Layouts
 				InternalLogger.Trace("Wrapping {0} with {1}", lr.GetType().Name, newRenderer.GetType().Name);
 				if (CanBeConvertedToLiteral(lr))
 				{
-					lr = ConvertToLiteral(lr);
+					lr = ConvertToLiteral(cfg, lr);
 				}
 
 				newRenderer.Inner = new SimpleLayout(string.Empty, new[] { lr });
@@ -332,9 +332,12 @@ namespace NLog.Layouts
 			}
 		}
 
-		private static LayoutRenderer ConvertToLiteral(LayoutRenderer renderer)
+		private static LayoutRenderer ConvertToLiteral(LoggingConfiguration cfg, LayoutRenderer renderer)
 		{
-			return new LiteralLayoutRenderer(renderer.Render(LogEventInfo.CreateNullEvent()));
+			renderer.Initialize(cfg);
+			string text = renderer.Render(LogEventInfo.CreateNullEvent());
+			renderer.Close();
+			return new LiteralLayoutRenderer(text);
 		}
 	}
 }

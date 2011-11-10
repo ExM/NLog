@@ -20,9 +20,9 @@ namespace NLog.LayoutRenderers
 		/// <summary>
 		/// Initializes the layout renderer.
 		/// </summary>
-		protected override void InitializeLayoutRenderer()
+		protected override void InternalInit(LoggingConfiguration cfg)
 		{
-			base.InitializeLayoutRenderer();
+			base.InternalInit(cfg);
 			try
 			{
 				this.MachineName = Environment.MachineName;

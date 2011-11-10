@@ -15,16 +15,16 @@ namespace NLog.Conditions
 	public class ConditionParser
 	{
 		private readonly ConditionTokenizer tokenizer;
-		private readonly ConfigurationItemFactory configurationItemFactory;
+		private readonly LoggingConfiguration cfg;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ConditionParser"/> class.
 		/// </summary>
 		/// <param name="stringReader">The string reader.</param>
 		/// <param name="configurationItemFactory">Instance of <see cref="ConfigurationItemFactory"/> used to resolve references to condition methods and layout renderers.</param>
-		private ConditionParser(SimpleStringReader stringReader, ConfigurationItemFactory configurationItemFactory)
+		private ConditionParser(SimpleStringReader stringReader, LoggingConfiguration cfg)
 		{
-			this.configurationItemFactory = configurationItemFactory;
+			this.cfg = cfg;
 			this.tokenizer = new ConditionTokenizer(stringReader);
 		}
 
@@ -47,14 +47,14 @@ namespace NLog.Conditions
 		/// <param name="expressionText">The expression to be parsed.</param>
 		/// <param name="configurationItemFactories">Instance of <see cref="ConfigurationItemFactory"/> used to resolve references to condition methods and layout renderers.</param>
 		/// <returns>The root of the expression syntax tree which can be used to get the value of the condition in a specified context.</returns>
-		public static ConditionExpression ParseExpression(string expressionText, ConfigurationItemFactory configurationItemFactories)
+		public static ConditionExpression ParseExpression(string expressionText, LoggingConfiguration cfg)
 		{
 			if (expressionText == null)
 			{
 				return null;
 			}
 
-			var parser = new ConditionParser(new SimpleStringReader(expressionText), configurationItemFactories);
+			var parser = new ConditionParser(new SimpleStringReader(expressionText), cfg);
 			ConditionExpression expression = parser.ParseExpression();
 			if (!parser.tokenizer.IsEOF())
 			{
@@ -73,9 +73,9 @@ namespace NLog.Conditions
 		/// <returns>
 		/// The root of the expression syntax tree which can be used to get the value of the condition in a specified context.
 		/// </returns>
-		internal static ConditionExpression ParseExpression(SimpleStringReader stringReader, ConfigurationItemFactory configurationItemFactories)
+		internal static ConditionExpression ParseExpression(SimpleStringReader stringReader, LoggingConfiguration cfg)
 		{
-			var parser = new ConditionParser(stringReader, configurationItemFactories);
+			var parser = new ConditionParser(stringReader, cfg);
 			ConditionExpression expression = parser.ParseExpression();
 		
 			return expression;
@@ -100,7 +100,7 @@ namespace NLog.Conditions
 
 			try
 			{
-				var methodInfo = this.configurationItemFactory.ConditionMethods.CreateInstance(functionName);
+				var methodInfo = cfg.ItemFactory.ConditionMethods.CreateInstance(functionName);
 				return new ConditionMethodExpression(functionName, methodInfo, par);
 			}
 			catch (Exception exception)
@@ -156,7 +156,7 @@ namespace NLog.Conditions
 
 			if (this.tokenizer.TokenType == ConditionTokenType.String)
 			{
-				ConditionExpression e = new ConditionLayoutExpression(new SimpleLayout(tokenizer.StringTokenValue, configurationItemFactory));
+				ConditionExpression e = new ConditionLayoutExpression(new SimpleLayout(tokenizer.StringTokenValue, cfg));
 				this.tokenizer.GetNextToken();
 				return e;
 			}

@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Text;
 using NLog.Internal;
+using NLog.Config;
 
 namespace NLog.LayoutRenderers
 {
@@ -79,9 +80,9 @@ namespace NLog.LayoutRenderers
 		/// <summary>
 		/// Initializes the layout renderer.
 		/// </summary>
-		protected override void InitializeLayoutRenderer()
+		protected override void InternalInit(LoggingConfiguration cfg)
 		{
-			base.InitializeLayoutRenderer();
+			base.InternalInit(cfg);
 
 			ulong performanceFrequency;
 

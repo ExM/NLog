@@ -14,14 +14,14 @@ namespace NLog.UnitTests.Conditions
 		[Test]
 		public void ParseNullText()
 		{
-			Assert.IsNull(ConditionParser.ParseExpression(null, CommonCfg.ItemFactory));
+			Assert.IsNull(ConditionParser.ParseExpression(null, CommonCfg));
 		}
 
 		[Test]
 		[ExpectedException(typeof(ConditionParseException))]
 		public void ParseEmptyText()
 		{
-			ConditionParser.ParseExpression("", CommonCfg.ItemFactory);
+			ConditionParser.ParseExpression("", CommonCfg);
 		}
 
 		[Test]
@@ -35,57 +35,57 @@ namespace NLog.UnitTests.Conditions
 		[Test]
 		public void NullLiteralTest()
 		{
-			Assert.AreEqual("null", ConditionParser.ParseExpression("null", CommonCfg.ItemFactory).ToString());
+			Assert.AreEqual("null", ConditionParser.ParseExpression("null", CommonCfg).ToString());
 		}
 
 		[Test]
 		public void BooleanLiteralTest()
 		{
-			Assert.AreEqual("True", ConditionParser.ParseExpression("true", CommonCfg.ItemFactory).ToString());
-			Assert.AreEqual("True", ConditionParser.ParseExpression("tRuE", CommonCfg.ItemFactory).ToString());
-			Assert.AreEqual("False", ConditionParser.ParseExpression("false", CommonCfg.ItemFactory).ToString());
-			Assert.AreEqual("False", ConditionParser.ParseExpression("fAlSe", CommonCfg.ItemFactory).ToString());
+			Assert.AreEqual("True", ConditionParser.ParseExpression("true", CommonCfg).ToString());
+			Assert.AreEqual("True", ConditionParser.ParseExpression("tRuE", CommonCfg).ToString());
+			Assert.AreEqual("False", ConditionParser.ParseExpression("false", CommonCfg).ToString());
+			Assert.AreEqual("False", ConditionParser.ParseExpression("fAlSe", CommonCfg).ToString());
 		}
 
 		[Test]
 		public void AndTest()
 		{
-			Assert.AreEqual("(True and True)", ConditionParser.ParseExpression("true and true", CommonCfg.ItemFactory).ToString());
-			Assert.AreEqual("(True and True)", ConditionParser.ParseExpression("tRuE AND true", CommonCfg.ItemFactory).ToString());
-			Assert.AreEqual("(True and True)", ConditionParser.ParseExpression("tRuE && true", CommonCfg.ItemFactory).ToString());
-			Assert.AreEqual("((True and True) and True)", ConditionParser.ParseExpression("true and true && true", CommonCfg.ItemFactory).ToString());
-			Assert.AreEqual("((True and True) and True)", ConditionParser.ParseExpression("tRuE AND true and true", CommonCfg.ItemFactory).ToString());
-			Assert.AreEqual("((True and True) and True)", ConditionParser.ParseExpression("tRuE && true AND true", CommonCfg.ItemFactory).ToString());
+			Assert.AreEqual("(True and True)", ConditionParser.ParseExpression("true and true", CommonCfg).ToString());
+			Assert.AreEqual("(True and True)", ConditionParser.ParseExpression("tRuE AND true", CommonCfg).ToString());
+			Assert.AreEqual("(True and True)", ConditionParser.ParseExpression("tRuE && true", CommonCfg).ToString());
+			Assert.AreEqual("((True and True) and True)", ConditionParser.ParseExpression("true and true && true", CommonCfg).ToString());
+			Assert.AreEqual("((True and True) and True)", ConditionParser.ParseExpression("tRuE AND true and true", CommonCfg).ToString());
+			Assert.AreEqual("((True and True) and True)", ConditionParser.ParseExpression("tRuE && true AND true", CommonCfg).ToString());
 		}
 
 		[Test]
 		public void OrTest()
 		{
-			Assert.AreEqual("(True or True)", ConditionParser.ParseExpression("true or true", CommonCfg.ItemFactory).ToString());
-			Assert.AreEqual("(True or True)", ConditionParser.ParseExpression("tRuE OR true", CommonCfg.ItemFactory).ToString());
-			Assert.AreEqual("(True or True)", ConditionParser.ParseExpression("tRuE || true", CommonCfg.ItemFactory).ToString());
-			Assert.AreEqual("((True or True) or True)", ConditionParser.ParseExpression("true or true || true", CommonCfg.ItemFactory).ToString());
-			Assert.AreEqual("((True or True) or True)", ConditionParser.ParseExpression("tRuE OR true or true", CommonCfg.ItemFactory).ToString());
-			Assert.AreEqual("((True or True) or True)", ConditionParser.ParseExpression("tRuE || true OR true", CommonCfg.ItemFactory).ToString());
+			Assert.AreEqual("(True or True)", ConditionParser.ParseExpression("true or true", CommonCfg).ToString());
+			Assert.AreEqual("(True or True)", ConditionParser.ParseExpression("tRuE OR true", CommonCfg).ToString());
+			Assert.AreEqual("(True or True)", ConditionParser.ParseExpression("tRuE || true", CommonCfg).ToString());
+			Assert.AreEqual("((True or True) or True)", ConditionParser.ParseExpression("true or true || true", CommonCfg).ToString());
+			Assert.AreEqual("((True or True) or True)", ConditionParser.ParseExpression("tRuE OR true or true", CommonCfg).ToString());
+			Assert.AreEqual("((True or True) or True)", ConditionParser.ParseExpression("tRuE || true OR true", CommonCfg).ToString());
 		}
 
 		[Test]
 		public void NotTest()
 		{
-			Assert.AreEqual("(not True)", ConditionParser.ParseExpression("not true", CommonCfg.ItemFactory).ToString());
-			Assert.AreEqual("(not (not True))", ConditionParser.ParseExpression("not not true", CommonCfg.ItemFactory).ToString());
-			Assert.AreEqual("(not (not (not True)))", ConditionParser.ParseExpression("not not not true", CommonCfg.ItemFactory).ToString());
+			Assert.AreEqual("(not True)", ConditionParser.ParseExpression("not true", CommonCfg).ToString());
+			Assert.AreEqual("(not (not True))", ConditionParser.ParseExpression("not not true", CommonCfg).ToString());
+			Assert.AreEqual("(not (not (not True)))", ConditionParser.ParseExpression("not not not true", CommonCfg).ToString());
 		}
 
 		[Test]
 		public void StringTest()
 		{
-			Assert.AreEqual("''", ConditionParser.ParseExpression("''", CommonCfg.ItemFactory).ToString());
-			Assert.AreEqual("'Foo'", ConditionParser.ParseExpression("'Foo'", CommonCfg.ItemFactory).ToString());
-			Assert.AreEqual("'Bar'", ConditionParser.ParseExpression("'Bar'", CommonCfg.ItemFactory).ToString());
-			Assert.AreEqual("'d'Artagnan'", ConditionParser.ParseExpression("'d''Artagnan'", CommonCfg.ItemFactory).ToString());
+			Assert.AreEqual("''", ConditionParser.ParseExpression("''", CommonCfg).ToString());
+			Assert.AreEqual("'Foo'", ConditionParser.ParseExpression("'Foo'", CommonCfg).ToString());
+			Assert.AreEqual("'Bar'", ConditionParser.ParseExpression("'Bar'", CommonCfg).ToString());
+			Assert.AreEqual("'d'Artagnan'", ConditionParser.ParseExpression("'d''Artagnan'", CommonCfg).ToString());
 
-			var cle = ConditionParser.ParseExpression("'${message} ${level}'", CommonCfg.ItemFactory) as ConditionLayoutExpression;
+			var cle = ConditionParser.ParseExpression("'${message} ${level}'", CommonCfg) as ConditionLayoutExpression;
 			Assert.IsNotNull(cle);
 			SimpleLayout sl = cle.Layout as SimpleLayout;
 			Assert.IsNotNull(sl);
@@ -99,11 +99,11 @@ namespace NLog.UnitTests.Conditions
 		[Test]
 		public void LogLevelTest()
 		{
-			var result = ConditionParser.ParseExpression("LogLevel.Info", CommonCfg.ItemFactory) as ConditionLiteralExpression;
+			var result = ConditionParser.ParseExpression("LogLevel.Info", CommonCfg) as ConditionLiteralExpression;
 			Assert.IsNotNull(result);
 			Assert.AreSame(LogLevel.Info, result.LiteralValue);
 
-			result = ConditionParser.ParseExpression("LogLevel.Trace", CommonCfg.ItemFactory) as ConditionLiteralExpression;
+			result = ConditionParser.ParseExpression("LogLevel.Trace", CommonCfg) as ConditionLiteralExpression;
 			Assert.IsNotNull(result);
 			Assert.AreSame(LogLevel.Trace, result.LiteralValue);
 		}
@@ -124,22 +124,22 @@ namespace NLog.UnitTests.Conditions
 		[Test]
 		public void NumberTest()
 		{
-			Assert.AreEqual("3.141592", ConditionParser.ParseExpression("3.141592", CommonCfg.ItemFactory).ToString());
-			Assert.AreEqual("42", ConditionParser.ParseExpression("42", CommonCfg.ItemFactory).ToString());
-			Assert.AreEqual("-42", ConditionParser.ParseExpression("-42", CommonCfg.ItemFactory).ToString());
-			Assert.AreEqual("-3.141592", ConditionParser.ParseExpression("-3.141592", CommonCfg.ItemFactory).ToString());
+			Assert.AreEqual("3.141592", ConditionParser.ParseExpression("3.141592", CommonCfg).ToString());
+			Assert.AreEqual("42", ConditionParser.ParseExpression("42", CommonCfg).ToString());
+			Assert.AreEqual("-42", ConditionParser.ParseExpression("-42", CommonCfg).ToString());
+			Assert.AreEqual("-3.141592", ConditionParser.ParseExpression("-3.141592", CommonCfg).ToString());
 		}
 
 		[Test]
 		public void ExtraParenthesisTest()
 		{
-			Assert.AreEqual("3.141592", ConditionParser.ParseExpression("(((3.141592)))", CommonCfg.ItemFactory).ToString());
+			Assert.AreEqual("3.141592", ConditionParser.ParseExpression("(((3.141592)))", CommonCfg).ToString());
 		}
 
 		[Test]
 		public void MessageTest()
 		{
-			var result = ConditionParser.ParseExpression("message", CommonCfg.ItemFactory);
+			var result = ConditionParser.ParseExpression("message", CommonCfg);
 			Assert.IsInstanceOf<ConditionMessageExpression>(result);
 			Assert.AreEqual("message", result.ToString());
 		}
@@ -147,7 +147,7 @@ namespace NLog.UnitTests.Conditions
 		[Test]
 		public void LevelTest()
 		{
-			var result = ConditionParser.ParseExpression("level", CommonCfg.ItemFactory);
+			var result = ConditionParser.ParseExpression("level", CommonCfg);
 			Assert.IsInstanceOf<ConditionLevelExpression>(result);
 			Assert.AreEqual("level", result.ToString());
 		}
@@ -155,7 +155,7 @@ namespace NLog.UnitTests.Conditions
 		[Test]
 		public void LoggerTest()
 		{
-			var result = ConditionParser.ParseExpression("logger", CommonCfg.ItemFactory);
+			var result = ConditionParser.ParseExpression("logger", CommonCfg);
 			Assert.IsInstanceOf<ConditionLoggerNameExpression>(result);
 			Assert.AreEqual("logger", result.ToString());
 		}
@@ -163,7 +163,7 @@ namespace NLog.UnitTests.Conditions
 		[Test]
 		public void ConditionFunctionTests()
 		{
-			var result = ConditionParser.ParseExpression("starts-with(logger, 'x${message}')", CommonCfg.ItemFactory) as ConditionMethodExpression;
+			var result = ConditionParser.ParseExpression("starts-with(logger, 'x${message}')", CommonCfg) as ConditionMethodExpression;
 			Assert.IsNotNull(result);
 			Assert.AreEqual("starts-with(logger, 'x${message}')", result.ToString());
 			Assert.AreEqual("StartsWith", result.MethodInfo.Name);
@@ -177,7 +177,7 @@ namespace NLog.UnitTests.Conditions
 			configurationItemFactory.LayoutRenderers.RegisterDefinition("foo", typeof(FooLayoutRenderer));
 			configurationItemFactory.ConditionMethods.RegisterDefinition("check", typeof(MyConditionMethods).GetMethod("CheckIt"));
 
-			ConditionParser.ParseExpression("check('${foo}')", configurationItemFactory);
+			ConditionParser.ParseExpression("check('${foo}')", new LoggingConfiguration(configurationItemFactory));
 		}
 
 		[Test]
@@ -187,91 +187,91 @@ namespace NLog.UnitTests.Conditions
 			configurationItemFactory.LayoutRenderers.RegisterDefinition("foo", typeof(FooLayoutRenderer));
 			configurationItemFactory.ConditionMethods.RegisterDefinition("__check__", typeof(MyConditionMethods).GetMethod("CheckIt"));
 
-			ConditionParser.ParseExpression("__check__('${foo}')", configurationItemFactory);
+			ConditionParser.ParseExpression("__check__('${foo}')", new LoggingConfiguration(configurationItemFactory));
 		}
 
 		[Test]
 		[ExpectedException(typeof(ConditionParseException))]
 		public void UnbalancedParenthesis1Test()
 		{
-			ConditionParser.ParseExpression("check(", CommonCfg.ItemFactory);
+			ConditionParser.ParseExpression("check(", CommonCfg);
 		}
 
 		[Test]
 		[ExpectedException(typeof(ConditionParseException))]
 		public void UnbalancedParenthesis2Test()
 		{
-			ConditionParser.ParseExpression("((1)", CommonCfg.ItemFactory);
+			ConditionParser.ParseExpression("((1)", CommonCfg);
 		}
 
 		[Test]
 		[ExpectedException(typeof(ConditionParseException))]
 		public void UnbalancedParenthesis3Test()
 		{
-			ConditionParser.ParseExpression("(1))", CommonCfg.ItemFactory);
+			ConditionParser.ParseExpression("(1))", CommonCfg);
 		}
 
 		[Test]
 		[ExpectedException(typeof(ConditionParseException))]
 		public void LogLevelWithoutAName()
 		{
-			ConditionParser.ParseExpression("LogLevel.'somestring'", CommonCfg.ItemFactory);
+			ConditionParser.ParseExpression("LogLevel.'somestring'", CommonCfg);
 		}
 
 		[Test]
 		[ExpectedException(typeof(ConditionParseException))]
 		public void InvalidNumberWithUnaryMinusTest()
 		{
-			ConditionParser.ParseExpression("-a31", CommonCfg.ItemFactory);
+			ConditionParser.ParseExpression("-a31", CommonCfg);
 		}
 
 		[Test]
 		[ExpectedException(typeof(ConditionParseException))]
 		public void InvalidNumberTest()
 		{
-			ConditionParser.ParseExpression("-123.4a", CommonCfg.ItemFactory);
+			ConditionParser.ParseExpression("-123.4a", CommonCfg);
 		}
 
 		[Test]
 		[ExpectedException(typeof(ConditionParseException))]
 		public void UnclosedString()
 		{
-			ConditionParser.ParseExpression("'Hello world", CommonCfg.ItemFactory);
+			ConditionParser.ParseExpression("'Hello world", CommonCfg);
 		}
 
 		[Test]
 		[ExpectedException(typeof(ConditionParseException))]
 		public void UnrecognizedToken()
 		{
-			ConditionParser.ParseExpression("somecompletelyunrecognizedtoken", CommonCfg.ItemFactory);
+			ConditionParser.ParseExpression("somecompletelyunrecognizedtoken", CommonCfg);
 		}
 
 		[Test]
 		[ExpectedException(typeof(ConditionParseException))]
 		public void UnrecognizedPunctuation()
 		{
-			ConditionParser.ParseExpression("#", CommonCfg.ItemFactory);
+			ConditionParser.ParseExpression("#", CommonCfg);
 		}
 
 		[Test]
 		[ExpectedException(typeof(ConditionParseException))]
 		public void UnrecognizedUnicodeChar()
 		{
-			ConditionParser.ParseExpression("\u0090", CommonCfg.ItemFactory);
+			ConditionParser.ParseExpression("\u0090", CommonCfg);
 		}
 
 		[Test]
 		[ExpectedException(typeof(ConditionParseException))]
 		public void UnrecognizedUnicodeChar2()
 		{
-			ConditionParser.ParseExpression("\u0015", CommonCfg.ItemFactory);
+			ConditionParser.ParseExpression("\u0015", CommonCfg);
 		}
 
 		[Test]
 		[ExpectedException(typeof(ConditionParseException))]
 		public void UnrecognizedMethod()
 		{
-			ConditionParser.ParseExpression("unrecognized-method()", CommonCfg.ItemFactory);
+			ConditionParser.ParseExpression("unrecognized-method()", CommonCfg);
 		}
 
 		[Test]
@@ -289,7 +289,7 @@ namespace NLog.UnitTests.Conditions
 
 			string input = operand1 + " " + op + " " + operand2;
 			string expectedOutput = "(" + operand1 + " " + result + " " + operand2 + ")";
-			var condition = ConditionParser.ParseExpression(input, CommonCfg.ItemFactory);
+			var condition = ConditionParser.ParseExpression(input, CommonCfg);
 			Assert.AreEqual(expectedOutput, condition.ToString());
 		}
 

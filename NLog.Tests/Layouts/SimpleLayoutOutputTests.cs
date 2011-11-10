@@ -34,9 +34,9 @@ namespace NLog.UnitTests.Layouts
 		{
 			ConfigurationItemFactory configurationItemFactory = new ConfigurationItemFactory();
 			configurationItemFactory.LayoutRenderers.RegisterDefinition("throwsException", typeof(ThrowsExceptionRenderer));
-			
-			SimpleLayout l = new SimpleLayout("xx${throwsException}yy", configurationItemFactory);
-			l.Initialize(CommonCfg);
+			var cfg = new LoggingConfiguration(configurationItemFactory);
+			SimpleLayout l = new SimpleLayout("xx${throwsException}yy", cfg);
+			l.Initialize(cfg);
 			string output = l.Render(LogEventInfo.CreateNullEvent());
 			Assert.AreEqual("xxyy", output);
 		}
@@ -71,7 +71,7 @@ namespace NLog.UnitTests.Layouts
 						ConfigurationItemFactory configurationItemFactory = new ConfigurationItemFactory();
 						configurationItemFactory.LayoutRenderers.RegisterDefinition("throwsException", typeof(ThrowsExceptionRenderer));
 
-						SimpleLayout l = new SimpleLayout("xx${throwsException:msg1}yy${throwsException:msg2}zz", configurationItemFactory);
+						SimpleLayout l = new SimpleLayout("xx${throwsException:msg1}yy${throwsException:msg2}zz", new LoggingConfiguration(configurationItemFactory));
 						l.Initialize(CommonCfg);
 						string output = l.Render(LogEventInfo.CreateNullEvent());
 						Assert.AreEqual("xxyyzz", output);

@@ -15,12 +15,7 @@ namespace NLog.LayoutRenderers
 	{
 		private const int MaxInitialRenderBufferLength = 16384;
 		private int maxRenderedLength;
-		private bool isInitialized;
-
-		/// <summary>
-		/// Gets the logging configuration this target is part of.
-		/// </summary>
-		protected LoggingConfiguration LoggingConfiguration { get; private set; }
+		private bool _isInitialized;
 
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
@@ -71,36 +66,21 @@ namespace NLog.LayoutRenderers
 
 			return builder.ToString();
 		}
-
+		
 		/// <summary>
 		/// Initializes this instance.
 		/// </summary>
-		/// <param name="configuration">The configuration.</param>
-		void ISupportsInitialize.Initialize(LoggingConfiguration configuration)
+		/// <param name="cfg">The configuration.</param>
+		public void Initialize(LoggingConfiguration cfg)
 		{
-			this.Initialize(configuration);
-		}
+			if(_isInitialized)
+				return;
 
-		/// <summary>
-		/// Closes this instance.
-		/// </summary>
-		void ISupportsInitialize.Close()
-		{
-			this.Close();
-		}
-
-		/// <summary>
-		/// Initializes this instance.
-		/// </summary>
-		/// <param name="configuration">The configuration.</param>
-		internal void Initialize(LoggingConfiguration configuration)
-		{
-			if (!this.isInitialized)
-			{
-				this.LoggingConfiguration = configuration;
-				this.isInitialized = true;
-				this.InitializeLayoutRenderer();
-			}
+			_isInitialized = true;
+			InternalInit(cfg);
+			
+			foreach(var item in ObjectGraph.OneLevelChilds<ISupportsInitialize>(this)) //HACK: cached to close?
+				item.Initialize(cfg);
 		}
 
 		/// <summary>
@@ -108,22 +88,21 @@ namespace NLog.LayoutRenderers
 		/// </summary>
 		public void Close()
 		{
-			if (this.isInitialized)
-			{
-				this.LoggingConfiguration = null;
-				this.isInitialized = false;
-				this.CloseLayoutRenderer();
-			}
+			if(!_isInitialized)
+				return;
+			
+			_isInitialized = false;
+			InternalClose();
+			
+			foreach(var item in ObjectGraph.OneLevelChilds<ISupportsInitialize>(this))
+				item.Close();
 		}
 
 		internal void Render(StringBuilder builder, LogEventInfo logEvent)
 		{
-			if (!this.isInitialized)
-			{
-				this.isInitialized = true;
-				this.InitializeLayoutRenderer();
-			}
-
+			if(!_isInitialized)
+				throw new InvalidOperationException("required run Initialize method");
+				
 			try
 			{
 				this.Append(builder, logEvent);
@@ -149,14 +128,14 @@ namespace NLog.LayoutRenderers
 		/// <summary>
 		/// Initializes the layout renderer.
 		/// </summary>
-		protected virtual void InitializeLayoutRenderer()
+		protected virtual void InternalInit(LoggingConfiguration cfg)
 		{
 		}
 
 		/// <summary>
 		/// Closes the layout renderer.
 		/// </summary>	  
-		protected virtual void CloseLayoutRenderer()
+		protected virtual void InternalClose()
 		{
 		}
 

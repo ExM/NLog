@@ -15,7 +15,7 @@ namespace NLog.Config
 	/// </summary>
 	public class LoggingConfiguration
 	{
-		private readonly ConfigurationItemFactory _configurationItemFactory = new ConfigurationItemFactory(typeof(Logger).Assembly);
+		private readonly ConfigurationItemFactory _configurationItemFactory;
 
 		private readonly IDictionary<string, Target> _targets =
 			new Dictionary<string, Target>(StringComparer.OrdinalIgnoreCase);
@@ -27,6 +27,13 @@ namespace NLog.Config
 		/// </summary>
 		public LoggingConfiguration()
 		{
+			_configurationItemFactory = new ConfigurationItemFactory(typeof(Logger).Assembly);
+			this.LoggingRules = new List<LoggingRule>();
+		}
+		
+		public LoggingConfiguration(ConfigurationItemFactory factory)
+		{
+			_configurationItemFactory = factory;
 			this.LoggingRules = new List<LoggingRule>();
 		}
 		

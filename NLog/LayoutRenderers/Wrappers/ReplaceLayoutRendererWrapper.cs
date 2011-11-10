@@ -51,9 +51,9 @@ namespace NLog.LayoutRenderers.Wrappers
 		/// <summary>
 		/// Initializes the layout renderer.
 		/// </summary>
-		protected override void InitializeLayoutRenderer()
+		protected override void InternalInit(LoggingConfiguration cfg)
 		{
-			base.InitializeLayoutRenderer();
+			base.InternalInit(cfg);
 			string regexString = this.SearchFor;
 
 			if (!this.Regex)

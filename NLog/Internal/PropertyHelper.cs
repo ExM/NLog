@@ -19,7 +19,7 @@ namespace NLog.Internal
 	{
 		private static Dictionary<Type, Dictionary<string, PropertyInfo>> parameterInfoCache = new Dictionary<Type, Dictionary<string, PropertyInfo>>();
 
-		internal static void SetPropertyFromString(object o, string name, string value, ConfigurationItemFactory configurationItemFactory)
+		internal static void SetPropertyFromString(object o, string name, string value, LoggingConfiguration cfg)
 		{
 			InternalLogger.Debug("Setting '{0}.{1}' to '{2}'", o.GetType().Name, name, value);
 
@@ -43,7 +43,7 @@ namespace NLog.Internal
 
 				propertyType = Nullable.GetUnderlyingType(propertyType) ?? propertyType;
 
-				if (!TryNLogSpecificConversion(propertyType, value, out newValue, configurationItemFactory))
+				if (!TryNLogSpecificConversion(propertyType, value, out newValue, cfg))
 				{
 					if (!TryGetEnumValue(propertyType, value, out newValue))
 					{
@@ -155,17 +155,17 @@ namespace NLog.Internal
 			return true;
 		}
 
-		private static bool TryNLogSpecificConversion(Type propertyType, string value, out object newValue, ConfigurationItemFactory configurationItemFactory)
+		private static bool TryNLogSpecificConversion(Type propertyType, string value, out object newValue, LoggingConfiguration cfg)
 		{
 			if (propertyType == typeof(Layout) || propertyType == typeof(SimpleLayout))
 			{
-				newValue = new SimpleLayout(value, configurationItemFactory);
+				newValue = new SimpleLayout(value, cfg);
 				return true;
 			}
 
 			if (propertyType == typeof(ConditionExpression))
 			{
-				newValue = ConditionParser.ParseExpression(value, configurationItemFactory);
+				newValue = ConditionParser.ParseExpression(value, cfg);
 				return true;
 			}
 

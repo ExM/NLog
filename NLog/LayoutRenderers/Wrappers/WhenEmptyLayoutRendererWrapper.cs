@@ -19,13 +19,6 @@ namespace NLog.LayoutRenderers.Wrappers
 		[RequiredParameter]
 		public Layout WhenEmpty { get; set; }
 
-		protected override void InitializeLayoutRenderer()
-		{
-			base.InitializeLayoutRenderer();
-			if(WhenEmpty != null)
-				WhenEmpty.Initialize(LoggingConfiguration);
-		}
-
 		/// <summary>
 		/// Transforms the output of another layout.
 		/// </summary>

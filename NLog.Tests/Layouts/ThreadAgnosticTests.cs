@@ -152,10 +152,10 @@ namespace NLog.UnitTests.Layouts
 		{
 			var cif = new ConfigurationItemFactory();
 			cif.RegisterType(typeof(CustomRendererNonAgnostic), string.Empty);
+			var cfg = new LoggingConfiguration(cif);
+			Layout l = new SimpleLayout("${customNotAgnostic}", cfg);
 
-			Layout l = new SimpleLayout("${customNotAgnostic}", cif);
-
-			l.Initialize(CommonCfg);
+			l.Initialize(cfg);
 			Assert.IsFalse(l.IsThreadAgnostic);
 		}
 
@@ -164,10 +164,10 @@ namespace NLog.UnitTests.Layouts
 		{
 			var cif = new ConfigurationItemFactory();
 			cif.RegisterType(typeof(CustomRendererAgnostic), string.Empty);
+			var cfg = new LoggingConfiguration(cif);
+			Layout l = new SimpleLayout("${customAgnostic}", cfg);
 
-			Layout l = new SimpleLayout("${customAgnostic}", cif);
-
-			l.Initialize(CommonCfg);
+			l.Initialize(cfg);
 			Assert.IsTrue(l.IsThreadAgnostic);
 		}
 

@@ -48,8 +48,8 @@ namespace NLog.Layouts
 		/// </summary>
 		/// <param name="text">The layout string to parse.</param>
 		/// <param name="configurationItemFactory">The NLog factories to use when creating references to layout renderers.</param>
-		public SimpleLayout(string text, ConfigurationItemFactory configurationItemFactory)
-			:this(text, LayoutParser.CompileLayout(configurationItemFactory, text))
+		public SimpleLayout(string text, LoggingConfiguration cfg)
+			:this(text, LayoutParser.CompileLayout(cfg, text))
 		{
 		}
 
@@ -64,7 +64,7 @@ namespace NLog.Layouts
 			base.InternalInit(cfg);
 			
 			if(Renderers == null)
-				SetRenderers(LayoutParser.CompileLayout(cfg.ItemFactory, _layoutText));
+				SetRenderers(LayoutParser.CompileLayout(cfg, _layoutText));
 
 			foreach (LayoutRenderer renderer in Renderers)
 				renderer.Initialize(cfg);

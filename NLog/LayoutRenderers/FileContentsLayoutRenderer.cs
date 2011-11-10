@@ -41,13 +41,6 @@ namespace NLog.LayoutRenderers
 		/// <docgen category='File Options' order='10' />
 		public Encoding Encoding { get; set; }
 
-		protected override void InitializeLayoutRenderer()
-		{
-			base.InitializeLayoutRenderer();
-			if (FileName != null)
-				FileName.Initialize(LoggingConfiguration);
-		}
-
 		/// <summary>
 		/// Renders the contents of the specified file and appends it to the specified <see cref="StringBuilder" />.
 		/// </summary>
