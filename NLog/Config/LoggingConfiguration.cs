@@ -20,7 +20,7 @@ namespace NLog.Config
 		private readonly IDictionary<string, Target> _targets =
 			new Dictionary<string, Target>(StringComparer.OrdinalIgnoreCase);
 
-		private object[] configItems;
+		private object[] _configItems;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LoggingConfiguration" /> class.
@@ -28,13 +28,13 @@ namespace NLog.Config
 		public LoggingConfiguration()
 		{
 			_configurationItemFactory = new ConfigurationItemFactory(typeof(Logger).Assembly);
-			this.LoggingRules = new List<LoggingRule>();
+			LoggingRules = new List<LoggingRule>();
 		}
 		
 		public LoggingConfiguration(ConfigurationItemFactory factory)
 		{
 			_configurationItemFactory = factory;
-			this.LoggingRules = new List<LoggingRule>();
+			LoggingRules = new List<LoggingRule>();
 		}
 		
 		public ConfigurationItemFactory ItemFactory
@@ -56,7 +56,10 @@ namespace NLog.Config
 		/// </remarks>
 		public ReadOnlyCollection<Target> ConfiguredNamedTargets
 		{
-			get { return new List<Target>(this._targets.Values).AsReadOnly(); }
+			get
+			{
+				return new List<Target>(_targets.Values).AsReadOnly();
+			}
 		}
 
 		/// <summary>
@@ -64,7 +67,10 @@ namespace NLog.Config
 		/// </summary>
 		public virtual IEnumerable<string> FileNamesToWatch
 		{
-			get { return new string[0]; }
+			get
+			{
+				return new string[0];
+			}
 		}
 
 		/// <summary>
@@ -79,7 +85,7 @@ namespace NLog.Config
 		{
 			get
 			{
-				return configItems.OfType<Target>().ToList().AsReadOnly();
+				return _configItems.OfType<Target>().ToList().AsReadOnly();
 			}
 		}
 
@@ -95,12 +101,10 @@ namespace NLog.Config
 		public void AddTarget(string name, Target target)
 		{
 			if (name == null)
-			{
 				throw new ArgumentException("Target name cannot be null", "name");
-			}
 
 			InternalLogger.Debug("Registering target {0}: {1}", name, target.GetType().FullName);
-			this._targets[name] = target;
+			_targets[name] = target;
 		}
 
 		/// <summary>
@@ -116,10 +120,8 @@ namespace NLog.Config
 		{
 			Target value;
 
-			if (!this._targets.TryGetValue(name, out value))
-			{
+			if (!_targets.TryGetValue(name, out value))
 				return null;
-			}
 
 			return value;
 		}
@@ -143,7 +145,7 @@ namespace NLog.Config
 		/// </param>
 		public void RemoveTarget(string name)
 		{
-			this._targets.Remove(name);
+			_targets.Remove(name);
 		}
 
 		/// <summary>
@@ -156,12 +158,10 @@ namespace NLog.Config
 		public void Install(InstallationContext installationContext)
 		{
 			if (installationContext == null)
-			{
 				throw new ArgumentNullException("installationContext");
-			}
 
-			this.InitializeAll();
-			foreach (IInstallable installable in configItems.OfType<IInstallable>())
+			InitializeAll();
+			foreach (IInstallable installable in _configItems.OfType<IInstallable>())
 			{
 				installationContext.Info("Installing '{0}'", installable);
 
@@ -173,9 +173,7 @@ namespace NLog.Config
 				catch (Exception exception)
 				{
 					if (exception.MustBeRethrown())
-					{
 						throw;
-					}
 
 					installationContext.Error("'{0}' installation failed: {1}.", installable, exception);
 				}
@@ -192,13 +190,11 @@ namespace NLog.Config
 		public void Uninstall(InstallationContext installationContext)
 		{
 			if (installationContext == null)
-			{
 				throw new ArgumentNullException("installationContext");
-			}
 
-			this.InitializeAll();
+			InitializeAll();
 
-			foreach (IInstallable installable in configItems.OfType<IInstallable>())
+			foreach (IInstallable installable in _configItems.OfType<IInstallable>())
 			{
 				installationContext.Info("Uninstalling '{0}'", installable);
 
@@ -210,9 +206,7 @@ namespace NLog.Config
 				catch (Exception exception)
 				{
 					if (exception.MustBeRethrown())
-					{
 						throw;
-					}
 
 					installationContext.Error("Uninstallation of '{0}' failed: {1}.", installable, exception);
 				}
@@ -225,7 +219,7 @@ namespace NLog.Config
 		internal void Close()
 		{
 			InternalLogger.Debug("Closing logging configuration...");
-			foreach (ISupportsInitialize initialize in this.configItems.OfType<ISupportsInitialize>())
+			foreach (ISupportsInitialize initialize in _configItems.OfType<ISupportsInitialize>())
 			{
 				InternalLogger.Trace("Closing {0}", initialize);
 				try
@@ -235,9 +229,7 @@ namespace NLog.Config
 				catch (Exception exception)
 				{
 					if (exception.MustBeRethrown())
-					{
 						throw;
-					}
 
 					InternalLogger.Warn("Exception while closing {0}", exception);
 				}
@@ -250,16 +242,12 @@ namespace NLog.Config
 		{
 			InternalLogger.Debug("--- NLog configuration dump. ---");
 			InternalLogger.Debug("Targets:");
-			foreach (Target target in this._targets.Values)
-			{
+			foreach (Target target in _targets.Values)
 				InternalLogger.Info("{0}", target);
-			}
 
 			InternalLogger.Debug("Rules:");
-			foreach (LoggingRule rule in this.LoggingRules)
-			{
+			foreach (LoggingRule rule in LoggingRules)
 				InternalLogger.Info("{0}", rule);
-			}
 
 			InternalLogger.Debug("--- End of NLog configuration dump ---");
 		}
@@ -271,14 +259,12 @@ namespace NLog.Config
 		internal void FlushAllTargets(AsyncContinuation asyncContinuation)
 		{
 			var uniqueTargets = new List<Target>();
-			foreach (var rule in this.LoggingRules)
+			foreach (var rule in LoggingRules)
 			{
 				foreach (var t in rule.Targets)
 				{
 					if (!uniqueTargets.Contains(t))
-					{
 						uniqueTargets.Add(t);
-					}
 				}
 			}
 
@@ -288,7 +274,7 @@ namespace NLog.Config
 		internal void FlushAllTargets2(AsyncContinuation asyncContinuation)
 		{
 			var uniqueTargets = new List<Target>();
-			foreach (var rule in this.LoggingRules)
+			foreach (var rule in LoggingRules)
 			foreach (var t in rule.Targets)
 				if (!uniqueTargets.Contains(t))
 					uniqueTargets.Add(t);
@@ -345,33 +331,27 @@ namespace NLog.Config
 		internal void ValidateConfig()
 		{
 			var roots = new List<object>();
-			foreach (LoggingRule r in this.LoggingRules)
-			{
+			foreach (LoggingRule r in LoggingRules)
 				roots.Add(r);
-			}
 
-			foreach (Target target in this._targets.Values)
-			{
+			foreach (Target target in _targets.Values)
 				roots.Add(target);
-			}
 
-			this.configItems = ObjectGraph.AllChilds<object>(roots).ToArray();
+			_configItems = ObjectGraph.AllChilds<object>(roots).ToArray();
 
 			// initialize all config items starting from most nested first
 			// so that whenever the container is initialized its children have already been
-			InternalLogger.Info("Found {0} configuration items", this.configItems.Length);
+			InternalLogger.Info("Found {0} configuration items", _configItems.Length);
 
-			foreach (object o in this.configItems)
-			{
+			foreach (object o in this._configItems)
 				PropertyHelper.CheckRequiredParameters(o);
-			}
 		}
 
 		internal void InitializeAll()
 		{
-			this.ValidateConfig();
+			ValidateConfig();
 
-			foreach (ISupportsInitialize initialize in configItems.OfType<ISupportsInitialize>().Reverse())
+			foreach (ISupportsInitialize initialize in _configItems.OfType<ISupportsInitialize>().Reverse())
 			{
 				InternalLogger.Trace("Initializing {0}", initialize);
 
@@ -382,14 +362,10 @@ namespace NLog.Config
 				catch (Exception exception)
 				{
 					if (exception.MustBeRethrown())
-					{
 						throw;
-					}
 
 					if (LogManager.ThrowExceptions)
-					{
 						throw new NLogConfigurationException("Error during initialization of " + initialize, exception);
-					}
 				}
 			}
 		}

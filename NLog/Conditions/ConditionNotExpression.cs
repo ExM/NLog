@@ -41,11 +41,5 @@ namespace NLog.Conditions
 		{
 			return !(bool)this.Expression.Evaluate(context);
 		}
-
-		protected override void InitializeCondition()
-		{
-			base.InitializeCondition();
-			Expression.Initialize(LoggingConfiguration);
-		}
 	}
 }

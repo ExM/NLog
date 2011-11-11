@@ -1,4 +1,5 @@
 using NLog.Layouts;
+using NLog.Config;
 
 namespace NLog.Conditions
 {
@@ -42,11 +43,10 @@ namespace NLog.Conditions
 			return _condEx.Evaluate(context);
 		}
 
-		protected override void InitializeCondition()
+		protected override void InternalInit(LoggingConfiguration cfg)
 		{
-			base.InitializeCondition();
-			_condEx = ConditionParser.ParseExpression(Text, LoggingConfiguration);
-			_condEx.Initialize(LoggingConfiguration);
+			base.InternalInit(cfg);
+			_condEx = ConditionParser.ParseExpression(Text, cfg);
 		}
 	}
 }

@@ -1,23 +1,17 @@
+using NLog.Conditions;
+using NLog.Config;
+using System.ComponentModel;
+using NLog.Internal;
 
 namespace NLog.Targets.Wrappers
 {
-	using NLog.Conditions;
-	using NLog.Config;
-	using System.ComponentModel;
-	using NLog.Internal;
-
 	/// <summary>
 	/// Filtering rule for <see cref="PostFilteringTargetWrapper"/>.
 	/// </summary>
 	[NLogConfigurationItem]
-	public class FilteringRule : ISupportsInitialize
+	public sealed class FilteringRule : ISupportsInitialize
 	{
-		private bool isInitialized;
-
-		/// <summary>
-		/// Gets the logging configuration this target is part of.
-		/// </summary>
-		protected LoggingConfiguration LoggingConfiguration { get; private set; }
+		private bool _isInitialized;
 
 		/// <summary>
 		/// Initializes a new instance of the FilteringRule class.
@@ -34,8 +28,8 @@ namespace NLog.Targets.Wrappers
 		/// <param name="filterToApply">Filter to apply to all log events when the first condition matches any of them.</param>
 		public FilteringRule(ConditionExpression whenExistsExpression, ConditionExpression filterToApply)
 		{
-			this.Exists = whenExistsExpression;
-			this.Filter = filterToApply;
+			Exists = whenExistsExpression;
+			Filter = filterToApply;
 		}
 
 		/// <summary>
@@ -57,16 +51,16 @@ namespace NLog.Targets.Wrappers
 		/// </summary>
 		/// <param name="configuration">The configuration.</param>
 		public void Initialize(LoggingConfiguration cfg)
-		{ // TODO: need refactoring
-			if (isInitialized)
+		{
+			if(_isInitialized)
 				return;
 
-			LoggingConfiguration = cfg;
-			isInitialized = true;
-			InitializeRule();
-			
-			foreach(var item in ObjectGraph.OneLevelChilds<ISupportsInitialize>(this))
-				item.Initialize(cfg);
+			_isInitialized = true;
+
+			if (Exists != null)
+				Exists.Initialize(cfg);
+			if (Filter != null)
+				Filter.Initialize(cfg);
 		}
 
 		/// <summary>
@@ -74,31 +68,15 @@ namespace NLog.Targets.Wrappers
 		/// </summary>
 		public void Close()
 		{
-			if (isInitialized)
-			{
-				LoggingConfiguration = null;
-				isInitialized = false;
-				CloseRule();
-			}
-		}
+			if(!_isInitialized)
+				return;
 
-		/// <summary>
-		/// Initializes the condition.
-		/// </summary>
-		protected virtual void InitializeRule()
-		{
+			_isInitialized = false;
+
 			if (Exists != null)
-				Exists.Initialize(LoggingConfiguration);
+				Exists.Close();
 			if (Filter != null)
-				Filter.Initialize(LoggingConfiguration);
+				Filter.Close();
 		}
-
-		/// <summary>
-		/// Closes the condition.
-		/// </summary>
-		protected virtual void CloseRule()
-		{
-		}
-
 	}
 }

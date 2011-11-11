@@ -111,13 +111,5 @@ namespace NLog.Conditions
 
 			return this.MethodInfo.Invoke(null, callParameters);
 		}
-
-		protected override void InitializeCondition()
-		{
-			base.InitializeCondition();
-			foreach (ConditionExpression ce in this.MethodParameters)
-				if(ce != null)
-					ce.Initialize(LoggingConfiguration);
-		}
 	}
 }

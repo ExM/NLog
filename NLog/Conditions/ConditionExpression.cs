@@ -1,10 +1,9 @@
+using System;
+using NLog.Config;
+using NLog.Internal;
 
 namespace NLog.Conditions
 {
-	using System;
-	using NLog.Config;
-	using NLog.Internal;
-
 	/// <summary>
 	/// Base class for representing nodes in condition expression trees.
 	/// </summary>
@@ -12,12 +11,7 @@ namespace NLog.Conditions
 	[ThreadAgnostic]
 	public abstract class ConditionExpression : ISupportsInitialize
 	{
-		private bool isInitialized;
-
-		/// <summary>
-		/// Gets the logging configuration this target is part of.
-		/// </summary>
-		protected LoggingConfiguration LoggingConfiguration { get; private set; }
+		private bool _isInitialized;
 
 		/// <summary>
 		/// Converts condition text to a condition expression tree.
@@ -71,15 +65,14 @@ namespace NLog.Conditions
 		/// </summary>
 		/// <param name="configuration">The configuration.</param>
 		public void Initialize(LoggingConfiguration cfg)
-		{ // TODO: need refactoring
-			if (isInitialized)
+		{
+			if (_isInitialized)
 				return;
 
-			LoggingConfiguration = cfg;
-			isInitialized = true;
-			InitializeCondition();
+			_isInitialized = true;
+			InternalInit(cfg);
 			
-			foreach(var item in ObjectGraph.OneLevelChilds<ISupportsInitialize>(this))
+			foreach(var item in ObjectGraph.OneLevelChilds<ISupportsInitialize>(this)) //HACK: cached to close?
 				item.Initialize(cfg);
 		}
 
@@ -88,25 +81,26 @@ namespace NLog.Conditions
 		/// </summary>
 		public void Close()
 		{
-			if (isInitialized)
-			{
-				LoggingConfiguration = null;
-				isInitialized = false;
-				CloseCondition();
-			}
+			if(!_isInitialized)
+
+			_isInitialized = false;
+			InternalClose();
+
+			foreach (var item in ObjectGraph.OneLevelChilds<ISupportsInitialize>(this))
+				item.Close();
 		}
 
 		/// <summary>
 		/// Initializes the condition.
 		/// </summary>
-		protected virtual void InitializeCondition()
+		protected virtual void InternalInit(LoggingConfiguration cfg)
 		{
 		}
 
 		/// <summary>
 		/// Closes the condition.
 		/// </summary>
-		protected virtual void CloseCondition()
+		protected virtual void InternalClose()
 		{
 		}
 	}
