@@ -479,7 +479,7 @@ namespace NLog.UnitTests.Targets
 			var fileTarget = new FileTarget();
 			fileTarget.FileName = "${logger}";
 			fileTarget.Layout = "${message}";
-			fileTarget.Initialize(CommonCfg);
+			fileTarget.DeepInitialize(CommonCfg);
 
 			// make sure that when file names get sorted, the asynchronous continuations are sorted with them as well
 			var exceptions = new List<Exception>();

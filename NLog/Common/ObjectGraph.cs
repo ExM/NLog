@@ -1,15 +1,34 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using NLog.Common;
 using NLog.Config;
-using System;
-using System.Linq;
+using NLog.Internal;
 
-namespace NLog.Internal
+namespace NLog.Common
 {
-	internal class ObjectGraph
+	public static class ObjectGraph
 	{
+		public static ISupportsInitialize[] DeepInitialize(this object root, LoggingConfiguration cfg)
+		{
+			return DeepInitialize(root, cfg, LogManager.ThrowExceptions);
+		}
+
+		public static ISupportsInitialize[] DeepInitialize(this object root, LoggingConfiguration cfg, bool throwExceptions)
+		{
+			InitializeContext context = new InitializeContext(cfg, throwExceptions);
+			context.DeepInitialize(root);
+			return context.Initialized;
+		}
+
+		public static ISupportsInitialize[] DeepInitialize(this IEnumerable<object> roots, LoggingConfiguration cfg, bool throwExceptions)
+		{
+			InitializeContext context = new InitializeContext(cfg, throwExceptions);
+			foreach (object root in roots)
+				context.DeepInitialize(root);
+			return context.Initialized;
+		}
+
 		/// <summary>
 		/// find all objects which may need stack trace
 		/// and determine maximum
@@ -54,8 +73,10 @@ namespace NLog.Internal
 		public static IEnumerable<T> AllChilds<T>(IEnumerable<object> roots)
 			where T : class
 		{
+			HashSet<object> visited = new HashSet<object>();
+
 			foreach (object root in roots)
-				foreach (T item in AllChilds<T>(root, new HashSet<object>()))
+				foreach (T item in AllChilds<T>(root, visited))
 					yield return item;
 		}
 
@@ -92,26 +113,25 @@ namespace NLog.Internal
 		public static IEnumerable<T> OneLevelChilds<T>(object o)
 			where T : class
 		{
-			Type curT = o.GetType();
-			PropertyCache cache;
-
-			lock (_sync)
-			{
-				if (!_cacheMap.TryGetValue(curT, out cache))
-				{
-					cache = new PropertyCache(curT);
-					_cacheMap.Add(curT, cache);
-				}
-			}
-
-			return cache.EnumChilds<T>(o);
+			return GetProperty(o.GetType())
+				.EnumChilds<T>(o);
 		}
 
-		private static IEnumerable OneLevelChilds(object o)
+		public static IEnumerable OneLevelChilds(object o)
 		{
-			Type curT = o.GetType();
-			PropertyCache cache;
+			return GetProperty(o.GetType())
+				.EnumChilds(o);
+		}
 
+		public static void CheckRequiredParameters(object o)
+		{
+			GetProperty(o.GetType())
+				.CheckRequiredParameters(o);
+		}
+
+		private static PropertyCache GetProperty(Type curT)
+		{
+			PropertyCache cache;
 			lock (_sync)
 			{
 				if (!_cacheMap.TryGetValue(curT, out cache))
@@ -120,8 +140,7 @@ namespace NLog.Internal
 					_cacheMap.Add(curT, cache);
 				}
 			}
-
-			return cache.EnumChilds(o);
+			return cache;
 		}
 
 		private class PropertyCache
@@ -141,6 +160,21 @@ namespace NLog.Internal
 				}
 
 				piList = list.ToArray();
+			}
+
+			public void CheckRequiredParameters(object o)
+			{
+				for(int i = 0; i < piList.Length; i++)
+				{
+					var pi = piList[i];
+					if (!pi.IsDefined(typeof(RequiredParameterAttribute), false))
+						continue;
+
+					object value = pi.GetValue(o, null);
+					if (value == null)
+						throw new NLogConfigurationException(
+							"Required parameter '" + pi.Name + "' on '" + o + "' was not specified.");
+				}
 			}
 
 			public IEnumerable EnumChilds(object o)

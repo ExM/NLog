@@ -1,13 +1,12 @@
-
+using System;
+using System.IO;
+using NUnit.Framework;
+using NLog.Targets;
+using System.Collections.Generic;
+using NLog.Common;
 
 namespace NLog.UnitTests.Targets
 {
-	using System;
-	using System.IO;
-	using NUnit.Framework;
-	using NLog.Targets;
-	using System.Collections.Generic;
-
 	[TestFixture]
 	public class ConsoleTargetTests : NLogTestBase
 	{
@@ -28,7 +27,7 @@ namespace NLog.UnitTests.Targets
 			try
 			{
 				var exceptions = new List<Exception>();
-				target.Initialize(CommonCfg);
+				target.DeepInitialize(CommonCfg);
 				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "Logger1", "message1").WithContinuation(exceptions.Add));
 				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "Logger1", "message2").WithContinuation(exceptions.Add));
 				target.WriteAsyncLogEvents(
@@ -74,7 +73,7 @@ Logger1 message6
 			try
 			{
 				var exceptions = new List<Exception>();
-				target.Initialize(CommonCfg);
+				target.DeepInitialize(CommonCfg);
 				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "Logger1", "message1").WithContinuation(exceptions.Add));
 				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "Logger1", "message2").WithContinuation(exceptions.Add));
 				target.WriteAsyncLogEvents(

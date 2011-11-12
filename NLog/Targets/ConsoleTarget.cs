@@ -41,6 +41,7 @@ namespace NLog.Targets
 			base.InitializeTarget();
 			if (Header != null)
 			{
+				Header.Initialize(LoggingConfiguration);
 				this.Output(Header.Render(LogEventInfo.CreateNullEvent()));
 			}
 		}

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using NLog.Config;
 using NLog.Filters;
 using NLog.Targets;
+using NLog.Common;
 
 namespace NLog.Internal
 {

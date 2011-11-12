@@ -2,6 +2,7 @@ using System.ComponentModel;
 using NLog.Config;
 using NLog.Internal;
 using System;
+using NLog.Common;
 
 namespace NLog.Layouts
 {

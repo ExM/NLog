@@ -1,5 +1,6 @@
 using NLog.Config;
 using NLog.Internal;
+using NLog.Common;
 
 namespace NLog.Layouts
 {

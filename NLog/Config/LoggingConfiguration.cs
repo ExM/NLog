@@ -20,7 +20,7 @@ namespace NLog.Config
 		private readonly IDictionary<string, Target> _targets =
 			new Dictionary<string, Target>(StringComparer.OrdinalIgnoreCase);
 
-		private object[] _configItems;
+		private ISupportsInitialize[] _initializedItems;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LoggingConfiguration" /> class.
@@ -81,11 +81,11 @@ namespace NLog.Config
 		/// <summary>
 		/// Gets all targets.
 		/// </summary>
-		public ReadOnlyCollection<Target> AllTargets
+		public Target[] AllTargets
 		{
 			get
 			{
-				return _configItems.OfType<Target>().ToList().AsReadOnly();
+				return ObjectGraph.AllChilds<Target>(_targets.Values).ToArray();
 			}
 		}
 
@@ -161,7 +161,8 @@ namespace NLog.Config
 				throw new ArgumentNullException("installationContext");
 
 			InitializeAll();
-			foreach (IInstallable installable in _configItems.OfType<IInstallable>())
+
+			foreach (IInstallable installable in ObjectGraph.AllChilds<IInstallable>(this))
 			{
 				installationContext.Info("Installing '{0}'", installable);
 
@@ -194,7 +195,7 @@ namespace NLog.Config
 
 			InitializeAll();
 
-			foreach (IInstallable installable in _configItems.OfType<IInstallable>())
+			foreach (IInstallable installable in ObjectGraph.AllChilds<IInstallable>(this))
 			{
 				installationContext.Info("Uninstalling '{0}'", installable);
 
@@ -219,20 +220,24 @@ namespace NLog.Config
 		internal void Close()
 		{
 			InternalLogger.Debug("Closing logging configuration...");
-			foreach (ISupportsInitialize initialize in _configItems.OfType<ISupportsInitialize>())
+			if (_initializedItems != null)
 			{
-				InternalLogger.Trace("Closing {0}", initialize);
-				try
+				foreach (var initialize in _initializedItems)
 				{
-					initialize.Close();
-				}
-				catch (Exception exception)
-				{
-					if (exception.MustBeRethrown())
-						throw;
+					InternalLogger.Trace("Closing {0}", initialize);
+					try
+					{
+						initialize.Close();
+					}
+					catch (Exception exception)
+					{
+						if (exception.MustBeRethrown())
+							throw;
 
-					InternalLogger.Warn("Exception while closing {0}", exception);
+						InternalLogger.Warn("Exception while closing {0}", exception);
+					}
 				}
+				_initializedItems = null;
 			}
 
 			InternalLogger.Debug("Finished closing logging configuration.");
@@ -325,10 +330,7 @@ namespace NLog.Config
 			//TODO: wait all exit
 		}
 
-		/// <summary>
-		/// Validates the configuration.
-		/// </summary>
-		internal void ValidateConfig()
+		internal void InitializeAll()
 		{
 			var roots = new List<object>();
 			foreach (LoggingRule r in LoggingRules)
@@ -337,37 +339,11 @@ namespace NLog.Config
 			foreach (Target target in _targets.Values)
 				roots.Add(target);
 
-			_configItems = ObjectGraph.AllChilds<object>(roots).ToArray();
+			_initializedItems = roots.DeepInitialize(this, LogManager.ThrowExceptions);
 
 			// initialize all config items starting from most nested first
 			// so that whenever the container is initialized its children have already been
-			InternalLogger.Info("Found {0} configuration items", _configItems.Length);
-
-			foreach (object o in this._configItems)
-				PropertyHelper.CheckRequiredParameters(o);
-		}
-
-		internal void InitializeAll()
-		{
-			ValidateConfig();
-
-			foreach (ISupportsInitialize initialize in _configItems.OfType<ISupportsInitialize>().Reverse())
-			{
-				InternalLogger.Trace("Initializing {0}", initialize);
-
-				try
-				{
-					initialize.Initialize(this);
-				}
-				catch (Exception exception)
-				{
-					if (exception.MustBeRethrown())
-						throw;
-
-					if (LogManager.ThrowExceptions)
-						throw new NLogConfigurationException("Error during initialization of " + initialize, exception);
-				}
-			}
+			InternalLogger.Info("Found {0} configuration items", _initializedItems.Length);
 		}
 	}
 }

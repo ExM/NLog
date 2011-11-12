@@ -13,7 +13,7 @@ namespace NLog.Config
 	/// Represents a logging rule. An equivalent of &lt;logger /&gt; configuration element.
 	/// </summary>
 	[NLogConfigurationItem]
-	public class LoggingRule //TODO: to implement ISupportsInitialize to initialize the Filters
+	public class LoggingRule
 	{
 		private readonly bool[] logLevels = new bool[LogLevel.MaxLevel.Ordinal + 1];
 

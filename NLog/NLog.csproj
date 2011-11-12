@@ -96,7 +96,8 @@
     <Compile Include="Filters\WhenNotContainsFilter.cs" />
     <Compile Include="Filters\WhenNotEqualFilter.cs" />
     <Compile Include="GlobalDiagnosticsContext.cs" />
-    <Compile Include="Internal\ObjectGraph.cs" />
+    <Compile Include="Internal\InitializeContext.cs" />
+    <Compile Include="Common\ObjectGraph.cs" />
     <Compile Include="Internal\CurrentTimeGetter.cs" />
     <Compile Include="Internal\DictionaryAdapter.cs" />
     <Compile Include="Internal\EnvironmentHelper.cs" />
@@ -107,7 +108,7 @@
     <Compile Include="Internal\FileAppenders\RetryingMultiProcessFileAppender.cs" />
     <Compile Include="Internal\FileAppenders\SingleProcessFileAppender.cs" />
     <Compile Include="Internal\IRenderable.cs" />
-    <Compile Include="Internal\ISupportsInitialize.cs" />
+    <Compile Include="Common\ISupportsInitialize.cs" />
     <Compile Include="Internal\LoggerConfiguration.cs" />
     <Compile Include="Internal\MultiFileWatcher.cs" />
     <Compile Include="Internal\ParameterUtils.cs" />

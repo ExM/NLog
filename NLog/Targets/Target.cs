@@ -329,12 +329,6 @@ namespace NLog.Targets
 		{
 			_allLayouts = ObjectGraph.AllChilds<Layout>(this).ToList();
 			InternalLogger.Trace ("{0} has {1} layouts", this, _allLayouts.Count);
-
-			foreach (var item in ObjectGraph.AllChilds<ISupportsInitialize>(this))
-				item.Initialize(LoggingConfiguration);
-
-			foreach(var item in ObjectGraph.OneLevelChilds<ISupportsInitialize>(this))
-				item.Initialize(LoggingConfiguration);
 		}
 
 		/// <summary>

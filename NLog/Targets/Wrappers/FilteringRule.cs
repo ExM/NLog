@@ -2,6 +2,7 @@ using NLog.Conditions;
 using NLog.Config;
 using System.ComponentModel;
 using NLog.Internal;
+using NLog.Common;
 
 namespace NLog.Targets.Wrappers
 {
