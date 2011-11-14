@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Text;
 using NLog.Config;
+using NLog.Internal;
 
 namespace NLog.Layouts
 {
@@ -13,7 +14,7 @@ namespace NLog.Layouts
 	[Layout("CsvLayout")]
 	[ThreadAgnostic]
 	[AppDomainFixedOutput]
-	public class CsvLayout : LayoutWithHeaderAndFooter
+	public class CsvLayout : LayoutWithHeaderAndFooter, ISupportsLazyCast
 	{
 		private string actualColumnDelimiter;
 		private string doubleQuoteChar;
@@ -74,45 +75,41 @@ namespace NLog.Layouts
 		/// </summary>
 		/// <docgen category='CSV Options' order='10' />
 		public string CustomColumnDelimiter { get; set; }
-
-		/// <summary>
-		/// Initializes the layout.
-		/// </summary>
-		protected override void InternalInit(LoggingConfiguration cfg)
+		
+		public void CreateChilds(LoggingConfiguration cfg)
 		{
-			base.InternalInit(cfg);
 			if(WithHeader && Header == null)
 				Header = new CsvHeaderLayout(this);
-
+				
 			switch(Delimiter)
 			{
-				case CsvColumnDelimiterMode.Auto:
-					actualColumnDelimiter = CultureInfo.CurrentCulture.TextInfo.ListSeparator;
-					break;
+			case CsvColumnDelimiterMode.Auto:
+				actualColumnDelimiter = CultureInfo.CurrentCulture.TextInfo.ListSeparator;
+				break;
 
-				case CsvColumnDelimiterMode.Comma:
-					actualColumnDelimiter = ",";
-					break;
+			case CsvColumnDelimiterMode.Comma:
+				actualColumnDelimiter = ",";
+				break;
 
-				case CsvColumnDelimiterMode.Semicolon:
-					actualColumnDelimiter = ";";
-					break;
+			case CsvColumnDelimiterMode.Semicolon:
+				actualColumnDelimiter = ";";
+				break;
 
-				case CsvColumnDelimiterMode.Pipe:
-					actualColumnDelimiter = "|";
-					break;
+			case CsvColumnDelimiterMode.Pipe:
+				actualColumnDelimiter = "|";
+				break;
 
-				case CsvColumnDelimiterMode.Tab:
-					actualColumnDelimiter = "\t";
-					break;
+			case CsvColumnDelimiterMode.Tab:
+				actualColumnDelimiter = "\t";
+				break;
 
-				case CsvColumnDelimiterMode.Space:
-					actualColumnDelimiter = " ";
-					break;
+			case CsvColumnDelimiterMode.Space:
+				actualColumnDelimiter = " ";
+				break;
 
-				case CsvColumnDelimiterMode.Custom:
-					actualColumnDelimiter = CustomColumnDelimiter;
-					break;
+			case CsvColumnDelimiterMode.Custom:
+				actualColumnDelimiter = CustomColumnDelimiter;
+				break;
 			}
 
 			quotableCharacters = (QuoteChar + "\r\n" + actualColumnDelimiter).ToCharArray();

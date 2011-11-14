@@ -216,6 +216,10 @@ namespace NLog.Targets
 				}
 			}
 		}
+		
+		public void CreateChilds(LoggingConfiguration configuration)
+		{
+		}
 
 		/// <summary>
 		/// Initializes this instance.

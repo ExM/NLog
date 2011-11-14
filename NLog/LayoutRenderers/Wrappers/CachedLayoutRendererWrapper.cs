@@ -1,9 +1,9 @@
+using NLog.Common;
+using NLog.Config;
+using System.ComponentModel;
 
 namespace NLog.LayoutRenderers.Wrappers
 {
-	using System.ComponentModel;
-	using NLog.Config;
-
 	/// <summary>
 	/// Applies caching to another layout output.
 	/// </summary>
@@ -13,16 +13,16 @@ namespace NLog.LayoutRenderers.Wrappers
 	[LayoutRenderer("cached")]
 	[AmbientProperty("Cached")]
 	[ThreadAgnostic]
-	public sealed class CachedLayoutRendererWrapper : WrapperLayoutRendererBase
+	public sealed class CachedLayoutRendererWrapper : WrapperLayoutRendererBase, ISupportsInitialize
 	{
-		private string cachedValue;
+		private string _cachedValue;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CachedLayoutRendererWrapper"/> class.
 		/// </summary>
 		public CachedLayoutRendererWrapper()
 		{
-			this.Cached = true;
+			Cached = true;
 		}
 
 		/// <summary>
@@ -32,22 +32,14 @@ namespace NLog.LayoutRenderers.Wrappers
 		[DefaultValue(true)]
 		public bool Cached { get; set; }
 
-		/// <summary>
-		/// Initializes the layout renderer.
-		/// </summary>
-		protected override void InternalInit(LoggingConfiguration cfg)
+		public void Initialize(LoggingConfiguration configuration)
 		{
-			base.InternalInit(cfg);
-			this.cachedValue = null;
+			_cachedValue = null;
 		}
 
-		/// <summary>
-		/// Closes the layout renderer.
-		/// </summary>
-		protected override void InternalClose()
+		public void Close()
 		{
-			base.InternalClose();
-			this.cachedValue = null;
+			_cachedValue = null;
 		}
 
 		/// <summary>
@@ -67,19 +59,15 @@ namespace NLog.LayoutRenderers.Wrappers
 		/// <returns>Contents of inner layout.</returns>
 		protected override string RenderInner(LogEventInfo logEvent)
 		{
-			if (this.Cached)
+			if(Cached)
 			{
-				if (this.cachedValue == null)
-				{
-					this.cachedValue = base.RenderInner(logEvent);
-				}
+				if (_cachedValue == null)
+					_cachedValue = base.RenderInner(logEvent);
 
-				return this.cachedValue;
+				return _cachedValue;
 			}
 			else
-			{
 				return base.RenderInner(logEvent);
-			}
 		}
 	}
 }

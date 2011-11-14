@@ -1,16 +1,16 @@
+using System;
+using System.IO;
+using System.Text;
+using NUnit.Framework;
+using NLog.Common;
+using NLog.Config;
+using NLog.Internal;
+using NLog.LayoutRenderers;
+using NLog.Layouts;
+using NLog.Common;
 
 namespace NLog.UnitTests.Layouts
 {
-	using System;
-	using System.IO;
-	using System.Text;
-	using NUnit.Framework;
-	using NLog.Common;
-	using NLog.Config;
-	using NLog.Internal;
-	using NLog.LayoutRenderers;
-	using NLog.Layouts;
-
 	[TestFixture]
 	public class SimpleLayoutOutputTests : NLogTestBase
 	{
@@ -20,7 +20,7 @@ namespace NLog.UnitTests.Layouts
 			int stringLength = 100000;
 
 			SimpleLayout l = new string('x', stringLength) + "${message}";
-			l.Initialize(CommonCfg);
+			l.DeepInitialize(CommonCfg);
 
 			string output = l.Render(LogEventInfo.CreateNullEvent());
 			Assert.AreEqual(new string('x', stringLength), output);
@@ -36,7 +36,7 @@ namespace NLog.UnitTests.Layouts
 			configurationItemFactory.LayoutRenderers.RegisterDefinition("throwsException", typeof(ThrowsExceptionRenderer));
 			var cfg = new LoggingConfiguration(configurationItemFactory);
 			SimpleLayout l = new SimpleLayout("xx${throwsException}yy", cfg);
-			l.Initialize(cfg);
+			l.DeepInitialize(cfg);
 			string output = l.Render(LogEventInfo.CreateNullEvent());
 			Assert.AreEqual("xxyy", output);
 		}
@@ -46,7 +46,7 @@ namespace NLog.UnitTests.Layouts
 		{
 			var l = new SimpleLayout("xx${level}yy");
 			var ev = LogEventInfo.CreateNullEvent();
-			l.Initialize(CommonCfg);
+			l.DeepInitialize(CommonCfg);
 			string output1 = l.Render(ev);
 			string output2 = l.Render(ev);
 			Assert.AreSame(output1, output2);
@@ -72,7 +72,7 @@ namespace NLog.UnitTests.Layouts
 						configurationItemFactory.LayoutRenderers.RegisterDefinition("throwsException", typeof(ThrowsExceptionRenderer));
 
 						SimpleLayout l = new SimpleLayout("xx${throwsException:msg1}yy${throwsException:msg2}zz", new LoggingConfiguration(configurationItemFactory));
-						l.Initialize(CommonCfg);
+						l.DeepInitialize(CommonCfg);
 						string output = l.Render(LogEventInfo.CreateNullEvent());
 						Assert.AreEqual("xxyyzz", output);
 					}, 
@@ -90,7 +90,7 @@ namespace NLog.UnitTests.Layouts
 			Assert.AreEqual(0, lr.CloseCount);
 
 			// make sure render will call Init
-			lr.Initialize(CommonCfg);
+			lr.DeepInitialize(CommonCfg);
 			lr.Render(LogEventInfo.CreateNullEvent());
 			Assert.AreEqual(1, lr.InitCount);
 			Assert.AreEqual(0, lr.CloseCount);
@@ -117,7 +117,7 @@ namespace NLog.UnitTests.Layouts
 			Assert.AreEqual(0, lr.InitCount);
 			Assert.AreEqual(0, lr.CloseCount);
 
-			lr.Initialize(CommonCfg);
+			lr.DeepInitialize(CommonCfg);
 			Assert.AreEqual(1, lr.InitCount);
 
 			// make sure render will not call another Init
@@ -147,27 +147,25 @@ namespace NLog.UnitTests.Layouts
 			}
 		}
 
-		public class MockLayout : Layout
+		public class MockLayout : Layout, ISupportsInitialize
 		{
 			public int InitCount { get; set; }
 
 			public int CloseCount { get; set; }
 
-			protected override void InternalInit(LoggingConfiguration cfg)
-			{
-				base.InternalInit(cfg);
-				this.InitCount++;
-			}
-
-			protected override void InternalClose()
-			{
-				base.InternalClose();
-				this.CloseCount++;
-			}
-
 			protected override string GetFormattedMessage(LogEventInfo logEvent)
 			{
 				return "foo";
+			}
+
+			void ISupportsInitialize.Initialize(LoggingConfiguration configuration)
+			{
+				InitCount++;
+			}
+
+			void ISupportsInitialize.Close()
+			{
+				CloseCount++;
 			}
 		}
 	}

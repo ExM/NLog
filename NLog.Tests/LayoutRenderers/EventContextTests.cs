@@ -6,6 +6,7 @@ using NLog.Config;
 using NUnit.Framework;
 using NLog.Internal;
 using NLog.Layouts;
+using NLog.Common;
 
 namespace NLog.UnitTests.LayoutRenderers
 {
@@ -17,7 +18,7 @@ namespace NLog.UnitTests.LayoutRenderers
 		{
 			Layout l = "${event-context:aaa}";
 			LogEventInfo lei = LogEventInfo.Create(LogLevel.Info, "aaa", "bbb");
-			l.Initialize(CommonCfg);
+			l.DeepInitialize(CommonCfg);
 			// empty
 			Assert.AreEqual("", l.Render(lei));
 		}
@@ -28,7 +29,7 @@ namespace NLog.UnitTests.LayoutRenderers
 			Layout l = "${event-context:aaa}";
 			LogEventInfo lei = LogEventInfo.Create(LogLevel.Info, "aaa", "bbb");
 			lei.Properties["aaa"] = "bbb";
-			l.Initialize(CommonCfg);
+			l.DeepInitialize(CommonCfg);
 			// empty
 			Assert.AreEqual("bbb", l.Render(lei));
 		}

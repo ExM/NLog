@@ -33,18 +33,6 @@ namespace NLog.Conditions
 		/// <see cref="ConditionExpression"/> tree.
 		/// </summary>
 		/// <param name="expressionText">The expression to be parsed.</param>
-		/// <returns>The root of the expression syntax tree which can be used to get the value of the condition in a specified context.</returns>
-		//public static ConditionExpression ParseExpression(string expressionText)
-		//{
-		//	return ParseExpression(expressionText, ConfigurationItemFactory.Default);
-
-		//}
-
-		/// <summary>
-		/// Parses the specified condition string and turns it into
-		/// <see cref="ConditionExpression"/> tree.
-		/// </summary>
-		/// <param name="expressionText">The expression to be parsed.</param>
 		/// <param name="configurationItemFactories">Instance of <see cref="ConfigurationItemFactory"/> used to resolve references to condition methods and layout renderers.</param>
 		/// <returns>The root of the expression syntax tree which can be used to get the value of the condition in a specified context.</returns>
 		public static ConditionExpression ParseExpression(string expressionText, LoggingConfiguration cfg)

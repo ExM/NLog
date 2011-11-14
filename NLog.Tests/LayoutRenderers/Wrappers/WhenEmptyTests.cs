@@ -1,12 +1,12 @@
+using System;
+using NLog;
+using NUnit.Framework;
+using NLog.Internal;
+using NLog.Layouts;
+using NLog.Common;
 
 namespace NLog.UnitTests.LayoutRenderers.Wrappers
 {
-	using System;
-	using NLog;
-	using NUnit.Framework;
-	using NLog.Internal;
-	using NLog.Layouts;
-
 	[TestFixture]
 	public class WhenEmptyTests : NLogTestBase
 	{
@@ -14,7 +14,7 @@ namespace NLog.UnitTests.LayoutRenderers.Wrappers
 		public void CoalesceTest()
 		{
 			SimpleLayout l = @"${message:whenEmpty=<no message>}";
-			l.Initialize(CommonCfg);
+			l.DeepInitialize(CommonCfg);
 			var le = LogEventInfo.Create(LogLevel.Info, "logger", "message");
 			Assert.AreEqual("message", l.Render(le));
 
@@ -27,7 +27,7 @@ namespace NLog.UnitTests.LayoutRenderers.Wrappers
 		public void CoalesceWithANestedLayout()
 		{
 			SimpleLayout l = @"${message:whenEmpty=${logger} emitted empty message}";
-			l.Initialize(CommonCfg);
+			l.DeepInitialize(CommonCfg);
 			var le = LogEventInfo.Create(LogLevel.Info, "logger", "message");
 			Assert.AreEqual("message", l.Render(le));
 

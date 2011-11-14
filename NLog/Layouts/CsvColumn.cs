@@ -9,7 +9,7 @@ namespace NLog.Layouts
 	/// </summary>
 	[NLogConfigurationItem]
 	[ThreadAgnostic]
-	public sealed class CsvColumn: ISupportsInitialize
+	public sealed class CsvColumn
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CsvColumn" /> class.
@@ -42,15 +42,5 @@ namespace NLog.Layouts
 		/// <docgen category='CSV Column Options' order='10' />
 		[RequiredParameter]
 		public Layout Layout { get; set; }
-		
-		public void Initialize(LoggingConfiguration cfg)
-		{
-			Layout.Initialize(cfg);
-		}
-
-		public void Close()
-		{
-			Layout.Close();
-		}
 	}
 }

@@ -1,12 +1,15 @@
 using NLog.Layouts;
 using NLog.Config;
+using NLog.Common;
+using System;
+using NLog.Internal;
 
 namespace NLog.Conditions
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class ConditionLazyExpression : ConditionExpression
+	public sealed class ConditionLazyExpression : ConditionExpression, ISupportsLazyCast
 	{
 		private ConditionExpression _condEx;
 
@@ -40,12 +43,14 @@ namespace NLog.Conditions
 		/// </summary>
 		protected override object EvaluateNode(LogEventInfo context)
 		{
+			if(_condEx == null)
+				throw new InvalidOperationException("required run CreateChilds method");
+		
 			return _condEx.Evaluate(context);
 		}
 
-		protected override void InternalInit(LoggingConfiguration cfg)
+		public void CreateChilds(LoggingConfiguration cfg)
 		{
-			base.InternalInit(cfg);
 			_condEx = ConditionParser.ParseExpression(Text, cfg);
 		}
 	}

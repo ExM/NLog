@@ -82,9 +82,10 @@ namespace NLog.UnitTests
 
 		protected void AssertLayoutRendererOutput(Layout l, string expected)
 		{
-			l.Initialize(CommonCfg);
+			l.DeepInitialize(CommonCfg);
 			string actual = l.Render(LogEventInfo.Create(LogLevel.Info, "loggername", "message"));
-			l.Close();
+			//l.Close();
+			//TODO: close Layout
 			Assert.AreEqual(expected, actual);
 		}
 

@@ -1,10 +1,10 @@
+using NLog;
+using NUnit.Framework;
+using NLog.Layouts;
+using NLog.Common;
 
 namespace NLog.UnitTests.LayoutRenderers.Wrappers
 {
-	using NLog;
-	using NUnit.Framework;
-	using NLog.Layouts;
-
 	[TestFixture]
 	public class XmlEncodeTests : NLogTestBase
 	{
@@ -14,7 +14,7 @@ namespace NLog.UnitTests.LayoutRenderers.Wrappers
 			MappedDiagnosticsContext.Clear();
 			MappedDiagnosticsContext.Set("foo", " abc<>&'\"def ");
 			SimpleLayout l = "${xml-encode:${mdc:foo}}";
-			l.Initialize(CommonCfg);
+			l.DeepInitialize(CommonCfg);
 			Assert.AreEqual(" abc&lt;&gt;&amp;&apos;&quot;def ", l.Render(LogEventInfo.CreateNullEvent()));
 		}
 	}

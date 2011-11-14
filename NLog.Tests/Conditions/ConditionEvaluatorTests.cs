@@ -1,14 +1,14 @@
+using System;
+using System.Globalization;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using NUnit.Framework;
+using NLog.Conditions;
+using NLog.Config;
+using NLog.Common;
 
 namespace NLog.UnitTests.Conditions
 {
-	using System;
-	using System.Globalization;
-	using System.IO;
-	using System.Runtime.Serialization.Formatters.Binary;
-	using NUnit.Framework;
-	using NLog.Conditions;
-	using NLog.Config;
-
 	[TestFixture]
 	public class ConditionEvaluatorTests : NLogTestBase
 	{
@@ -203,7 +203,7 @@ namespace NLog.UnitTests.Conditions
 		private void AssertTypePromotionTest(bool expected, string text, LoggingConfiguration cfg)
 		{
 			ConditionExpression condition = ConditionParser.ParseExpression(text, cfg);
-			condition.Initialize(cfg);
+			condition.DeepInitialize(cfg);
 			LogEventInfo context = CreateWellKnownContext();
 			object actualResult = condition.Evaluate(context);
 			Assert.AreEqual(expected, actualResult);
@@ -325,7 +325,7 @@ namespace NLog.UnitTests.Conditions
 		private void AssertEvaluationResult(object expectedResult, string conditionText)
 		{
 			ConditionExpression condition = ConditionParser.ParseExpression(conditionText, CommonCfg);
-			condition.Initialize(CommonCfg);
+			condition.DeepInitialize(CommonCfg);
 			LogEventInfo context = CreateWellKnownContext();
 			object actualResult = condition.Evaluate(context);
 			Assert.AreEqual(expectedResult, actualResult);

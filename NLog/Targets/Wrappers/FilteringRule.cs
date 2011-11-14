@@ -10,10 +10,8 @@ namespace NLog.Targets.Wrappers
 	/// Filtering rule for <see cref="PostFilteringTargetWrapper"/>.
 	/// </summary>
 	[NLogConfigurationItem]
-	public sealed class FilteringRule : ISupportsInitialize
+	public sealed class FilteringRule
 	{
-		private bool _isInitialized;
-
 		/// <summary>
 		/// Initializes a new instance of the FilteringRule class.
 		/// </summary>
@@ -46,38 +44,5 @@ namespace NLog.Targets.Wrappers
 		/// <docgen category='Filtering Options' order='10' />
 		[RequiredParameter]
 		public ConditionExpression Filter { get; set; }
-
-		/// <summary>
-		/// Initializes this instance.
-		/// </summary>
-		/// <param name="configuration">The configuration.</param>
-		public void Initialize(LoggingConfiguration cfg)
-		{
-			if(_isInitialized)
-				return;
-
-			_isInitialized = true;
-
-			if (Exists != null)
-				Exists.Initialize(cfg);
-			if (Filter != null)
-				Filter.Initialize(cfg);
-		}
-
-		/// <summary>
-		/// Closes this instance.
-		/// </summary>
-		public void Close()
-		{
-			if(!_isInitialized)
-				return;
-
-			_isInitialized = false;
-
-			if (Exists != null)
-				Exists.Close();
-			if (Filter != null)
-				Filter.Close();
-		}
 	}
 }

@@ -76,16 +76,12 @@ namespace NLog.Layouts
 		/// Initializes this instance.
 		/// </summary>
 		/// <param name="cfg">The configuration.</param>
-		public void Initialize(LoggingConfiguration cfg)
+		public virtual void Initialize(LoggingConfiguration cfg)
 		{
 			if(_isInitialized)
 				return;
-
-			_isInitialized = true;
-			InternalInit(cfg);
 			
-			foreach(var item in ObjectGraph.OneLevelChilds<ISupportsInitialize>(this)) //HACK: cached to close?
-				item.Initialize(cfg);
+			_isInitialized = true;
 			
 			_threadAgnostic = ObjectGraph.ResolveThreadAgnostic(this);
 		}
@@ -93,31 +89,12 @@ namespace NLog.Layouts
 		/// <summary>
 		/// Closes this instance.
 		/// </summary>
-		public void Close()
+		public virtual void Close()
 		{
 			if(!_isInitialized)
 				return;
 			
 			_isInitialized = false;
-			InternalClose();
-			
-			foreach(var item in ObjectGraph.OneLevelChilds<ISupportsInitialize>(this))
-				item.Close();
-		}
-
-		/// <summary>
-		/// Initializes the layout.
-		/// </summary>
-		/// <param name="cfg">The configuration.</param>
-		protected virtual void InternalInit(LoggingConfiguration cfg)
-		{
-		}
-
-		/// <summary>
-		/// Closes the layout.
-		/// </summary>
-		protected virtual void InternalClose()
-		{
 		}
 
 		/// <summary>

@@ -3,6 +3,7 @@ using NLog;
 using NUnit.Framework;
 using NLog.Internal;
 using NLog.Layouts;
+using NLog.Common;
 
 namespace NLog.UnitTests.LayoutRenderers.Wrappers
 {
@@ -13,7 +14,7 @@ namespace NLog.UnitTests.LayoutRenderers.Wrappers
 		public void OnExceptionTest1()
 		{
 			SimpleLayout l = @"${message}${onexception:EXCEPTION\:${exception:format=message}}${logger}";
-			l.Initialize(CommonCfg);
+			l.DeepInitialize(CommonCfg);
 			// no exception - ${onexception} is ignored completely
 			var le = LogEventInfo.Create(LogLevel.Info, "logger", "message");
 			Assert.AreEqual("messagelogger", l.Render(le));

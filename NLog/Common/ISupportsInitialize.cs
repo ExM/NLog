@@ -11,7 +11,7 @@ namespace NLog.Common
 		/// Initializes this instance.
 		/// </summary>
 		/// <param name="configuration">The configuration.</param>
-		void Initialize(LoggingConfiguration configuration); //
+		void Initialize(LoggingConfiguration configuration);
 
 		/// <summary>
 		/// Closes this instance.

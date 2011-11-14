@@ -18,7 +18,7 @@ namespace NLog.Layouts
 	[Layout("SimpleLayout")]
 	[ThreadAgnostic]
 	[AppDomainFixedOutput]
-	public class SimpleLayout : Layout
+	public class SimpleLayout : Layout, ISupportsLazyCast
 	{
 		private const int MaxInitialRenderBufferLength = 16384;
 		private int _maxRenderedLength;
@@ -59,23 +59,10 @@ namespace NLog.Layouts
 			SetRenderers(renderers);
 		}
 		
-		protected override void InternalInit(LoggingConfiguration cfg)
+		public void CreateChilds(LoggingConfiguration cfg)
 		{
-			base.InternalInit(cfg);
-			
 			if(Renderers == null)
 				SetRenderers(LayoutParser.CompileLayout(cfg, _layoutText));
-
-			foreach (LayoutRenderer renderer in Renderers)
-				renderer.Initialize(cfg);
-		}
-		
-		protected override void InternalClose()
-		{
-			base.InternalClose();
-			
-			foreach (LayoutRenderer renderer in Renderers)
-				renderer.Close();
 		}
 
 		/// <summary>
@@ -137,7 +124,7 @@ namespace NLog.Layouts
 		public static string Evaluate(LoggingConfiguration cfg, string text, LogEventInfo logEvent)
 		{
 			var l = new SimpleLayout(text);
-			l.Initialize(cfg);
+			l.DeepInitialize(cfg);
 			return l.Render(logEvent);
 		}
 
@@ -181,6 +168,9 @@ namespace NLog.Layouts
 		/// <returns>The rendered layout.</returns>
 		protected override string GetFormattedMessage(LogEventInfo logEvent)
 		{
+			if(Renderers == null)
+				throw new InvalidOperationException("required run CreateChilds method");
+		
 			if (_fixedText != null)
 				return _fixedText;
 

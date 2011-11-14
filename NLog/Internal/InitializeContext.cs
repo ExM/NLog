@@ -42,10 +42,13 @@ namespace NLog.Internal
 				return;
 
 			ObjectGraph.CheckRequiredParameters(root);
-			AttemptInitialize(root as ISupportsInitialize);
-
+			
+			AttemptLazyCast(root as ISupportsLazyCast);
+			
 			foreach (object child in ObjectGraph.OneLevelChilds(root))
 				DeepInitialize(child);
+				
+			AttemptInitialize(root as ISupportsInitialize);
 		}
 
 		private void AttemptInitialize(ISupportsInitialize supInit)
@@ -68,6 +71,12 @@ namespace NLog.Internal
 				if (_throwExceptions)
 					throw new NLogConfigurationException("Error during initialization of " + supInit, exception);
 			}
+		}
+		
+		private void AttemptLazyCast(ISupportsLazyCast supLazyCast)
+		{
+			if(supLazyCast != null)
+				supLazyCast.CreateChilds(_cfg);
 		}
 	}
 }

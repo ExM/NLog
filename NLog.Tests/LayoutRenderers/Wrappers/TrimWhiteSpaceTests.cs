@@ -1,11 +1,11 @@
+using NLog.Common;
+using NLog;
+using NUnit.Framework;
+using NLog.Internal;
+using NLog.Layouts;
 
 namespace NLog.UnitTests.LayoutRenderers.Wrappers
 {
-	using NLog;
-	using NUnit.Framework;
-	using NLog.Internal;
-	using NLog.Layouts;
-
 	[TestFixture]
 	public class TrimWhiteSpaceTests : NLogTestBase
 	{
@@ -15,7 +15,7 @@ namespace NLog.UnitTests.LayoutRenderers.Wrappers
 			MappedDiagnosticsContext.Clear();
 			MappedDiagnosticsContext.Set("foo", "  bar  ");
 			SimpleLayout l = "${trim-whitespace:${mdc:foo}}";
-			l.Initialize(CommonCfg);
+			l.DeepInitialize(CommonCfg);
 			Assert.AreEqual("bar", l.Render(LogEventInfo.CreateNullEvent()));
 
 			MappedDiagnosticsContext.Set("foo", "");

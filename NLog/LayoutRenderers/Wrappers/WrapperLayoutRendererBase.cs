@@ -1,10 +1,9 @@
+using System.Text;
+using NLog.Config;
+using NLog.Layouts;
 
 namespace NLog.LayoutRenderers.Wrappers
 {
-	using System.Text;
-	using NLog.Config;
-	using NLog.Layouts;
-
 	/// <summary>
 	/// Decodes text "encrypted" with ROT-13.
 	/// </summary>
@@ -28,7 +27,7 @@ namespace NLog.LayoutRenderers.Wrappers
 		protected override void Append(StringBuilder builder, LogEventInfo logEvent)
 		{
 			string msg = this.RenderInner(logEvent);
-			builder.Append(this.Transform(msg));
+			builder.Append(Transform(msg));
 		}
 
 		/// <summary>
@@ -45,7 +44,7 @@ namespace NLog.LayoutRenderers.Wrappers
 		/// <returns>Contents of inner layout.</returns>
 		protected virtual string RenderInner(LogEventInfo logEvent)
 		{
-			return this.Inner.Render(logEvent);
+			return Inner.Render(logEvent);
 		}
 	}
 }

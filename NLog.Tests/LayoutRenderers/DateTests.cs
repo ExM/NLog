@@ -4,6 +4,7 @@ using System.Reflection;
 using NLog;
 using NLog.Config;
 using NUnit.Framework;
+using NLog.Common;
 
 namespace NLog.UnitTests.LayoutRenderers
 {
@@ -39,7 +40,7 @@ namespace NLog.UnitTests.LayoutRenderers
 			dt.Format = "R";
 
 			var ei = new LogEventInfo(LogLevel.Info, "logger", "msg");
-			dt.Initialize(CommonCfg);
+			dt.DeepInitialize(CommonCfg);
 			Assert.AreEqual(ei.TimeStamp.ToUniversalTime().ToString("R"), dt.Render(ei));
 		}
 
@@ -51,7 +52,7 @@ namespace NLog.UnitTests.LayoutRenderers
 			dt.Format = "R";
 
 			var ei = new LogEventInfo(LogLevel.Info, "logger", "msg");
-			dt.Initialize(CommonCfg);
+			dt.DeepInitialize(CommonCfg);
 			Assert.AreEqual(ei.TimeStamp.ToString("R"), dt.Render(ei));
 		}
 

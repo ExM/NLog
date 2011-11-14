@@ -1,17 +1,18 @@
+using System.Text.RegularExpressions;
+using NLog.Config;
+using NLog.Common;
+using System;
 
 namespace NLog.LayoutRenderers.Wrappers
 {
-	using System.Text.RegularExpressions;
-	using NLog.Config;
-
 	/// <summary>
 	/// Replaces a string in the output of another layout with another string.
 	/// </summary>
 	[LayoutRenderer("replace")]
 	[ThreadAgnostic]
-	public sealed class ReplaceLayoutRendererWrapper : WrapperLayoutRendererBase
+	public sealed class ReplaceLayoutRendererWrapper : WrapperLayoutRendererBase, ISupportsInitialize
 	{
-		private Regex regex;
+		private Regex _regex;
 
 		/// <summary>
 		/// Gets or sets the text to search for.
@@ -49,40 +50,47 @@ namespace NLog.LayoutRenderers.Wrappers
 		public bool WholeWords { get; set; }
 
 		/// <summary>
-		/// Initializes the layout renderer.
-		/// </summary>
-		protected override void InternalInit(LoggingConfiguration cfg)
-		{
-			base.InternalInit(cfg);
-			string regexString = this.SearchFor;
-
-			if (!this.Regex)
-			{
-				regexString = System.Text.RegularExpressions.Regex.Escape(regexString);
-			}
-
-			RegexOptions regexOptions = RegexOptions.Compiled;
-			if (this.IgnoreCase)
-			{
-				regexOptions |= RegexOptions.IgnoreCase;
-			}
-
-			if (this.WholeWords)
-			{
-				regexString = "\\b" + regexString + "\\b";
-			}
-
-			this.regex = new Regex(regexString, regexOptions);
-		}
-
-		/// <summary>
 		/// Post-processes the rendered message. 
 		/// </summary>
 		/// <param name="text">The text to be post-processed.</param>
 		/// <returns>Post-processed text.</returns>
 		protected override string Transform(string text)
 		{
-			return this.regex.Replace(text, this.ReplaceWith);
+			if(!_isInitialized)
+				throw new InvalidOperationException("required run Initialize method");
+			return _regex.Replace(text, ReplaceWith);
+		}
+		
+		private bool _isInitialized = false;
+
+		public void Initialize(LoggingConfiguration configuration)
+		{
+			if(_isInitialized)
+				return;
+			
+			_isInitialized = true;
+			
+			string regexString = SearchFor;
+
+			if(!Regex)
+				regexString = System.Text.RegularExpressions.Regex.Escape(regexString);
+
+			RegexOptions regexOptions = RegexOptions.Compiled;
+			if(IgnoreCase)
+				regexOptions |= RegexOptions.IgnoreCase;
+
+			if(WholeWords)
+				regexString = "\\b" + regexString + "\\b";
+
+			_regex = new Regex(regexString, regexOptions);
+		}
+
+		public void Close()
+		{
+			if(!_isInitialized)
+				return;
+			
+			_isInitialized = false;
 		}
 	}
 }

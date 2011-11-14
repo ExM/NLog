@@ -1,18 +1,19 @@
+using NLog.Common;
+using System.Diagnostics;
+using System.Globalization;
+using System.Text;
+using NLog.Config;
+using System;
 
 namespace NLog.LayoutRenderers
 {
-	using System.Diagnostics;
-	using System.Globalization;
-	using System.Text;
-	using NLog.Config;
-
 	/// <summary>
 	/// The performance counter.
 	/// </summary>
 	[LayoutRenderer("performancecounter")]
-	public class PerformanceCounterLayoutRenderer : LayoutRenderer
+	public class PerformanceCounterLayoutRenderer : LayoutRenderer, ISupportsInitialize
 	{
-		private PerformanceCounter perfCounter;
+		private PerformanceCounter _perfCounter;
 
 		/// <summary>
 		/// Gets or sets the name of the counter category.
@@ -41,43 +42,41 @@ namespace NLog.LayoutRenderers
 		public string MachineName { get; set; }
 
 		/// <summary>
-		/// Initializes the layout renderer.
-		/// </summary>
-		protected override void InternalInit(LoggingConfiguration cfg)
-		{
-			base.InternalInit(cfg);
-
-			if (this.MachineName != null)
-			{
-				this.perfCounter = new PerformanceCounter(this.Category, this.Counter, this.Instance, this.MachineName);
-			}
-			else
-			{
-				this.perfCounter = new PerformanceCounter(this.Category, this.Counter, this.Instance, true);
-			}
-		}
-
-		/// <summary>
-		/// Closes the layout renderer.
-		/// </summary>
-		protected override void InternalClose()
-		{
-			base.InternalClose();
-			if (this.perfCounter != null)
-			{
-				this.perfCounter.Close();
-				this.perfCounter = null;
-			}
-		}
-
-		/// <summary>
 		/// Renders the specified environment variable and appends it to the specified <see cref="StringBuilder" />.
 		/// </summary>
 		/// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
 		/// <param name="logEvent">Logging event.</param>
 		protected override void Append(StringBuilder builder, LogEventInfo logEvent)
 		{
-			builder.Append(this.perfCounter.NextValue().ToString(CultureInfo.InvariantCulture));
+			if(!_isInitialized)
+				throw new InvalidOperationException("required run Initialize method");
+			builder.Append(_perfCounter.NextValue().ToString(CultureInfo.InvariantCulture));
+		}
+
+		private bool _isInitialized = false;
+
+		public void Initialize(LoggingConfiguration configuration)
+		{
+			if(_isInitialized)
+				return;
+			
+			_isInitialized = true;
+			
+			if(MachineName != null)
+				_perfCounter = new PerformanceCounter(Category, Counter, Instance, MachineName);
+			else
+				_perfCounter = new PerformanceCounter(Category, Counter, Instance, true);
+		}
+
+		public void Close()
+		{
+			if(!_isInitialized)
+				return;
+			
+			_isInitialized = false;
+			
+			_perfCounter.Close();
+			_perfCounter = null;
 		}
 	}
 }

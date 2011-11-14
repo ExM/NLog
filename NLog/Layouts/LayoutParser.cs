@@ -334,9 +334,9 @@ namespace NLog.Layouts
 
 		private static LayoutRenderer ConvertToLiteral(LoggingConfiguration cfg, LayoutRenderer renderer)
 		{
-			renderer.Initialize(cfg);
+			renderer.DeepInitialize(cfg);
 			string text = renderer.Render(LogEventInfo.CreateNullEvent());
-			renderer.Close();
+			//TODO: close renderer
 			return new LiteralLayoutRenderer(text);
 		}
 	}
