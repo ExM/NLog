@@ -97,7 +97,7 @@
     <Compile Include="Filters\WhenNotEqualFilter.cs" />
     <Compile Include="GlobalDiagnosticsContext.cs" />
     <Compile Include="Internal\InitializeContext.cs" />
-    <Compile Include="Common\ObjectGraph.cs" />
+    <Compile Include="Internal\ObjectGraph.cs" />
     <Compile Include="Internal\CurrentTimeGetter.cs" />
     <Compile Include="Internal\DictionaryAdapter.cs" />
     <Compile Include="Internal\EnvironmentHelper.cs" />

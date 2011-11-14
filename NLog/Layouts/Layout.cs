@@ -60,6 +60,15 @@ namespace NLog.Layouts
 		}
 
 		/// <summary>
+		/// Initialize for tests
+		/// </summary>
+		/// <param name="cfg"></param>
+		public void DeepInitialize(LoggingConfiguration cfg)
+		{
+			ObjectGraph.DeepInitialize(this, cfg, LogManager.ThrowExceptions);
+		}
+
+		/// <summary>
 		/// Renders the event info in layout.
 		/// </summary>
 		/// <param name="logEvent">The event info.</param>

@@ -47,6 +47,15 @@ namespace NLog.Targets
 		protected bool IsInitialized { get; private set; }
 
 		/// <summary>
+		/// Initialize for tests
+		/// </summary>
+		/// <param name="cfg"></param>
+		public void DeepInitialize(LoggingConfiguration cfg)
+		{
+			ObjectGraph.DeepInitialize(this, cfg, LogManager.ThrowExceptions);
+		}
+
+		/// <summary>
 		/// Initializes this instance.
 		/// </summary>
 		/// <param name="configuration">The configuration.</param>

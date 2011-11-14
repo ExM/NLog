@@ -3,18 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using NLog.Config;
-using NLog.Internal;
+using NLog.Common;
 
-namespace NLog.Common
+namespace NLog.Internal
 {
-	public static class ObjectGraph
+	internal static class ObjectGraph
 	{
-		public static ISupportsInitialize[] DeepInitialize(this object root, LoggingConfiguration cfg)
-		{
-			return DeepInitialize(root, cfg, LogManager.ThrowExceptions);
-		}
-
-		public static ISupportsInitialize[] DeepInitialize(this object root, LoggingConfiguration cfg, bool throwExceptions)
+		public static ISupportsInitialize[] DeepInitialize(object root, LoggingConfiguration cfg, bool throwExceptions)
 		{
 			InitializeContext context = new InitializeContext(cfg, throwExceptions);
 			context.DeepInitialize(root);

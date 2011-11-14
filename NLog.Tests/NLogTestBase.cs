@@ -84,8 +84,6 @@ namespace NLog.UnitTests
 		{
 			l.DeepInitialize(CommonCfg);
 			string actual = l.Render(LogEventInfo.Create(LogLevel.Info, "loggername", "message"));
-			//l.Close();
-			//TODO: close Layout
 			Assert.AreEqual(expected, actual);
 		}
 

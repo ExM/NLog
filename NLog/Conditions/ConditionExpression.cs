@@ -23,6 +23,15 @@ namespace NLog.Conditions
 		}
 
 		/// <summary>
+		/// Initialize for tests
+		/// </summary>
+		/// <param name="cfg"></param>
+		public void DeepInitialize(LoggingConfiguration cfg)
+		{
+			ObjectGraph.DeepInitialize(this, cfg, LogManager.ThrowExceptions);
+		}
+
+		/// <summary>
 		/// Evaluates the expression.
 		/// </summary>
 		/// <param name="context">Evaluation context.</param>

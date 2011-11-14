@@ -34,6 +34,15 @@ namespace NLog.LayoutRenderers
 		}
 
 		/// <summary>
+		/// Initialize for tests
+		/// </summary>
+		/// <param name="cfg"></param>
+		public void DeepInitialize(LoggingConfiguration cfg)
+		{
+			ObjectGraph.DeepInitialize(this, cfg, LogManager.ThrowExceptions);
+		}
+
+		/// <summary>
 		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
 		/// </summary>
 		public void Dispose()
