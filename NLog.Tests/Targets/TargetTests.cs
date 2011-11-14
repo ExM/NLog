@@ -16,7 +16,7 @@ namespace NLog.UnitTests.Targets
 		public void InitializeTest()
 		{
 			var target = new MyTarget();
-			target.Initialize(null);
+			target.DeepInitialize(CommonCfg);
 
 			// initialize was called once
 			Assert.AreEqual(1, target.InitializeCount);
@@ -30,11 +30,11 @@ namespace NLog.UnitTests.Targets
 			target.ThrowOnInitialize = true;
 			try
 			{
-				target.Initialize(null);
+				target.DeepInitialize(CommonCfg);
 				Assert.Fail("Expected exception.");
 			}
-			catch (InvalidOperationException)
-			{
+			catch(NLogConfigurationException) //(InvalidOperationException)
+			{ // HACK: check out the new behavior to throw exceptions
 			}
 
 			// after exception in Initialize(), the target becomes non-functional and all Write() operations
@@ -51,8 +51,8 @@ namespace NLog.UnitTests.Targets
 		public void DoubleInitializeTest()
 		{
 			var target = new MyTarget();
-			target.Initialize(null);
-			target.Initialize(null);
+			target.DeepInitialize(CommonCfg);
+			target.DeepInitialize(CommonCfg);
 
 			// initialize was called once
 			Assert.AreEqual(1, target.InitializeCount);
@@ -63,9 +63,9 @@ namespace NLog.UnitTests.Targets
 		public void DoubleCloseTest()
 		{
 			var target = new MyTarget();
-			target.Initialize(null);
-			target.Close();
-			target.Close();
+			using (target.DeepInitialize(CommonCfg))
+			{
+			}
 
 			// initialize and close were called once each
 			Assert.AreEqual(1, target.InitializeCount);
@@ -77,7 +77,7 @@ namespace NLog.UnitTests.Targets
 		public void CloseWithoutInitializeTest()
 		{
 			var target = new MyTarget();
-			target.Close();
+			((ISupportsInitialize)target).Close();
 
 			// nothing was called
 			Assert.AreEqual(0, target.InitializeCount + target.FlushCount + target.CloseCount + target.WriteCount + target.WriteCount2 + target.WriteCount3);
@@ -106,8 +106,9 @@ namespace NLog.UnitTests.Targets
 		public void WriteOnClosedTargetTest()
 		{
 			var target = new MyTarget();
-			target.Initialize(null);
-			target.Close();
+			using(target.DeepInitialize(CommonCfg))
+			{
+			}
 
 			var exceptions = new List<Exception>();
 			target.WriteAsyncLogEvent(LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add));
@@ -132,7 +133,7 @@ namespace NLog.UnitTests.Targets
 		{
 			var target = new MyTarget();
 			List<Exception> exceptions = new List<Exception>();
-			target.Initialize(null);
+			target.DeepInitialize(CommonCfg);
 			target.Flush(exceptions.Add);
 
 			// flush was called
@@ -160,8 +161,9 @@ namespace NLog.UnitTests.Targets
 		public void FlushOnClosedTargetTest()
 		{
 			var target = new MyTarget();
-			target.Initialize(null);
-			target.Close();
+			using (target.DeepInitialize(CommonCfg))
+			{
+			}
 			Assert.AreEqual(1, target.InitializeCount);
 			Assert.AreEqual(1, target.CloseCount);
 
@@ -179,41 +181,42 @@ namespace NLog.UnitTests.Targets
 		public void LockingTest()
 		{
 			var target = new MyTarget();
-			target.Initialize(null);
 
 			var mre = new ManualResetEvent(false);
-
 			Exception backgroundThreadException = null;
+			List<Exception> exceptions;
 
-			Thread t = new Thread(() =>
+			using (target.DeepInitialize(CommonCfg))
 			{
-				try
+				Thread t = new Thread(() =>
 				{
-					target.BlockingOperation(1000);
-				}
-				catch (Exception ex)
-				{
-					backgroundThreadException = ex;
-				}
-				finally
-				{
-					mre.Set();
-				}
-			});
+					try
+					{
+						target.BlockingOperation(1000);
+					}
+					catch (Exception ex)
+					{
+						backgroundThreadException = ex;
+					}
+					finally
+					{
+						mre.Set();
+					}
+				});
 
 
-			target.Initialize(null);
-			t.Start();
-			Thread.Sleep(50);
-			List<Exception> exceptions = new List<Exception>();
-			target.WriteAsyncLogEvent(LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add));
-			target.WriteAsyncLogEvents(new[] 
-			{
-				LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add),
-				LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add),
-			});
-			target.Flush(exceptions.Add);
-			target.Close();
+				target.DeepInitialize(CommonCfg);
+				t.Start();
+				Thread.Sleep(50);
+				exceptions = new List<Exception>();
+				target.WriteAsyncLogEvent(LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add));
+				target.WriteAsyncLogEvents(new[] 
+				{
+					LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add),
+					LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add),
+				});
+				target.Flush(exceptions.Add);
+			}
 
 			exceptions.ForEach(Assert.IsNull);
 

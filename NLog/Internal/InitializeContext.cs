@@ -26,7 +26,7 @@ namespace NLog.Internal
 		{
 			get
 			{
-				return _initialized.ToArray();
+				return ((IEnumerable<ISupportsInitialize>)_initialized).Reverse().ToArray();
 			}
 		}
 

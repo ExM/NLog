@@ -101,32 +101,31 @@ Close()
 				KeepConnection = true,
 			};
 
-			dt.DeepInitialize(CommonCfg);
-			Assert.AreSame(typeof(MockDbConnection), dt.ConnectionType);
-
-			List<Exception> exceptions = new List<Exception>();
-			dt.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "MyLogger", "msg1").WithContinuation(exceptions.Add));
-			dt.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "MyLogger", "msg2").WithContinuation(exceptions.Add));
-			dt.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "MyLogger", "msg3").WithContinuation(exceptions.Add));
-			foreach (var ex in exceptions)
+			using (dt.DeepInitialize(CommonCfg))
 			{
-				Assert.IsNull(ex, Convert.ToString(ex));
-			}
+				Assert.AreSame(typeof(MockDbConnection), dt.ConnectionType);
 
-			string expectedLog = @"Open('FooBar').
+				List<Exception> exceptions = new List<Exception>();
+				dt.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "MyLogger", "msg1").WithContinuation(exceptions.Add));
+				dt.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "MyLogger", "msg2").WithContinuation(exceptions.Add));
+				dt.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "MyLogger", "msg3").WithContinuation(exceptions.Add));
+				foreach (var ex in exceptions)
+				{
+					Assert.IsNull(ex, Convert.ToString(ex));
+				}
+
+				AssertLog(@"Open('FooBar').
 ExecuteNonQuery: INSERT INTO FooBar VALUES('msg1')
 ExecuteNonQuery: INSERT INTO FooBar VALUES('msg2')
 ExecuteNonQuery: INSERT INTO FooBar VALUES('msg3')
-";
+");
 
-			AssertLog(expectedLog);
 
-			MockDbConnection.ClearLog();
-			dt.Close();
-			expectedLog = @"Close()
-";
+				MockDbConnection.ClearLog();
+			}
 
-			AssertLog(expectedLog);
+			AssertLog(@"Close()
+");
 		}
 
 		[Test]
@@ -141,37 +140,35 @@ ExecuteNonQuery: INSERT INTO FooBar VALUES('msg3')
 				KeepConnection = true,
 			};
 
-			dt.DeepInitialize(CommonCfg);
-			Assert.AreSame(typeof(MockDbConnection), dt.ConnectionType);
-			var exceptions = new List<Exception>();
+			using (dt.DeepInitialize(CommonCfg))
+			{
+				Assert.AreSame(typeof(MockDbConnection), dt.ConnectionType);
+				var exceptions = new List<Exception>();
 
-			var events = new[]
+				var events = new[]
 			{
 				new LogEventInfo(LogLevel.Info, "MyLogger", "msg1").WithContinuation(exceptions.Add),
 				new LogEventInfo(LogLevel.Info, "MyLogger", "msg2").WithContinuation(exceptions.Add),
 				new LogEventInfo(LogLevel.Info, "MyLogger", "msg3").WithContinuation(exceptions.Add),
 			};
 
-			dt.WriteAsyncLogEvents(events);
-			foreach (var ex in exceptions)
-			{
-				Assert.IsNull(ex, Convert.ToString(ex));
-			}
+				dt.WriteAsyncLogEvents(events);
+				foreach (var ex in exceptions)
+				{
+					Assert.IsNull(ex, Convert.ToString(ex));
+				}
 
-			string expectedLog = @"Open('FooBar').
+				AssertLog(@"Open('FooBar').
 ExecuteNonQuery: INSERT INTO FooBar VALUES('msg1')
 ExecuteNonQuery: INSERT INTO FooBar VALUES('msg2')
 ExecuteNonQuery: INSERT INTO FooBar VALUES('msg3')
-";
+");
 
-			AssertLog(expectedLog);
+				MockDbConnection.ClearLog();
+			}
 
-			MockDbConnection.ClearLog();
-			dt.Close();
-			expectedLog = @"Close()
-";
-
-			AssertLog(expectedLog);
+			AssertLog(@"Close()
+");
 		}
 
 		[Test]
@@ -186,20 +183,21 @@ ExecuteNonQuery: INSERT INTO FooBar VALUES('msg3')
 				KeepConnection = true,
 			};
 
-			dt.DeepInitialize(CommonCfg);
-			Assert.AreSame(typeof(MockDbConnection), dt.ConnectionType);
-
-			List<Exception> exceptions = new List<Exception>();
-			dt.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "MyLogger", "msg1").WithContinuation(exceptions.Add));
-			dt.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "MyLogger", "msg2").WithContinuation(exceptions.Add));
-			dt.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "MyLogger2", "msg3").WithContinuation(exceptions.Add));
-			dt.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "MyLogger", "msg4").WithContinuation(exceptions.Add));
-			foreach (var ex in exceptions)
+			using (dt.DeepInitialize(CommonCfg))
 			{
-				Assert.IsNull(ex, Convert.ToString(ex));
-			}
+				Assert.AreSame(typeof(MockDbConnection), dt.ConnectionType);
 
-			string expectedLog = @"Open('Database=MyLogger').
+				List<Exception> exceptions = new List<Exception>();
+				dt.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "MyLogger", "msg1").WithContinuation(exceptions.Add));
+				dt.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "MyLogger", "msg2").WithContinuation(exceptions.Add));
+				dt.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "MyLogger2", "msg3").WithContinuation(exceptions.Add));
+				dt.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "MyLogger", "msg4").WithContinuation(exceptions.Add));
+				foreach (var ex in exceptions)
+				{
+					Assert.IsNull(ex, Convert.ToString(ex));
+				}
+
+				AssertLog(@"Open('Database=MyLogger').
 ExecuteNonQuery: INSERT INTO FooBar VALUES('msg1')
 ExecuteNonQuery: INSERT INTO FooBar VALUES('msg2')
 Close()
@@ -208,16 +206,13 @@ ExecuteNonQuery: INSERT INTO FooBar VALUES('msg3')
 Close()
 Open('Database=MyLogger').
 ExecuteNonQuery: INSERT INTO FooBar VALUES('msg4')
-";
+");
 
-			AssertLog(expectedLog);
+				MockDbConnection.ClearLog();
+			}
 
-			MockDbConnection.ClearLog();
-			dt.Close();
-			expectedLog = @"Close()
-";
-
-			AssertLog(expectedLog);
+			AssertLog(@"Close()
+");
 		}
 
 		[Test]
@@ -232,48 +227,46 @@ ExecuteNonQuery: INSERT INTO FooBar VALUES('msg4')
 				KeepConnection = true,
 			};
 
-			dt.DeepInitialize(CommonCfg);
-
-			Assert.AreSame(typeof(MockDbConnection), dt.ConnectionType);
-
-			// when we pass multiple log events in an array, the target will bucket-sort them by
-			// connection string and group all commands for the same connection string together
-			// to minimize number of db open/close operations
-			// in this case msg1, msg2 and msg4 will be written together to MyLogger database
-			// and msg3 will be written to MyLogger2 database
-
-			List<Exception> exceptions = new List<Exception>();
-			var events = new[]
+			using (dt.DeepInitialize(CommonCfg))
 			{
-				new LogEventInfo(LogLevel.Info, "MyLogger", "msg1").WithContinuation(exceptions.Add),
-				new LogEventInfo(LogLevel.Info, "MyLogger", "msg2").WithContinuation(exceptions.Add),
-				new LogEventInfo(LogLevel.Info, "MyLogger2", "msg3").WithContinuation(exceptions.Add),
-				new LogEventInfo(LogLevel.Info, "MyLogger", "msg4").WithContinuation(exceptions.Add),
-			};
 
-			dt.WriteAsyncLogEvents(events);
-			foreach (var ex in exceptions)
-			{
-				Assert.IsNull(ex, Convert.ToString(ex));
-			}
+				Assert.AreSame(typeof(MockDbConnection), dt.ConnectionType);
 
-			string expectedLog = @"Open('Database=MyLogger').
+				// when we pass multiple log events in an array, the target will bucket-sort them by
+				// connection string and group all commands for the same connection string together
+				// to minimize number of db open/close operations
+				// in this case msg1, msg2 and msg4 will be written together to MyLogger database
+				// and msg3 will be written to MyLogger2 database
+
+				List<Exception> exceptions = new List<Exception>();
+				var events = new[]
+				{
+					new LogEventInfo(LogLevel.Info, "MyLogger", "msg1").WithContinuation(exceptions.Add),
+					new LogEventInfo(LogLevel.Info, "MyLogger", "msg2").WithContinuation(exceptions.Add),
+					new LogEventInfo(LogLevel.Info, "MyLogger2", "msg3").WithContinuation(exceptions.Add),
+					new LogEventInfo(LogLevel.Info, "MyLogger", "msg4").WithContinuation(exceptions.Add),
+				};
+
+				dt.WriteAsyncLogEvents(events);
+				foreach (var ex in exceptions)
+				{
+					Assert.IsNull(ex, Convert.ToString(ex));
+				}
+
+				AssertLog(@"Open('Database=MyLogger').
 ExecuteNonQuery: INSERT INTO FooBar VALUES('msg1')
 ExecuteNonQuery: INSERT INTO FooBar VALUES('msg2')
 ExecuteNonQuery: INSERT INTO FooBar VALUES('msg4')
 Close()
 Open('Database=MyLogger2').
 ExecuteNonQuery: INSERT INTO FooBar VALUES('msg3')
-";
+");
 
-			AssertLog(expectedLog);
+				MockDbConnection.ClearLog();
+			}
 
-			MockDbConnection.ClearLog();
-			dt.Close();
-			expectedLog = @"Close()
-";
-
-			AssertLog(expectedLog);
+			AssertLog(@"Close()
+");
 		}
 
 		[Test]
@@ -294,30 +287,30 @@ ExecuteNonQuery: INSERT INTO FooBar VALUES('msg3')
 				}
 			};
 
-			dt.DeepInitialize(CommonCfg);
+			using (dt.DeepInitialize(CommonCfg))
+			{
+				Assert.AreSame(typeof(MockDbConnection), dt.ConnectionType);
 
-			Assert.AreSame(typeof(MockDbConnection), dt.ConnectionType);
+				// when we pass multiple log events in an array, the target will bucket-sort them by
+				// connection string and group all commands for the same connection string together
+				// to minimize number of db open/close operations
+				// in this case msg1, msg2 and msg4 will be written together to MyLogger database
+				// and msg3 will be written to MyLogger2 database
 
-			// when we pass multiple log events in an array, the target will bucket-sort them by
-			// connection string and group all commands for the same connection string together
-			// to minimize number of db open/close operations
-			// in this case msg1, msg2 and msg4 will be written together to MyLogger database
-			// and msg3 will be written to MyLogger2 database
-
-			List<Exception> exceptions = new List<Exception>();
-			var events = new[]
+				List<Exception> exceptions = new List<Exception>();
+				var events = new[]
 			{
 				new LogEventInfo(LogLevel.Info, "MyLogger", "msg1").WithContinuation(exceptions.Add),
 				new LogEventInfo(LogLevel.Debug, "MyLogger2", "msg3").WithContinuation(exceptions.Add),
 			};
 
-			dt.WriteAsyncLogEvents(events);
-			foreach (var ex in exceptions)
-			{
-				Assert.IsNull(ex, Convert.ToString(ex));
-			}
+				dt.WriteAsyncLogEvents(events);
+				foreach (var ex in exceptions)
+				{
+					Assert.IsNull(ex, Convert.ToString(ex));
+				}
 
-			string expectedLog = @"Open('Server=.;Trusted_Connection=SSPI;').
+				AssertLog(@"Open('Server=.;Trusted_Connection=SSPI;').
 CreateParameter(0)
 Parameter #0 Direction=Input
 Parameter #0 Name=msg
@@ -350,16 +343,13 @@ Parameter #2 Name=lg
 Parameter #2 Value=MyLogger2
 Add Parameter Parameter #2
 ExecuteNonQuery: INSERT INTO FooBar VALUES(@msg, @lvl, @lg)
-";
+");
 
-			AssertLog(expectedLog);
+				MockDbConnection.ClearLog();
+			}
 
-			MockDbConnection.ClearLog();
-			dt.Close();
-			expectedLog = @"Close()
-";
-
-			AssertLog(expectedLog);
+			AssertLog( @"Close()
+");
 		}
 
 		[Test]
@@ -390,25 +380,27 @@ ExecuteNonQuery: INSERT INTO FooBar VALUES(@msg, @lvl, @lg)
 					}
 			};
 
-			dt.DeepInitialize(CommonCfg);
-
-			Assert.AreSame(typeof(MockDbConnection), dt.ConnectionType);
-
-			// when we pass multiple log events in an array, the target will bucket-sort them by
-			// connection string and group all commands for the same connection string together
-			// to minimize number of db open/close operations
-			// in this case msg1, msg2 and msg4 will be written together to MyLogger database
-			// and msg3 will be written to MyLogger2 database
-
-			var exceptions = new List<Exception>();
-			var events = new[]
+			List<Exception> exceptions;
+			using (dt.DeepInitialize(CommonCfg))
 			{
-				new LogEventInfo(LogLevel.Info, "MyLogger", "msg1").WithContinuation(exceptions.Add),
-				new LogEventInfo(LogLevel.Debug, "MyLogger2", "msg3").WithContinuation(exceptions.Add),
-			};
+				Assert.AreSame(typeof(MockDbConnection), dt.ConnectionType);
 
-			dt.WriteAsyncLogEvents(events);
-			dt.Close();
+				// when we pass multiple log events in an array, the target will bucket-sort them by
+				// connection string and group all commands for the same connection string together
+				// to minimize number of db open/close operations
+				// in this case msg1, msg2 and msg4 will be written together to MyLogger database
+				// and msg3 will be written to MyLogger2 database
+
+				exceptions = new List<Exception>();
+				var events = new[]
+				{
+					new LogEventInfo(LogLevel.Info, "MyLogger", "msg1").WithContinuation(exceptions.Add),
+					new LogEventInfo(LogLevel.Debug, "MyLogger2", "msg3").WithContinuation(exceptions.Add),
+				};
+
+				dt.WriteAsyncLogEvents(events);
+			}
+
 			foreach (var ex in exceptions)
 			{
 				Assert.IsNull(ex, Convert.ToString(ex));
@@ -503,9 +495,10 @@ Close()
 			db.CommandText = "not important";
 			db.ConnectionString = "cannotconnect";
 			db.DBProvider = typeof(MockDbConnection).AssemblyQualifiedName;
-			db.DeepInitialize(CommonCfg);
-			db.WriteAsyncLogEvent(LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add));
-			db.Close();
+			using (db.DeepInitialize(CommonCfg))
+			{
+				db.WriteAsyncLogEvent(LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add));
+			}
 
 			Assert.AreEqual(1, exceptions.Count);
 			Assert.IsNotNull(exceptions[0]);
@@ -524,11 +517,12 @@ Close()
 			db.ConnectionString = "cannotexecute";
 			db.KeepConnection = true;
 			db.DBProvider = typeof(MockDbConnection).AssemblyQualifiedName;
-			db.DeepInitialize(CommonCfg);
-			db.WriteAsyncLogEvent(LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add));
-			db.WriteAsyncLogEvent(LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add));
-			db.WriteAsyncLogEvent(LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add));
-			db.Close();
+			using (db.DeepInitialize(CommonCfg))
+			{
+				db.WriteAsyncLogEvent(LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add));
+				db.WriteAsyncLogEvent(LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add));
+				db.WriteAsyncLogEvent(LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add));
+			}
 
 			Assert.AreEqual(3, exceptions.Count);
 			Assert.IsNotNull(exceptions[0]);
@@ -562,12 +556,13 @@ Close()
 			db.ConnectionString = "cannotexecute";
 			db.KeepConnection = true;
 			db.DBProvider = typeof(MockDbConnection).AssemblyQualifiedName;
-			db.DeepInitialize(CommonCfg);
-			db.WriteAsyncLogEvents(
-				LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add),
-				LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add),
-				LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add));
-			db.Close();
+			using (db.DeepInitialize(CommonCfg))
+			{
+				db.WriteAsyncLogEvents(
+					LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add),
+					LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add),
+					LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add));
+			}
 
 			Assert.AreEqual(3, exceptions.Count);
 			Assert.IsNotNull(exceptions[0]);
@@ -704,9 +699,10 @@ Close()
 			dt.CommandText = "NotImportant";
 
 			var exceptions = new List<Exception>();
-			dt.DeepInitialize(CommonCfg);
-			dt.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "Logger1", "msg1").WithContinuation(exceptions.Add));
-			dt.Close();
+			using (dt.DeepInitialize(CommonCfg))
+			{
+				dt.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "Logger1", "msg1").WithContinuation(exceptions.Add));
+			}
 
 			return MockDbConnection.LastConnectionString;
 		}

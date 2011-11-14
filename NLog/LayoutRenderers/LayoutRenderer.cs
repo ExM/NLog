@@ -11,7 +11,7 @@ namespace NLog.LayoutRenderers
 	/// Render environmental information related to logging events.
 	/// </summary>
 	[NLogConfigurationItem]
-	public abstract class LayoutRenderer : IRenderable, IDisposable
+	public abstract class LayoutRenderer : IRenderable
 	{
 		private const int MaxInitialRenderBufferLength = 16384;
 		private int maxRenderedLength;
@@ -40,15 +40,6 @@ namespace NLog.LayoutRenderers
 		public void DeepInitialize(LoggingConfiguration cfg)
 		{
 			ObjectGraph.DeepInitialize(this, cfg, LogManager.ThrowExceptions);
-		}
-
-		/// <summary>
-		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-		/// </summary>
-		public void Dispose()
-		{
-			this.Dispose(true);
-			GC.SuppressFinalize(this);
 		}
 
 		/// <summary>
@@ -98,18 +89,5 @@ namespace NLog.LayoutRenderers
 		/// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
 		/// <param name="logEvent">Logging event.</param>
 		protected abstract void Append(StringBuilder builder, LogEventInfo logEvent);
-
-		/// <summary>
-		/// Releases unmanaged and - optionally - managed resources.
-		/// </summary>
-		/// <param name="disposing">True to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (disposing)
-			{
-				//TODO: check required dispose
-				//this.Close();
-			}
-		}
 	}
 }

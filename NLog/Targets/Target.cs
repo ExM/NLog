@@ -13,7 +13,7 @@ namespace NLog.Targets
 	/// Represents logging target.
 	/// </summary>
 	[NLogConfigurationItem]
-	public abstract class Target : ISupportsInitialize, IDisposable
+	public abstract class Target : ISupportsInitialize
 	{
 		private object _lockObject = new object();
 		private List<Layout> _allLayouts;
@@ -50,35 +50,9 @@ namespace NLog.Targets
 		/// Initialize for tests
 		/// </summary>
 		/// <param name="cfg"></param>
-		public void DeepInitialize(LoggingConfiguration cfg)
+		public IDisposable DeepInitialize(LoggingConfiguration cfg)
 		{
-			ObjectGraph.DeepInitialize(this, cfg, LogManager.ThrowExceptions);
-		}
-
-		/// <summary>
-		/// Initializes this instance.
-		/// </summary>
-		/// <param name="configuration">The configuration.</param>
-		void ISupportsInitialize.Initialize(LoggingConfiguration configuration)
-		{
-			Initialize(configuration);
-		}
-
-		/// <summary>
-		/// Closes this instance.
-		/// </summary>
-		void ISupportsInitialize.Close()
-		{
-			Close();
-		}
-
-		/// <summary>
-		/// Closes the target.
-		/// </summary>
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
+			return new DeepCloser(ObjectGraph.DeepInitialize(this, cfg, true));
 		}
 
 		/// <summary>
@@ -230,7 +204,7 @@ namespace NLog.Targets
 		/// Initializes this instance.
 		/// </summary>
 		/// <param name="configuration">The configuration.</param>
-		public void Initialize(LoggingConfiguration configuration)
+		void ISupportsInitialize.Initialize(LoggingConfiguration configuration)
 		{
 			lock(SyncRoot)
 			{
@@ -260,7 +234,7 @@ namespace NLog.Targets
 		/// <summary>
 		/// Closes this instance.
 		/// </summary>
-		public void Close()
+		void ISupportsInitialize.Close()
 		{
 			lock(SyncRoot)
 			{
@@ -317,16 +291,6 @@ namespace NLog.Targets
 
 				WriteAsyncLogEvents(wrappedLogEventInfos);
 			}
-		}
-
-		/// <summary>
-		/// Releases unmanaged and - optionally - managed resources.
-		/// </summary>
-		/// <param name="disposing">True to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-		protected virtual void Dispose(bool disposing)
-		{
-			if(disposing)
-				CloseTarget();
 		}
 
 		/// <summary>

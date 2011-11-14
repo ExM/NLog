@@ -96,6 +96,7 @@
     <Compile Include="Filters\WhenNotContainsFilter.cs" />
     <Compile Include="Filters\WhenNotEqualFilter.cs" />
     <Compile Include="GlobalDiagnosticsContext.cs" />
+    <Compile Include="Internal\DeepCloser.cs" />
     <Compile Include="Internal\InitializeContext.cs" />
     <Compile Include="Internal\ObjectGraph.cs" />
     <Compile Include="Internal\CurrentTimeGetter.cs" />

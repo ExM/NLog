@@ -24,8 +24,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 				RetryDelayMilliseconds = 1,
 			};
 
-			wrapper.Initialize(null);
-			target.Initialize(null);
+			wrapper.DeepInitialize(CommonCfg);
 
 			var exceptions = new List<Exception>();
 
@@ -68,8 +67,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 				RetryDelayMilliseconds = 1,
 			};
 
-			wrapper.Initialize(null);
-			target.Initialize(null);
+			wrapper.DeepInitialize(CommonCfg);
 
 			var exceptions = new List<Exception>();
 

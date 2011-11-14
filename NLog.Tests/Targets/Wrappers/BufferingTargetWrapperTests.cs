@@ -22,108 +22,106 @@ namespace NLog.UnitTests.Targets.Wrappers
 				BufferSize = 10,
 			};
 
-			myTarget.Initialize(null);
-			targetWrapper.Initialize(null);
+			using (targetWrapper.DeepInitialize(CommonCfg))
+			{
 
-			int totalEvents = 100;
+				int totalEvents = 100;
 
-			var continuationHit = new bool[totalEvents];
-			var lastException = new Exception[totalEvents];
-			var continuationThread = new Thread[totalEvents];
-			int hitCount = 0;
+				var continuationHit = new bool[totalEvents];
+				var lastException = new Exception[totalEvents];
+				var continuationThread = new Thread[totalEvents];
+				int hitCount = 0;
 
-			CreateContinuationFunc createAsyncContinuation = 
-				eventNumber =>
+				CreateContinuationFunc createAsyncContinuation =
+					eventNumber =>
+						ex =>
+						{
+							lastException[eventNumber] = ex;
+							continuationThread[eventNumber] = Thread.CurrentThread;
+							continuationHit[eventNumber] = true;
+							Interlocked.Increment(ref hitCount);
+						};
+
+				// write 9 events - they will all be buffered and no final continuation will be reached
+				int eventCounter = 0;
+				for (int i = 0; i < 9; ++i)
+				{
+					targetWrapper.WriteAsyncLogEvent(new LogEventInfo().WithContinuation(createAsyncContinuation(eventCounter++)));
+				}
+
+				Assert.AreEqual(0, hitCount);
+				Assert.AreEqual(0, myTarget.WriteCount);
+
+				// write one more event - everything will be flushed
+				targetWrapper.WriteAsyncLogEvent(new LogEventInfo().WithContinuation(createAsyncContinuation(eventCounter++)));
+				Assert.AreEqual(10, hitCount);
+				Assert.AreEqual(1, myTarget.BufferedWriteCount);
+				Assert.AreEqual(10, myTarget.BufferedTotalEvents);
+				Assert.AreEqual(10, myTarget.WriteCount);
+				for (int i = 0; i < hitCount; ++i)
+				{
+					Assert.AreSame(Thread.CurrentThread, continuationThread[i]);
+					Assert.IsNull(lastException[i]);
+				}
+
+				// write 9 more events - they will all be buffered and no final continuation will be reached
+				for (int i = 0; i < 9; ++i)
+				{
+					targetWrapper.WriteAsyncLogEvent(new LogEventInfo().WithContinuation(createAsyncContinuation(eventCounter++)));
+				}
+
+				// no change
+				Assert.AreEqual(10, hitCount);
+				Assert.AreEqual(1, myTarget.BufferedWriteCount);
+				Assert.AreEqual(10, myTarget.BufferedTotalEvents);
+				Assert.AreEqual(10, myTarget.WriteCount);
+
+				Exception flushException = null;
+				var flushHit = new ManualResetEvent(false);
+
+				targetWrapper.Flush(
 					ex =>
-					{
-						lastException[eventNumber] = ex;
-						continuationThread[eventNumber] = Thread.CurrentThread;
-						continuationHit[eventNumber] = true;
-						Interlocked.Increment(ref hitCount);
-					};
-
-			// write 9 events - they will all be buffered and no final continuation will be reached
-			int eventCounter = 0;
-			for (int i = 0; i < 9; ++i)
-			{
-				targetWrapper.WriteAsyncLogEvent(new LogEventInfo().WithContinuation(createAsyncContinuation(eventCounter++)));
-			}
-
-			Assert.AreEqual(0, hitCount);
-			Assert.AreEqual(0, myTarget.WriteCount);
-
-			// write one more event - everything will be flushed
-			targetWrapper.WriteAsyncLogEvent(new LogEventInfo().WithContinuation(createAsyncContinuation(eventCounter++)));
-			Assert.AreEqual(10, hitCount);
-			Assert.AreEqual(1, myTarget.BufferedWriteCount);
-			Assert.AreEqual(10, myTarget.BufferedTotalEvents);
-			Assert.AreEqual(10, myTarget.WriteCount);
-			for (int i = 0; i < hitCount; ++i)
-			{
-				Assert.AreSame(Thread.CurrentThread, continuationThread[i]);
-				Assert.IsNull(lastException[i]);
-			}
-
-			// write 9 more events - they will all be buffered and no final continuation will be reached
-			for (int i = 0; i < 9; ++i)
-			{
-				targetWrapper.WriteAsyncLogEvent(new LogEventInfo().WithContinuation(createAsyncContinuation(eventCounter++)));
-			}
-
-			// no change
-			Assert.AreEqual(10, hitCount);
-			Assert.AreEqual(1, myTarget.BufferedWriteCount);
-			Assert.AreEqual(10, myTarget.BufferedTotalEvents);
-			Assert.AreEqual(10, myTarget.WriteCount);
-
-			Exception flushException = null;
-			var flushHit = new ManualResetEvent(false);
-
-			targetWrapper.Flush(
-				ex =>
 					{
 						flushException = ex;
 						flushHit.Set();
 					});
 
-			Thread.Sleep(1000);
+				Thread.Sleep(1000);
 
-			flushHit.WaitOne();
-			Assert.IsNull(flushException);
+				flushHit.WaitOne();
+				Assert.IsNull(flushException);
 
-			// make sure remaining events were written
-			Assert.AreEqual(19, hitCount);
-			Assert.AreEqual(2, myTarget.BufferedWriteCount);
-			Assert.AreEqual(19, myTarget.BufferedTotalEvents);
-			Assert.AreEqual(19, myTarget.WriteCount);
-			Assert.AreEqual(1, myTarget.FlushCount);
+				// make sure remaining events were written
+				Assert.AreEqual(19, hitCount);
+				Assert.AreEqual(2, myTarget.BufferedWriteCount);
+				Assert.AreEqual(19, myTarget.BufferedTotalEvents);
+				Assert.AreEqual(19, myTarget.WriteCount);
+				Assert.AreEqual(1, myTarget.FlushCount);
 
-			// flushes happen on the same thread
-			for (int i = 10; i < hitCount; ++i)
-			{
-				Assert.IsNotNull(continuationThread[i]);
-				Assert.AreSame(Thread.CurrentThread, continuationThread[i], "Invalid thread #" + i);
-				Assert.IsNull(lastException[i]);
-			}
-
-			// flush again - should just invoke Flush() on the wrapped target
-			flushHit.Reset();
-			targetWrapper.Flush(
-				ex =>
+				// flushes happen on the same thread
+				for (int i = 10; i < hitCount; ++i)
 				{
-					flushException = ex;
-					flushHit.Set();
-				});
+					Assert.IsNotNull(continuationThread[i]);
+					Assert.AreSame(Thread.CurrentThread, continuationThread[i], "Invalid thread #" + i);
+					Assert.IsNull(lastException[i]);
+				}
 
-			flushHit.WaitOne();
-			Assert.AreEqual(19, hitCount);
-			Assert.AreEqual(2, myTarget.BufferedWriteCount);
-			Assert.AreEqual(19, myTarget.BufferedTotalEvents);
-			Assert.AreEqual(19, myTarget.WriteCount);
-			Assert.AreEqual(2, myTarget.FlushCount);
+				// flush again - should just invoke Flush() on the wrapped target
+				flushHit.Reset();
+				targetWrapper.Flush(
+					ex =>
+					{
+						flushException = ex;
+						flushHit.Set();
+					});
 
-			targetWrapper.Close();
-			myTarget.Close();
+				flushHit.WaitOne();
+				Assert.AreEqual(19, hitCount);
+				Assert.AreEqual(2, myTarget.BufferedWriteCount);
+				Assert.AreEqual(19, myTarget.BufferedTotalEvents);
+				Assert.AreEqual(19, myTarget.WriteCount);
+				Assert.AreEqual(2, myTarget.FlushCount);
+			}
 		}
 
 		[Test]
@@ -137,8 +135,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 				FlushTimeout = 1000,
 			};
 
-			myTarget.Initialize(null);
-			targetWrapper.Initialize(null);
+			targetWrapper.DeepInitialize(CommonCfg);
 
 			int totalEvents = 100;
 
@@ -209,107 +206,105 @@ namespace NLog.UnitTests.Targets.Wrappers
 				BufferSize = 10,
 			};
 
-			myTarget.Initialize(null);
-			targetWrapper.Initialize(null);
+			using (targetWrapper.DeepInitialize(CommonCfg))
+			{
 
-			int totalEvents = 100;
+				int totalEvents = 100;
 
-			var continuationHit = new bool[totalEvents];
-			var lastException = new Exception[totalEvents];
-			var continuationThread = new Thread[totalEvents];
-			int hitCount = 0;
+				var continuationHit = new bool[totalEvents];
+				var lastException = new Exception[totalEvents];
+				var continuationThread = new Thread[totalEvents];
+				int hitCount = 0;
 
-			CreateContinuationFunc createAsyncContinuation =
-				eventNumber =>
+				CreateContinuationFunc createAsyncContinuation =
+					eventNumber =>
+						ex =>
+						{
+							lastException[eventNumber] = ex;
+							continuationThread[eventNumber] = Thread.CurrentThread;
+							continuationHit[eventNumber] = true;
+							Interlocked.Increment(ref hitCount);
+						};
+
+				// write 9 events - they will all be buffered and no final continuation will be reached
+				int eventCounter = 0;
+				for (int i = 0; i < 9; ++i)
+				{
+					targetWrapper.WriteAsyncLogEvent(new LogEventInfo().WithContinuation(createAsyncContinuation(eventCounter++)));
+				}
+
+				Assert.AreEqual(0, hitCount);
+
+				// write one more event - everything will be flushed
+				targetWrapper.WriteAsyncLogEvent(new LogEventInfo().WithContinuation(createAsyncContinuation(eventCounter++)));
+
+				while (hitCount < 10)
+				{
+					Thread.Sleep(10);
+				}
+
+				Assert.AreEqual(10, hitCount);
+				Assert.AreEqual(1, myTarget.BufferedWriteCount);
+				Assert.AreEqual(10, myTarget.BufferedTotalEvents);
+				for (int i = 0; i < hitCount; ++i)
+				{
+					Assert.AreNotSame(Thread.CurrentThread, continuationThread[i]);
+					Assert.IsNull(lastException[i]);
+				}
+
+				// write 9 more events - they will all be buffered and no final continuation will be reached
+				for (int i = 0; i < 9; ++i)
+				{
+					targetWrapper.WriteAsyncLogEvent(new LogEventInfo().WithContinuation(createAsyncContinuation(eventCounter++)));
+				}
+
+				// no change
+				Assert.AreEqual(10, hitCount);
+				Assert.AreEqual(1, myTarget.BufferedWriteCount);
+				Assert.AreEqual(10, myTarget.BufferedTotalEvents);
+
+				Exception flushException = null;
+				var flushHit = new ManualResetEvent(false);
+
+				targetWrapper.Flush(
 					ex =>
 					{
-						lastException[eventNumber] = ex;
-						continuationThread[eventNumber] = Thread.CurrentThread;
-						continuationHit[eventNumber] = true;
-						Interlocked.Increment(ref hitCount);
-					};
+						flushException = ex;
+						flushHit.Set();
+					});
 
-			// write 9 events - they will all be buffered and no final continuation will be reached
-			int eventCounter = 0;
-			for (int i = 0; i < 9; ++i)
-			{
-				targetWrapper.WriteAsyncLogEvent(new LogEventInfo().WithContinuation(createAsyncContinuation(eventCounter++)));
-			}
+				Thread.Sleep(1000);
 
-			Assert.AreEqual(0, hitCount);
+				flushHit.WaitOne();
+				Assert.IsNull(flushException);
 
-			// write one more event - everything will be flushed
-			targetWrapper.WriteAsyncLogEvent(new LogEventInfo().WithContinuation(createAsyncContinuation(eventCounter++)));
+				// make sure remaining events were written
+				Assert.AreEqual(19, hitCount);
+				Assert.AreEqual(2, myTarget.BufferedWriteCount);
+				Assert.AreEqual(19, myTarget.BufferedTotalEvents);
 
-			while (hitCount < 10)
-			{
-				Thread.Sleep(10);
-			}
-
-			Assert.AreEqual(10, hitCount);
-			Assert.AreEqual(1, myTarget.BufferedWriteCount);
-			Assert.AreEqual(10, myTarget.BufferedTotalEvents);
-			for (int i = 0; i < hitCount; ++i)
-			{
-				Assert.AreNotSame(Thread.CurrentThread, continuationThread[i]);
-				Assert.IsNull(lastException[i]);
-			}
-
-			// write 9 more events - they will all be buffered and no final continuation will be reached
-			for (int i = 0; i < 9; ++i)
-			{
-				targetWrapper.WriteAsyncLogEvent(new LogEventInfo().WithContinuation(createAsyncContinuation(eventCounter++)));
-			}
-
-			// no change
-			Assert.AreEqual(10, hitCount);
-			Assert.AreEqual(1, myTarget.BufferedWriteCount);
-			Assert.AreEqual(10, myTarget.BufferedTotalEvents);
-
-			Exception flushException = null;
-			var flushHit = new ManualResetEvent(false);
-
-			targetWrapper.Flush(
-				ex =>
+				// flushes happen on another thread
+				for (int i = 10; i < hitCount; ++i)
 				{
-					flushException = ex;
-					flushHit.Set();
-				});
+					Assert.IsNotNull(continuationThread[i]);
+					Assert.AreNotSame(Thread.CurrentThread, continuationThread[i], "Invalid thread #" + i);
+					Assert.IsNull(lastException[i]);
+				}
 
-			Thread.Sleep(1000);
+				// flush again - should not do anything
+				flushHit.Reset();
+				targetWrapper.Flush(
+					ex =>
+					{
+						flushException = ex;
+						flushHit.Set();
+					});
 
-			flushHit.WaitOne();
-			Assert.IsNull(flushException);
-
-			// make sure remaining events were written
-			Assert.AreEqual(19, hitCount);
-			Assert.AreEqual(2, myTarget.BufferedWriteCount);
-			Assert.AreEqual(19, myTarget.BufferedTotalEvents);
-
-			// flushes happen on another thread
-			for (int i = 10; i < hitCount; ++i)
-			{
-				Assert.IsNotNull(continuationThread[i]);
-				Assert.AreNotSame(Thread.CurrentThread, continuationThread[i], "Invalid thread #" + i);
-				Assert.IsNull(lastException[i]);
+				flushHit.WaitOne();
+				Assert.AreEqual(19, hitCount);
+				Assert.AreEqual(2, myTarget.BufferedWriteCount);
+				Assert.AreEqual(19, myTarget.BufferedTotalEvents);
 			}
-
-			// flush again - should not do anything
-			flushHit.Reset();
-			targetWrapper.Flush(
-				ex =>
-				{
-					flushException = ex;
-					flushHit.Set();
-				});
-
-			flushHit.WaitOne();
-			Assert.AreEqual(19, hitCount);
-			Assert.AreEqual(2, myTarget.BufferedWriteCount);
-			Assert.AreEqual(19, myTarget.BufferedTotalEvents);
-
-			targetWrapper.Close();
-			myTarget.Close();
 		}
 
 		[Test]
@@ -324,8 +319,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 				SlidingTimeout = false,
 			};
 
-			myTarget.Initialize(null);
-			targetWrapper.Initialize(null);
+			targetWrapper.DeepInitialize(CommonCfg);
 
 			int totalEvents = 100;
 
@@ -369,8 +363,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 				FlushTimeout = 400,
 			};
 
-			myTarget.Initialize(null);
-			targetWrapper.Initialize(null);
+			targetWrapper.DeepInitialize(CommonCfg);
 
 			int totalEvents = 100;
 

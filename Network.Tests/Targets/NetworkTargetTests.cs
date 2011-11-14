@@ -26,40 +26,42 @@ namespace NLog.UnitTests.Targets
 			target.Layout = "${message}";
 			target.NewLine = true;
 			target.KeepConnection = true;
-			target.DeepInitialize(CommonCfg);
 
-			var exceptions = new List<Exception>();
-			var mre = new ManualResetEvent(false);
-			int remaining = 3;
-			AsyncContinuation asyncContinuation = ex =>
-				{
-					lock (exceptions)
-					{
-						exceptions.Add(ex);
-						if (--remaining == 0)
-						{
-							mre.Set();
-						}
-					}
-				};
-
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger", "msg1").WithContinuation(asyncContinuation));
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger", "msg2").WithContinuation(asyncContinuation));
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger", "msg3").WithContinuation(asyncContinuation));
-
-			mre.WaitOne();
-			foreach (var ex in exceptions)
+			MyNetworkSender sender;
+			using (target.DeepInitialize(CommonCfg))
 			{
-				if (ex != null)
+				var exceptions = new List<Exception>();
+				var mre = new ManualResetEvent(false);
+				int remaining = 3;
+				AsyncContinuation asyncContinuation = ex =>
+					{
+						lock (exceptions)
+						{
+							exceptions.Add(ex);
+							if (--remaining == 0)
+							{
+								mre.Set();
+							}
+						}
+					};
+
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger", "msg1").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger", "msg2").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger", "msg3").WithContinuation(asyncContinuation));
+
+				mre.WaitOne();
+				foreach (var ex in exceptions)
 				{
-					Assert.Fail(ex.ToString());
+					if (ex != null)
+					{
+						Assert.Fail(ex.ToString());
+					}
 				}
+
+				Assert.AreEqual(1, senderFactory.Senders.Count);
+
+				sender = senderFactory.Senders[0];
 			}
-
-			Assert.AreEqual(1, senderFactory.Senders.Count);
-
-			var sender = senderFactory.Senders[0];
-			target.Close();
 
 			Assert.AreEqual(18L, sender.MemoryStream.Length);
 			Assert.AreEqual("msg1\r\nmsg2\r\nmsg3\r\n", target.Encoding.GetString(sender.MemoryStream.GetBuffer(), 0, (int)sender.MemoryStream.Length));
@@ -83,45 +85,45 @@ namespace NLog.UnitTests.Targets
 			target.SenderFactory = senderFactory;
 			target.Layout = "${message}";
 			target.KeepConnection = true;
-			target.DeepInitialize(CommonCfg);
-
-			var exceptions = new List<Exception>();
-			var mre = new ManualResetEvent(false);
-			int remaining = 3;
-			AsyncContinuation asyncContinuation = ex =>
+			using (target.DeepInitialize(CommonCfg))
 			{
-				lock (exceptions)
+				var exceptions = new List<Exception>();
+				var mre = new ManualResetEvent(false);
+				int remaining = 3;
+				AsyncContinuation asyncContinuation = ex =>
 				{
-					exceptions.Add(ex);
-					if (--remaining == 0)
+					lock (exceptions)
 					{
-						mre.Set();
+						exceptions.Add(ex);
+						if (--remaining == 0)
+						{
+							mre.Set();
+						}
+					}
+				};
+
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "msg1").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger2", "msg2").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger3", "msg3").WithContinuation(asyncContinuation));
+
+				mre.WaitOne();
+				foreach (var ex in exceptions)
+				{
+					if (ex != null)
+					{
+						Assert.Fail(ex.ToString());
 					}
 				}
-			};
 
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "msg1").WithContinuation(asyncContinuation));
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger2", "msg2").WithContinuation(asyncContinuation));
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger3", "msg3").WithContinuation(asyncContinuation));
-
-			mre.WaitOne();
-			foreach (var ex in exceptions)
-			{
-				if (ex != null)
+				mre.Reset();
+				AsyncContinuation flushContinuation = ex =>
 				{
-					Assert.Fail(ex.ToString());
-				}
+					mre.Set();
+				};
+
+				target.Flush(flushContinuation);
+				mre.WaitOne();
 			}
-
-			mre.Reset();
-			AsyncContinuation flushContinuation = ex =>
-			{
-				mre.Set();
-			};
-
-			target.Flush(flushContinuation);
-			mre.WaitOne();
-			target.Close();
 
 			string expectedLog = @"1: connect tcp://logger1.company.lan/
 1: send 0 4
@@ -148,18 +150,18 @@ namespace NLog.UnitTests.Targets
 			target.SenderFactory = senderFactory;
 			target.Layout = "${message}";
 			target.KeepConnection = true;
-			target.DeepInitialize(CommonCfg);
-
-			var mre = new ManualResetEvent(false);
-
-			AsyncContinuation flushContinuation = ex =>
+			using (target.DeepInitialize(CommonCfg))
 			{
-				mre.Set();
-			};
+				var mre = new ManualResetEvent(false);
 
-			target.Flush(flushContinuation);
-			mre.WaitOne();
-			target.Close();
+				AsyncContinuation flushContinuation = ex =>
+				{
+					mre.Set();
+				};
+
+				target.Flush(flushContinuation);
+				mre.WaitOne();
+			}
 
 			string expectedLog = @"";
 			Assert.AreEqual(expectedLog, senderFactory.Log.ToString());
@@ -175,41 +177,40 @@ namespace NLog.UnitTests.Targets
 			target.Layout = "${message}";
 			target.KeepConnection = true;
 			target.ConnectionCacheSize = 2;
-			target.DeepInitialize(CommonCfg);
-
-			var exceptions = new List<Exception>();
-			var mre = new ManualResetEvent(false);
-			int remaining = 6;
-			AsyncContinuation asyncContinuation = ex =>
+			using (target.DeepInitialize(CommonCfg))
 			{
-				lock (exceptions)
+				var exceptions = new List<Exception>();
+				var mre = new ManualResetEvent(false);
+				int remaining = 6;
+				AsyncContinuation asyncContinuation = ex =>
 				{
-					exceptions.Add(ex);
-					if (--remaining == 0)
+					lock (exceptions)
 					{
-						mre.Set();
+						exceptions.Add(ex);
+						if (--remaining == 0)
+						{
+							mre.Set();
+						}
+					}
+				};
+
+				// logger1 should be kept alive because it's being referenced frequently
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "msg1").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger2", "msg2").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "msg3").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger3", "msg1").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "msg2").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger2", "msg3").WithContinuation(asyncContinuation));
+
+				mre.WaitOne();
+				foreach (var ex in exceptions)
+				{
+					if (ex != null)
+					{
+						Assert.Fail(ex.ToString());
 					}
 				}
-			};
-
-			// logger1 should be kept alive because it's being referenced frequently
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "msg1").WithContinuation(asyncContinuation));
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger2", "msg2").WithContinuation(asyncContinuation));
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "msg3").WithContinuation(asyncContinuation));
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger3", "msg1").WithContinuation(asyncContinuation));
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "msg2").WithContinuation(asyncContinuation));
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger2", "msg3").WithContinuation(asyncContinuation));
-
-			mre.WaitOne();
-			foreach (var ex in exceptions)
-			{
-				if (ex != null)
-				{
-					Assert.Fail(ex.ToString());
-				}
 			}
-
-			target.Close();
 
 			string expectedLog = @"1: connect tcp://logger1.company.lan/
 1: send 0 4
@@ -238,40 +239,39 @@ namespace NLog.UnitTests.Targets
 			target.SenderFactory = senderFactory;
 			target.Layout = "${message}";
 			target.KeepConnection = false;
-			target.DeepInitialize(CommonCfg);
-
-			var exceptions = new List<Exception>();
-			var mre = new ManualResetEvent(false);
-			int remaining = 6;
-			AsyncContinuation asyncContinuation = ex =>
+			using (target.DeepInitialize(CommonCfg))
 			{
-				lock (exceptions)
+				var exceptions = new List<Exception>();
+				var mre = new ManualResetEvent(false);
+				int remaining = 6;
+				AsyncContinuation asyncContinuation = ex =>
 				{
-					exceptions.Add(ex);
-					if (--remaining == 0)
+					lock (exceptions)
 					{
-						mre.Set();
+						exceptions.Add(ex);
+						if (--remaining == 0)
+						{
+							mre.Set();
+						}
+					}
+				};
+
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "msg1").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger2", "msg2").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "msg3").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger3", "msg1").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "msg2").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger2", "msg3").WithContinuation(asyncContinuation));
+
+				mre.WaitOne();
+				foreach (var ex in exceptions)
+				{
+					if (ex != null)
+					{
+						Assert.Fail(ex.ToString());
 					}
 				}
-			};
-
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "msg1").WithContinuation(asyncContinuation));
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger2", "msg2").WithContinuation(asyncContinuation));
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "msg3").WithContinuation(asyncContinuation));
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger3", "msg1").WithContinuation(asyncContinuation));
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "msg2").WithContinuation(asyncContinuation));
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger2", "msg3").WithContinuation(asyncContinuation));
-
-			mre.WaitOne();
-			foreach (var ex in exceptions)
-			{
-				if (ex != null)
-				{
-					Assert.Fail(ex.ToString());
-				}
 			}
-
-			target.Close();
 
 			string expectedLog = @"1: connect tcp://logger1.company.lan/
 1: send 0 4
@@ -306,37 +306,36 @@ namespace NLog.UnitTests.Targets
 			target.KeepConnection = true;
 			target.MaxMessageSize = 9;
 			target.OnOverflow = NetworkTargetOverflowAction.Split;
-			target.DeepInitialize(CommonCfg);
-
-			var exceptions = new List<Exception>();
-			var mre = new ManualResetEvent(false);
-			int remaining = 3;
-			AsyncContinuation asyncContinuation = ex =>
+			using (target.DeepInitialize(CommonCfg))
 			{
-				lock (exceptions)
+				var exceptions = new List<Exception>();
+				var mre = new ManualResetEvent(false);
+				int remaining = 3;
+				AsyncContinuation asyncContinuation = ex =>
 				{
-					exceptions.Add(ex);
-					if (--remaining == 0)
+					lock (exceptions)
 					{
-						mre.Set();
+						exceptions.Add(ex);
+						if (--remaining == 0)
+						{
+							mre.Set();
+						}
+					}
+				};
+
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "012345678901234567890123456789").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "012345678901234").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger2", "012345678901234567890123").WithContinuation(asyncContinuation));
+
+				mre.WaitOne();
+				foreach (var ex in exceptions)
+				{
+					if (ex != null)
+					{
+						Assert.Fail(ex.ToString());
 					}
 				}
-			};
-
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "012345678901234567890123456789").WithContinuation(asyncContinuation));
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "012345678901234").WithContinuation(asyncContinuation));
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger2", "012345678901234567890123").WithContinuation(asyncContinuation));
-			
-			mre.WaitOne();
-			foreach (var ex in exceptions)
-			{
-				if (ex != null)
-				{
-					Assert.Fail(ex.ToString());
-				}
 			}
-
-			target.Close();
 
 			string expectedLog = @"1: connect tcp://logger1.company.lan/
 1: send 0 9
@@ -366,37 +365,36 @@ namespace NLog.UnitTests.Targets
 			target.KeepConnection = true;
 			target.MaxMessageSize = 10;
 			target.OnOverflow = NetworkTargetOverflowAction.Discard;
-			target.DeepInitialize(CommonCfg);
-
-			var exceptions = new List<Exception>();
-			var mre = new ManualResetEvent(false);
-			int remaining = 3;
-			AsyncContinuation asyncContinuation = ex =>
+			using (target.DeepInitialize(CommonCfg))
 			{
-				lock (exceptions)
+				var exceptions = new List<Exception>();
+				var mre = new ManualResetEvent(false);
+				int remaining = 3;
+				AsyncContinuation asyncContinuation = ex =>
 				{
-					exceptions.Add(ex);
-					if (--remaining == 0)
+					lock (exceptions)
 					{
-						mre.Set();
+						exceptions.Add(ex);
+						if (--remaining == 0)
+						{
+							mre.Set();
+						}
+					}
+				};
+
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "0123456").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "012345678901234").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger2", "01234").WithContinuation(asyncContinuation));
+
+				mre.WaitOne();
+				foreach (var ex in exceptions)
+				{
+					if (ex != null)
+					{
+						Assert.Fail(ex.ToString());
 					}
 				}
-			};
-
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "0123456").WithContinuation(asyncContinuation));
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "012345678901234").WithContinuation(asyncContinuation));
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger2", "01234").WithContinuation(asyncContinuation));
-
-			mre.WaitOne();
-			foreach (var ex in exceptions)
-			{
-				if (ex != null)
-				{
-					Assert.Fail(ex.ToString());
-				}
 			}
-
-			target.Close();
 
 			string expectedLog = @"1: connect tcp://logger1.company.lan/
 1: send 0 7
@@ -419,34 +417,33 @@ namespace NLog.UnitTests.Targets
 			target.KeepConnection = true;
 			target.MaxMessageSize = 10;
 			target.OnOverflow = NetworkTargetOverflowAction.Error;
-			target.DeepInitialize(CommonCfg);
-
-			var exceptions = new List<Exception>();
-			var mre = new ManualResetEvent(false);
-			int remaining = 3;
-			AsyncContinuation asyncContinuation = ex =>
+			using (target.DeepInitialize(CommonCfg))
 			{
-				lock (exceptions)
+				var exceptions = new List<Exception>();
+				var mre = new ManualResetEvent(false);
+				int remaining = 3;
+				AsyncContinuation asyncContinuation = ex =>
 				{
-					exceptions.Add(ex);
-					if (--remaining == 0)
+					lock (exceptions)
 					{
-						mre.Set();
+						exceptions.Add(ex);
+						if (--remaining == 0)
+						{
+							mre.Set();
+						}
 					}
-				}
-			};
+				};
 
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "0123456").WithContinuation(asyncContinuation));
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "012345678901234").WithContinuation(asyncContinuation));
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger2", "01234").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "0123456").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "012345678901234").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger2", "01234").WithContinuation(asyncContinuation));
 
-			mre.WaitOne();
-			Assert.IsNull(exceptions[0]);
-			Assert.IsNotNull(exceptions[1]);
-			Assert.AreEqual("Attempted to send a message larger than MaxMessageSize (10). Actual size was: 15. Adjust OnOverflow and MaxMessageSize parameters accordingly.", exceptions[1].Message);
-			Assert.IsNull(exceptions[2]);
-
-			target.Close();
+				mre.WaitOne();
+				Assert.IsNull(exceptions[0]);
+				Assert.IsNotNull(exceptions[1]);
+				Assert.AreEqual("Attempted to send a message larger than MaxMessageSize (10). Actual size was: 15. Adjust OnOverflow and MaxMessageSize parameters accordingly.", exceptions[1].Message);
+				Assert.IsNull(exceptions[2]);
+			}
 
 			string expectedLog = @"1: connect tcp://logger1.company.lan/
 1: send 0 7
@@ -472,37 +469,36 @@ namespace NLog.UnitTests.Targets
 			target.Layout = "${message}";
 			target.KeepConnection = true;
 			target.OnOverflow = NetworkTargetOverflowAction.Discard;
-			target.DeepInitialize(CommonCfg);
-
-			var exceptions = new List<Exception>();
-			var mre = new ManualResetEvent(false);
-			int remaining = 5;
-			AsyncContinuation asyncContinuation = ex =>
+			using (target.DeepInitialize(CommonCfg))
 			{
-				lock (exceptions)
+				var exceptions = new List<Exception>();
+				var mre = new ManualResetEvent(false);
+				int remaining = 5;
+				AsyncContinuation asyncContinuation = ex =>
 				{
-					exceptions.Add(ex);
-					if (--remaining == 0)
+					lock (exceptions)
 					{
-						mre.Set();
+						exceptions.Add(ex);
+						if (--remaining == 0)
+						{
+							mre.Set();
+						}
 					}
-				}
-			};
+				};
 
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "0123456").WithContinuation(asyncContinuation));
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "0123456").WithContinuation(asyncContinuation));
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "0123456").WithContinuation(asyncContinuation));
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "0123456").WithContinuation(asyncContinuation));
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "01234").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "0123456").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "0123456").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "0123456").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "0123456").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "01234").WithContinuation(asyncContinuation));
 
-			mre.WaitOne();
-			Assert.IsNotNull(exceptions[0]);
-			Assert.IsNotNull(exceptions[1]);
-			Assert.IsNotNull(exceptions[2]);
-			Assert.IsNull(exceptions[3]);
-			Assert.IsNull(exceptions[4]);
-
-			target.Close();
+				mre.WaitOne();
+				Assert.IsNotNull(exceptions[0]);
+				Assert.IsNotNull(exceptions[1]);
+				Assert.IsNotNull(exceptions[2]);
+				Assert.IsNull(exceptions[3]);
+				Assert.IsNull(exceptions[4]);
+			}
 
 			string expectedLog = @"1: connect tcp://logger1.company.lan/
 1: send 0 7
@@ -575,37 +571,37 @@ namespace NLog.UnitTests.Targets
 						}
 					}, null);
 
-				target.DeepInitialize(CommonCfg);
-
-				int pendingWrites = 100;
-				var writeCompleted = new ManualResetEvent(false);
-				var exceptions = new List<Exception>();
-
-				AsyncContinuation writeFinished =
-					ex =>
-					{
-						lock (exceptions)
-						{
-							Console.WriteLine("{0} Write finished {1}", pendingWrites, ex);
-							exceptions.Add(ex);
-							pendingWrites--;
-							if (pendingWrites == 0)
-							{
-								writeCompleted.Set();
-							}
-						}
-					};
-
-				int toWrite = pendingWrites;
-				for (int i = 0; i < toWrite; ++i)
+				using (target.DeepInitialize(CommonCfg))
 				{
-					var ev = new LogEventInfo(LogLevel.Info, "logger1", "messagemessagemessagemessagemessage" + i).WithContinuation(writeFinished);
-					target.WriteAsyncLogEvent(ev);
-					expectedResult += "messagemessagemessagemessagemessage" + i + "\n";
-				}
+					int pendingWrites = 100;
+					var writeCompleted = new ManualResetEvent(false);
+					var exceptions = new List<Exception>();
 
-				Assert.IsTrue(writeCompleted.WaitOne(10000, false), "Writes did not complete");
-				target.Close();
+					AsyncContinuation writeFinished =
+						ex =>
+						{
+							lock (exceptions)
+							{
+								Console.WriteLine("{0} Write finished {1}", pendingWrites, ex);
+								exceptions.Add(ex);
+								pendingWrites--;
+								if (pendingWrites == 0)
+								{
+									writeCompleted.Set();
+								}
+							}
+						};
+
+					int toWrite = pendingWrites;
+					for (int i = 0; i < toWrite; ++i)
+					{
+						var ev = new LogEventInfo(LogLevel.Info, "logger1", "messagemessagemessagemessagemessage" + i).WithContinuation(writeFinished);
+						target.WriteAsyncLogEvent(ev);
+						expectedResult += "messagemessagemessagemessagemessage" + i + "\n";
+					}
+
+					Assert.IsTrue(writeCompleted.WaitOne(10000, false), "Writes did not complete");
+				}
 				Assert.IsTrue(receiveFinished.WaitOne(10000, false), "Receive did not complete");
 				string resultString = Encoding.UTF8.GetString(resultStream.GetBuffer(), 0, (int)resultStream.Length);
 				Assert.IsNull(receiveException, "Receive exception: " + receiveException);
@@ -663,37 +659,37 @@ namespace NLog.UnitTests.Targets
 
 				remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
 				listener.BeginReceiveFrom(receiveBuffer, 0, receiveBuffer.Length, SocketFlags.None, ref remoteEndPoint, receivedDatagram, null);
-
-				target.DeepInitialize(CommonCfg);
-
-				int pendingWrites = 100;
-				var writeCompleted = new ManualResetEvent(false);
-				var exceptions = new List<Exception>();
-
-				AsyncContinuation writeFinished =
-					ex =>
-					{
-						lock (exceptions)
-						{
-							exceptions.Add(ex);
-							pendingWrites--;
-							if (pendingWrites == 0)
-							{
-								writeCompleted.Set();
-							}
-						}
-					};
-
-				int toWrite = pendingWrites;
-				for (int i = 0; i < toWrite; ++i)
+				int toWrite;
+				using (target.DeepInitialize(CommonCfg))
 				{
-					var ev = new LogEventInfo(LogLevel.Info, "logger1", "message" + i).WithContinuation(writeFinished);
-					target.WriteAsyncLogEvent(ev);
-					expectedResult += "message" + i + "\n";
-				}
+					int pendingWrites = 100;
+					var writeCompleted = new ManualResetEvent(false);
+					var exceptions = new List<Exception>();
 
-				Assert.IsTrue(writeCompleted.WaitOne(10000, false));
-				target.Close();
+					AsyncContinuation writeFinished =
+						ex =>
+						{
+							lock (exceptions)
+							{
+								exceptions.Add(ex);
+								pendingWrites--;
+								if (pendingWrites == 0)
+								{
+									writeCompleted.Set();
+								}
+							}
+						};
+
+					toWrite = pendingWrites;
+					for (int i = 0; i < toWrite; ++i)
+					{
+						var ev = new LogEventInfo(LogLevel.Info, "logger1", "message" + i).WithContinuation(writeFinished);
+						target.WriteAsyncLogEvent(ev);
+						expectedResult += "message" + i + "\n";
+					}
+
+					Assert.IsTrue(writeCompleted.WaitOne(10000, false));
+				}
 				Assert.IsTrue(receiveFinished.WaitOne(10000, false));
 				Assert.AreEqual(toWrite, receivedMessages.Count);
 				for (int i = 0; i < toWrite; ++i)
@@ -715,41 +711,42 @@ namespace NLog.UnitTests.Targets
 				KeepConnection = true,
 			};
 
-			target.DeepInitialize(CommonCfg);
-
 			int toWrite = 10;
-			int pendingWrites = toWrite;
-			var writeCompleted = new ManualResetEvent(false);
 			var exceptions = new List<Exception>();
 
-			AsyncContinuation writeFinished =
-				ex =>
-				{
-					lock (exceptions)
-					{
-						exceptions.Add(ex);
-						pendingWrites--;
-						Console.WriteLine("Write finished. Pending {0}", pendingWrites);
-						if (pendingWrites == 0)
-						{
-							writeCompleted.Set();
-						}
-					}
-				};
-
-			for (int i = 0; i < toWrite; ++i)
+			using (target.DeepInitialize(CommonCfg))
 			{
-				var ev = new LogEventInfo(LogLevel.Info, "logger1", "message" + i).WithContinuation(writeFinished);
-				target.WriteAsyncLogEvent(ev);
+				int pendingWrites = toWrite;
+				var writeCompleted = new ManualResetEvent(false);
+
+				AsyncContinuation writeFinished =
+					ex =>
+					{
+						lock (exceptions)
+						{
+							exceptions.Add(ex);
+							pendingWrites--;
+							Console.WriteLine("Write finished. Pending {0}", pendingWrites);
+							if (pendingWrites == 0)
+							{
+								writeCompleted.Set();
+							}
+						}
+					};
+
+				for (int i = 0; i < toWrite; ++i)
+				{
+					var ev = new LogEventInfo(LogLevel.Info, "logger1", "message" + i).WithContinuation(writeFinished);
+					target.WriteAsyncLogEvent(ev);
+				}
+
+				Console.WriteLine("Waiting for completion...");
+				writeCompleted.WaitOne();
+
+				Console.WriteLine("Closing...");
+
+				// no exception
 			}
-
-			Console.WriteLine("Waiting for completion...");
-			writeCompleted.WaitOne();
-
-			Console.WriteLine("Closing...");
-
-			// no exception
-			target.Close();
 
 			Assert.AreEqual(toWrite, exceptions.Count);
 			foreach (var ex in exceptions)
@@ -774,37 +771,36 @@ namespace NLog.UnitTests.Targets
 			target.Layout = "${message}";
 			target.KeepConnection = false;
 			target.OnOverflow = NetworkTargetOverflowAction.Discard;
-			target.DeepInitialize(CommonCfg);
-
-			var exceptions = new List<Exception>();
-			var mre = new ManualResetEvent(false);
-			int remaining = 5;
-			AsyncContinuation asyncContinuation = ex =>
+			using (target.DeepInitialize(CommonCfg))
 			{
-				lock (exceptions)
+				var exceptions = new List<Exception>();
+				var mre = new ManualResetEvent(false);
+				int remaining = 5;
+				AsyncContinuation asyncContinuation = ex =>
 				{
-					exceptions.Add(ex);
-					if (--remaining == 0)
+					lock (exceptions)
 					{
-						mre.Set();
+						exceptions.Add(ex);
+						if (--remaining == 0)
+						{
+							mre.Set();
+						}
 					}
-				}
-			};
+				};
 
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "0123456").WithContinuation(asyncContinuation));
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "0123456").WithContinuation(asyncContinuation));
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "0123456").WithContinuation(asyncContinuation));
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "0123456").WithContinuation(asyncContinuation));
-			target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "01234").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "0123456").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "0123456").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "0123456").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "0123456").WithContinuation(asyncContinuation));
+				target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "logger1", "01234").WithContinuation(asyncContinuation));
 
-			mre.WaitOne();
-			Assert.IsNotNull(exceptions[0]);
-			Assert.IsNotNull(exceptions[1]);
-			Assert.IsNotNull(exceptions[2]);
-			Assert.IsNull(exceptions[3]);
-			Assert.IsNull(exceptions[4]);
-
-			target.Close();
+				mre.WaitOne();
+				Assert.IsNotNull(exceptions[0]);
+				Assert.IsNotNull(exceptions[1]);
+				Assert.IsNotNull(exceptions[2]);
+				Assert.IsNull(exceptions[3]);
+				Assert.IsNull(exceptions[4]);
+			}
 
 			string expectedLog = @"1: connect tcp://logger1.company.lan/
 1: send 0 7
