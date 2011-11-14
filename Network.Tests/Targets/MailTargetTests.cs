@@ -1,17 +1,15 @@
-
-
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Mail;
+using NUnit.Framework;
+using NLog.Internal;
+using NLog.Layouts;
+using NLog.Targets;
+using NLog.Common;
 
 namespace NLog.UnitTests.Targets
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Net;
-	using System.Net.Mail;
-	using NUnit.Framework;
-	using NLog.Internal;
-	using NLog.Layouts;
-	using NLog.Targets;
-
 	[TestFixture]
 	public class MailTargetTests : NLogTestBase
 	{
@@ -30,7 +28,7 @@ namespace NLog.UnitTests.Targets
 				Body = "${level} ${logger} ${message}"
 			};
 
-			mmt.Initialize(CommonCfg);
+			mmt.DeepInitialize(CommonCfg);
 
 			var exceptions = new List<Exception>();
 			mmt.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "MyLogger", "log message 1").WithContinuation(exceptions.Add));
@@ -70,7 +68,7 @@ namespace NLog.UnitTests.Targets
 				SmtpAuthentication = SmtpAuthenticationMode.Ntlm,
 			};
 
-			mmt.Initialize(CommonCfg);
+			mmt.DeepInitialize(CommonCfg);
 
 			var exceptions = new List<Exception>();
 			mmt.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "MyLogger", "log message 1").WithContinuation(exceptions.Add));
@@ -97,7 +95,7 @@ namespace NLog.UnitTests.Targets
 					SmtpPassword = "${mdc:password}",
 				};
 
-				mmt.Initialize(CommonCfg);
+				mmt.DeepInitialize(CommonCfg);
 
 				var exceptions = new List<Exception>();
 				MappedDiagnosticsContext.Set("username", "u1");
@@ -146,7 +144,7 @@ namespace NLog.UnitTests.Targets
 
 			layout.Initialize(CommonCfg);
 
-			mmt.Initialize(CommonCfg);
+			mmt.DeepInitialize(CommonCfg);
 
 			var exceptions = new List<Exception>();
 			mmt.WriteAsyncLogEvents(
@@ -176,7 +174,7 @@ namespace NLog.UnitTests.Targets
 				AddNewLines = true,
 			};
 
-			mmt.Initialize(CommonCfg);
+			mmt.DeepInitialize(CommonCfg);
 
 			var exceptions = new List<Exception>();
 			mmt.WriteAsyncLogEvents(
@@ -215,7 +213,7 @@ namespace NLog.UnitTests.Targets
 				AddNewLines = true,
 			};
 
-			mmt.Initialize(CommonCfg);
+			mmt.DeepInitialize(CommonCfg);
 
 			var exceptions = new List<Exception>();
 			var exceptions2 = new List<Exception>();
@@ -264,7 +262,7 @@ namespace NLog.UnitTests.Targets
 				AddNewLines = true,
 			};
 
-			mmt.Initialize(CommonCfg);
+			mmt.DeepInitialize(CommonCfg);
 
 			var exceptions = new List<Exception>();
 			mmt.WriteAsyncLogEvents(
@@ -305,7 +303,7 @@ namespace NLog.UnitTests.Targets
 				Footer = "Last event: ${logger}",
 			};
 
-			mmt.Initialize(CommonCfg);
+			mmt.DeepInitialize(CommonCfg);
 
 			var exceptions = new List<Exception>();
 			mmt.WriteAsyncLogEvents(

@@ -7,6 +7,7 @@ using System.Data.Common;
 using System.Globalization;
 using NUnit.Framework;
 using NLog.Targets;
+using NLog.Common;
 
 namespace NLog.UnitTests.Targets
 {
@@ -24,7 +25,7 @@ namespace NLog.UnitTests.Targets
 				DBProvider = typeof(MockDbConnection).AssemblyQualifiedName,
 			};
 
-			dt.Initialize(CommonCfg);
+			dt.DeepInitialize(CommonCfg);
 			Assert.AreSame(typeof(MockDbConnection), dt.ConnectionType);
 
 			List<Exception> exceptions = new List<Exception>();
@@ -61,7 +62,7 @@ Close()
 				DBProvider = typeof(MockDbConnection).AssemblyQualifiedName,
 			};
 
-			dt.Initialize(CommonCfg);
+			dt.DeepInitialize(CommonCfg);
 			Assert.AreSame(typeof(MockDbConnection), dt.ConnectionType);
 
 			List<Exception> exceptions = new List<Exception>();
@@ -100,7 +101,7 @@ Close()
 				KeepConnection = true,
 			};
 
-			dt.Initialize(CommonCfg);
+			dt.DeepInitialize(CommonCfg);
 			Assert.AreSame(typeof(MockDbConnection), dt.ConnectionType);
 
 			List<Exception> exceptions = new List<Exception>();
@@ -140,7 +141,7 @@ ExecuteNonQuery: INSERT INTO FooBar VALUES('msg3')
 				KeepConnection = true,
 			};
 
-			dt.Initialize(CommonCfg);
+			dt.DeepInitialize(CommonCfg);
 			Assert.AreSame(typeof(MockDbConnection), dt.ConnectionType);
 			var exceptions = new List<Exception>();
 
@@ -185,7 +186,7 @@ ExecuteNonQuery: INSERT INTO FooBar VALUES('msg3')
 				KeepConnection = true,
 			};
 
-			dt.Initialize(CommonCfg);
+			dt.DeepInitialize(CommonCfg);
 			Assert.AreSame(typeof(MockDbConnection), dt.ConnectionType);
 
 			List<Exception> exceptions = new List<Exception>();
@@ -231,7 +232,7 @@ ExecuteNonQuery: INSERT INTO FooBar VALUES('msg4')
 				KeepConnection = true,
 			};
 
-			dt.Initialize(CommonCfg);
+			dt.DeepInitialize(CommonCfg);
 
 			Assert.AreSame(typeof(MockDbConnection), dt.ConnectionType);
 
@@ -293,7 +294,7 @@ ExecuteNonQuery: INSERT INTO FooBar VALUES('msg3')
 				}
 			};
 
-			dt.Initialize(CommonCfg);
+			dt.DeepInitialize(CommonCfg);
 
 			Assert.AreSame(typeof(MockDbConnection), dt.ConnectionType);
 
@@ -389,7 +390,7 @@ ExecuteNonQuery: INSERT INTO FooBar VALUES(@msg, @lvl, @lg)
 					}
 			};
 
-			dt.Initialize(CommonCfg);
+			dt.DeepInitialize(CommonCfg);
 
 			Assert.AreSame(typeof(MockDbConnection), dt.ConnectionType);
 
@@ -502,7 +503,7 @@ Close()
 			db.CommandText = "not important";
 			db.ConnectionString = "cannotconnect";
 			db.DBProvider = typeof(MockDbConnection).AssemblyQualifiedName;
-			db.Initialize(CommonCfg);
+			db.DeepInitialize(CommonCfg);
 			db.WriteAsyncLogEvent(LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add));
 			db.Close();
 
@@ -523,7 +524,7 @@ Close()
 			db.ConnectionString = "cannotexecute";
 			db.KeepConnection = true;
 			db.DBProvider = typeof(MockDbConnection).AssemblyQualifiedName;
-			db.Initialize(CommonCfg);
+			db.DeepInitialize(CommonCfg);
 			db.WriteAsyncLogEvent(LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add));
 			db.WriteAsyncLogEvent(LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add));
 			db.WriteAsyncLogEvent(LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add));
@@ -561,7 +562,7 @@ Close()
 			db.ConnectionString = "cannotexecute";
 			db.KeepConnection = true;
 			db.DBProvider = typeof(MockDbConnection).AssemblyQualifiedName;
-			db.Initialize(CommonCfg);
+			db.DeepInitialize(CommonCfg);
 			db.WriteAsyncLogEvents(
 				LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add),
 				LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add),
@@ -604,7 +605,7 @@ Close()
 				new ConnectionStringSettings("MyConnectionString", "cs1", "MockDb"),
 			};
 
-			dt.Initialize(CommonCfg);
+			dt.DeepInitialize(CommonCfg);
 			Assert.AreSame(MockDbFactory.Instance, dt.ProviderFactory);
 			Assert.AreEqual("cs1", dt.ConnectionString.Render(LogEventInfo.CreateNullEvent()));
 		}
@@ -703,7 +704,7 @@ Close()
 			dt.CommandText = "NotImportant";
 
 			var exceptions = new List<Exception>();
-			dt.Initialize(CommonCfg);
+			dt.DeepInitialize(CommonCfg);
 			dt.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "Logger1", "msg1").WithContinuation(exceptions.Add));
 			dt.Close();
 

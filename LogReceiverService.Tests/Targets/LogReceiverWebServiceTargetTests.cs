@@ -53,7 +53,7 @@ namespace NLog.UnitTests.Targets
 			};
 
 			var configuration = new LoggingConfiguration();
-			target.Initialize(configuration);
+			target.DeepInitialize(configuration);
 			target.WriteAsyncLogEvents(events);
 
 			// with multiple events, we should get string caching
@@ -107,7 +107,7 @@ namespace NLog.UnitTests.Targets
 			events[0].LogEvent.Properties["prop2"] = "value2a";
 
 			var configuration = new LoggingConfiguration();
-			target.Initialize(configuration);
+			target.DeepInitialize(configuration);
 			target.WriteAsyncLogEvents(events);
 
 			// with multiple events, we should get string caching
