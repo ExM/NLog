@@ -622,7 +622,7 @@ Close()
 
 			try
 			{
-				dt.Initialize(CommonCfg);
+				dt.DeepInitialize(CommonCfg);
 				Assert.Fail("Exception expected.");
 			}
 			catch (NLogConfigurationException configurationException)
@@ -637,7 +637,7 @@ Close()
 			var dt = new DatabaseTarget();
 			dt.DBProvider = "MockDb";
 			dt.CommandText = "Notimportant";
-			dt.Initialize(CommonCfg);
+			dt.DeepInitialize(CommonCfg);
 			Assert.AreSame(MockDbFactory.Instance, dt.ProviderFactory);
 			dt.OpenConnection("myConnectionString");
 			Assert.AreEqual(1, MockDbConnection2.OpenCount);
@@ -657,7 +657,7 @@ Close()
 					CommandText = "notimportant",
 				};
 
-				dt.Initialize(CommonCfg);
+				dt.DeepInitialize(CommonCfg);
 				Assert.AreEqual(typeof(System.Data.SqlClient.SqlConnection), dt.ConnectionType);
 			}
 		}
@@ -673,7 +673,7 @@ Close()
 				CommandText = "notimportant",
 			};
 
-			dt.Initialize(CommonCfg);
+			dt.DeepInitialize(CommonCfg);
 			Assert.AreEqual(typeof(System.Data.OleDb.OleDbConnection), dt.ConnectionType);
 		}
 
@@ -688,7 +688,7 @@ Close()
 				CommandText = "notimportant",
 			};
 
-			dt.Initialize(CommonCfg);
+			dt.DeepInitialize(CommonCfg);
 			Assert.AreEqual(typeof(System.Data.Odbc.OdbcConnection), dt.ConnectionType);
 		}
 		

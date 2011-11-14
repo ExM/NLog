@@ -34,7 +34,7 @@ namespace NLog.Targets
 	/// <code lang="C#" source="examples/targets/Configuration API/Database/MSSQL/Example.cs" height="630" />
 	/// </example>
 	[Target("Database")]
-	public sealed class DatabaseTarget : Target, IInstallable
+	public sealed class DatabaseTarget : Target, IInstallable, ISupportsLazyParameters
 	{
 		private static Assembly systemDataAssembly = typeof(IDbConnection).Assembly;
 
@@ -245,39 +245,31 @@ namespace NLog.Targets
 			return connection;
 		}
 
-		/// <summary>
-		/// Initializes the target. Can be used by inheriting classes
-		/// to initialize logging.
-		/// </summary>
-		protected override void InitializeTarget()
+		public void CreateParameters(LoggingConfiguration cfg)
 		{
-			base.InitializeTarget();
-
 			bool foundProvider = false;
 
-			if (!string.IsNullOrEmpty(this.ConnectionStringName))
+			if (!string.IsNullOrEmpty(ConnectionStringName))
 			{
 				// read connection string and provider factory from the configuration file
-				var cs = this.ConnectionStringsSettings[this.ConnectionStringName];
+				var cs = ConnectionStringsSettings[ConnectionStringName];
 				if (cs == null)
 				{
-					throw new NLogConfigurationException("Connection string '" + this.ConnectionStringName + "' is not declared in <connectionStrings /> section.");
+					throw new NLogConfigurationException("Connection string '" + ConnectionStringName + "' is not declared in <connectionStrings /> section.");
 				}
 
-				ConnectionString = SimpleLayout.Escape(cs.ConnectionString);
-				ConnectionString.Initialize(LoggingConfiguration);
-
-				this.ProviderFactory = DbProviderFactories.GetFactory(cs.ProviderName);
+				ConnectionString = new SimpleLayout(SimpleLayout.Escape(cs.ConnectionString), cfg);
+				ProviderFactory = DbProviderFactories.GetFactory(cs.ProviderName);
 				foundProvider = true;
 			}
 
 			if (!foundProvider)
 			{
-				foreach (DataRow row in DbProviderFactories.GetFactoryClasses().Rows)
+				foreach(DataRow row in DbProviderFactories.GetFactoryClasses().Rows)
 				{
-					if ((string)row["InvariantName"] == this.DBProvider)
+					if ((string)row["InvariantName"] == DBProvider)
 					{
-						this.ProviderFactory = DbProviderFactories.GetFactory(this.DBProvider);
+						ProviderFactory = DbProviderFactories.GetFactory(DBProvider);
 						foundProvider = true;
 					}
 				}
@@ -285,28 +277,37 @@ namespace NLog.Targets
 
 			if (!foundProvider)
 			{
-				switch (this.DBProvider.ToUpper(CultureInfo.InvariantCulture))
+				switch (DBProvider.ToUpper(CultureInfo.InvariantCulture))
 				{
 					case "SQLSERVER":
 					case "MSSQL":
 					case "MICROSOFT":
 					case "MSDE":
-						this.ConnectionType = systemDataAssembly.GetType("System.Data.SqlClient.SqlConnection", true);
+						ConnectionType = systemDataAssembly.GetType("System.Data.SqlClient.SqlConnection", true);
 						break;
 
 					case "OLEDB":
-						this.ConnectionType = systemDataAssembly.GetType("System.Data.OleDb.OleDbConnection", true);
+						ConnectionType = systemDataAssembly.GetType("System.Data.OleDb.OleDbConnection", true);
 						break;
 
 					case "ODBC":
-						this.ConnectionType = systemDataAssembly.GetType("System.Data.Odbc.OdbcConnection", true);
+						ConnectionType = systemDataAssembly.GetType("System.Data.Odbc.OdbcConnection", true);
 						break;
 
 					default:
-						this.ConnectionType = Type.GetType(this.DBProvider, true);
+						ConnectionType = Type.GetType(DBProvider, true);
 						break;
 				}
 			}
+		}
+
+		/// <summary>
+		/// Initializes the target. Can be used by inheriting classes
+		/// to initialize logging.
+		/// </summary>
+		protected override void InitializeTarget()
+		{
+			base.InitializeTarget();
 		}
 
 		/// <summary>
@@ -315,7 +316,6 @@ namespace NLog.Targets
 		protected override void CloseTarget()
 		{
 			base.CloseTarget();
-
 			this.CloseConnection();
 		}
 

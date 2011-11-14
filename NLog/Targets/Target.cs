@@ -216,10 +216,6 @@ namespace NLog.Targets
 				}
 			}
 		}
-		
-		public void CreateChilds(LoggingConfiguration configuration)
-		{
-		}
 
 		/// <summary>
 		/// Initializes this instance.
@@ -231,24 +227,23 @@ namespace NLog.Targets
 			{
 				LoggingConfiguration = configuration;
 
-				if (!IsInitialized)
+				if(IsInitialized)
+					return;
+				
+				IsInitialized = true;
+				try
 				{
-					PropertyHelper.CheckRequiredParameters(this);
-					IsInitialized = true;
-					try
-					{
-						InitializeTarget();
-						initializeException = null;
-					}
-					catch (Exception exception)
-					{
-						if (exception.MustBeRethrown())
-							throw;
-
-						initializeException = exception;
-						InternalLogger.Error("Error initializing target {0} {1}.", this, exception);
+					InitializeTarget();
+					initializeException = null;
+				}
+				catch (Exception exception)
+				{
+					if (exception.MustBeRethrown())
 						throw;
-					}
+					
+					initializeException = exception;
+					InternalLogger.Error("Error initializing target {0} {1}.", this, exception);
+					throw;
 				}
 			}
 		}
@@ -262,26 +257,26 @@ namespace NLog.Targets
 			{
 				LoggingConfiguration = null;
 
-				if (IsInitialized)
+				if (!IsInitialized)
+					return;
+				
+				IsInitialized = false;
+
+				if (initializeException != null)
+					return;
+
+				// if Init succeeded, call Close()
+				try
 				{
-					IsInitialized = false;
-
-					try
-					{
-						if(initializeException == null)
-						{
-							// if Init succeeded, call Close()
-							CloseTarget();
-						}
-					}
-					catch (Exception exception)
-					{
-						if (exception.MustBeRethrown())
-							throw;
-
-						InternalLogger.Error("Error closing target {0} {1}.", this, exception);
+					CloseTarget();
+				}
+				catch (Exception exception)
+				{
+					if (exception.MustBeRethrown())
 						throw;
-					}
+
+					InternalLogger.Error("Error closing target {0} {1}.", this, exception);
+					throw;
 				}
 			}
 		}

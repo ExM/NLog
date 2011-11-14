@@ -9,7 +9,7 @@ namespace NLog.Conditions
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class ConditionLazyExpression : ConditionExpression, ISupportsLazyCast
+	public sealed class ConditionLazyExpression : ConditionExpression, ISupportsLazyParameters
 	{
 		private ConditionExpression _condEx;
 
@@ -49,7 +49,7 @@ namespace NLog.Conditions
 			return _condEx.Evaluate(context);
 		}
 
-		public void CreateChilds(LoggingConfiguration cfg)
+		public void CreateParameters(LoggingConfiguration cfg)
 		{
 			_condEx = ConditionParser.ParseExpression(Text, cfg);
 		}

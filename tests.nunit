@@ -1,25 +1,25 @@
 ﻿<NUnitProject>
   <Settings activeconfig="Win" />
   <Config name="Win" binpathtype="Auto">
-	<assembly path="NLog.Tests\..\bin\Debug\NLog.Tests.dll" />
-	<assembly path="AspNet.Tests\..\bin\Debug\NLog.AspNet.Tests.dll" />
-	<assembly path="Database.Tests\..\bin\Debug\NLog.Database.Tests.dll" />
-	<assembly path="LogReceiverService.Tests\..\bin\Debug\NLog.LogReceiverService.Tests.dll" />
-	<assembly path="LogReceiverService.Wcf.Tests\..\bin\Debug\NLog.LogReceiverService.Wcf.Tests.dll" />
-	<assembly path="Network.Tests\..\bin\Debug\NLog.Network.Tests.dll" />
-	<assembly path="WinForm.Tests\..\bin\Debug\NLog.WinForm.Tests.dll" />
+	<assembly path="bin/Debug/NLog.Tests.dll" />
+	<assembly path="bin/Debug/NLog.AspNet.Tests.dll" />
+	<assembly path="bin/Debug/NLog.Database.Tests.dll" />
+	<assembly path="bin/Debug/NLog.LogReceiverService.Tests.dll" />
+	<assembly path="bin/Debug/NLog.LogReceiverService.Wcf.Tests.dll" />
+	<assembly path="bin/Debug/NLog.Network.Tests.dll" />
+	<assembly path="bin/Debug/NLog.WinForm.Tests.dll" />
 
-	<assembly path="WinTraits.Tests\..\bin\Debug\NLog.WinTraits.Tests.dll" />
+	<assembly path="bin/Debug/NLog.WinTraits.Tests.dll" />
   </Config>
   <Config name="Linux" binpathtype="Auto">
-	<assembly path="NLog.Tests\..\bin\Debug\NLog.Tests.dll" />
-	<assembly path="AspNet.Tests\..\bin\Debug\NLog.AspNet.Tests.dll" />
-	<assembly path="Database.Tests\..\bin\Debug\NLog.Database.Tests.dll" />
-	<assembly path="LogReceiverService.Tests\..\bin\Debug\NLog.LogReceiverService.Tests.dll" />
-	<assembly path="LogReceiverService.Wcf.Tests\..\bin\Debug\NLog.LogReceiverService.Wcf.Tests.dll" />
-	<assembly path="Network.Tests\..\bin\Debug\NLog.Network.Tests.dll" />
-	<assembly path="WinForm.Tests\..\bin\Debug\NLog.WinForm.Tests.dll" />
+	<assembly path="bin/Debug/NLog.Tests.dll" />
+	<assembly path="bin/Debug/NLog.AspNet.Tests.dll" />
+	<assembly path="bin/Debug/NLog.Database.Tests.dll" />
+	<assembly path="bin/Debug/NLog.LogReceiverService.Tests.dll" />
+	<assembly path="bin/Debug/NLog.LogReceiverService.Wcf.Tests.dll" />
+	<assembly path="bin/Debug/NLog.Network.Tests.dll" />
+	<assembly path="bin/Debug/NLog.WinForm.Tests.dll" />
 
-	<assembly path="UnixTraits.Tests\..\bin\Debug\NLog.UnixTraits.Tests.dll" />
+	<assembly path="bin/Debug/NLog.UnixTraits.Tests.dll" />
   </Config>
 </NUnitProject>

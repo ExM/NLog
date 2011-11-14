@@ -76,12 +76,14 @@ namespace NLog.Layouts
 		/// Initializes this instance.
 		/// </summary>
 		/// <param name="cfg">The configuration.</param>
-		public virtual void Initialize(LoggingConfiguration cfg)
+		public void Initialize(LoggingConfiguration cfg)
 		{
 			if(_isInitialized)
 				return;
 			
 			_isInitialized = true;
+
+			InternalInit(cfg);
 			
 			_threadAgnostic = ObjectGraph.ResolveThreadAgnostic(this);
 		}
@@ -89,12 +91,29 @@ namespace NLog.Layouts
 		/// <summary>
 		/// Closes this instance.
 		/// </summary>
-		public virtual void Close()
+		public void Close()
 		{
 			if(!_isInitialized)
 				return;
 			
 			_isInitialized = false;
+
+			InternalClose();
+		}
+
+		/// <summary>
+		/// Initializes this instance.
+		/// </summary>
+		/// <param name="cfg">The configuration.</param>
+		protected virtual void InternalInit(LoggingConfiguration cfg)
+		{
+		}
+
+		/// <summary>
+		/// Closes this instance.
+		/// </summary>
+		protected virtual void InternalClose()
+		{
 		}
 
 		/// <summary>

@@ -18,7 +18,7 @@ namespace NLog.Layouts
 	[Layout("SimpleLayout")]
 	[ThreadAgnostic]
 	[AppDomainFixedOutput]
-	public class SimpleLayout : Layout, ISupportsLazyCast
+	public class SimpleLayout : Layout, ISupportsLazyParameters
 	{
 		private const int MaxInitialRenderBufferLength = 16384;
 		private int _maxRenderedLength;
@@ -59,7 +59,7 @@ namespace NLog.Layouts
 			SetRenderers(renderers);
 		}
 		
-		public void CreateChilds(LoggingConfiguration cfg)
+		public void CreateParameters(LoggingConfiguration cfg)
 		{
 			if(Renderers == null)
 				SetRenderers(LayoutParser.CompileLayout(cfg, _layoutText));
@@ -169,7 +169,7 @@ namespace NLog.Layouts
 		protected override string GetFormattedMessage(LogEventInfo logEvent)
 		{
 			if(Renderers == null)
-				throw new InvalidOperationException("required run CreateChilds method");
+				throw new InvalidOperationException("required run CreateParameters method");
 		
 			if (_fixedText != null)
 				return _fixedText;

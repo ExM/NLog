@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Text;
 using NLog.Config;
 using NLog.Internal;
+using NLog.Common;
 
 namespace NLog.Layouts
 {
@@ -14,7 +15,7 @@ namespace NLog.Layouts
 	[Layout("CsvLayout")]
 	[ThreadAgnostic]
 	[AppDomainFixedOutput]
-	public class CsvLayout : LayoutWithHeaderAndFooter, ISupportsLazyCast
+	public class CsvLayout : LayoutWithHeaderAndFooter, ISupportsLazyParameters
 	{
 		private string actualColumnDelimiter;
 		private string doubleQuoteChar;
@@ -76,7 +77,7 @@ namespace NLog.Layouts
 		/// <docgen category='CSV Options' order='10' />
 		public string CustomColumnDelimiter { get; set; }
 		
-		public void CreateChilds(LoggingConfiguration cfg)
+		public void CreateParameters(LoggingConfiguration cfg)
 		{
 			if(WithHeader && Header == null)
 				Header = new CsvHeaderLayout(this);

@@ -43,7 +43,7 @@ namespace NLog.Internal
 
 			ObjectGraph.CheckRequiredParameters(root);
 			
-			AttemptLazyCast(root as ISupportsLazyCast);
+			AttemptLazyCast(root as ISupportsLazyParameters);
 			
 			foreach (object child in ObjectGraph.OneLevelChilds(root))
 				DeepInitialize(child);
@@ -73,10 +73,10 @@ namespace NLog.Internal
 			}
 		}
 		
-		private void AttemptLazyCast(ISupportsLazyCast supLazyCast)
+		private void AttemptLazyCast(ISupportsLazyParameters supLazyCast)
 		{
 			if(supLazyCast != null)
-				supLazyCast.CreateChilds(_cfg);
+				supLazyCast.CreateParameters(_cfg);
 		}
 	}
 }

@@ -1,13 +1,10 @@
 using System;
-using System.IO;
 using System.Text;
-using NUnit.Framework;
 using NLog.Common;
 using NLog.Config;
-using NLog.Internal;
 using NLog.LayoutRenderers;
 using NLog.Layouts;
-using NLog.Common;
+using NUnit.Framework;
 
 namespace NLog.UnitTests.Layouts
 {
@@ -147,7 +144,7 @@ namespace NLog.UnitTests.Layouts
 			}
 		}
 
-		public class MockLayout : Layout, ISupportsInitialize
+		public class MockLayout : Layout
 		{
 			public int InitCount { get; set; }
 
@@ -158,13 +155,15 @@ namespace NLog.UnitTests.Layouts
 				return "foo";
 			}
 
-			void ISupportsInitialize.Initialize(LoggingConfiguration configuration)
+			protected override void InternalInit(LoggingConfiguration cfg)
 			{
+				base.InternalInit(cfg);
 				InitCount++;
 			}
 
-			void ISupportsInitialize.Close()
+			protected override void InternalClose()
 			{
+				base.InternalClose();
 				CloseCount++;
 			}
 		}
