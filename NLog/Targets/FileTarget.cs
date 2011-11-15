@@ -50,7 +50,7 @@ namespace NLog.Targets
 			this.Encoding = Encoding.Default;
 			this.BufferSize = 32768;
 			this.AutoFlush = true;
-			this.NewLineChars = EnvironmentHelper.NewLine;
+			this.NewLineChars = Environment.NewLine;
 			this.EnableFileDelete = true;
 			this.OpenFileCacheTimeout = -1;
 			this.OpenFileCacheSize = 5;
@@ -152,7 +152,7 @@ namespace NLog.Targets
 						break;
 
 					case LineEndingMode.Default:
-						this.NewLineChars = EnvironmentHelper.NewLine;
+						this.NewLineChars = Environment.NewLine;
 						break;
 
 					case LineEndingMode.None:
@@ -1077,6 +1077,7 @@ namespace NLog.Targets
 		/// <summary>
 		/// Creates the file stream.
 		/// </summary>
+		/// <param name="fileName">name of file</param>
 		/// <param name="allowConcurrentWrite">If set to <c>true</c> allow concurrent writes.</param>
 		/// <returns>A <see cref="FileStream"/> object which can be used to write to the file.</returns>
 		public FileStream CreateFileStream(string fileName, bool allowConcurrentWrite)

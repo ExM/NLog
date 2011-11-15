@@ -81,9 +81,9 @@ namespace NLog.Targets
 		/// </remarks>
 		public RichTextBoxTarget()
 		{
-			this.WordColoringRules = new List<RichTextBoxWordColoringRule>();
-			this.RowColoringRules = new List<RichTextBoxRowColoringRule>();
-			this.ToolWindow = true;
+			WordColoringRules = new List<RichTextBoxWordColoringRule>();
+			RowColoringRules = new List<RichTextBoxRowColoringRule>();
+			ToolWindow = true;
 		}
 
 		private delegate void DelSendTheMessageToRichTextBox(string logMessage, RichTextBoxRowColoringRule rule);
@@ -201,33 +201,31 @@ namespace NLog.Targets
 		protected override void InitializeTarget()
 		{
 			base.InitializeTarget();
-			if (this.FormName == null)
-			{
-				this.FormName = "NLogForm" + Guid.NewGuid().ToString("N");
-			}
+			if (FormName == null)
+				FormName = "NLogForm" + Guid.NewGuid().ToString("N");
 
-			var openFormByName = Application.OpenForms[this.FormName];
-			if (openFormByName != null)
+			var openFormByName = Application.OpenForms[FormName];
+			if(openFormByName != null)
 			{
-				this.TargetForm = openFormByName;
-				if (string.IsNullOrEmpty(this.ControlName))
+				TargetForm = openFormByName;
+				if (string.IsNullOrEmpty(ControlName))
 				{
-					throw new NLogConfigurationException("Rich text box control name must be specified for " + this.GetType().Name + ".");
+					throw new NLogConfigurationException("Rich text box control name must be specified for " + GetType().Name + ".");
 				}
 
-				this.CreatedForm = false;
-				this.TargetRichTextBox = FormHelper.FindControl<RichTextBox>(this.ControlName, this.TargetForm);
+				CreatedForm = false;
+				TargetRichTextBox = FormHelper.FindControl<RichTextBox>(ControlName, TargetForm);
 
-				if (this.TargetRichTextBox == null)
+				if(TargetRichTextBox == null)
 				{
-					throw new NLogConfigurationException("Rich text box control '" + this.ControlName + "' cannot be found on form '" + this.FormName + "'.");
+					throw new NLogConfigurationException("Rich text box control '" + ControlName + "' cannot be found on form '" + FormName + "'.");
 				}
 			}
 			else
 			{
-				this.TargetForm = FormHelper.CreateForm(this.FormName, this.Width, this.Height, true, this.ShowMinimized, this.ToolWindow);
-				this.TargetRichTextBox = FormHelper.CreateRichTextBox(this.ControlName, this.TargetForm);
-				this.CreatedForm = true;
+				TargetForm = FormHelper.CreateForm(FormName, Width, Height, true, ShowMinimized, ToolWindow);
+				TargetRichTextBox = FormHelper.CreateRichTextBox(ControlName, TargetForm);
+				CreatedForm = true;
 			}
 		}
 
@@ -236,10 +234,10 @@ namespace NLog.Targets
 		/// </summary>
 		protected override void CloseTarget()
 		{
-			if (this.CreatedForm)
+			if(CreatedForm)
 			{
-				this.TargetForm.BeginInvoke((FormCloseDelegate)this.TargetForm.Close);
-				this.TargetForm = null;
+				TargetForm.BeginInvoke((FormCloseDelegate)TargetForm.Close);
+				TargetForm = null;
 			}
 		}
 
@@ -251,7 +249,7 @@ namespace NLog.Targets
 		{
 			RichTextBoxRowColoringRule matchingRule = null;
 
-			foreach (RichTextBoxRowColoringRule rr in this.RowColoringRules)
+			foreach (RichTextBoxRowColoringRule rr in RowColoringRules)
 			{
 				if (rr.CheckCondition(logEvent))
 				{
@@ -260,7 +258,7 @@ namespace NLog.Targets
 				}
 			}
 
-			if (this.UseDefaultRowColoringRules && matchingRule == null)
+			if (UseDefaultRowColoringRules && matchingRule == null)
 			{
 				foreach (RichTextBoxRowColoringRule rr in DefaultRowColoringRules)
 				{
@@ -277,9 +275,9 @@ namespace NLog.Targets
 				matchingRule = RichTextBoxRowColoringRule.Default;
 			}
 			
-			string logMessage = this.Layout.Render(logEvent);
+			string logMessage = Layout.Render(logEvent);
 
-			this.TargetRichTextBox.BeginInvoke(new DelSendTheMessageToRichTextBox(this.SendTheMessageToRichTextBox), new object[] { logMessage, matchingRule });
+			TargetRichTextBox.BeginInvoke(new DelSendTheMessageToRichTextBox(SendTheMessageToRichTextBox), new object[] { logMessage, matchingRule });
 		}
 
 		private static Color GetColorFromString(string color, Color defaultColor)
@@ -294,7 +292,7 @@ namespace NLog.Targets
 
 		private void SendTheMessageToRichTextBox(string logMessage, RichTextBoxRowColoringRule rule)
 		{
-			RichTextBox rtbx = this.TargetRichTextBox;
+			RichTextBox rtbx = TargetRichTextBox;
 
 			int startIndex = rtbx.Text.Length;
 			rtbx.SelectionStart = startIndex;
@@ -305,7 +303,7 @@ namespace NLog.Targets
 			rtbx.SelectionLength = rtbx.Text.Length - rtbx.SelectionStart;
 
 			// find word to color
-			foreach (RichTextBoxWordColoringRule wordRule in this.WordColoringRules)
+			foreach (RichTextBoxWordColoringRule wordRule in WordColoringRules)
 			{
 				MatchCollection mc = wordRule.CompiledRegex.Matches(rtbx.Text, startIndex);
 				foreach (Match m in mc)
@@ -318,26 +316,26 @@ namespace NLog.Targets
 				}
 			}
 
-			if (this.MaxLines > 0)
+			if (MaxLines > 0)
 			{
-				this.lineCount++;
-				if (this.lineCount > this.MaxLines)
+				lineCount++;
+				if (lineCount > MaxLines)
 				{
 					int pos = rtbx.GetFirstCharIndexFromLine(1);
 					rtbx.Select(0, pos);
 					rtbx.SelectedText = string.Empty;
-					this.lineCount--;
+					lineCount--;
 				}
 			}
 
-			if (this.AutoScroll)
+			if (AutoScroll)
 			{
 				rtbx.Select(rtbx.TextLength, 0);
 				rtbx.ScrollToCaret();
 			}
 		}
 
-		public void CreateParameters(LoggingConfiguration cfg)
+		void ISupportsLazyParameters.CreateParameters(LoggingConfiguration cfg)
 		{
 			if (UseDefaultRowColoringRules)
 				DefaultRowColoringRules = CreateDefautRules();

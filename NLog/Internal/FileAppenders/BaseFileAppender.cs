@@ -16,7 +16,6 @@ namespace NLog.Internal.FileAppenders
 		/// Initializes a new instance of the <see cref="BaseFileAppender" /> class.
 		/// </summary>
 		/// <param name="fileName">Name of the file.</param>
-		/// <param name="createParameters">The create parameters.</param>
 		public BaseFileAppender(string fileName)
 		{
 			FileName = fileName;

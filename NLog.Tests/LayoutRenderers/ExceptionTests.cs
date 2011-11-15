@@ -124,8 +124,8 @@ namespace NLog.UnitTests.LayoutRenderers
 			string exceptionMessage = "Test exception";
 			Exception ex = GetNestedExceptionWithStackTrace(exceptionMessage);
 			logger.ErrorException("msg", ex);
-			AssertDebugLastMessage("debug1", "InvalidOperationException Wrapper2" + EnvironmentHelper.NewLine + 
-"InvalidOperationException Wrapper1" + EnvironmentHelper.NewLine +
+			AssertDebugLastMessage("debug1", "InvalidOperationException Wrapper2" + Environment.NewLine +
+"InvalidOperationException Wrapper1" + Environment.NewLine +
 "InvalidOperationException Test exception");
 		}
 

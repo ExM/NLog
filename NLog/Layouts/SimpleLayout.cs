@@ -47,19 +47,24 @@ namespace NLog.Layouts
 		/// Initializes a new instance of the <see cref="SimpleLayout"/> class.
 		/// </summary>
 		/// <param name="text">The layout string to parse.</param>
-		/// <param name="configurationItemFactory">The NLog factories to use when creating references to layout renderers.</param>
+		/// <param name="cfg">The custom configuration for extract renderers</param>
 		public SimpleLayout(string text, LoggingConfiguration cfg)
 			:this(text, LayoutParser.CompileLayout(cfg, text))
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SimpleLayout"/> class.
+		/// </summary>
+		/// <param name="text">The layout string to view.</param>
+		/// <param name="renderers">renderers</param>
 		public SimpleLayout(string text, LayoutRenderer[] renderers)
 		{
 			_layoutText = text;
 			SetRenderers(renderers);
 		}
-		
-		public void CreateParameters(LoggingConfiguration cfg)
+
+		void ISupportsLazyParameters.CreateParameters(LoggingConfiguration cfg)
 		{
 			if(Renderers == null)
 				SetRenderers(LayoutParser.CompileLayout(cfg, _layoutText));
@@ -117,6 +122,7 @@ namespace NLog.Layouts
 		/// <summary>
 		/// Evaluates the specified text by expadinging all layout renderers.
 		/// </summary>
+		/// <param name="cfg">custom configuration to resolve renderers.</param>
 		/// <param name="text">The text to be evaluated.</param>
 		/// <param name="logEvent">Log event to be used for evaluation.</param>
 		/// <returns>The input text with all occurences of ${} replaced with
@@ -132,6 +138,7 @@ namespace NLog.Layouts
 		/// Evaluates the specified text by expadinging all layout renderers
 		/// in new <see cref="LogEventInfo" /> context.
 		/// </summary>
+		/// <param name="cfg">custom configuration to resolve renderers.</param>
 		/// <param name="text">The text to be evaluated.</param>
 		/// <returns>The input text with all occurences of ${} replaced with
 		/// values provided by the appropriate layout renderers.</returns>

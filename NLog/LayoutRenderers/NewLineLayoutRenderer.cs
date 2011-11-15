@@ -19,7 +19,7 @@ namespace NLog.LayoutRenderers
 		/// <param name="logEvent">Logging event.</param>
 		protected override void Append(StringBuilder builder, LogEventInfo logEvent)
 		{
-			builder.Append(EnvironmentHelper.NewLine);
+			builder.Append(Environment.NewLine);
 		}
 	}
 }

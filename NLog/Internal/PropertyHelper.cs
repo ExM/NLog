@@ -74,18 +74,6 @@ namespace NLog.Internal
 			}
 		}
 
-		internal static bool IsArrayProperty(Type t, string name)
-		{
-			PropertyInfo propInfo;
-
-			if (!TryGetPropertyInfo(t, name, out propInfo))
-			{
-				throw new NotSupportedException("Parameter " + name + " not supported on " + t.Name);
-			}
-
-			return propInfo.IsDefined(typeof(ArrayParameterAttribute), false);
-		}
-
 		internal static bool TryGetPropertyInfo(object o, string propertyName, out PropertyInfo result)
 		{
 			PropertyInfo propInfo = o.GetType().GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
@@ -119,27 +107,6 @@ namespace NLog.Internal
 			}
 
 			return null;
-		}
-
-		internal static IEnumerable<PropertyInfo> GetAllReadableProperties(Type type)
-		{
-			return type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-		}
-
-		internal static void CheckRequiredParameters(object o)
-		{
-			foreach (PropertyInfo propInfo in PropertyHelper.GetAllReadableProperties(o.GetType()))
-			{
-				if (propInfo.IsDefined(typeof(RequiredParameterAttribute), false))
-				{
-					object value = propInfo.GetValue(o, null);
-					if (value == null)
-					{
-						throw new NLogConfigurationException(
-							"Required parameter '" + propInfo.Name + "' on '" + o + "' was not specified.");
-					}
-				}
-			}
 		}
 
 		private static bool TryImplicitConversion(Type resultType, string value, out object result)
@@ -273,7 +240,7 @@ namespace NLog.Internal
 		private static Dictionary<string, PropertyInfo> BuildPropertyInfoDictionary(Type t)
 		{
 			var retVal = new Dictionary<string, PropertyInfo>(StringComparer.OrdinalIgnoreCase);
-			foreach (PropertyInfo propInfo in GetAllReadableProperties(t))
+			foreach (PropertyInfo propInfo in t.GetProperties(BindingFlags.Public | BindingFlags.Instance))
 			{
 				var arrayParameterAttribute = (ArrayParameterAttribute)Attribute.GetCustomAttribute(propInfo, typeof(ArrayParameterAttribute));
 

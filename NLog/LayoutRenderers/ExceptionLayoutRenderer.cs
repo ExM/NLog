@@ -30,7 +30,7 @@ namespace NLog.LayoutRenderers
 		{
 			this.Format = "message";
 			this.Separator = " ";
-			this.InnerExceptionSeparator = EnvironmentHelper.NewLine;
+			this.InnerExceptionSeparator = Environment.NewLine;
 			this.MaxInnerExceptionLevel = 0;
 		}
 

@@ -1,10 +1,11 @@
+using System.Text;
+using NLog.Config;
+using NLog.Internal;
+using System;
+using System.Security;
 
 namespace NLog.LayoutRenderers
 {
-	using System.Text;
-	using NLog.Config;
-	using NLog.Internal;
-
 	/// <summary>
 	/// The environment variable.
 	/// </summary>
@@ -26,9 +27,22 @@ namespace NLog.LayoutRenderers
 		/// <param name="logEvent">Logging event.</param>
 		protected override void Append(StringBuilder builder, LogEventInfo logEvent)
 		{
-			if (this.Variable != null)
+			if (Variable != null)
+				builder.Append(GetSafeEnvironmentVariable(Variable));
+		}
+
+		private static string GetSafeEnvironmentVariable(string name)
+		{
+			try
 			{
-				builder.Append(EnvironmentHelper.GetSafeEnvironmentVariable(this.Variable));
+				string s = Environment.GetEnvironmentVariable(name);
+				if (s == null || s.Length == 0)
+					return null;
+				return s;
+			}
+			catch (SecurityException)
+			{
+				return string.Empty;
 			}
 		}
 	}

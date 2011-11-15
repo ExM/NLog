@@ -21,7 +21,7 @@ namespace NLog.Conditions
 		/// Initializes a new instance of the <see cref="ConditionParser"/> class.
 		/// </summary>
 		/// <param name="stringReader">The string reader.</param>
-		/// <param name="configurationItemFactory">Instance of <see cref="ConfigurationItemFactory"/> used to resolve references to condition methods and layout renderers.</param>
+		/// <param name="cfg">instance of configuration</param>
 		private ConditionParser(SimpleStringReader stringReader, LoggingConfiguration cfg)
 		{
 			this.cfg = cfg;
@@ -33,7 +33,7 @@ namespace NLog.Conditions
 		/// <see cref="ConditionExpression"/> tree.
 		/// </summary>
 		/// <param name="expressionText">The expression to be parsed.</param>
-		/// <param name="configurationItemFactories">Instance of <see cref="ConfigurationItemFactory"/> used to resolve references to condition methods and layout renderers.</param>
+		/// <param name="cfg">Instance of <see cref="LoggingConfiguration"/> used to resolve references to condition methods and layout renderers.</param>
 		/// <returns>The root of the expression syntax tree which can be used to get the value of the condition in a specified context.</returns>
 		public static ConditionExpression ParseExpression(string expressionText, LoggingConfiguration cfg)
 		{
@@ -57,7 +57,7 @@ namespace NLog.Conditions
 		/// <see cref="ConditionExpression"/> tree.
 		/// </summary>
 		/// <param name="stringReader">The string reader.</param>
-		/// <param name="configurationItemFactories">Instance of <see cref="ConfigurationItemFactory"/> used to resolve references to condition methods and layout renderers.</param>
+		/// <param name="cfg">Instance of <see cref="LoggingConfiguration"/> used to resolve references to condition methods and layout renderers.</param>
 		/// <returns>
 		/// The root of the expression syntax tree which can be used to get the value of the condition in a specified context.
 		/// </returns>

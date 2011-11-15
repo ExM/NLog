@@ -53,7 +53,7 @@ namespace NLog.Conditions
 			return Inner.Evaluate(context);
 		}
 
-		public void CreateParameters(LoggingConfiguration cfg)
+		void ISupportsLazyParameters.CreateParameters(LoggingConfiguration cfg)
 		{
 			Inner = ConditionParser.ParseExpression(Text, cfg);
 		}

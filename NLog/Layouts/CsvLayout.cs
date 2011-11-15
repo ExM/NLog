@@ -76,8 +76,8 @@ namespace NLog.Layouts
 		/// </summary>
 		/// <docgen category='CSV Options' order='10' />
 		public string CustomColumnDelimiter { get; set; }
-		
-		public void CreateParameters(LoggingConfiguration cfg)
+
+		void ISupportsLazyParameters.CreateParameters(LoggingConfiguration cfg)
 		{
 			if(WithHeader && Header == null)
 				Header = new CsvHeaderLayout(this);

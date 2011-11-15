@@ -30,13 +30,20 @@ namespace NLog.Config
 			_configurationItemFactory = new ConfigurationItemFactory(typeof(Logger).Assembly);
 			LoggingRules = new List<LoggingRule>();
 		}
-		
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LoggingConfiguration" /> class.
+		/// </summary>
+		/// <param name="factory">custom factory to resolve references</param>
 		public LoggingConfiguration(ConfigurationItemFactory factory)
 		{
 			_configurationItemFactory = factory;
 			LoggingRules = new List<LoggingRule>();
 		}
 		
+		/// <summary>
+		/// Instance of <see cref="ConfigurationItemFactory"/> used to resolve references
+		/// </summary>
 		public ConfigurationItemFactory ItemFactory
 		{
 			get

@@ -245,7 +245,7 @@ namespace NLog.Targets
 			return connection;
 		}
 
-		public void CreateParameters(LoggingConfiguration cfg)
+		void ISupportsLazyParameters.CreateParameters(LoggingConfiguration cfg)
 		{
 			bool foundProvider = false;
 
