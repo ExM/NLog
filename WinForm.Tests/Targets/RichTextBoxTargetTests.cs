@@ -1,23 +1,20 @@
-
 using System.Diagnostics;
-
-#if !MONO
+using System;
+using System.IO;
+using System.Text;
+using NUnit.Framework;
+using NLog.Common;
+using NLog.Config;
+using NLog.Layouts;
+using NLog.Targets;
+using NLog.Targets.Wrappers;
+using System.Threading;
+using System.Windows.Forms;
+using System.Drawing;
+using NLog.Internal;
 
 namespace NLog.UnitTests.Targets
 {
-	using System;
-	using System.IO;
-	using System.Text;
-	using NUnit.Framework;
-	using NLog.Common;
-	using NLog.Config;
-	using NLog.Layouts;
-	using NLog.Targets;
-	using NLog.Targets.Wrappers;
-	using System.Threading;
-	using System.Windows.Forms;
-	using System.Drawing;
-	using NLog.Internal;
 
 	[TestFixture]
 	public class RichTextBoxTargetTests : NLogTestBase
@@ -69,7 +66,7 @@ namespace NLog.UnitTests.Targets
 \cf4\ulnone Info NLog.UnitTests.Targets.RichTextBoxTargetTests Test\par
 \cf5 Debug NLog.UnitTests.Targets.RichTextBoxTargetTests Foo\par
 \cf6\i Trace NLog.UnitTests.Targets.RichTextBoxTargetTests Bar\par
-\cf0\highlight0\i0\f1\par
+\cf0\highlight0\i0\par
 }";
 			Assert.IsTrue(rtfText.Contains(expectedRtf), "Invalid RTF: " + rtfText);
 
@@ -117,7 +114,7 @@ Warn NLog.UnitTests.Targets.RichTextBoxTargetTests Bar\par
 Info NLog.UnitTests.Targets.RichTextBoxTargetTests Test\par
 Debug NLog.UnitTests.Targets.RichTextBoxTargetTests Foo\par
 Trace NLog.UnitTests.Targets.RichTextBoxTargetTests Bar\par
-\cf0\highlight0\f1\par
+\cf0\highlight0\par
 }";
 				Assert.IsTrue(rtfText.Contains(expectedRtf), "Invalid RTF: " + rtfText);
 			}
@@ -169,7 +166,7 @@ Error NLog.UnitTests.Targets.RichTextBoxTargetTests Foo\par
 \cf1 Info NLog.UnitTests.Targets.RichTextBoxTargetTests Test\par
 Debug NLog.UnitTests.Targets.RichTextBoxTargetTests Foo\par
 \cf3 Trace NLog.UnitTests.Targets.RichTextBoxTargetTests Bar\par
-\cf0\highlight0\f1\par
+\cf0\highlight0\par
 }";
 				Assert.IsTrue(rtfText.Contains(expectedRtf), "Invalid RTF: " + rtfText);
 			}
@@ -217,14 +214,15 @@ Debug NLog.UnitTests.Targets.RichTextBoxTargetTests Foo\par
 
 				// "zzz" string will be highlighted
 
-				string expectedRtf = @"{\colortbl ;\red0\green0\blue0;\red255\green255\blue255;\red255\green0\blue0;\red0\green128\blue0;}
-\viewkind4\uc1\pard\cf1\highlight2\f0\fs17 Fatal NLog.UnitTests.Targets.RichTextBoxTargetTests Test \cf3\f1 zzz\cf1\f0\par
+				string expectedRtf =
+@"{\colortbl ;\red0\green0\blue0;\red255\green255\blue255;\red255\green0\blue0;\red0\green128\blue0;}
+\viewkind4\uc1\pard\cf1\highlight2\f0\fs17 Fatal NLog.UnitTests.Targets.RichTextBoxTargetTests Test \cf3 zzz\cf1\par
 Error NLog.UnitTests.Targets.RichTextBoxTargetTests Foo xxx\par
 Warn NLog.UnitTests.Targets.RichTextBoxTargetTests Bar yyy\par
-Info NLog.UnitTests.Targets.RichTextBoxTargetTests Test \cf4\f1 aaa\cf1\f0\par
-Debug NLog.UnitTests.Targets.RichTextBoxTargetTests Foo \cf3\f1 zzz\cf1\f0\par
+Info NLog.UnitTests.Targets.RichTextBoxTargetTests Test \cf4 aaa\cf1\par
+Debug NLog.UnitTests.Targets.RichTextBoxTargetTests Foo \cf3 zzz\cf1\par
 Trace NLog.UnitTests.Targets.RichTextBoxTargetTests Bar ccc\par
-\cf0\highlight0\f1\par
+\cf0\highlight0\par
 }";
 				Assert.IsTrue(rtfText.Contains(expectedRtf), "Invalid RTF: " + rtfText);
 			}
@@ -323,7 +321,19 @@ Trace NLog.UnitTests.Targets.RichTextBoxTargetTests Bar ccc\par
 				new RichTextBoxRowColoringRule("level == LogLevel.Trace", "DarkGray", "Empty", FontStyle.Italic),
 			};
 
-			var actualRules = RichTextBoxTarget.DefaultRowColoringRules;
+			RichTextBoxTarget target = new RichTextBoxTarget()
+			{
+				ControlName = "Control1",
+				UseDefaultRowColoringRules = true,
+				Layout = "${level} ${logger} ${message}",
+				ToolWindow = false,
+				Width = 300,
+				Height = 200,
+			};
+
+			((ISupportsLazyParameters)target).CreateParameters(CommonCfg);
+
+			var actualRules = target.DefaultRowColoringRules;
 			Assert.AreEqual(expectedRules.Length, actualRules.Count);
 			for (int i = 0; i < expectedRules.Length; ++i)
 			{
@@ -444,7 +454,8 @@ Trace NLog.UnitTests.Targets.RichTextBoxTargetTests Bar ccc\par
 				}
 				catch (NLogConfigurationException ex)
 				{
-					Assert.AreEqual("Rich text box control 'Control1' cannot be found on form 'MyForm1'.", ex.Message);
+					Assert.IsNotNull(ex.InnerException);
+					Assert.AreEqual("Rich text box control 'Control1' cannot be found on form 'MyForm1'.", ex.InnerException.Message);
 				}
 			}
 		}
@@ -472,11 +483,10 @@ Trace NLog.UnitTests.Targets.RichTextBoxTargetTests Bar ccc\par
 				}
 				catch (NLogConfigurationException ex)
 				{
-					Assert.AreEqual("Rich text box control name must be specified for RichTextBoxTarget.", ex.Message);
+					Assert.IsNotNull(ex.InnerException);
+					Assert.AreEqual("Rich text box control name must be specified for RichTextBoxTarget.", ex.InnerException.Message);
 				}
 			}
 		}
 	}
 }
-
-#endif

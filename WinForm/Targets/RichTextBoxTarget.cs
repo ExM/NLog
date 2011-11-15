@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using NLog.Config;
 using NLog.Internal;
+using NLog.Common;
 
 namespace NLog.Targets
 {
@@ -45,7 +46,7 @@ namespace NLog.Targets
 	/// for WordColoring
 	/// </example>
 	[Target("RichTextBox")]
-	public sealed class RichTextBoxTarget : TargetWithLayout
+	public sealed class RichTextBoxTarget : TargetWithLayout, ISupportsLazyParameters
 	{
 		private int lineCount;
 
@@ -57,7 +58,11 @@ namespace NLog.Targets
 		/// </remarks>
 		static RichTextBoxTarget()
 		{
-			var rules = new List<RichTextBoxRowColoringRule>()
+		}
+
+		private List<RichTextBoxRowColoringRule> CreateDefautRules()
+		{
+			return new List<RichTextBoxRowColoringRule>()
 			{
 				new RichTextBoxRowColoringRule("level == LogLevel.Fatal", "White", "Red", FontStyle.Bold),
 				new RichTextBoxRowColoringRule("level == LogLevel.Error", "Red", "Empty", FontStyle.Bold | FontStyle.Italic),
@@ -66,8 +71,6 @@ namespace NLog.Targets
 				new RichTextBoxRowColoringRule("level == LogLevel.Debug", "Gray", "Empty"),
 				new RichTextBoxRowColoringRule("level == LogLevel.Trace", "DarkGray", "Empty", FontStyle.Italic),
 			};
-			
-			DefaultRowColoringRules = rules.AsReadOnly();
 		}
 
 		/// <summary>
@@ -86,11 +89,6 @@ namespace NLog.Targets
 		private delegate void DelSendTheMessageToRichTextBox(string logMessage, RichTextBoxRowColoringRule rule);
 
 		private delegate void FormCloseDelegate();
-
-		/// <summary>
-		/// Gets the default set of row coloring rules which applies when <see cref="UseDefaultRowColoringRules"/> is set to true.
-		/// </summary>
-		public static ReadOnlyCollection<RichTextBoxRowColoringRule> DefaultRowColoringRules { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the Name of RichTextBox to which Nlog will write.
@@ -118,6 +116,11 @@ namespace NLog.Targets
 		/// <docgen category='Highlighting Options' order='10' />
 		[ArrayParameter(typeof(RichTextBoxRowColoringRule), "row-coloring")]
 		public IList<RichTextBoxRowColoringRule> RowColoringRules { get; private set; }
+
+		/// <summary>
+		/// The default row coloring rules
+		/// </summary>
+		public IList<RichTextBoxRowColoringRule> DefaultRowColoringRules { get; private set; }
 
 		/// <summary>
 		/// Gets the word highlighting rules.
@@ -197,6 +200,7 @@ namespace NLog.Targets
 		/// </summary>
 		protected override void InitializeTarget()
 		{
+			base.InitializeTarget();
 			if (this.FormName == null)
 			{
 				this.FormName = "NLogForm" + Guid.NewGuid().ToString("N");
@@ -331,6 +335,12 @@ namespace NLog.Targets
 				rtbx.Select(rtbx.TextLength, 0);
 				rtbx.ScrollToCaret();
 			}
+		}
+
+		public void CreateParameters(LoggingConfiguration cfg)
+		{
+			if (UseDefaultRowColoringRules)
+				DefaultRowColoringRules = CreateDefautRules();
 		}
 	}
 }

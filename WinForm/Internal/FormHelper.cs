@@ -137,7 +137,7 @@ namespace NLog.Internal
 
 		private static Icon GetNLogIcon()
 		{
-			using (var stream = typeof(FormHelper).Assembly.GetManifestResourceStream("NLog.Resources.NLog.ico"))
+			using (var stream = typeof(FormHelper).Assembly.GetManifestResourceStream("NLog.WinForm.Resources.NLog.ico"))
 			{
 				return new Icon(stream);
 			}
