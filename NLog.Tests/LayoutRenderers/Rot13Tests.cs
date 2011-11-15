@@ -33,7 +33,7 @@ namespace NLog.UnitTests.LayoutRenderers
 		{
 			Layout l = "${rot13:HELLO}";
 			LogEventInfo lei = LogEventInfo.Create(LogLevel.Info, "aaa", "bbb");
-			l.DeepInitialize(CommonCfg);
+			l.Initialize(CommonCfg);
 			Assert.AreEqual("URYYB", l.Render(lei));
 		}
 
@@ -42,7 +42,7 @@ namespace NLog.UnitTests.LayoutRenderers
 		{
 			Layout l = "${rot13:text=HELLO}";
 			LogEventInfo lei = LogEventInfo.Create(LogLevel.Info, "aaa", "bbb");
-			l.DeepInitialize(CommonCfg);
+			l.Initialize(CommonCfg);
 			Assert.AreEqual("URYYB", l.Render(lei));
 		}
 
@@ -52,7 +52,7 @@ namespace NLog.UnitTests.LayoutRenderers
 			Layout l = "${rot13:${event-context:aaa}}";
 			LogEventInfo lei = LogEventInfo.Create(LogLevel.Info, "aaa", "bbb");
 			lei.Properties["aaa"] = "HELLO";
-			l.DeepInitialize(CommonCfg);
+			l.Initialize(CommonCfg);
 			Assert.AreEqual("URYYB", l.Render(lei));
 		}
 

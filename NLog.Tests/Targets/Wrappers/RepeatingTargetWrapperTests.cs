@@ -20,7 +20,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 				WrappedTarget = target,
 				RepeatCount = 3,
 			};
-			wrapper.DeepInitialize(CommonCfg);
+			wrapper.Initialize(CommonCfg);
 
 			var exceptions = new List<Exception>();
 
@@ -58,7 +58,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 				WrappedTarget = target,
 				RepeatCount = 3,
 			};
-			wrapper.DeepInitialize(CommonCfg);
+			wrapper.Initialize(CommonCfg);
 
 			var exceptions = new List<Exception>();
 

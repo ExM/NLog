@@ -50,7 +50,7 @@ namespace NLog.Targets
 		/// Initialize for tests
 		/// </summary>
 		/// <param name="cfg"></param>
-		public IDisposable DeepInitialize(LoggingConfiguration cfg)
+		public IDisposable Initialize(LoggingConfiguration cfg)
 		{
 			return new DeepCloser(ObjectGraph.DeepInitialize(this, cfg, true));
 		}

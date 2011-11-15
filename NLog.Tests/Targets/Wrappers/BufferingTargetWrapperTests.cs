@@ -22,7 +22,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 				BufferSize = 10,
 			};
 
-			using (targetWrapper.DeepInitialize(CommonCfg))
+			using (targetWrapper.Initialize(CommonCfg))
 			{
 
 				int totalEvents = 100;
@@ -135,7 +135,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 				FlushTimeout = 1000,
 			};
 
-			targetWrapper.DeepInitialize(CommonCfg);
+			targetWrapper.Initialize(CommonCfg);
 
 			int totalEvents = 100;
 
@@ -206,7 +206,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 				BufferSize = 10,
 			};
 
-			using (targetWrapper.DeepInitialize(CommonCfg))
+			using (targetWrapper.Initialize(CommonCfg))
 			{
 
 				int totalEvents = 100;
@@ -319,7 +319,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 				SlidingTimeout = false,
 			};
 
-			targetWrapper.DeepInitialize(CommonCfg);
+			targetWrapper.Initialize(CommonCfg);
 
 			int totalEvents = 100;
 
@@ -363,7 +363,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 				FlushTimeout = 400,
 			};
 
-			targetWrapper.DeepInitialize(CommonCfg);
+			targetWrapper.Initialize(CommonCfg);
 
 			int totalEvents = 100;
 

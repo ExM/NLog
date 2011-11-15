@@ -16,7 +16,7 @@ namespace NLog.UnitTests.Targets
 		public void InitializeTest()
 		{
 			var target = new MyTarget();
-			target.DeepInitialize(CommonCfg);
+			target.Initialize(CommonCfg);
 
 			// initialize was called once
 			Assert.AreEqual(1, target.InitializeCount);
@@ -30,7 +30,7 @@ namespace NLog.UnitTests.Targets
 			target.ThrowOnInitialize = true;
 			try
 			{
-				target.DeepInitialize(CommonCfg);
+				target.Initialize(CommonCfg);
 				Assert.Fail("Expected exception.");
 			}
 			catch(NLogConfigurationException) //(InvalidOperationException)
@@ -51,8 +51,8 @@ namespace NLog.UnitTests.Targets
 		public void DoubleInitializeTest()
 		{
 			var target = new MyTarget();
-			target.DeepInitialize(CommonCfg);
-			target.DeepInitialize(CommonCfg);
+			target.Initialize(CommonCfg);
+			target.Initialize(CommonCfg);
 
 			// initialize was called once
 			Assert.AreEqual(1, target.InitializeCount);
@@ -63,7 +63,7 @@ namespace NLog.UnitTests.Targets
 		public void DoubleCloseTest()
 		{
 			var target = new MyTarget();
-			using (target.DeepInitialize(CommonCfg))
+			using (target.Initialize(CommonCfg))
 			{
 			}
 
@@ -106,7 +106,7 @@ namespace NLog.UnitTests.Targets
 		public void WriteOnClosedTargetTest()
 		{
 			var target = new MyTarget();
-			using(target.DeepInitialize(CommonCfg))
+			using(target.Initialize(CommonCfg))
 			{
 			}
 
@@ -133,7 +133,7 @@ namespace NLog.UnitTests.Targets
 		{
 			var target = new MyTarget();
 			List<Exception> exceptions = new List<Exception>();
-			target.DeepInitialize(CommonCfg);
+			target.Initialize(CommonCfg);
 			target.Flush(exceptions.Add);
 
 			// flush was called
@@ -161,7 +161,7 @@ namespace NLog.UnitTests.Targets
 		public void FlushOnClosedTargetTest()
 		{
 			var target = new MyTarget();
-			using (target.DeepInitialize(CommonCfg))
+			using (target.Initialize(CommonCfg))
 			{
 			}
 			Assert.AreEqual(1, target.InitializeCount);
@@ -186,7 +186,7 @@ namespace NLog.UnitTests.Targets
 			Exception backgroundThreadException = null;
 			List<Exception> exceptions;
 
-			using (target.DeepInitialize(CommonCfg))
+			using (target.Initialize(CommonCfg))
 			{
 				Thread t = new Thread(() =>
 				{
@@ -205,7 +205,7 @@ namespace NLog.UnitTests.Targets
 				});
 
 
-				target.DeepInitialize(CommonCfg);
+				target.Initialize(CommonCfg);
 				t.Start();
 				Thread.Sleep(50);
 				exceptions = new List<Exception>();

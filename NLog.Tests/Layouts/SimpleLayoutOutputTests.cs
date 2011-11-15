@@ -17,7 +17,7 @@ namespace NLog.UnitTests.Layouts
 			int stringLength = 100000;
 
 			SimpleLayout l = new string('x', stringLength) + "${message}";
-			l.DeepInitialize(CommonCfg);
+			l.Initialize(CommonCfg);
 
 			string output = l.Render(LogEventInfo.CreateNullEvent());
 			Assert.AreEqual(new string('x', stringLength), output);
@@ -33,7 +33,7 @@ namespace NLog.UnitTests.Layouts
 			configurationItemFactory.LayoutRenderers.RegisterDefinition("throwsException", typeof(ThrowsExceptionRenderer));
 			var cfg = new LoggingConfiguration(configurationItemFactory);
 			SimpleLayout l = new SimpleLayout("xx${throwsException}yy", cfg);
-			l.DeepInitialize(cfg);
+			l.Initialize(cfg);
 			string output = l.Render(LogEventInfo.CreateNullEvent());
 			Assert.AreEqual("xxyy", output);
 		}
@@ -43,7 +43,7 @@ namespace NLog.UnitTests.Layouts
 		{
 			var l = new SimpleLayout("xx${level}yy");
 			var ev = LogEventInfo.CreateNullEvent();
-			l.DeepInitialize(CommonCfg);
+			l.Initialize(CommonCfg);
 			string output1 = l.Render(ev);
 			string output2 = l.Render(ev);
 			Assert.AreSame(output1, output2);
@@ -69,7 +69,7 @@ namespace NLog.UnitTests.Layouts
 						configurationItemFactory.LayoutRenderers.RegisterDefinition("throwsException", typeof(ThrowsExceptionRenderer));
 
 						SimpleLayout l = new SimpleLayout("xx${throwsException:msg1}yy${throwsException:msg2}zz", new LoggingConfiguration(configurationItemFactory));
-						l.DeepInitialize(CommonCfg);
+						l.Initialize(CommonCfg);
 						string output = l.Render(LogEventInfo.CreateNullEvent());
 						Assert.AreEqual("xxyyzz", output);
 					}, 
@@ -87,17 +87,17 @@ namespace NLog.UnitTests.Layouts
 			Assert.AreEqual(0, lr.CloseCount);
 
 			// make sure render will call Init
-			lr.DeepInitialize(CommonCfg);
-			lr.Render(LogEventInfo.CreateNullEvent());
-			Assert.AreEqual(1, lr.InitCount);
-			Assert.AreEqual(0, lr.CloseCount);
-
-			lr.Close();
+			using(lr.Initialize(CommonCfg))
+			{
+				lr.Render(LogEventInfo.CreateNullEvent());
+				Assert.AreEqual(1, lr.InitCount);
+				Assert.AreEqual(0, lr.CloseCount);
+			}
 			Assert.AreEqual(1, lr.InitCount);
 			Assert.AreEqual(1, lr.CloseCount);
 
 			// second call to Close() will be ignored
-			lr.Close();
+			((ISupportsInitialize)lr).Close();
 			Assert.AreEqual(1, lr.InitCount);
 			Assert.AreEqual(1, lr.CloseCount);
 		}
@@ -110,19 +110,19 @@ namespace NLog.UnitTests.Layouts
 			Assert.AreEqual(0, lr.CloseCount);
 
 			// calls to Close() will be ignored because 
-			lr.Close();
+			((ISupportsInitialize)lr).Close();
 			Assert.AreEqual(0, lr.InitCount);
 			Assert.AreEqual(0, lr.CloseCount);
 
-			lr.DeepInitialize(CommonCfg);
-			Assert.AreEqual(1, lr.InitCount);
-
-			// make sure render will not call another Init
-			lr.Render(LogEventInfo.CreateNullEvent());
-			Assert.AreEqual(1, lr.InitCount);
-			Assert.AreEqual(0, lr.CloseCount);
-
-			lr.Close();
+			using(lr.Initialize(CommonCfg))
+			{
+				Assert.AreEqual(1, lr.InitCount);
+	
+				// make sure render will not call another Init
+				lr.Render(LogEventInfo.CreateNullEvent());
+				Assert.AreEqual(1, lr.InitCount);
+				Assert.AreEqual(0, lr.CloseCount);
+			}
 			Assert.AreEqual(1, lr.InitCount);
 			Assert.AreEqual(1, lr.CloseCount);
 		}

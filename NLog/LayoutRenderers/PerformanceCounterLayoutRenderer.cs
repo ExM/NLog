@@ -11,7 +11,7 @@ namespace NLog.LayoutRenderers
 	/// The performance counter.
 	/// </summary>
 	[LayoutRenderer("performancecounter")]
-	public class PerformanceCounterLayoutRenderer : LayoutRenderer, ISupportsInitialize
+	public sealed class PerformanceCounterLayoutRenderer : LayoutRenderer, ISupportsInitialize
 	{
 		private PerformanceCounter _perfCounter;
 
@@ -55,7 +55,7 @@ namespace NLog.LayoutRenderers
 
 		private bool _isInitialized = false;
 
-		public void Initialize(LoggingConfiguration configuration)
+		void ISupportsInitialize.Initialize(LoggingConfiguration configuration)
 		{
 			if(_isInitialized)
 				return;
@@ -68,7 +68,7 @@ namespace NLog.LayoutRenderers
 				_perfCounter = new PerformanceCounter(Category, Counter, Instance, true);
 		}
 
-		public void Close()
+		void ISupportsInitialize.Close()
 		{
 			if(!_isInitialized)
 				return;

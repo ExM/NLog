@@ -13,7 +13,7 @@ namespace NLog.UnitTests.LayoutRenderers.Wrappers
 		public void Render()
 		{
 			SimpleLayout l = "${guid}";
-			l.DeepInitialize(CommonCfg);
+			l.Initialize(CommonCfg);
 			string s1 = l.Render(LogEventInfo.CreateNullEvent());
 			string s2 = l.Render(LogEventInfo.CreateNullEvent());
 

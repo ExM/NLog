@@ -1,9 +1,8 @@
+using System;
+using System.ComponentModel;
 
 namespace NLog.Targets
 {
-	using System;
-	using System.ComponentModel;
-
 	/// <summary>
 	/// Writes log messages to the console.
 	/// </summary>
@@ -39,11 +38,8 @@ namespace NLog.Targets
 		protected override void InitializeTarget()
 		{
 			base.InitializeTarget();
-			if (Header != null)
-			{
-				Header.Initialize(LoggingConfiguration);
-				this.Output(Header.Render(LogEventInfo.CreateNullEvent()));
-			}
+			if(Header != null)
+				Output(Header.Render(LogEventInfo.CreateNullEvent()));
 		}
 
 		/// <summary>
@@ -51,10 +47,8 @@ namespace NLog.Targets
 		/// </summary>
 		protected override void CloseTarget()
 		{
-			if (Footer != null)
-			{
-				this.Output(Footer.Render(LogEventInfo.CreateNullEvent()));
-			}
+			if(Footer != null)
+				Output(Footer.Render(LogEventInfo.CreateNullEvent()));
 
 			base.CloseTarget();
 		}
@@ -69,19 +63,15 @@ namespace NLog.Targets
 		/// </remarks>
 		protected override void Write(LogEventInfo logEvent)
 		{
-			this.Output(this.Layout.Render(logEvent));
+			Output(Layout.Render(logEvent));
 		}
 
 		private void Output(string s)
 		{
-			if (this.Error)
-			{
+			if (Error)
 				Console.Error.WriteLine(s);
-			}
 			else
-			{
 				Console.Out.WriteLine(s);
-			}
 		}
 	}
 }

@@ -120,7 +120,7 @@ namespace NLog.UnitTests.Layouts
 				ev.Message = "hello, world";
 
 				string sep = delim.Value;
-				csvLayout.DeepInitialize(CommonCfg);
+				csvLayout.Initialize(CommonCfg);
 
 				Assert.AreEqual("2010-01-01 12:34:56.0000" + sep + "Info" + sep + "hello, world", csvLayout.Render(ev));
 				Assert.AreEqual("date" + sep + "level" + sep + "message;text", csvLayout.Header.Render(ev));
@@ -163,7 +163,7 @@ namespace NLog.UnitTests.Layouts
 				ev.Message = "hello, world";
 
 				string sep = delim.Value;
-				csvLayout.DeepInitialize(CommonCfg);
+				csvLayout.Initialize(CommonCfg);
 
 				Assert.AreEqual("'2010-01-01 12:34:56.0000'" + sep + "'Info'" + sep + "'hello, world'", csvLayout.Render(ev));
 				Assert.AreEqual("'date'" + sep + "'level'" + sep + "'message;text'", csvLayout.Header.Render(ev));
@@ -186,7 +186,7 @@ namespace NLog.UnitTests.Layouts
 				Delimiter = CsvColumnDelimiterMode.Semicolon,
 			};
 
-			csvLayout.DeepInitialize(CommonCfg);
+			csvLayout.Initialize(CommonCfg);
 
 			// no quoting
 			Assert.AreEqual(
@@ -261,7 +261,7 @@ namespace NLog.UnitTests.Layouts
 				Message = "hello, world"
 			};
 
-			csvLayout.DeepInitialize(CommonCfg);
+			csvLayout.Initialize(CommonCfg);
 
 			var r11 = csvLayout.Render(e1);
 			var r12 = csvLayout.Render(e1);

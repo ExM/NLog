@@ -13,7 +13,7 @@ namespace NLog.LayoutRenderers
 	/// The information about the running process.
 	/// </summary>
 	[LayoutRenderer("processinfo")]
-	public class ProcessInfoLayoutRenderer : LayoutRenderer, ISupportsInitialize
+	public sealed class ProcessInfoLayoutRenderer : LayoutRenderer, ISupportsInitialize
 	{
 		private Process process;
 
@@ -49,7 +49,7 @@ namespace NLog.LayoutRenderers
 		
 		private bool _isInitialized = false;
 
-		public void Initialize(LoggingConfiguration configuration)
+		void ISupportsInitialize.Initialize(LoggingConfiguration configuration)
 		{
 			if(_isInitialized)
 				return;
@@ -63,7 +63,7 @@ namespace NLog.LayoutRenderers
 			process = Process.GetCurrentProcess();
 		}
 
-		public void Close()
+		void ISupportsInitialize.Close()
 		{
 			if(!_isInitialized)
 				return;

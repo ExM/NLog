@@ -25,7 +25,7 @@ namespace NLog.UnitTests.Targets
 				DBProvider = typeof(MockDbConnection).AssemblyQualifiedName,
 			};
 
-			dt.DeepInitialize(CommonCfg);
+			dt.Initialize(CommonCfg);
 			Assert.AreSame(typeof(MockDbConnection), dt.ConnectionType);
 
 			List<Exception> exceptions = new List<Exception>();
@@ -62,7 +62,7 @@ Close()
 				DBProvider = typeof(MockDbConnection).AssemblyQualifiedName,
 			};
 
-			dt.DeepInitialize(CommonCfg);
+			dt.Initialize(CommonCfg);
 			Assert.AreSame(typeof(MockDbConnection), dt.ConnectionType);
 
 			List<Exception> exceptions = new List<Exception>();
@@ -101,7 +101,7 @@ Close()
 				KeepConnection = true,
 			};
 
-			using (dt.DeepInitialize(CommonCfg))
+			using (dt.Initialize(CommonCfg))
 			{
 				Assert.AreSame(typeof(MockDbConnection), dt.ConnectionType);
 
@@ -140,7 +140,7 @@ ExecuteNonQuery: INSERT INTO FooBar VALUES('msg3')
 				KeepConnection = true,
 			};
 
-			using (dt.DeepInitialize(CommonCfg))
+			using (dt.Initialize(CommonCfg))
 			{
 				Assert.AreSame(typeof(MockDbConnection), dt.ConnectionType);
 				var exceptions = new List<Exception>();
@@ -183,7 +183,7 @@ ExecuteNonQuery: INSERT INTO FooBar VALUES('msg3')
 				KeepConnection = true,
 			};
 
-			using (dt.DeepInitialize(CommonCfg))
+			using (dt.Initialize(CommonCfg))
 			{
 				Assert.AreSame(typeof(MockDbConnection), dt.ConnectionType);
 
@@ -227,7 +227,7 @@ ExecuteNonQuery: INSERT INTO FooBar VALUES('msg4')
 				KeepConnection = true,
 			};
 
-			using (dt.DeepInitialize(CommonCfg))
+			using (dt.Initialize(CommonCfg))
 			{
 
 				Assert.AreSame(typeof(MockDbConnection), dt.ConnectionType);
@@ -287,7 +287,7 @@ ExecuteNonQuery: INSERT INTO FooBar VALUES('msg3')
 				}
 			};
 
-			using (dt.DeepInitialize(CommonCfg))
+			using (dt.Initialize(CommonCfg))
 			{
 				Assert.AreSame(typeof(MockDbConnection), dt.ConnectionType);
 
@@ -381,7 +381,7 @@ ExecuteNonQuery: INSERT INTO FooBar VALUES(@msg, @lvl, @lg)
 			};
 
 			List<Exception> exceptions;
-			using (dt.DeepInitialize(CommonCfg))
+			using (dt.Initialize(CommonCfg))
 			{
 				Assert.AreSame(typeof(MockDbConnection), dt.ConnectionType);
 
@@ -495,7 +495,7 @@ Close()
 			db.CommandText = "not important";
 			db.ConnectionString = "cannotconnect";
 			db.DBProvider = typeof(MockDbConnection).AssemblyQualifiedName;
-			using (db.DeepInitialize(CommonCfg))
+			using (db.Initialize(CommonCfg))
 			{
 				db.WriteAsyncLogEvent(LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add));
 			}
@@ -517,7 +517,7 @@ Close()
 			db.ConnectionString = "cannotexecute";
 			db.KeepConnection = true;
 			db.DBProvider = typeof(MockDbConnection).AssemblyQualifiedName;
-			using (db.DeepInitialize(CommonCfg))
+			using (db.Initialize(CommonCfg))
 			{
 				db.WriteAsyncLogEvent(LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add));
 				db.WriteAsyncLogEvent(LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add));
@@ -556,7 +556,7 @@ Close()
 			db.ConnectionString = "cannotexecute";
 			db.KeepConnection = true;
 			db.DBProvider = typeof(MockDbConnection).AssemblyQualifiedName;
-			using (db.DeepInitialize(CommonCfg))
+			using (db.Initialize(CommonCfg))
 			{
 				db.WriteAsyncLogEvents(
 					LogEventInfo.CreateNullEvent().WithContinuation(exceptions.Add),
@@ -600,7 +600,7 @@ Close()
 				new ConnectionStringSettings("MyConnectionString", "cs1", "MockDb"),
 			};
 
-			dt.DeepInitialize(CommonCfg);
+			dt.Initialize(CommonCfg);
 			Assert.AreSame(MockDbFactory.Instance, dt.ProviderFactory);
 			Assert.AreEqual("cs1", dt.ConnectionString.Render(LogEventInfo.CreateNullEvent()));
 		}
@@ -617,7 +617,7 @@ Close()
 
 			try
 			{
-				dt.DeepInitialize(CommonCfg);
+				dt.Initialize(CommonCfg);
 				Assert.Fail("Exception expected.");
 			}
 			catch (NLogConfigurationException configurationException)
@@ -632,7 +632,7 @@ Close()
 			var dt = new DatabaseTarget();
 			dt.DBProvider = "MockDb";
 			dt.CommandText = "Notimportant";
-			dt.DeepInitialize(CommonCfg);
+			dt.Initialize(CommonCfg);
 			Assert.AreSame(MockDbFactory.Instance, dt.ProviderFactory);
 			dt.OpenConnection("myConnectionString");
 			Assert.AreEqual(1, MockDbConnection2.OpenCount);
@@ -652,7 +652,7 @@ Close()
 					CommandText = "notimportant",
 				};
 
-				dt.DeepInitialize(CommonCfg);
+				dt.Initialize(CommonCfg);
 				Assert.AreEqual(typeof(System.Data.SqlClient.SqlConnection), dt.ConnectionType);
 			}
 		}
@@ -668,7 +668,7 @@ Close()
 				CommandText = "notimportant",
 			};
 
-			dt.DeepInitialize(CommonCfg);
+			dt.Initialize(CommonCfg);
 			Assert.AreEqual(typeof(System.Data.OleDb.OleDbConnection), dt.ConnectionType);
 		}
 
@@ -683,7 +683,7 @@ Close()
 				CommandText = "notimportant",
 			};
 
-			dt.DeepInitialize(CommonCfg);
+			dt.Initialize(CommonCfg);
 			Assert.AreEqual(typeof(System.Data.Odbc.OdbcConnection), dt.ConnectionType);
 		}
 		
@@ -699,7 +699,7 @@ Close()
 			dt.CommandText = "NotImportant";
 
 			var exceptions = new List<Exception>();
-			using (dt.DeepInitialize(CommonCfg))
+			using (dt.Initialize(CommonCfg))
 			{
 				dt.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "Logger1", "msg1").WithContinuation(exceptions.Add));
 			}

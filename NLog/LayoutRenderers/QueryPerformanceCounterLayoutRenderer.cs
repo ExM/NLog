@@ -13,7 +13,7 @@ namespace NLog.LayoutRenderers
 	/// High precision timer, based on the value returned from QueryPerformanceCounter() optionally converted to seconds.
 	/// </summary>
 	[LayoutRenderer("qpc")]
-	public class QueryPerformanceCounterLayoutRenderer : LayoutRenderer, ISupportsInitialize
+	public sealed class QueryPerformanceCounterLayoutRenderer : LayoutRenderer, ISupportsInitialize
 	{
 		private bool _raw;
 		private long _firstQpcValue;
@@ -126,7 +126,7 @@ namespace NLog.LayoutRenderers
 		
 		private bool _isInitialized = false;
 
-		public void Initialize(LoggingConfiguration configuration)
+		void ISupportsInitialize.Initialize(LoggingConfiguration configuration)
 		{
 			if(_isInitialized)
 				return;
@@ -144,7 +144,7 @@ namespace NLog.LayoutRenderers
 			_lastQpcValue = qpcValue;
 		}
 
-		public void Close()
+		void ISupportsInitialize.Close()
 		{
 			if(!_isInitialized)
 				return;

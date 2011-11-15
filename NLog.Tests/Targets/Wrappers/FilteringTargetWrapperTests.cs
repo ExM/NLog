@@ -24,7 +24,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 				Condition = myMockCondition,
 			};
 
-			wrapper.DeepInitialize(CommonCfg);
+			wrapper.Initialize(CommonCfg);
 			var logEvent = new LogEventInfo();
 			Exception lastException = null;
 			bool continuationHit = false;
@@ -58,7 +58,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 			var myTarget = new MyAsyncTarget();
 			var wrapper = new FilteringTargetWrapper(myTarget, myMockCondition);
 
-			wrapper.DeepInitialize(CommonCfg);
+			wrapper.Initialize(CommonCfg);
 			var logEvent = new LogEventInfo();
 			Exception lastException = null;
 			var continuationHit = new ManualResetEvent(false);
@@ -94,7 +94,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 			};
 
 			var wrapper = new FilteringTargetWrapper(myTarget, myMockCondition);
-			wrapper.DeepInitialize(CommonCfg);
+			wrapper.Initialize(CommonCfg);
 			var logEvent = new LogEventInfo();
 			Exception lastException = null;
 			var continuationHit = new ManualResetEvent(false);
@@ -135,7 +135,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 				Condition = myMockCondition,
 			};
 
-			wrapper.DeepInitialize(CommonCfg);
+			wrapper.Initialize(CommonCfg);
 			var logEvent = new LogEventInfo();
 			Exception lastException = null;
 			bool continuationHit = false;
@@ -169,7 +169,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 			var myMockCondition = new MyMockCondition(false);
 			var myTarget = new MyAsyncTarget();
 			var wrapper = new FilteringTargetWrapper(myTarget, myMockCondition);
-			wrapper.DeepInitialize(CommonCfg);
+			wrapper.Initialize(CommonCfg);
 			var logEvent = new LogEventInfo();
 			Exception lastException = null;
 			var continuationHit = new ManualResetEvent(false);
@@ -204,7 +204,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 				ThrowExceptions = true,
 			};
 			var wrapper = new FilteringTargetWrapper(myTarget, myMockCondition);
-			wrapper.DeepInitialize(CommonCfg);
+			wrapper.Initialize(CommonCfg);
 			var logEvent = new LogEventInfo();
 			Exception lastException = null;
 			var continuationHit = new ManualResetEvent(false);

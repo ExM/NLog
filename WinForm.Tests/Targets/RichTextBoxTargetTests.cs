@@ -359,7 +359,7 @@ Trace NLog.UnitTests.Targets.RichTextBoxTargetTests Bar ccc\par
 				form.Controls.Add(rtb);
 				form.Shown += (sender, e) =>
 					{
-						target.DeepInitialize(CommonCfg);
+						target.Initialize(CommonCfg);
 						form.Activate();
 						Application.DoEvents();
 						Assert.AreSame(form, target.TargetForm);
@@ -406,7 +406,7 @@ Trace NLog.UnitTests.Targets.RichTextBoxTargetTests Bar ccc\par
 					form1.Show();
 					form1.Activate();
 
-					target.DeepInitialize(CommonCfg);
+					target.Initialize(CommonCfg);
 					Assert.AreSame(form1, target.TargetForm);
 					Assert.AreSame(rtb2, target.TargetRichTextBox);
 				}
@@ -439,7 +439,7 @@ Trace NLog.UnitTests.Targets.RichTextBoxTargetTests Bar ccc\par
 				form.Show();
 				try
 				{
-					target.DeepInitialize(CommonCfg);
+					target.Initialize(CommonCfg);
 					Assert.Fail("Expected exception.");
 				}
 				catch (NLogConfigurationException ex)
@@ -467,7 +467,7 @@ Trace NLog.UnitTests.Targets.RichTextBoxTargetTests Bar ccc\par
 
 				try
 				{
-					target.DeepInitialize(CommonCfg);
+					target.Initialize(CommonCfg);
 					Assert.Fail("Expected exception.");
 				}
 				catch (NLogConfigurationException ex)

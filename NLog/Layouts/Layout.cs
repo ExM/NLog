@@ -63,9 +63,9 @@ namespace NLog.Layouts
 		/// Initialize for tests
 		/// </summary>
 		/// <param name="cfg"></param>
-		public void DeepInitialize(LoggingConfiguration cfg)
+		public IDisposable Initialize(LoggingConfiguration cfg)
 		{
-			ObjectGraph.DeepInitialize(this, cfg, LogManager.ThrowExceptions);
+			return new DeepCloser(ObjectGraph.DeepInitialize(this, cfg, true));
 		}
 
 		/// <summary>
@@ -85,7 +85,7 @@ namespace NLog.Layouts
 		/// Initializes this instance.
 		/// </summary>
 		/// <param name="cfg">The configuration.</param>
-		public void Initialize(LoggingConfiguration cfg)
+		void ISupportsInitialize.Initialize(LoggingConfiguration cfg)
 		{
 			if(_isInitialized)
 				return;
@@ -100,7 +100,7 @@ namespace NLog.Layouts
 		/// <summary>
 		/// Closes this instance.
 		/// </summary>
-		public void Close()
+		void ISupportsInitialize.Close()
 		{
 			if(!_isInitialized)
 				return;

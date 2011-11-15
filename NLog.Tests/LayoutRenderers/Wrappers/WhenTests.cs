@@ -13,7 +13,7 @@ namespace NLog.UnitTests.LayoutRenderers.Wrappers
 		public void PositiveWhenTest()
 		{
 			SimpleLayout l = @"${message:when=logger=='logger'}";
-			l.DeepInitialize(CommonCfg);
+			l.Initialize(CommonCfg);
 			var le = LogEventInfo.Create(LogLevel.Info, "logger", "message");
 			Assert.AreEqual("message", l.Render(le));
 		}
@@ -22,7 +22,7 @@ namespace NLog.UnitTests.LayoutRenderers.Wrappers
 		public void NegativeWhenTest()
 		{
 			SimpleLayout l = @"${message:when=logger=='logger'}";
-			l.DeepInitialize(CommonCfg);
+			l.Initialize(CommonCfg);
 			var le = LogEventInfo.Create(LogLevel.Info, "logger2", "message");
 			Assert.AreEqual("", l.Render(le));
 		}
@@ -33,7 +33,7 @@ namespace NLog.UnitTests.LayoutRenderers.Wrappers
 			// condition is pretty complex here and includes nested layout renderers
 			// we are testing here that layout parsers property invokes Condition parser to consume the right number of characters
 			SimpleLayout l = @"${message:when='${pad:${logger}:padding=10:padCharacter=X}'=='XXXXlogger':padding=-10:padCharacter=Y}";
-			l.DeepInitialize(CommonCfg);
+			l.Initialize(CommonCfg);
 			var le = LogEventInfo.Create(LogLevel.Info, "logger", "message");
 			Assert.AreEqual("messageYYY", l.Render(le));
 		}
@@ -44,7 +44,7 @@ namespace NLog.UnitTests.LayoutRenderers.Wrappers
 			// condition is pretty complex here and includes nested layout renderers
 			// we are testing here that layout parsers property invokes Condition parser to consume the right number of characters
 			SimpleLayout l = @"${message:padding=-10:padCharacter=Y:when='${pad:${logger}:padding=10:padCharacter=X}'=='XXXXlogger'}";
-			l.DeepInitialize(CommonCfg);
+			l.Initialize(CommonCfg);
 			var le = LogEventInfo.Create(LogLevel.Info, "logger", "message");
 			Assert.AreEqual("messageYYY", l.Render(le));
 		}

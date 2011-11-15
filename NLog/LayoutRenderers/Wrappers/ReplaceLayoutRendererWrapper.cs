@@ -63,7 +63,7 @@ namespace NLog.LayoutRenderers.Wrappers
 		
 		private bool _isInitialized = false;
 
-		public void Initialize(LoggingConfiguration configuration)
+		void ISupportsInitialize.Initialize(LoggingConfiguration configuration)
 		{
 			if(_isInitialized)
 				return;
@@ -85,7 +85,7 @@ namespace NLog.LayoutRenderers.Wrappers
 			_regex = new Regex(regexString, regexOptions);
 		}
 
-		public void Close()
+		void ISupportsInitialize.Close()
 		{
 			if(!_isInitialized)
 				return;

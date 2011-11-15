@@ -20,7 +20,7 @@ namespace NLog.UnitTests.LayoutRenderers
 			dt.UniversalTime = true;
 
 			var ei = new LogEventInfo(LogLevel.Info, "logger", "msg");
-			dt.DeepInitialize(CommonCfg);
+			dt.Initialize(CommonCfg);
 			Assert.AreEqual(ei.TimeStamp.ToUniversalTime().ToString("HH:mm:ss.ffff"), dt.Render(ei));
 		}
 
@@ -31,7 +31,7 @@ namespace NLog.UnitTests.LayoutRenderers
 			dt.UniversalTime = false;
 
 			var ei = new LogEventInfo(LogLevel.Info, "logger", "msg");
-			dt.DeepInitialize(CommonCfg);
+			dt.Initialize(CommonCfg);
 			Assert.AreEqual(ei.TimeStamp.ToString("HH:mm:ss.ffff"), dt.Render(ei));
 		}
 		

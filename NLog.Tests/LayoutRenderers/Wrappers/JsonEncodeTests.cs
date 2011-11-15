@@ -14,7 +14,7 @@ namespace NLog.UnitTests.LayoutRenderers.Wrappers
 			MappedDiagnosticsContext.Clear();
 			MappedDiagnosticsContext.Set("foo", " abc\"\n\b\r\f\t/\u1234\u5432\\xyz ");
 			SimpleLayout l = "${json-encode:${mdc:foo}}";
-			l.DeepInitialize(CommonCfg);
+			l.Initialize(CommonCfg);
 			Assert.AreEqual(@" abc\""\n\b\r\f\t\/\u1234\u5432\\xyz ", l.Render(LogEventInfo.CreateNullEvent()));
 		}
 	}

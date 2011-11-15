@@ -203,7 +203,7 @@ namespace NLog.UnitTests.Conditions
 		private void AssertTypePromotionTest(bool expected, string text, LoggingConfiguration cfg)
 		{
 			ConditionExpression condition = ConditionParser.ParseExpression(text, cfg);
-			condition.DeepInitialize(cfg);
+			condition.Initialize(cfg);
 			LogEventInfo context = CreateWellKnownContext();
 			object actualResult = condition.Evaluate(context);
 			Assert.AreEqual(expected, actualResult);
@@ -325,7 +325,7 @@ namespace NLog.UnitTests.Conditions
 		private void AssertEvaluationResult(object expectedResult, string conditionText)
 		{
 			ConditionExpression condition = ConditionParser.ParseExpression(conditionText, CommonCfg);
-			condition.DeepInitialize(CommonCfg);
+			condition.Initialize(CommonCfg);
 			LogEventInfo context = CreateWellKnownContext();
 			object actualResult = condition.Evaluate(context);
 			Assert.AreEqual(expectedResult, actualResult);

@@ -14,7 +14,7 @@ namespace NLog.UnitTests.LayoutRenderers.Wrappers
 		public void CoalesceTest()
 		{
 			SimpleLayout l = @"${message:whenEmpty=<no message>}";
-			l.DeepInitialize(CommonCfg);
+			l.Initialize(CommonCfg);
 			var le = LogEventInfo.Create(LogLevel.Info, "logger", "message");
 			Assert.AreEqual("message", l.Render(le));
 
@@ -27,7 +27,7 @@ namespace NLog.UnitTests.LayoutRenderers.Wrappers
 		public void CoalesceWithANestedLayout()
 		{
 			SimpleLayout l = @"${message:whenEmpty=${logger} emitted empty message}";
-			l.DeepInitialize(CommonCfg);
+			l.Initialize(CommonCfg);
 			var le = LogEventInfo.Create(LogLevel.Info, "logger", "message");
 			Assert.AreEqual("message", l.Render(le));
 

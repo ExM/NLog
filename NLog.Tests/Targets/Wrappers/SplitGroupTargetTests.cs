@@ -25,7 +25,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 				Targets = { myTarget1, myTarget2, myTarget3 },
 			};
 
-			wrapper.DeepInitialize(CommonCfg);
+			wrapper.Initialize(CommonCfg);
 
 			List<Exception> exceptions = new List<Exception>();
 
@@ -96,7 +96,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 				// no targets
 			};
 
-			wrapper.DeepInitialize(CommonCfg);
+			wrapper.Initialize(CommonCfg);
 
 			List<Exception> exceptions = new List<Exception>();
 

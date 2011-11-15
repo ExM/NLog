@@ -28,7 +28,7 @@ namespace NLog.UnitTests.Targets
 			target.KeepConnection = true;
 
 			MyNetworkSender sender;
-			using (target.DeepInitialize(CommonCfg))
+			using (target.Initialize(CommonCfg))
 			{
 				var exceptions = new List<Exception>();
 				var mre = new ManualResetEvent(false);
@@ -85,7 +85,7 @@ namespace NLog.UnitTests.Targets
 			target.SenderFactory = senderFactory;
 			target.Layout = "${message}";
 			target.KeepConnection = true;
-			using (target.DeepInitialize(CommonCfg))
+			using (target.Initialize(CommonCfg))
 			{
 				var exceptions = new List<Exception>();
 				var mre = new ManualResetEvent(false);
@@ -150,7 +150,7 @@ namespace NLog.UnitTests.Targets
 			target.SenderFactory = senderFactory;
 			target.Layout = "${message}";
 			target.KeepConnection = true;
-			using (target.DeepInitialize(CommonCfg))
+			using (target.Initialize(CommonCfg))
 			{
 				var mre = new ManualResetEvent(false);
 
@@ -177,7 +177,7 @@ namespace NLog.UnitTests.Targets
 			target.Layout = "${message}";
 			target.KeepConnection = true;
 			target.ConnectionCacheSize = 2;
-			using (target.DeepInitialize(CommonCfg))
+			using (target.Initialize(CommonCfg))
 			{
 				var exceptions = new List<Exception>();
 				var mre = new ManualResetEvent(false);
@@ -239,7 +239,7 @@ namespace NLog.UnitTests.Targets
 			target.SenderFactory = senderFactory;
 			target.Layout = "${message}";
 			target.KeepConnection = false;
-			using (target.DeepInitialize(CommonCfg))
+			using (target.Initialize(CommonCfg))
 			{
 				var exceptions = new List<Exception>();
 				var mre = new ManualResetEvent(false);
@@ -306,7 +306,7 @@ namespace NLog.UnitTests.Targets
 			target.KeepConnection = true;
 			target.MaxMessageSize = 9;
 			target.OnOverflow = NetworkTargetOverflowAction.Split;
-			using (target.DeepInitialize(CommonCfg))
+			using (target.Initialize(CommonCfg))
 			{
 				var exceptions = new List<Exception>();
 				var mre = new ManualResetEvent(false);
@@ -365,7 +365,7 @@ namespace NLog.UnitTests.Targets
 			target.KeepConnection = true;
 			target.MaxMessageSize = 10;
 			target.OnOverflow = NetworkTargetOverflowAction.Discard;
-			using (target.DeepInitialize(CommonCfg))
+			using (target.Initialize(CommonCfg))
 			{
 				var exceptions = new List<Exception>();
 				var mre = new ManualResetEvent(false);
@@ -417,7 +417,7 @@ namespace NLog.UnitTests.Targets
 			target.KeepConnection = true;
 			target.MaxMessageSize = 10;
 			target.OnOverflow = NetworkTargetOverflowAction.Error;
-			using (target.DeepInitialize(CommonCfg))
+			using (target.Initialize(CommonCfg))
 			{
 				var exceptions = new List<Exception>();
 				var mre = new ManualResetEvent(false);
@@ -469,7 +469,7 @@ namespace NLog.UnitTests.Targets
 			target.Layout = "${message}";
 			target.KeepConnection = true;
 			target.OnOverflow = NetworkTargetOverflowAction.Discard;
-			using (target.DeepInitialize(CommonCfg))
+			using (target.Initialize(CommonCfg))
 			{
 				var exceptions = new List<Exception>();
 				var mre = new ManualResetEvent(false);
@@ -571,7 +571,7 @@ namespace NLog.UnitTests.Targets
 						}
 					}, null);
 
-				using (target.DeepInitialize(CommonCfg))
+				using (target.Initialize(CommonCfg))
 				{
 					int pendingWrites = 100;
 					var writeCompleted = new ManualResetEvent(false);
@@ -660,7 +660,7 @@ namespace NLog.UnitTests.Targets
 				remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
 				listener.BeginReceiveFrom(receiveBuffer, 0, receiveBuffer.Length, SocketFlags.None, ref remoteEndPoint, receivedDatagram, null);
 				int toWrite;
-				using (target.DeepInitialize(CommonCfg))
+				using (target.Initialize(CommonCfg))
 				{
 					int pendingWrites = 100;
 					var writeCompleted = new ManualResetEvent(false);
@@ -714,7 +714,7 @@ namespace NLog.UnitTests.Targets
 			int toWrite = 10;
 			var exceptions = new List<Exception>();
 
-			using (target.DeepInitialize(CommonCfg))
+			using (target.Initialize(CommonCfg))
 			{
 				int pendingWrites = toWrite;
 				var writeCompleted = new ManualResetEvent(false);
@@ -771,7 +771,7 @@ namespace NLog.UnitTests.Targets
 			target.Layout = "${message}";
 			target.KeepConnection = false;
 			target.OnOverflow = NetworkTargetOverflowAction.Discard;
-			using (target.DeepInitialize(CommonCfg))
+			using (target.Initialize(CommonCfg))
 			{
 				var exceptions = new List<Exception>();
 				var mre = new ManualResetEvent(false);

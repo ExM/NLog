@@ -28,7 +28,7 @@ namespace NLog.UnitTests.Targets
 				Body = "${level} ${logger} ${message}"
 			};
 
-			mmt.DeepInitialize(CommonCfg);
+			mmt.Initialize(CommonCfg);
 
 			var exceptions = new List<Exception>();
 			mmt.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "MyLogger", "log message 1").WithContinuation(exceptions.Add));
@@ -68,7 +68,7 @@ namespace NLog.UnitTests.Targets
 				SmtpAuthentication = SmtpAuthenticationMode.Ntlm,
 			};
 
-			mmt.DeepInitialize(CommonCfg);
+			mmt.Initialize(CommonCfg);
 
 			var exceptions = new List<Exception>();
 			mmt.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "MyLogger", "log message 1").WithContinuation(exceptions.Add));
@@ -95,7 +95,7 @@ namespace NLog.UnitTests.Targets
 					SmtpPassword = "${mdc:password}",
 				};
 
-				mmt.DeepInitialize(CommonCfg);
+				mmt.Initialize(CommonCfg);
 
 				var exceptions = new List<Exception>();
 				MappedDiagnosticsContext.Set("username", "u1");
@@ -144,7 +144,7 @@ namespace NLog.UnitTests.Targets
 
 			layout.Initialize(CommonCfg);
 
-			mmt.DeepInitialize(CommonCfg);
+			mmt.Initialize(CommonCfg);
 
 			var exceptions = new List<Exception>();
 			mmt.WriteAsyncLogEvents(
@@ -174,7 +174,7 @@ namespace NLog.UnitTests.Targets
 				AddNewLines = true,
 			};
 
-			mmt.DeepInitialize(CommonCfg);
+			mmt.Initialize(CommonCfg);
 
 			var exceptions = new List<Exception>();
 			mmt.WriteAsyncLogEvents(
@@ -213,7 +213,7 @@ namespace NLog.UnitTests.Targets
 				AddNewLines = true,
 			};
 
-			mmt.DeepInitialize(CommonCfg);
+			mmt.Initialize(CommonCfg);
 
 			var exceptions = new List<Exception>();
 			var exceptions2 = new List<Exception>();
@@ -262,7 +262,7 @@ namespace NLog.UnitTests.Targets
 				AddNewLines = true,
 			};
 
-			mmt.DeepInitialize(CommonCfg);
+			mmt.Initialize(CommonCfg);
 
 			var exceptions = new List<Exception>();
 			mmt.WriteAsyncLogEvents(
@@ -303,7 +303,7 @@ namespace NLog.UnitTests.Targets
 				Footer = "Last event: ${logger}",
 			};
 
-			mmt.DeepInitialize(CommonCfg);
+			mmt.Initialize(CommonCfg);
 
 			var exceptions = new List<Exception>();
 			mmt.WriteAsyncLogEvents(

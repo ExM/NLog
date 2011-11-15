@@ -27,7 +27,7 @@ namespace NLog.UnitTests.Targets
 			try
 			{
 				var exceptions = new List<Exception>();
-				using (target.DeepInitialize(CommonCfg))
+				using (target.Initialize(CommonCfg))
 				{
 					target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "Logger1", "message1").WithContinuation(exceptions.Add));
 					target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "Logger1", "message2").WithContinuation(exceptions.Add));
@@ -74,7 +74,7 @@ Logger1 message6
 			try
 			{
 				var exceptions = new List<Exception>();
-				using(target.DeepInitialize(CommonCfg))
+				using(target.Initialize(CommonCfg))
 				{
 					target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "Logger1", "message1").WithContinuation(exceptions.Add));
 					target.WriteAsyncLogEvent(new LogEventInfo(LogLevel.Info, "Logger1", "message2").WithContinuation(exceptions.Add));

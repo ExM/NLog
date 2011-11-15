@@ -124,8 +124,8 @@ namespace NLog.Layouts
 		public static string Evaluate(LoggingConfiguration cfg, string text, LogEventInfo logEvent)
 		{
 			var l = new SimpleLayout(text);
-			l.DeepInitialize(cfg);
-			return l.Render(logEvent);
+			using(l.Initialize(cfg))
+				return l.Render(logEvent);
 		}
 
 		/// <summary>

@@ -1,14 +1,13 @@
 using NLog.Config;
 using NLog.Common;
+using System;
+using NUnit.Framework;
+using NLog.LayoutRenderers;
+using NLog.LayoutRenderers.Wrappers;
+using NLog.Layouts;
 
 namespace NLog.UnitTests.Layouts
 {
-	using System;
-	using NUnit.Framework;
-	using NLog.LayoutRenderers;
-	using NLog.LayoutRenderers.Wrappers;
-	using NLog.Layouts;
-
 	[TestFixture]
 	public class SimpleLayoutParserTests : NLogTestBase
 	{
@@ -16,7 +15,7 @@ namespace NLog.UnitTests.Layouts
 		public void SimpleTest()
 		{
 			SimpleLayout l = "${message}";
-			l.DeepInitialize(CommonCfg);
+			l.Initialize(CommonCfg);
 			Assert.AreEqual(1, l.Renderers.Count);
 			Assert.IsInstanceOf<MessageLayoutRenderer>(l.Renderers[0]);
 		}
@@ -31,7 +30,7 @@ namespace NLog.UnitTests.Layouts
 		public void SingleParamTest()
 		{
 			SimpleLayout l = "${mdc:item=AAA}";
-			l.DeepInitialize(CommonCfg);
+			l.Initialize(CommonCfg);
 			Assert.AreEqual(1, l.Renderers.Count);
 			MdcLayoutRenderer mdc = l.Renderers[0] as MdcLayoutRenderer;
 			Assert.IsNotNull(mdc);
@@ -42,7 +41,7 @@ namespace NLog.UnitTests.Layouts
 		public void ValueWithColonTest()
 		{
 			SimpleLayout l = "${mdc:item=AAA\\:}";
-			l.DeepInitialize(CommonCfg);
+			l.Initialize(CommonCfg);
 			Assert.AreEqual(1, l.Renderers.Count);
 			MdcLayoutRenderer mdc = l.Renderers[0] as MdcLayoutRenderer;
 			Assert.IsNotNull(mdc);
@@ -53,7 +52,7 @@ namespace NLog.UnitTests.Layouts
 		public void ValueWithBracketTest()
 		{
 			SimpleLayout l = "${mdc:item=AAA\\}\\:}";
-			l.DeepInitialize(CommonCfg);
+			l.Initialize(CommonCfg);
 			Assert.AreEqual("${mdc:item=AAA\\}\\:}", l.Text);
 			Assert.AreEqual(1, l.Renderers.Count);
 			MdcLayoutRenderer mdc = l.Renderers[0] as MdcLayoutRenderer;
@@ -65,7 +64,7 @@ namespace NLog.UnitTests.Layouts
 		public void DefaultValueTest()
 		{
 			SimpleLayout l = "${mdc:BBB}";
-			l.DeepInitialize(CommonCfg);
+			l.Initialize(CommonCfg);
 			Assert.AreEqual(1, l.Renderers.Count);
 			MdcLayoutRenderer mdc = l.Renderers[0] as MdcLayoutRenderer;
 			Assert.IsNotNull(mdc);
@@ -76,7 +75,7 @@ namespace NLog.UnitTests.Layouts
 		public void DefaultValueWithBracketTest()
 		{
 			SimpleLayout l = "${mdc:AAA\\}\\:}";
-			l.DeepInitialize(CommonCfg);
+			l.Initialize(CommonCfg);
 			Assert.AreEqual(l.Text, "${mdc:AAA\\}\\:}");
 			Assert.AreEqual(1, l.Renderers.Count);
 			MdcLayoutRenderer mdc = l.Renderers[0] as MdcLayoutRenderer;
@@ -88,7 +87,7 @@ namespace NLog.UnitTests.Layouts
 		public void DefaultValueWithOtherParametersTest()
 		{
 			SimpleLayout l = "${exception:message,type:separator=x}";
-			l.DeepInitialize(CommonCfg);
+			l.Initialize(CommonCfg);
 			Assert.AreEqual(1, l.Renderers.Count);
 			ExceptionLayoutRenderer elr = l.Renderers[0] as ExceptionLayoutRenderer;
 			Assert.IsNotNull(elr);
@@ -100,7 +99,7 @@ namespace NLog.UnitTests.Layouts
 		public void EmptyValueTest()
 		{
 			SimpleLayout l = "${mdc:item=}";
-			l.DeepInitialize(CommonCfg);
+			l.Initialize(CommonCfg);
 			Assert.AreEqual(1, l.Renderers.Count);
 			MdcLayoutRenderer mdc = l.Renderers[0] as MdcLayoutRenderer;
 			Assert.IsNotNull(mdc);
@@ -111,7 +110,7 @@ namespace NLog.UnitTests.Layouts
 		public void NestedLayoutTest()
 		{
 			SimpleLayout l = "${rot13:inner=${ndc:topFrames=3:separator=x}}";
-			l.DeepInitialize(CommonCfg);
+			l.Initialize(CommonCfg);
 			Assert.AreEqual(1, l.Renderers.Count);
 			var lr = l.Renderers[0] as Rot13LayoutRendererWrapper;
 			Assert.IsNotNull(lr);
@@ -129,7 +128,7 @@ namespace NLog.UnitTests.Layouts
 		public void DoubleNestedLayoutTest()
 		{
 			SimpleLayout l = "${rot13:inner=${rot13:inner=${ndc:topFrames=3:separator=x}}}";
-			l.DeepInitialize(CommonCfg);
+			l.Initialize(CommonCfg);
 			Assert.AreEqual(1, l.Renderers.Count);
 			var lr = l.Renderers[0] as Rot13LayoutRendererWrapper;
 			Assert.IsNotNull(lr);
@@ -151,7 +150,7 @@ namespace NLog.UnitTests.Layouts
 		public void DoubleNestedLayoutWithDefaultLayoutParametersTest()
 		{
 			SimpleLayout l = "${rot13:${rot13:${ndc:topFrames=3:separator=x}}}";
-			l.DeepInitialize(CommonCfg);
+			l.Initialize(CommonCfg);
 			Assert.AreEqual(1, l.Renderers.Count);
 			var lr = l.Renderers[0] as Rot13LayoutRendererWrapper;
 			Assert.IsNotNull(lr);
@@ -173,7 +172,7 @@ namespace NLog.UnitTests.Layouts
 		public void AmbientPropertyTest()
 		{
 			SimpleLayout l = "${message:padding=10}";
-			l.DeepInitialize(CommonCfg);
+			l.Initialize(CommonCfg);
 			Assert.AreEqual(1, l.Renderers.Count);
 			var pad = l.Renderers[0] as PaddingLayoutRendererWrapper;
 			Assert.IsNotNull(pad);
@@ -186,14 +185,14 @@ namespace NLog.UnitTests.Layouts
 		public void MissingLayoutRendererTest()
 		{
 			SimpleLayout l = "${rot13:${foobar}}";
-			l.DeepInitialize(CommonCfg);
+			l.Initialize(CommonCfg);
 		}
 
 		[Test]
 		public void DoubleAmbientPropertyTest()
 		{
 			SimpleLayout l = "${message:uppercase=true:padding=10}";
-			l.DeepInitialize(CommonCfg);
+			l.Initialize(CommonCfg);
 			Assert.AreEqual(1, l.Renderers.Count);
 			var upperCase = l.Renderers[0] as UppercaseLayoutRendererWrapper;
 			Assert.IsNotNull(upperCase);
@@ -207,7 +206,7 @@ namespace NLog.UnitTests.Layouts
 		public void ReverseDoubleAmbientPropertyTest()
 		{
 			SimpleLayout l = "${message:padding=10:uppercase=true}";
-			l.DeepInitialize(CommonCfg);
+			l.Initialize(CommonCfg);
 			Assert.AreEqual(1, l.Renderers.Count);
 			var pad = ((SimpleLayout)l).Renderers[0] as PaddingLayoutRendererWrapper;
 			Assert.IsNotNull(pad);
@@ -250,7 +249,7 @@ namespace NLog.UnitTests.Layouts
 		{
 			string escapedString = SimpleLayout.Escape(originalString);
 			SimpleLayout l = escapedString;
-			l.DeepInitialize(CommonCfg);
+			l.Initialize(CommonCfg);
 			string renderedString = l.Render(LogEventInfo.CreateNullEvent());
 			Assert.AreEqual(originalString, renderedString);
 		}

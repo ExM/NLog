@@ -32,12 +32,12 @@ namespace NLog.LayoutRenderers.Wrappers
 		[DefaultValue(true)]
 		public bool Cached { get; set; }
 
-		public void Initialize(LoggingConfiguration configuration)
+		void ISupportsInitialize.Initialize(LoggingConfiguration configuration)
 		{
 			_cachedValue = null;
 		}
 
-		public void Close()
+		void ISupportsInitialize.Close()
 		{
 			_cachedValue = null;
 		}

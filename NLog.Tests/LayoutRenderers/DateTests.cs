@@ -40,7 +40,7 @@ namespace NLog.UnitTests.LayoutRenderers
 			dt.Format = "R";
 
 			var ei = new LogEventInfo(LogLevel.Info, "logger", "msg");
-			dt.DeepInitialize(CommonCfg);
+			dt.Initialize(CommonCfg);
 			Assert.AreEqual(ei.TimeStamp.ToUniversalTime().ToString("R"), dt.Render(ei));
 		}
 
@@ -52,7 +52,7 @@ namespace NLog.UnitTests.LayoutRenderers
 			dt.Format = "R";
 
 			var ei = new LogEventInfo(LogLevel.Info, "logger", "msg");
-			dt.DeepInitialize(CommonCfg);
+			dt.Initialize(CommonCfg);
 			Assert.AreEqual(ei.TimeStamp.ToString("R"), dt.Render(ei));
 		}
 

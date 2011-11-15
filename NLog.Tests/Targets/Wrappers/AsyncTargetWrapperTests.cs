@@ -48,7 +48,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 			{
 				WrappedTarget = myTarget,
 			};
-			targetWrapper.DeepInitialize(CommonCfg);
+			targetWrapper.Initialize(CommonCfg);
 
 			var logEvent = new LogEventInfo();
 			Exception lastException = null;
@@ -83,7 +83,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 		{
 			var myTarget = new MyAsyncTarget();
 			var targetWrapper = new AsyncTargetWrapper(myTarget);
-			targetWrapper.DeepInitialize(CommonCfg);
+			targetWrapper.Initialize(CommonCfg);
 			var logEvent = new LogEventInfo();
 			Exception lastException = null;
 			var continuationHit = new ManualResetEvent(false);
@@ -116,7 +116,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 			};
 
 			var targetWrapper = new AsyncTargetWrapper(myTarget);
-			targetWrapper.DeepInitialize(CommonCfg);
+			targetWrapper.Initialize(CommonCfg);
 
 			var logEvent = new LogEventInfo();
 			Exception lastException = null;
@@ -162,7 +162,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 				OverflowAction = AsyncTargetWrapperOverflowAction.Grow,
 			};
 
-			targetWrapper.DeepInitialize(CommonCfg);
+			targetWrapper.Initialize(CommonCfg);
 
 			List<Exception> exceptions = new List<Exception>();
 
@@ -235,7 +235,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 			};
 
 			bool continuationHit = false;
-			using (targetWrapper.DeepInitialize(CommonCfg))
+			using (targetWrapper.Initialize(CommonCfg))
 			{
 				targetWrapper.WriteAsyncLogEvent(LogEventInfo.CreateNullEvent().WithContinuation(ex => { continuationHit = true; }));
 
@@ -257,7 +257,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 				WrappedTarget = new DebugTarget(),
 			};
 			string internalLog;
-			using (targetWrapper.DeepInitialize(CommonCfg))
+			using (targetWrapper.Initialize(CommonCfg))
 			{
 
 				// null out wrapped target - will cause exception on the timer thread

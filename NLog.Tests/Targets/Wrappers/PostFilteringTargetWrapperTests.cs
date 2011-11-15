@@ -37,7 +37,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 				DefaultFilter = "level >= LogLevel.Info",
 			};
 
-			wrapper.DeepInitialize(CommonCfg);
+			wrapper.Initialize(CommonCfg);
 
 			var exceptions = new List<Exception>();
 			
@@ -82,7 +82,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 				DefaultFilter = "level >= LogLevel.Info",
 			};
 
-			wrapper.DeepInitialize(CommonCfg);
+			wrapper.Initialize(CommonCfg);
 
 			var exceptions = new List<Exception>();
 
@@ -139,7 +139,7 @@ Trace Sending to MyTarget
 				DefaultFilter = "level >= LogLevel.Info",
 			};
 
-			wrapper.DeepInitialize(CommonCfg);
+			wrapper.Initialize(CommonCfg);
 
 			var exceptions = new List<Exception>();
 
@@ -186,7 +186,7 @@ Trace Sending to MyTarget
 				WrappedTarget = target,
 			};
 
-			wrapper.DeepInitialize(CommonCfg);
+			wrapper.Initialize(CommonCfg);
 
 			var exceptions = new List<Exception>();
 
