@@ -12,6 +12,8 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Drawing;
 using NLog.Internal;
+using NLog.WinForm.RtfParsing;
+using System.Collections.Generic;
 
 namespace NLog.UnitTests.Targets
 {
@@ -35,8 +37,8 @@ namespace NLog.UnitTests.Targets
 			};
 
 			SimpleConfigurator.ConfigureForTargetLogging(target, LogLevel.Trace);
-			logger.Fatal("Test");
-			logger.Error("Foo");
+			logger.Fatal(" {Test}rrr");
+			logger.Error(" }F;o\\o");
 			logger.Warn("Bar");
 			logger.Info("Test");
 			logger.Debug("Foo");
@@ -68,6 +70,10 @@ namespace NLog.UnitTests.Targets
 \cf6\i Trace NLog.UnitTests.Targets.RichTextBoxTargetTests Bar\par
 \cf0\highlight0\i0\par
 }";
+			Console.WriteLine(rtfText);
+
+			List<RtfParagraph> phs = RtfDocument.Load(rtfText);
+
 			Assert.IsTrue(rtfText.Contains(expectedRtf), "Invalid RTF: " + rtfText);
 
 			LogManager.Configuration = null;
@@ -104,7 +110,7 @@ namespace NLog.UnitTests.Targets
 				MemoryStream ms = new MemoryStream();
 				target.TargetRichTextBox.SaveFile(ms, RichTextBoxStreamType.RichText);
 				string rtfText = Encoding.UTF8.GetString(ms.GetBuffer());
-
+				
 				Assert.IsTrue(target.CreatedForm);
 
 				string expectedRtf = @"{\colortbl ;\red0\green0\blue0;\red255\green255\blue255;}
