@@ -4,6 +4,7 @@ using NUnit.Framework;
 using NLog.Filters;
 using NLog.Layouts;
 using NLog.Targets;
+using NLog.Common;
 
 namespace NLog.UnitTests.Config
 {
@@ -236,6 +237,50 @@ namespace NLog.UnitTests.Config
 
 			Assert.AreEqual(1, configuration.LoggingRules[0].Filters.Count);
 			Assert.AreEqual("MyExtensionNamespace.WhenFooFilter", configuration.LoggingRules[0].Filters[0].GetType().FullName);
+		}
+
+		[Test]
+		public void CustomLoad()
+		{
+			string winExt = Path.GetFullPath("NLog.WinTraits.dll");
+			string unixExt = Path.GetFullPath("NLog.UnixTraits.dll");
+
+			if (Platform.CurrentOS == PlatformID.Win32NT)
+			{
+				if(!File.Exists(winExt))
+					Assert.Ignore("file {0} not found", winExt);
+			}
+			else if (Platform.CurrentOS == PlatformID.Unix)
+			{
+				if (!File.Exists(unixExt))
+					Assert.Ignore("file {0} not found", unixExt);
+			}
+			else
+				Assert.Ignore("unexpected OS: {0}", Platform.CurrentOS);
+
+
+			var configuration = CreateConfigurationFromString(@"
+<nlog throwExceptions='true'>
+	<extensions>
+		<add platform='Win32NT' assemblyFile='" + winExt + @"' />
+		<add platform='Unix' assemblyFile='" + unixExt + @"' />
+	</extensions>
+
+	<targets>
+		<target name='t' type='File' fileName='${basedir}\test.log' />
+	</targets>
+
+	<rules>
+	  <logger name='*' writeTo='t'/>
+	</rules>
+</nlog>");
+
+			Target myTarget = configuration.FindTargetByName("t");
+
+			if (Platform.CurrentOS == PlatformID.Win32NT)
+				Assert.AreEqual("NLog.WinTraits.Targets.FileTarget", myTarget.GetType().FullName);
+			else //if (Platform.CurrentOS == PlatformID.Unix)
+				Assert.AreEqual("NLog.UnixTraits.Targets.FileTarget", myTarget.GetType().FullName);
 		}
 
 	}

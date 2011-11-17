@@ -1,12 +1,15 @@
 using System;
 
-namespace NLog.Internal
+namespace NLog.Common
 {
 	/// <summary>
 	/// Detects the platform the NLog is running on.
 	/// </summary>
-	internal static class Platform
+	public static class Platform
 	{
+		/// <summary>
+		/// The current operation system
+		/// </summary>
 		public static readonly PlatformID CurrentOS;
 
 		static Platform()

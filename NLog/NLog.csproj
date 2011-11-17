@@ -112,7 +112,7 @@
     <Compile Include="Common\ISupportsInitialize.cs" />
     <Compile Include="Internal\LoggerConfiguration.cs" />
     <Compile Include="Internal\MultiFileWatcher.cs" />
-    <Compile Include="Internal\Platform.cs" />
+    <Compile Include="Common\Platform.cs" />
     <Compile Include="Internal\PropertyHelper.cs" />
     <Compile Include="Internal\ReflectionHelpers.cs" />
     <Compile Include="Internal\SimpleStringReader.cs" />

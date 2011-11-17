@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Xml;
+using System.Linq;
 using NLog.Common;
 using NLog.Filters;
 using NLog.Internal;
@@ -598,6 +599,16 @@ namespace NLog.Config
 
 			foreach (var addElement in extensionsElement.Elements("add"))
 			{
+				string platforms = addElement.GetOptionalAttribute("platform", null);
+				if (platforms != null)
+				{
+					string curOs = Platform.CurrentOS.ToString().ToLowerInvariant();
+					platforms = platforms.ToLowerInvariant();
+
+					if (!platforms.Split(',', ' ').Any(p => p == curOs))
+						continue; // extension can not be used on this operating system
+				}
+
 				string prefix = addElement.GetOptionalAttribute("prefix", null);
 
 				if (prefix != null)
