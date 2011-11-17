@@ -27,7 +27,8 @@ namespace NLog.WinForm.RtfParsing
 		private static List<RtfParagraph> ExtractParagraphs(string text, Color[] table)
 		{
 			List<RtfParagraph> result = new List<RtfParagraph>();
-			Color? curColor = null;
+			Color curFColor = Color.FromKnownColor(KnownColor.WindowText);
+			Color curBColor = Color.FromKnownColor(KnownColor.WindowFrame);
 			FontStyle curFontStyle = FontStyle.Regular;
 			RtfReader reader = new RtfReader(text);
 			
@@ -43,7 +44,7 @@ namespace NLog.WinForm.RtfParsing
 					if(newText || par.Count == 0)
 					{
 						newText = false;
-						par.Add(new RtfText(){ Color = curColor, FontStyle = curFontStyle, Text = reader.Text});
+						par.Add(new RtfText() { FColor = curFColor, BColor = curBColor, FontStyle = curFontStyle, Text = reader.Text });
 						continue;
 					}
 					else
@@ -67,7 +68,8 @@ namespace NLog.WinForm.RtfParsing
 				if(reader.Tag == "pard")
 				{
 					newText = true;
-					curColor = null;
+					curBColor = table[0];
+					curFColor = table[0];
 					curFontStyle = FontStyle.Regular;
 					result.Add(par);
 					par = new RtfParagraph();
@@ -112,7 +114,7 @@ namespace NLog.WinForm.RtfParsing
 					continue;
 				}
 				
-				if(reader.Tag == "ul0")
+				if(reader.Tag == "ul0" || reader.Tag == "ulnone")
 				{
 					newText = true;
 					curFontStyle &= ~FontStyle.Underline;
@@ -124,7 +126,23 @@ namespace NLog.WinForm.RtfParsing
 				if(num != -1)
 				{
 					newText = true;
-					curColor = table[num];
+					curFColor = table[num];
+					continue;
+				}
+
+				num = NumTag("cb", reader.Tag);
+				if(num != -1)
+				{
+					newText = true;
+					curBColor = table[num];
+					continue;
+				}
+
+				num = NumTag("highlight", reader.Tag);
+				if (num != -1)
+				{
+					newText = true;
+					curBColor = table[num];
 					continue;
 				}
 				
@@ -135,11 +153,19 @@ namespace NLog.WinForm.RtfParsing
 				num = NumTag("fs", reader.Tag);
 				if(num != -1)
 					continue;
+
+				num = NumTag("viewkind", reader.Tag);
+				if(num != -1)
+					continue;
+
+				num = NumTag("uc", reader.Tag);
+				if(num != -1)
+					continue;
 				
 				num = NumTag("cf", reader.Tag);
 				if(num != -1)
 				{
-					curColor = table[num];
+					curFColor = table[num];
 					continue;
 				}
 				
@@ -182,8 +208,13 @@ namespace NLog.WinForm.RtfParsing
 		{
 			List<Color> result = new List<Color>();
 			// \red0\green0\blue0;\red128\green0\blue0;
-			foreach (string item in text.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
-				result.Add(ParseColor(item));
+			foreach (string item in text.Split(new char[] { ';' }, StringSplitOptions.None))
+			{
+				if(item != string.Empty)
+					result.Add(ParseColor(item));
+				else if(result.Count == 0)
+					result.Add(Color.FromArgb(0,0,0));
+			}
 
 			return result.ToArray();
 		}

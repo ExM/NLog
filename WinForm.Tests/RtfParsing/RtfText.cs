@@ -8,7 +8,8 @@ namespace NLog.WinForm.RtfParsing
 {
 	public class RtfText
 	{
-		public Color? Color;
+		public Color FColor;
+		public Color BColor;
 		public FontStyle FontStyle;
 
 		public string Text;

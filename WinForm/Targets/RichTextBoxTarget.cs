@@ -298,7 +298,7 @@ namespace NLog.Targets
 			rtbx.SelectionStart = startIndex;
 			rtbx.SelectionBackColor = GetColorFromString(rule.BackgroundColor, rtbx.BackColor);
 			rtbx.SelectionColor = GetColorFromString(rule.FontColor, rtbx.ForeColor);
-			rtbx.SelectionFont = new Font(rtbx.SelectionFont, rtbx.SelectionFont.Style ^ rule.Style);
+			rtbx.SelectionFont = new Font(rtbx.SelectionFont, rule.Style);
 			rtbx.AppendText(logMessage + "\n");
 			rtbx.SelectionLength = rtbx.Text.Length - rtbx.SelectionStart;
 
@@ -312,7 +312,7 @@ namespace NLog.Targets
 					rtbx.SelectionLength = m.Length;
 					rtbx.SelectionBackColor = GetColorFromString(wordRule.BackgroundColor, rtbx.BackColor);
 					rtbx.SelectionColor = GetColorFromString(wordRule.FontColor, rtbx.ForeColor);
-					rtbx.SelectionFont = new Font(rtbx.SelectionFont, rtbx.SelectionFont.Style ^ wordRule.Style);
+					rtbx.SelectionFont = new Font(rtbx.SelectionFont, wordRule.Style);
 				}
 			}
 

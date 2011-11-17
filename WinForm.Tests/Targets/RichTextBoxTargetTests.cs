@@ -60,47 +60,50 @@ namespace NLog.UnitTests.Targets
 			string rtfText = Encoding.UTF8.GetString(ms.GetBuffer());
 
 			Assert.IsTrue(target.CreatedForm);
-
-			string expectedRtf = @"{\colortbl ;\red255\green255\blue255;\red255\green0\blue0;\red255\green165\blue0;\red0\green0\blue0;\red128\green128\blue128;\red169\green169\blue169;}
-\viewkind4\uc1\pard\cf1\highlight2\b\f0\fs17 Fatal NLog.UnitTests.Targets.RichTextBoxTargetTests Test\par
-\cf2\highlight1\i Error NLog.UnitTests.Targets.RichTextBoxTargetTests Foo\par
+			Console.WriteLine(rtfText);
+			List<RtfParagraph> phs = RtfDocument.Load(rtfText);
+/*
+{\rtf1\ansi\ansicpg1251\deff0\deflang1049{\fonttbl{\f0\fnil\fcharset204 Microsoft Sans Serif;}}
+{\colortbl ;\red255\green255\blue255;\red255\green0\blue0;\red255\green165\blue0;\red0\green0\blue0;\red128\green128\blue128;\red169\green169\blue169;}
+\viewkind4\uc1\pard\cf1\highlight2\b\f0\fs17 Fatal NLog.UnitTests.Targets.RichTextBoxTargetTests  \{Test\}rrr\par
+\cf2\highlight1\i Error NLog.UnitTests.Targets.RichTextBoxTargetTests  \}F;o\\o\par
 \cf3\ul\b0\i0 Warn NLog.UnitTests.Targets.RichTextBoxTargetTests Bar\par
 \cf4\ulnone Info NLog.UnitTests.Targets.RichTextBoxTargetTests Test\par
 \cf5 Debug NLog.UnitTests.Targets.RichTextBoxTargetTests Foo\par
 \cf6\i Trace NLog.UnitTests.Targets.RichTextBoxTargetTests Bar\par
 \cf0\highlight0\i0\par
-}";
-			Console.WriteLine(rtfText);
+}
+*/
+			Color fc = target.TargetRichTextBox.ForeColor;
+			Color bc = target.TargetRichTextBox.BackColor;
+			Color w = Color.FromName("White");
+			Color r = Color.FromName("Red");
+			Color o = Color.FromName("Orange");
+			Color b = Color.FromName("Black");
+			Color g = Color.FromName("Gray");
+			Color dg = Color.FromName("DarkGray");
 
-			List<RtfParagraph> phs = RtfDocument.Load(rtfText);
-			
-			Assert.AreEqual("Fatal NLog.UnitTests.Targets.RichTextBoxTargetTests  {Test}rrr", phs[0][0].Text);
-			Assert.AreEqual(FontStyle.Bold, phs[0][0].FontStyle);
-			Assert.AreEqual(FontStyle.Bold, phs[0][0].FontStyle);
-			
-			Assert.AreEqual("Error NLog.UnitTests.Targets.RichTextBoxTargetTests  }F;o\\o", phs[1][0].Text);
-			Assert.AreEqual(FontStyle.Italic, phs[1][0].FontStyle);
-			
-			Assert.AreEqual("Warn NLog.UnitTests.Targets.RichTextBoxTargetTests Bar", phs[2][0].Text);
-			Assert.AreEqual(FontStyle.Italic | FontStyle.Underline, phs[2][0].FontStyle);
-			
-			Assert.AreEqual("Info NLog.UnitTests.Targets.RichTextBoxTargetTests Test", phs[3][0].Text);
-			Assert.AreEqual(FontStyle.Italic | FontStyle.Underline, phs[3][0].FontStyle);
-			
-			Assert.AreEqual("Debug NLog.UnitTests.Targets.RichTextBoxTargetTests Foo", phs[4][0].Text);
-			Assert.AreEqual(FontStyle.Italic | FontStyle.Underline, phs[4][0].FontStyle);
-			
-			Assert.AreEqual("Trace NLog.UnitTests.Targets.RichTextBoxTargetTests Bar", phs[5][0].Text);
-			Assert.AreEqual(FontStyle.Underline, phs[5][0].FontStyle);
-			
-			
-			
-			Assert.IsTrue(rtfText.Contains(expectedRtf), "Invalid RTF: " + rtfText);
+			CheckText(phs[0][0], "Fatal NLog.UnitTests.Targets.RichTextBoxTargetTests  {Test}rrr", FontStyle.Bold, w, r);
+			CheckText(phs[1][0], "Error NLog.UnitTests.Targets.RichTextBoxTargetTests  }F;o\\o", FontStyle.Bold | FontStyle.Italic, r, bc);
+			CheckText(phs[2][0], "Warn NLog.UnitTests.Targets.RichTextBoxTargetTests Bar", FontStyle.Underline, o, bc);
+			CheckText(phs[3][0], "Info NLog.UnitTests.Targets.RichTextBoxTargetTests Test", FontStyle.Regular, b, bc);
+			CheckText(phs[4][0], "Debug NLog.UnitTests.Targets.RichTextBoxTargetTests Foo", FontStyle.Regular, g, bc);
+			CheckText(phs[5][0], "Trace NLog.UnitTests.Targets.RichTextBoxTargetTests Bar", FontStyle.Italic, dg, bc);
 
 			LogManager.Configuration = null;
 			Assert.IsNull(target.TargetForm);
 			Application.DoEvents();
 			Assert.IsTrue(form.IsDisposed);
+		}
+
+		public void CheckText(RtfText rtf, string exText, FontStyle exfs, Color? exF = null, Color? exB = null)
+		{
+			Assert.AreEqual(exText, rtf.Text);
+			Assert.AreEqual(exfs, rtf.FontStyle);
+			if(exF != null)
+				Assert.AreEqual(exF.Value.ToArgb(), rtf.FColor.ToArgb(), "{0} not equal {1} ", exF, rtf.FColor);
+			if(exB != null)
+				Assert.AreEqual(exB.Value.ToArgb(), rtf.BColor.ToArgb(), "{0} not equal {1} ", exB, rtf.BColor);
 		}
 
 		[Test]
@@ -111,7 +114,7 @@ namespace NLog.UnitTests.Targets
 				RichTextBoxTarget target = new RichTextBoxTarget()
 				{
 					ControlName = "Control1",
-					Layout = "${level} ${logger} ${message}",
+					Layout = "${level} ${message}",
 					ShowMinimized = true,
 					ToolWindow = false,
 				};
@@ -134,16 +137,29 @@ namespace NLog.UnitTests.Targets
 				
 				Assert.IsTrue(target.CreatedForm);
 
-				string expectedRtf = @"{\colortbl ;\red0\green0\blue0;\red255\green255\blue255;}
-\viewkind4\uc1\pard\cf1\highlight2\f0\fs17 Fatal NLog.UnitTests.Targets.RichTextBoxTargetTests Test\par
-Error NLog.UnitTests.Targets.RichTextBoxTargetTests Foo\par
-Warn NLog.UnitTests.Targets.RichTextBoxTargetTests Bar\par
-Info NLog.UnitTests.Targets.RichTextBoxTargetTests Test\par
-Debug NLog.UnitTests.Targets.RichTextBoxTargetTests Foo\par
-Trace NLog.UnitTests.Targets.RichTextBoxTargetTests Bar\par
+				Console.WriteLine(rtfText);
+				List<RtfParagraph> phs = RtfDocument.Load(rtfText);
+/*
+{\rtf1\ansi\ansicpg1251\deff0\deflang1049{\fonttbl{\f0\fnil\fcharset204 Microsoft Sans Serif;}}
+{\colortbl ;\red0\green0\blue0;\red255\green255\blue255;}
+\viewkind4\uc1\pard\cf1\highlight2\f0\fs17 Fatal Test\par
+Error Foo\par
+Warn Bar\par
+Info Test\par
+Debug Foo\par
+Trace Bar\par
 \cf0\highlight0\par
-}";
-				Assert.IsTrue(rtfText.Contains(expectedRtf), "Invalid RTF: " + rtfText);
+}
+*/
+				Color fc = target.TargetRichTextBox.ForeColor;
+				Color bc = target.TargetRichTextBox.BackColor;
+
+				CheckText(phs[0][0], "Fatal Test", FontStyle.Regular, fc, bc);
+				CheckText(phs[1][0], "Error Foo", FontStyle.Regular, fc, bc);
+				CheckText(phs[2][0], "Warn Bar", FontStyle.Regular, fc, bc);
+				CheckText(phs[3][0], "Info Test", FontStyle.Regular, fc, bc);
+				CheckText(phs[4][0], "Debug Foo", FontStyle.Regular, fc, bc);
+				CheckText(phs[5][0], "Trace Bar", FontStyle.Regular, fc, bc);
 			}
 			finally
 			{
@@ -159,7 +175,7 @@ Trace NLog.UnitTests.Targets.RichTextBoxTargetTests Bar\par
 				RichTextBoxTarget target = new RichTextBoxTarget()
 				{
 					ControlName = "Control1",
-					Layout = "${level} ${logger} ${message}",
+					Layout = "${level} ${message}",
 					ShowMinimized = true,
 					ToolWindow = false,
 					RowColoringRules =
@@ -185,17 +201,31 @@ Trace NLog.UnitTests.Targets.RichTextBoxTargetTests Bar\par
 				string rtfText = Encoding.UTF8.GetString(ms.GetBuffer());
 
 				Assert.IsTrue(target.CreatedForm);
-
-				string expectedRtf = @"{\colortbl ;\red0\green0\blue0;\red255\green255\blue255;\red128\green0\blue0;}
-\viewkind4\uc1\pard\cf1\highlight2\f0\fs17 Fatal NLog.UnitTests.Targets.RichTextBoxTargetTests Test\par
-Error NLog.UnitTests.Targets.RichTextBoxTargetTests Foo\par
-\cf3 Warn NLog.UnitTests.Targets.RichTextBoxTargetTests Bar\par
-\cf1 Info NLog.UnitTests.Targets.RichTextBoxTargetTests Test\par
-Debug NLog.UnitTests.Targets.RichTextBoxTargetTests Foo\par
-\cf3 Trace NLog.UnitTests.Targets.RichTextBoxTargetTests Bar\par
+				Console.WriteLine(rtfText);
+/* win
+{\rtf1\ansi\ansicpg1251\deff0\deflang1049{\fonttbl{\f0\fnil\fcharset204 Microsoft Sans Serif;}}
+{\colortbl ;\red0\green0\blue0;\red255\green255\blue255;\red128\green0\blue0;}
+\viewkind4\uc1\pard\cf1\highlight2\f0\fs17 Fatal Test\par
+Error Foo\par
+\cf3 Warn Bar\par
+\cf1 Info Test\par
+Debug Foo\par
+\cf3 Trace Bar\par
 \cf0\highlight0\par
-}";
-				Assert.IsTrue(rtfText.Contains(expectedRtf), "Invalid RTF: " + rtfText);
+}
+*/
+				List<RtfParagraph> phs = RtfDocument.Load(rtfText);
+
+				Color fc = target.TargetRichTextBox.ForeColor;
+				Color bc = target.TargetRichTextBox.BackColor;
+				Color m = Color.FromName("Maroon");
+
+				CheckText(phs[0][0], "Fatal Test", FontStyle.Regular, fc, bc);
+				CheckText(phs[1][0], "Error Foo", FontStyle.Regular, fc, bc);
+				CheckText(phs[2][0], "Warn Bar", FontStyle.Regular, m, bc);
+				CheckText(phs[3][0], "Info Test", FontStyle.Regular, fc, bc);
+				CheckText(phs[4][0], "Debug Foo", FontStyle.Regular, fc, bc);
+				CheckText(phs[5][0], "Trace Bar", FontStyle.Regular, m, bc);
 			}
 			finally
 			{
@@ -211,7 +241,7 @@ Debug NLog.UnitTests.Targets.RichTextBoxTargetTests Foo\par
 				RichTextBoxTarget target = new RichTextBoxTarget()
 				{
 					ControlName = "Control1",
-					Layout = "${level} ${logger} ${message}",
+					Layout = "${level} ${message}",
 					ShowMinimized = true,
 					ToolWindow = false,
 					WordColoringRules =
@@ -241,17 +271,31 @@ Debug NLog.UnitTests.Targets.RichTextBoxTargetTests Foo\par
 
 				// "zzz" string will be highlighted
 
-				string expectedRtf =
-@"{\colortbl ;\red0\green0\blue0;\red255\green255\blue255;\red255\green0\blue0;\red0\green128\blue0;}
-\viewkind4\uc1\pard\cf1\highlight2\f0\fs17 Fatal NLog.UnitTests.Targets.RichTextBoxTargetTests Test \cf3 zzz\cf1\par
-Error NLog.UnitTests.Targets.RichTextBoxTargetTests Foo xxx\par
-Warn NLog.UnitTests.Targets.RichTextBoxTargetTests Bar yyy\par
-Info NLog.UnitTests.Targets.RichTextBoxTargetTests Test \cf4 aaa\cf1\par
-Debug NLog.UnitTests.Targets.RichTextBoxTargetTests Foo \cf3 zzz\cf1\par
-Trace NLog.UnitTests.Targets.RichTextBoxTargetTests Bar ccc\par
+				Console.WriteLine(rtfText);
+				List<RtfParagraph> phs = RtfDocument.Load(rtfText);
+/*
+{\rtf1\ansi\ansicpg1251\deff0\deflang1049{\fonttbl{\f0\fnil\fcharset204 Microsoft Sans Serif;}}
+{\colortbl ;\red0\green0\blue0;\red255\green255\blue255;\red255\green0\blue0;\red0\green128\blue0;}
+\viewkind4\uc1\pard\cf1\highlight2\f0\fs17 Fatal Test \cf3 zzz\cf1\par
+Error Foo xxx\par
+Warn Bar yyy\par
+Info Test \cf4 aaa\cf1\par
+Debug Foo \cf3 zzz\cf1\par
+Trace Bar ccc\par
 \cf0\highlight0\par
-}";
-				Assert.IsTrue(rtfText.Contains(expectedRtf), "Invalid RTF: " + rtfText);
+}
+*/
+				Color fc = target.TargetRichTextBox.ForeColor;
+				Color bc = target.TargetRichTextBox.BackColor;
+				Color r = Color.FromName("Red");
+				Color g = Color.FromName("Green");
+
+				CheckText(phs[0][0], "Fatal Test ", FontStyle.Regular, fc, bc); CheckText(phs[0][1], "zzz", FontStyle.Regular, r, bc);
+				CheckText(phs[1][0], "Error Foo xxx", FontStyle.Regular, fc, bc);
+				CheckText(phs[2][0], "Warn Bar yyy", FontStyle.Regular, fc, bc);
+				CheckText(phs[3][0], "Info Test ", FontStyle.Regular, fc, bc); CheckText(phs[3][1], "aaa", FontStyle.Regular, g, bc);
+				CheckText(phs[4][0], "Debug Foo ", FontStyle.Regular, fc, bc); CheckText(phs[4][1], "zzz", FontStyle.Regular, r, bc);
+				CheckText(phs[5][0], "Trace Bar ccc", FontStyle.Regular, fc, bc);
 			}
 			finally
 			{
