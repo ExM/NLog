@@ -1,13 +1,12 @@
+using System;
+using System.Text;
+using NUnit.Framework;
+using System.Collections.Generic;
+using System.Reflection;
+using NLog.Config;
 
 namespace NLog.UnitTests
 {
-	using System;
-	using System.Text;
-	using NUnit.Framework;
-	using System.Collections.Generic;
-	using System.Reflection;
-	using NLog.Config;
-
 	[TestFixture]
 	public class ApiTests : NLogTestBase
 	{

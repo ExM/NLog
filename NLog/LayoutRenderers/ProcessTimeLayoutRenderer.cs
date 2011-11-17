@@ -1,11 +1,9 @@
+using System;
+using System.Text;
+using NLog.Config;
 
 namespace NLog.LayoutRenderers
 {
-	using System;
-	using System.Text;
-
-	using NLog.Config;
-
 	/// <summary>
 	/// The process time in format HH:mm:ss.mmm.
 	/// </summary>

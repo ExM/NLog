@@ -1,10 +1,8 @@
+using System.Text;
+using NLog.Config;
 
 namespace NLog.LayoutRenderers
 {
-	using System.Text;
-
-	using NLog.Config;
-
 	/// <summary>
 	/// A string literal.
 	/// </summary>

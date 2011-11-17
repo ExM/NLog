@@ -1,12 +1,11 @@
+using System;
+using System.ComponentModel;
+using System.Threading;
+using NLog.Common;
+using NLog.Internal;
 
 namespace NLog.Targets.Wrappers
 {
-	using System;
-	using System.ComponentModel;
-	using System.Threading;
-	using NLog.Common;
-	using NLog.Internal;
-
 	/// <summary>
 	/// Repeats each log event the specified number of times.
 	/// </summary>

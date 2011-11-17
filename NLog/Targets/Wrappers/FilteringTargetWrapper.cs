@@ -1,12 +1,11 @@
+using System;
+using NLog.Common;
+using NLog.Conditions;
+using NLog.Config;
+using NLog.Internal;
 
 namespace NLog.Targets.Wrappers
 {
-	using System;
-	using NLog.Common;
-	using NLog.Conditions;
-	using NLog.Config;
-	using NLog.Internal;
-
 	/// <summary>
 	/// Filters log entries based on a condition.
 	/// </summary>

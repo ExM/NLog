@@ -1,10 +1,9 @@
+using System;
+using NLog.Common;
+using NLog.Internal;
 
 namespace NLog.Targets.Wrappers
 {
-	using System;
-	using NLog.Common;
-	using NLog.Internal;
-
 	/// <summary>
 	/// Provides fallback-on-error.
 	/// </summary>

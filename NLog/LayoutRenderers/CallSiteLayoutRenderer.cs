@@ -1,14 +1,13 @@
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using System.Text;
+using NLog.Config;
+using NLog.Internal;
 
 namespace NLog.LayoutRenderers
 {
-	using System.ComponentModel;
-	using System.Diagnostics;
-	using System.IO;
-	using System.Reflection;
-	using System.Text;
-	using NLog.Config;
-	using NLog.Internal;
-
 	/// <summary>
 	/// The call site (class name, method name and source information).
 	/// </summary>

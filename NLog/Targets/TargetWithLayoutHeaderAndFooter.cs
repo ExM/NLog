@@ -1,9 +1,8 @@
+using NLog.Config;
+using NLog.Layouts;
 
 namespace NLog.Targets
 {
-	using NLog.Config;
-	using NLog.Layouts;
-
 	/// <summary>
 	/// Represents target that supports string formatting using layouts.
 	/// </summary>

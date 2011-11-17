@@ -1,12 +1,10 @@
-
+using System;
+using System.IO;
+using System.Text;
+using NLog.Config;
 
 namespace NLog.LayoutRenderers
 {
-	using System;
-	using System.IO;
-	using System.Text;
-	using NLog.Config;
-
 	/// <summary>
 	/// System special folder path (includes My Documents, My Music, Program Files, Desktop, and more).
 	/// </summary>

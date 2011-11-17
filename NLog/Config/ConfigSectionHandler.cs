@@ -1,12 +1,11 @@
+using System;
+using System.Configuration;
+using System.Xml;
+using NLog.Common;
+using NLog.Internal;
 
 namespace NLog.Config
 {
-	using System;
-	using System.Configuration;
-	using System.Xml;
-	using NLog.Common;
-	using NLog.Internal;
-
 	/// <summary>
 	/// NLog configuration section handler class for configuring NLog from App.config.
 	/// </summary>

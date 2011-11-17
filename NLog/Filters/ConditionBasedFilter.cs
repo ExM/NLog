@@ -1,9 +1,8 @@
+using NLog.Conditions;
+using NLog.Config;
 
 namespace NLog.Filters
 {
-	using NLog.Conditions;
-	using NLog.Config;
-
 	/// <summary>
 	/// Matches when the specified condition is met.
 	/// </summary>

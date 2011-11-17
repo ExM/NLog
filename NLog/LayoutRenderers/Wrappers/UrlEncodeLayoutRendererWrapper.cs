@@ -1,9 +1,8 @@
+using NLog.Config;
+using NLog.Internal;
 
 namespace NLog.LayoutRenderers.Wrappers
 {
-	using NLog.Config;
-	using NLog.Internal;
-
 	/// <summary>
 	/// Encodes the result of another layout output for use with URLs.
 	/// </summary>

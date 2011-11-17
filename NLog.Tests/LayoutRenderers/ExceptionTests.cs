@@ -7,12 +7,11 @@ using NLog.LayoutRenderers;
 using NLog.Layouts;
 using NLog.Targets;
 using NUnit.Framework;
+using System.Collections.Generic;
+using NLog.Internal;
 
 namespace NLog.UnitTests.LayoutRenderers
 {
-	using System.Collections.Generic;
-	using NLog.Internal;
-
 	[TestFixture]
 	public class ExceptionTests : NLogTestBase
 	{

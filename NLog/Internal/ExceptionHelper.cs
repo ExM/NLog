@@ -1,9 +1,8 @@
+using System;
+using System.Threading;
 
 namespace NLog.Internal
 {
-	using System;
-	using System.Threading;
-
 	/// <summary>
 	/// Helper class for dealing with exceptions.
 	/// </summary>

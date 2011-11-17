@@ -1,10 +1,7 @@
-
-#pragma warning disable 0618
+using NUnit.Framework;
 
 namespace NLog.UnitTests.Contexts
 {
-	using NUnit.Framework;
-
 	[TestFixture]
 	public class GlobalDiagnosticsContextTests
 	{

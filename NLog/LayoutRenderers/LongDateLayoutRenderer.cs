@@ -1,13 +1,11 @@
+using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Text;
+using NLog.Config;
 
 namespace NLog.LayoutRenderers
 {
-	using System;
-	using System.ComponentModel;
-	using System.Diagnostics;
-	using System.Text;
-
-	using NLog.Config;
-
 	/// <summary>
 	/// The date and time in a long, sortable format yyyy-MM-dd HH:mm:ss.mmm.
 	/// </summary>

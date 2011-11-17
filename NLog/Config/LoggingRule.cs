@@ -1,14 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using System.Text;
+using NLog.Filters;
+using NLog.Targets;
 
 namespace NLog.Config
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Collections.ObjectModel;
-	using System.Globalization;
-	using System.Text;
-	using NLog.Filters;
-	using NLog.Targets;
-
 	/// <summary>
 	/// Represents a logging rule. An equivalent of &lt;logger /&gt; configuration element.
 	/// </summary>

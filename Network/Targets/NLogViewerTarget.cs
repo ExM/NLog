@@ -1,12 +1,11 @@
+using System;
+using System.Collections.Generic;
+using NLog.Config;
+using NLog.LayoutRenderers;
+using NLog.Layouts;
 
 namespace NLog.Targets
 {
-	using System;
-	using System.Collections.Generic;
-	using NLog.Config;
-	using NLog.LayoutRenderers;
-	using NLog.Layouts;
-
 	/// <summary>
 	/// Sends log messages to the remote instance of NLog Viewer. 
 	/// </summary>

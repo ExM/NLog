@@ -1,15 +1,14 @@
 using System.Xml;
 using NUnit.Framework;
 using NLog.Config;
+using System;
+using System.IO;
+using NLog.Layouts;
+using NLog.Targets;
+using NLog.Targets.Wrappers;
 
 namespace NLog.UnitTests
 {
-	using System;
-	using System.IO;
-	using NLog.Layouts;
-	using NLog.Targets;
-	using NLog.Targets.Wrappers;
-
 	[TestFixture]
 	public class RegressionTests : NLogTestBase
 	{

@@ -1,13 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Globalization;
+using System.IO;
 
 namespace NLog.Config
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Collections.Specialized;
-	using System.ComponentModel;
-	using System.Globalization;
-	using System.IO;
-
 	/// <summary>
 	/// Provides context for install/uninstall operations.
 	/// </summary>

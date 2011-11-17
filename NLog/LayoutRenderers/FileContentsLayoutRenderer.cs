@@ -1,14 +1,13 @@
+using System;
+using System.IO;
+using System.Text;
+using NLog.Common;
+using NLog.Config;
+using NLog.Internal;
+using NLog.Layouts;
 
 namespace NLog.LayoutRenderers
 {
-	using System;
-	using System.IO;
-	using System.Text;
-	using NLog.Common;
-	using NLog.Config;
-	using NLog.Internal;
-	using NLog.Layouts;
-
 	/// <summary>
 	/// Renders contents of the specified file.
 	/// </summary>

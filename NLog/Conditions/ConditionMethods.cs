@@ -1,8 +1,7 @@
+using System;
 
 namespace NLog.Conditions
 {
-	using System;
-
 	/// <summary>
 	/// A bunch of utility methods (mostly predicates) which can be used in
 	/// condition expressions. Parially inspired by XPath 1.0.

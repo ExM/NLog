@@ -1,8 +1,7 @@
+using System;
 
 namespace NLog.Config
 {
-	using System;
-
 	/// <summary>
 	/// Attribute used to mark the default parameters for layout renderers.
 	/// </summary>

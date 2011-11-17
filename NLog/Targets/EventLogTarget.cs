@@ -1,17 +1,15 @@
-
+using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Globalization;
+using System.Security;
+using NLog.Common;
+using NLog.Config;
+using NLog.Internal;
+using NLog.Layouts;
 
 namespace NLog.Targets
 {
-	using System;
-	using System.ComponentModel;
-	using System.Diagnostics;
-	using System.Globalization;
-	using System.Security;
-	using NLog.Common;
-	using NLog.Config;
-	using NLog.Internal;
-	using NLog.Layouts;
-
 	/// <summary>
 	/// Writes log message to the Event Log.
 	/// </summary>

@@ -1,12 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading;
+using NLog.Internal;
 
 namespace NLog.Common
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Text;
-	using System.Threading;
-	using NLog.Internal;
-
 	/// <summary>
 	/// Helpers for asynchronous operations.
 	/// </summary>

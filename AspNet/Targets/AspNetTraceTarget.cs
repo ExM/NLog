@@ -1,9 +1,7 @@
-
+using System.Web;
 
 namespace NLog.Targets
 {
-	using System.Web;
-
 	/// <summary>
 	/// Writes log messages to the ASP.NET trace.
 	/// </summary>

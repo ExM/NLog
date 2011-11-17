@@ -1,11 +1,10 @@
+using System.ComponentModel;
+using System.Globalization;
+using System.Text;
+using NLog.Config;
 
 namespace NLog.LayoutRenderers
 {
-	using System.ComponentModel;
-	using System.Globalization;
-	using System.Text;
-	using NLog.Config;
-
 	/// <summary>
 	/// Current date and time.
 	/// </summary>

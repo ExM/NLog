@@ -1,17 +1,15 @@
-
+using System;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Globalization;
+using System.Reflection;
+using System.Text;
+using System.Xml;
+using NLog.Internal;
 
 namespace NLog
 {
-	using System;
-	using System.Collections;
-	using System.ComponentModel;
-	using System.Diagnostics;
-	using System.Globalization;
-	using System.Reflection;
-	using System.Text;
-	using System.Xml;
-	using NLog.Internal;
-
 	/// <summary>
 	/// TraceListener which routes all messages through NLog.
 	/// </summary>

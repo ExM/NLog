@@ -1,9 +1,8 @@
+using NLog.Conditions;
+using NLog.Config;
 
 namespace NLog.LayoutRenderers.Wrappers
 {
-	using NLog.Conditions;
-	using NLog.Config;
-
 	/// <summary>
 	/// Only outputs the inner layout when the specified condition has been met.
 	/// </summary>

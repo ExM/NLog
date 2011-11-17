@@ -1,8 +1,7 @@
+using System.Collections.Generic;
 
 namespace NLog.Targets
 {
-	using System.Collections.Generic;
-
 	/// <summary>
 	/// Writes log messages to an ArrayList in memory for programmatic retrieval.
 	/// </summary>

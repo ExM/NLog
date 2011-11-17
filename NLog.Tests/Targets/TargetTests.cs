@@ -1,14 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using NUnit.Framework;
+using NLog.Common;
+using NLog.Internal;
+using NLog.Targets;
 
 namespace NLog.UnitTests.Targets
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Threading;
-	using NUnit.Framework;
-	using NLog.Common;
-	using NLog.Internal;
-	using NLog.Targets;
-
 	[TestFixture]
 	public class TargetTests : NLogTestBase
 	{

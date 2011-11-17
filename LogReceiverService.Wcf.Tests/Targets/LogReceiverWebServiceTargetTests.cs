@@ -1,14 +1,13 @@
+using System;
+using System.Collections.Generic;
+using NLog.Common;
+using NLog.LogReceiverService;
+using NUnit.Framework;
+using NLog.Config;
+using NLog.Targets;
 
 namespace NLog.UnitTests.Targets
 {
-	using System;
-	using System.Collections.Generic;
-	using NLog.Common;
-	using NLog.LogReceiverService;
-	using NUnit.Framework;
-	using NLog.Config;
-	using NLog.Targets;
-
 	[TestFixture]
 	public class LogReceiverWebServiceTargetTests : NLogTestBase
 	{

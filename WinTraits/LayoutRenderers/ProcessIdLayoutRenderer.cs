@@ -1,11 +1,10 @@
+using System.Globalization;
+using System.Text;
+using NLog.Config;
+using NLog.Internal;
 
 namespace NLog.LayoutRenderers
 {
-	using System.Globalization;
-	using System.Text;
-	using NLog.Config;
-	using NLog.Internal;
-
 	/// <summary>
 	/// The identifier of the current process.
 	/// </summary>

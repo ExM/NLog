@@ -1,11 +1,9 @@
-
+using System;
+using System.Net.Sockets;
+using System.Security;
 
 namespace NLog.Internal.NetworkSenders
 {
-	using System;
-	using System.Net.Sockets;
-	using System.Security;
-
 	/// <summary>
 	/// Socket proxy for mocking Socket code.
 	/// </summary>

@@ -1,11 +1,10 @@
+using System;
+using System.IO;
+using NLog.Common;
+using NLog.Targets;
 
 namespace NLog.Internal.FileAppenders
 {
-	using System;
-	using System.IO;
-	using NLog.Common;
-	using NLog.Targets;
-
 	/// <summary>
 	/// Optimized single-process file appender which keeps the file open for exclusive write.
 	/// </summary>

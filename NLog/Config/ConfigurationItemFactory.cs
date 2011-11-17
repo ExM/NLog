@@ -1,16 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using NLog.Conditions;
+using NLog.Filters;
+using NLog.Internal;
+using NLog.LayoutRenderers;
+using NLog.Layouts;
+using NLog.Targets;
 
 namespace NLog.Config
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Reflection;
-	using NLog.Conditions;
-	using NLog.Filters;
-	using NLog.Internal;
-	using NLog.LayoutRenderers;
-	using NLog.Layouts;
-	using NLog.Targets;
-
 	/// <summary>
 	/// Provides registration information for named items (targets, layouts, layout renderers, etc.) managed by NLog.
 	/// </summary>

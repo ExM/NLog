@@ -1,9 +1,8 @@
+using System;
+using System.Reflection;
 
 namespace NLog.Targets
 {
-	using System;
-	using System.Reflection;
-
 	/// <summary>
 	/// Calls the specified static method on each log message and passes contextual parameters to it.
 	/// </summary>

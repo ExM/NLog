@@ -1,11 +1,10 @@
+using System;
+using NLog.Common;
+using NLog.Config;
+using NLog.Internal;
 
 namespace NLog.Targets.Wrappers
 {
-	using System;
-	using NLog.Common;
-	using NLog.Config;
-	using NLog.Internal;
-
 	/// <summary>
 	/// Base class for targets wrap other (single) targets.
 	/// </summary>

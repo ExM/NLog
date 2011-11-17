@@ -1,8 +1,7 @@
+using System.Text;
 
 namespace NLog.Internal
 {
-	using System.Text;
-
 	/// <summary>
 	/// URL Encoding helper.
 	/// </summary>

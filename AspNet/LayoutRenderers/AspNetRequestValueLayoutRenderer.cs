@@ -1,10 +1,9 @@
+using System.Text;
+using System.Web;
+using NLog.Config;
 
 namespace NLog.LayoutRenderers
 {
-	using System.Text;
-	using System.Web;
-	using NLog.Config;
-
 	/// <summary>
 	/// ASP.NET Request variable.
 	/// </summary>

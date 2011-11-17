@@ -1,11 +1,10 @@
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
+using System.Text;
 
 namespace NLog.LayoutRenderers
 {
-	using System.Collections.Generic;
-	using System.ComponentModel;
-	using System.Globalization;
-	using System.Text;
-
 	/// <summary>
 	/// A counter value (increases on each layout rendering).
 	/// </summary>

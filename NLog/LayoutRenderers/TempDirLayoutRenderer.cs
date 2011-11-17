@@ -1,11 +1,9 @@
+using System.IO;
+using System.Text;
+using NLog.Config;
 
 namespace NLog.LayoutRenderers
 {
-	using System.IO;
-	using System.Text;
-
-	using NLog.Config;
-
 	/// <summary>
 	/// A temporary directory.
 	/// </summary>

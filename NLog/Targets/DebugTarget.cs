@@ -1,8 +1,7 @@
+using System;
 
 namespace NLog.Targets
 {
-	using System;
-
 	/// <summary>
 	/// Mock target - useful for testing.
 	/// </summary>

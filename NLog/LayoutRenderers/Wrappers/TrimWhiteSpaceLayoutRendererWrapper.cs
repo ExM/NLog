@@ -1,10 +1,9 @@
+using System.ComponentModel;
+using System.Globalization;
+using NLog.Config;
 
 namespace NLog.LayoutRenderers.Wrappers
 {
-	using System.ComponentModel;
-	using System.Globalization;
-	using NLog.Config;
-
 	/// <summary>
 	/// Trims the whitespace from the result of another layout renderer.
 	/// </summary>

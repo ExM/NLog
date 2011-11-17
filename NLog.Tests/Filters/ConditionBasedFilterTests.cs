@@ -1,14 +1,13 @@
+using System;
+using System.Xml;
+using System.Reflection;
+using System.IO;
+using NLog;
+using NLog.Config;
+using NUnit.Framework;
 
 namespace NLog.UnitTests.Filters
 {
-	using System;
-	using System.Xml;
-	using System.Reflection;
-	using System.IO;
-	using NLog;
-	using NLog.Config;
-	using NUnit.Framework;
-
 	[TestFixture]
 	public class ConditionBasedFilterTests : NLogTestBase
 	{

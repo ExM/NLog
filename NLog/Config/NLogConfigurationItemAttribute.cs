@@ -1,8 +1,7 @@
+using System;
 
 namespace NLog.Config
 {
-	using System;
-
 	/// <summary>
 	/// Marks the object as configuration item for NLog.
 	/// </summary>

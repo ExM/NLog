@@ -1,10 +1,9 @@
+using System.Collections.Generic;
+using NLog.Common;
+using NLog.Internal;
 
 namespace NLog.Targets.Wrappers
 {
-	using System.Collections.Generic;
-	using NLog.Common;
-	using NLog.Internal;
-
 	/// <summary>
 	/// Asynchronous request queue.
 	/// </summary>

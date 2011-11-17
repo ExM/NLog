@@ -1,11 +1,9 @@
+using System;
+using System.Collections.Generic;
+using NLog.Internal;
 
 namespace NLog
 {
-	using System;
-	using System.Collections.Generic;
-
-	using NLog.Internal;
-
 	/// <summary>
 	/// Nested Diagnostics Context - a thread-local structure that keeps a stack
 	/// of strings and provides methods to output them in layouts

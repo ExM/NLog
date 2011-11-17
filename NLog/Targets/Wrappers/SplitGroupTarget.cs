@@ -1,12 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using NLog.Common;
+using NLog.Internal;
 
 namespace NLog.Targets.Wrappers
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Threading;
-	using NLog.Common;
-	using NLog.Internal;
-
 	/// <summary>
 	/// Writes log events to all targets.
 	/// </summary>

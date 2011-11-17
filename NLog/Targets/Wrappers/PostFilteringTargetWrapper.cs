@@ -1,13 +1,12 @@
+using System;
+using System.Collections.Generic;
+using NLog.Common;
+using NLog.Conditions;
+using NLog.Config;
+using NLog.Internal;
 
 namespace NLog.Targets.Wrappers
 {
-	using System;
-	using System.Collections.Generic;
-	using NLog.Common;
-	using NLog.Conditions;
-	using NLog.Config;
-	using NLog.Internal;
-
 	/// <summary>
 	/// Filters buffered log entries based on a set of conditions that are evaluated on a group of events.
 	/// </summary>

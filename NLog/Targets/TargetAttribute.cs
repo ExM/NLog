@@ -1,9 +1,8 @@
+using System;
+using NLog.Config;
 
 namespace NLog.Targets
 {
-	using System;
-	using NLog.Config;
-
 	/// <summary>
 	/// Marks class as a logging target and assigns a name to it.
 	/// </summary>

@@ -1,9 +1,8 @@
+using System.Text;
+using NLog.Config;
 
 namespace NLog.LayoutRenderers
 {
-	using System.Text;
-	using NLog.Config;
-
 	/// <summary>
 	/// Mapped Diagnostic Context item. Provided for compatibility with log4net.
 	/// </summary>

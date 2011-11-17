@@ -1,9 +1,8 @@
+using NLog.Config;
+using NLog.Layouts;
 
 namespace NLog.Filters
 {
-	using NLog.Config;
-	using NLog.Layouts;
-
 	/// <summary>
 	/// A base class for filters that are based on comparing a value to a layout.
 	/// </summary>

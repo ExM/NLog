@@ -1,8 +1,7 @@
+using System;
 
 namespace NLog
 {
-	using System;
-
 	/// <summary>
 	/// Exception thrown during log event processing.
 	/// </summary>

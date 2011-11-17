@@ -1,13 +1,12 @@
+using System;
+using System.ComponentModel;
+using System.Globalization;
+using System.Text;
+using System.Xml;
+using NLog.Config;
 
 namespace NLog.LayoutRenderers.Wrappers
 {
-	using System;
-	using System.ComponentModel;
-	using System.Globalization;
-	using System.Text;
-	using System.Xml;
-	using NLog.Config;
-
 	/// <summary>
 	/// Escapes output of another layout using JSON rules.
 	/// </summary>

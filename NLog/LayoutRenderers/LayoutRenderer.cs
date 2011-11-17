@@ -1,12 +1,11 @@
+using System;
+using System.Text;
+using NLog.Common;
+using NLog.Config;
+using NLog.Internal;
 
 namespace NLog.LayoutRenderers
 {
-	using System;
-	using System.Text;
-	using NLog.Common;
-	using NLog.Config;
-	using NLog.Internal;
-
 	/// <summary>
 	/// Render environmental information related to logging events.
 	/// </summary>

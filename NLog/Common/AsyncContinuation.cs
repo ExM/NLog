@@ -1,8 +1,7 @@
+using System;
 
 namespace NLog.Common
 {
-	using System;
-
 	/// <summary>
 	/// Asynchronous continuation delegate - function invoked at the end of asynchronous
 	/// processing.

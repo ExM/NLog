@@ -1,13 +1,12 @@
+using System;
+using System.Globalization;
+using System.Text;
+using Microsoft.Win32;
+using NLog.Config;
+using NLog.Internal;
 
 namespace NLog.LayoutRenderers
 {
-	using System;
-	using System.Globalization;
-	using System.Text;
-	using Microsoft.Win32;
-	using NLog.Config;
-	using NLog.Internal;
-
 	/// <summary>
 	/// A value from the Registry.
 	/// </summary>

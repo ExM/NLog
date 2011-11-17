@@ -1,11 +1,10 @@
+using System;
+using System.IO;
+using NUnit.Framework;
+using NLog.Config;
 
 namespace NLog.UnitTests.Config
 {
-	using System;
-	using System.IO;
-	using NUnit.Framework;
-	using NLog.Config;
-
 	[TestFixture]
 	public class IncludeTests : NLogTestBase
 	{

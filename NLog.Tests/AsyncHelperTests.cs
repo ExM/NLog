@@ -1,13 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using NUnit.Framework;
+using NLog.Common;
+using NLog.Internal;
 
 namespace NLog.UnitTests
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Threading;
-	using NUnit.Framework;
-	using NLog.Common;
-	using NLog.Internal;
-
 	[TestFixture]
 	public class AsyncHelperTests : NLogTestBase
 	{

@@ -1,10 +1,9 @@
+using NUnit.Framework;
+using NLog.Layouts;
+using NLog.Filters;
 
 namespace NLog.UnitTests.Filters
 {
-	using NUnit.Framework;
-	using NLog.Layouts;
-	using NLog.Filters;
-
 	[TestFixture]
 	public class APITests : NLogTestBase
 	{

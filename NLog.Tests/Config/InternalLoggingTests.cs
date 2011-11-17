@@ -1,10 +1,9 @@
+using System;
+using NUnit.Framework;
+using NLog.Common;
 
 namespace NLog.UnitTests.Config
 {
-	using System;
-	using NUnit.Framework;
-	using NLog.Common;
-
 	[TestFixture]
 	public class InternalLoggingTests : NLogTestBase
 	{

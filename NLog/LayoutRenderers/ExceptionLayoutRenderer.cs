@@ -1,15 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
+using System.Text;
+using NLog.Common;
+using NLog.Config;
 
 namespace NLog.LayoutRenderers
 {
-	using System;
-	using System.Collections.Generic;
-	using System.ComponentModel;
-	using System.Globalization;
-	using System.Text;
-	using NLog.Common;
-	using NLog.Config;
-	using NLog.Internal;
-
 	/// <summary>
 	/// Exception information provided through 
 	/// a call to one of the Logger.*Exception() methods.

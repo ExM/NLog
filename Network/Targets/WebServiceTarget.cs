@@ -1,17 +1,16 @@
+using System;
+using System.ComponentModel;
+using System.Globalization;
+using System.IO;
+using System.Net;
+using System.Text;
+using System.Xml;
+using NLog.Common;
+using NLog.Internal;
+using NLog.Layouts;
 
 namespace NLog.Targets
 {
-	using System;
-	using System.ComponentModel;
-	using System.Globalization;
-	using System.IO;
-	using System.Net;
-	using System.Text;
-	using System.Xml;
-	using NLog.Common;
-	using NLog.Internal;
-	using NLog.Layouts;
-
 	/// <summary>
 	/// Calls the specified web service on each log message.
 	/// </summary>

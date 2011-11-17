@@ -1,13 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Threading;
+using NLog.Common;
+using NLog.Internal;
 
 namespace NLog.Targets.Wrappers
 {
-	using System;
-	using System.Collections.Generic;
-	using System.ComponentModel;
-	using System.Threading;
-	using NLog.Common;
-	using NLog.Internal;
-
 	/// <summary>
 	/// Provides asynchronous, buffered execution of target writes.
 	/// </summary>

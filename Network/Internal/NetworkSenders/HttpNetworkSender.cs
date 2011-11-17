@@ -1,10 +1,9 @@
+using System;
+using System.Net;
+using NLog.Common;
 
 namespace NLog.Internal.NetworkSenders
 {
-	using System;
-	using System.Net;
-	using NLog.Common;
-
 	/// <summary>
 	/// Network sender which uses HTTP or HTTPS POST.
 	/// </summary>

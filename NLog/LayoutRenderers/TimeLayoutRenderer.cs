@@ -1,13 +1,11 @@
+using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Text;
+using NLog.Config;
 
 namespace NLog.LayoutRenderers
 {
-	using System;
-	using System.ComponentModel;
-	using System.Diagnostics;
-	using System.Text;
-
-	using NLog.Config;
-
 	/// <summary>
 	/// The time in a 24-hour, sortable format HH:mm:ss.mmm.
 	/// </summary>

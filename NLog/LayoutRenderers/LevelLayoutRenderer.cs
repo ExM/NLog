@@ -1,11 +1,9 @@
+using System.Diagnostics;
+using System.Text;
+using NLog.Config;
 
 namespace NLog.LayoutRenderers
 {
-	using System.Diagnostics;
-	using System.Text;
-
-	using NLog.Config;
-
 	/// <summary>
 	/// The log level.
 	/// </summary>

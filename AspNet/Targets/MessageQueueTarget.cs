@@ -1,13 +1,11 @@
-
+using System.ComponentModel;
+using System.Messaging;
+using System.Text;
+using NLog.Config;
+using NLog.Layouts;
 
 namespace NLog.Targets
 {
-	using System.ComponentModel;
-	using System.Messaging;
-	using System.Text;
-	using NLog.Config;
-	using NLog.Layouts;
-
 	/// <summary>
 	/// Writes log message to the specified message queue handled by MSMQ.
 	/// </summary>

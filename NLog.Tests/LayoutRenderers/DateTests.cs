@@ -5,12 +5,11 @@ using NLog;
 using NLog.Config;
 using NUnit.Framework;
 using NLog.Common;
+using NLog.LayoutRenderers;
+using System.Globalization;
 
 namespace NLog.UnitTests.LayoutRenderers
 {
-	using NLog.LayoutRenderers;
-	using System.Globalization;
-
 	[TestFixture]
 	public class DateTests : NLogTestBase
 	{

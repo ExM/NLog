@@ -1,8 +1,7 @@
+using System;
 
 namespace NLog.Config
 {
-	using System;
-
 	/// <summary>
 	/// Marks the class or a member as advanced. Advanced classes and members are hidden by 
 	/// default in generated documentation.

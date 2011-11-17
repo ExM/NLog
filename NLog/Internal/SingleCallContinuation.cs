@@ -1,10 +1,9 @@
+using System;
+using System.Threading;
+using NLog.Common;
 
 namespace NLog.Internal
 {
-	using System;
-	using System.Threading;
-	using NLog.Common;
-
 	/// <summary>
 	/// Implements a single-call guard around given continuation function.
 	/// </summary>

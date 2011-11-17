@@ -1,10 +1,8 @@
-
 #define TRACE
+using System.Diagnostics;
 
 namespace NLog.Targets
 {
-	using System.Diagnostics;
-
 	/// <summary>
 	/// Sends log messages through System.Diagnostics.Trace.
 	/// </summary>

@@ -1,11 +1,10 @@
+using System;
+using System.ComponentModel;
+using System.Security.Principal;
+using System.Text;
 
 namespace NLog.LayoutRenderers
 {
-	using System;
-	using System.ComponentModel;
-	using System.Security.Principal;
-	using System.Text;
-
 	/// <summary>
 	/// Thread identity information (name and authentication information).
 	/// </summary>

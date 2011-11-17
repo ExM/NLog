@@ -1,11 +1,10 @@
+using NUnit.Framework;
+using NLog.LayoutRenderers;
+using NLog.Layouts;
+using NLog.Targets;
 
 namespace NLog.UnitTests.Config
 {
-	using NUnit.Framework;
-	using NLog.LayoutRenderers;
-	using NLog.Layouts;
-	using NLog.Targets;
-
 	[TestFixture]
 	public class VariableTests : NLogTestBase
 	{

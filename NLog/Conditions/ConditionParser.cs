@@ -1,13 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using NLog.Config;
+using NLog.Internal;
+using NLog.Layouts;
 
 namespace NLog.Conditions
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Globalization;
-	using NLog.Config;
-	using NLog.Internal;
-	using NLog.Layouts;
-
 	/// <summary>
 	/// Condition parser. Turns a string representation of condition expression
 	/// into an expression tree.

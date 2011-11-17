@@ -1,12 +1,10 @@
+using System;
+using System.IO;
+using System.Text;
+using NLog.Config;
 
 namespace NLog.LayoutRenderers
 {
-	using System;
-	using System.IO;
-	using System.Text;
-
-	using NLog.Config;
-
 	/// <summary>
 	/// The current application domain's base directory.
 	/// </summary>

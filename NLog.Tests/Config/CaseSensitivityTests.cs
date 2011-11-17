@@ -1,8 +1,7 @@
+using NUnit.Framework;
 
 namespace NLog.UnitTests.Config
 {
-	using NUnit.Framework;
-
 	[TestFixture]
 	public class CaseSensitivityTests : NLogTestBase
 	{

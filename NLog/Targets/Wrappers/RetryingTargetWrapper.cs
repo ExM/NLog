@@ -1,12 +1,11 @@
+using System;
+using System.ComponentModel;
+using System.Threading;
+using NLog.Common;
+using NLog.Internal;
 
 namespace NLog.Targets.Wrappers
 {
-	using System;
-	using System.ComponentModel;
-	using System.Threading;
-	using NLog.Common;
-	using NLog.Internal;
-
 	/// <summary>
 	/// Retries in case of write error.
 	/// </summary>

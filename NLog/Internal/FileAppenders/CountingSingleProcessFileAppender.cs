@@ -1,10 +1,9 @@
+using System;
+using System.IO;
+using NLog.Targets;
 
 namespace NLog.Internal.FileAppenders
 {
-	using System;
-	using System.IO;
-	using NLog.Targets;
-
 	/// <summary>
 	/// Implementation of <see cref="BaseFileAppender"/> which caches 
 	/// file information.

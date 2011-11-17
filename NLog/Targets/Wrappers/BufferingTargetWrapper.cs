@@ -1,11 +1,10 @@
+using System.ComponentModel;
+using System.Threading;
+using NLog.Common;
+using NLog.Internal;
 
 namespace NLog.Targets.Wrappers
 {
-	using System.ComponentModel;
-	using System.Threading;
-	using NLog.Common;
-	using NLog.Internal;
-
 	/// <summary>
 	/// A target that buffers log events and sends them in batches to the wrapped target.
 	/// </summary>

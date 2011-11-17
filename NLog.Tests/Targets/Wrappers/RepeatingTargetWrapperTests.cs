@@ -1,13 +1,12 @@
+using System;
+using System.Collections.Generic;
+using NUnit.Framework;
+using NLog.Internal;
+using NLog.Targets;
+using NLog.Targets.Wrappers;
 
 namespace NLog.UnitTests.Targets.Wrappers
 {
-	using System;
-	using System.Collections.Generic;
-	using NUnit.Framework;
-	using NLog.Internal;
-	using NLog.Targets;
-	using NLog.Targets.Wrappers;
-
 	[TestFixture]
 	public class RepeatingTargetWrapperTests : NLogTestBase
 	{

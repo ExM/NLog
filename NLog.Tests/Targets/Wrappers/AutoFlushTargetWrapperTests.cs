@@ -1,14 +1,13 @@
+using System;
+using System.Threading;
+using NUnit.Framework;
+using NLog.Common;
+using NLog.Targets;
+using NLog.Targets.Wrappers;
+using NLog.Internal;
 
 namespace NLog.UnitTests.Targets.Wrappers
 {
-	using System;
-	using System.Threading;
-	using NUnit.Framework;
-	using NLog.Common;
-	using NLog.Targets;
-	using NLog.Targets.Wrappers;
-	using NLog.Internal;
-
 	[TestFixture]
 	public class AutoFlushTargetWrapperTests : NLogTestBase
 	{

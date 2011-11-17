@@ -1,12 +1,11 @@
+using System;
+using System.Collections.Generic;
+using NLog.Common;
+using NLog.Config;
+using NLog.Internal;
 
 namespace NLog.Targets
 {
-	using System;
-	using System.Collections.Generic;
-	using NLog.Common;
-	using NLog.Config;
-	using NLog.Internal;
-
 	/// <summary>
 	/// The base class for all targets which call methods (local or remote). 
 	/// Manages parameters and type coercion.

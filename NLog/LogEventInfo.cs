@@ -1,17 +1,16 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Globalization;
+using System.Threading;
+using NLog.Common;
+using NLog.Internal;
+using NLog.Layouts;
 
 namespace NLog
 {
-	using System;
-	using System.Collections;
-	using System.Collections.Generic;
-	using System.ComponentModel;
-	using System.Diagnostics;
-	using System.Globalization;
-	using System.Threading;
-	using NLog.Common;
-	using NLog.Internal;
-	using NLog.Layouts;
-
 	/// <summary>
 	/// Represents the logging event.
 	/// </summary>

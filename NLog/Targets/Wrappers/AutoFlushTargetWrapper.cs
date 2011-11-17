@@ -1,10 +1,9 @@
+using System;
+using NLog.Common;
+using NLog.Internal;
 
 namespace NLog.Targets.Wrappers
 {
-	using System;
-	using NLog.Common;
-	using NLog.Internal;
-
 	/// <summary>
 	/// Causes a flush after each write on a wrapped target.
 	/// </summary>

@@ -1,9 +1,8 @@
+using NLog.Config;
+using NLog.Layouts;
 
 namespace NLog.LayoutRenderers.Wrappers
 {
-	using NLog.Config;
-	using NLog.Layouts;
-
 	/// <summary>
 	/// Decodes text "encrypted" with ROT-13.
 	/// </summary>

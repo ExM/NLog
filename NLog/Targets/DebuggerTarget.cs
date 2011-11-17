@@ -1,9 +1,7 @@
-
+using System.Diagnostics;
 
 namespace NLog.Targets
 {
-	using System.Diagnostics;
-
 	/// <summary>
 	/// Writes log messages to the attached managed debugger.
 	/// </summary>

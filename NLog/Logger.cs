@@ -1,10 +1,9 @@
+using System;
+using System.ComponentModel;
+using NLog.Internal;
 
 namespace NLog
 {
-	using System;
-	using System.ComponentModel;
-	using NLog.Internal;
-
 	/// <summary>
 	/// Provides logging interface and utility functions.
 	/// </summary>

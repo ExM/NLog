@@ -1,10 +1,9 @@
+using System.ComponentModel;
+using System.Globalization;
+using NLog.Config;
 
 namespace NLog.LayoutRenderers.Wrappers
 {
-	using System.ComponentModel;
-	using System.Globalization;
-	using NLog.Config;
-
 	/// <summary>
 	/// Converts the result of another layout output to lower case.
 	/// </summary>

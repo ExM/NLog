@@ -1,10 +1,10 @@
+using System;
+using System.IO;
+using System.Text;
+using NUnit.Framework;
+
 namespace NLog.UnitTests.LayoutRenderers
 {
-	using System;
-	using System.IO;
-	using System.Text;
-	using NUnit.Framework;
-
 	[TestFixture]
 	public class FileContentsTests : NLogTestBase
 	{

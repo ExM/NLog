@@ -1,12 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using NLog.Common;
+using NLog.Internal;
 
 namespace NLog.Config
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Reflection;
-	using NLog.Common;
-	using NLog.Internal;
-
 	/// <summary>
 	/// Factory for class-based items.
 	/// </summary>

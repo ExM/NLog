@@ -1,9 +1,8 @@
+using System;
+using NLog.Internal;
 
 namespace NLog
 {
-	using System;
-	using NLog.Internal;
-
 	/// <summary>
 	/// Defines available log levels.
 	/// </summary>

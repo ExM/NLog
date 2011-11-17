@@ -1,9 +1,8 @@
+using System;
+using System.Collections.Generic;
 
 namespace NLog
 {
-	using System;
-	using System.Collections.Generic;
-
 	/// <summary>
 	/// Global Diagnostics Context - a dictionary structure to hold per-application-instance values.
 	/// </summary>

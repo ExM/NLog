@@ -1,10 +1,9 @@
+using System.ComponentModel;
+using NLog.Conditions;
+using NLog.Config;
 
 namespace NLog.Targets
 {
-	using System.ComponentModel;
-	using NLog.Conditions;
-	using NLog.Config;
-
 	/// <summary>
 	/// The row-highlighting condition.
 	/// </summary>

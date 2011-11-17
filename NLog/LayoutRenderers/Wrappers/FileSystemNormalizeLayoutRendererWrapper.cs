@@ -1,10 +1,9 @@
+using System.ComponentModel;
+using System.Text;
+using NLog.Config;
 
 namespace NLog.LayoutRenderers.Wrappers
 {
-	using System.ComponentModel;
-	using System.Text;
-	using NLog.Config;
-
 	/// <summary>
 	/// Filters characters not allowed in the file names by replacing them with safe character.
 	/// </summary>

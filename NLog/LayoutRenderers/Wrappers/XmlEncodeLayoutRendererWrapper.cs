@@ -1,13 +1,12 @@
+using System;
+using System.ComponentModel;
+using System.Globalization;
+using System.Text;
+using System.Xml;
+using NLog.Config;
 
 namespace NLog.LayoutRenderers.Wrappers
 {
-	using System;
-	using System.ComponentModel;
-	using System.Globalization;
-	using System.Text;
-	using System.Xml;
-	using NLog.Config;
-
 	/// <summary>
 	/// Converts the result of another layout output to be XML-compliant.
 	/// </summary>

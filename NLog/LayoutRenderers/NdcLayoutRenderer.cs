@@ -1,9 +1,8 @@
+using System;
+using System.Text;
 
 namespace NLog.LayoutRenderers
 {
-	using System;
-	using System.Text;
-
 	/// <summary>
 	/// Nested Diagnostic Context item. Provided for compatibility with log4net.
 	/// </summary>

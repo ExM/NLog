@@ -1,9 +1,8 @@
+using NLog.Config;
+using NLog.Layouts;
 
 namespace NLog.LayoutRenderers.Wrappers
 {
-	using NLog.Config;
-	using NLog.Layouts;
-
 	/// <summary>
 	/// Outputs alternative layout when the inner layout produces empty result.
 	/// </summary>

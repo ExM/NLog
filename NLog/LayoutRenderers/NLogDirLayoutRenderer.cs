@@ -1,12 +1,9 @@
-
+using System.IO;
+using System.Text;
+using NLog.Config;
 
 namespace NLog.LayoutRenderers
 {
-	using System.IO;
-	using System.Text;
-
-	using NLog.Config;
-
 	/// <summary>
 	/// The directory where NLog.dll is located.
 	/// </summary>

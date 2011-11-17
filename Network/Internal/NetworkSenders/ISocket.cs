@@ -1,8 +1,7 @@
+using System.Net.Sockets;
 
 namespace NLog.Internal.NetworkSenders
 {
-	using System.Net.Sockets;
-
 	/// <summary>
 	/// Interface for mocking socket calls.
 	/// </summary>

@@ -1,10 +1,9 @@
+using System;
+using System.Collections.Generic;
+using NLog.Common;
 
 namespace NLog.Internal
 {
-	using System;
-	using System.Collections.Generic;
-	using NLog.Common;
-
 	/// <summary>
 	/// Provides helpers to sort log events and associated continuations.
 	/// </summary>

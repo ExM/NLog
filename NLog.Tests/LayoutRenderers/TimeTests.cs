@@ -5,11 +5,10 @@ using NLog;
 using NLog.Config;
 using NUnit.Framework;
 using NLog.Common;
+using NLog.LayoutRenderers;
 
 namespace NLog.UnitTests.LayoutRenderers
 {
-	using NLog.LayoutRenderers;
-
 	[TestFixture]
 	public class TimeTests : NLogTestBase
 	{

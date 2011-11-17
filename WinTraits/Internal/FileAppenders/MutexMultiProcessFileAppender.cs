@@ -1,14 +1,12 @@
-
+using System;
+using System.Globalization;
+using System.IO;
+using System.Threading;
+using NLog.Common;
+using NLog.Targets;
 
 namespace NLog.Internal.FileAppenders
 {
-	using System;
-	using System.Globalization;
-	using System.IO;
-	using System.Threading;
-	using NLog.Common;
-	using NLog.Targets;
-
 	/// <summary>
 	/// Provides a multiprocess-safe atomic file appends while
 	/// keeping the files open.

@@ -1,25 +1,19 @@
-
 using System.Diagnostics;
-
+using System;
+using System.IO;
+using System.Text;
+using NUnit.Framework;
+using NLog.Common;
+using NLog.Config;
+using NLog.Layouts;
+using NLog.Targets;
+using NLog.Targets.Wrappers;
+using System.Threading;
+using NLog.Internal;
+using System.Collections.Generic;
 
 namespace NLog.UnitTests.Targets
 {
-	using System;
-	using System.IO;
-	using System.Text;
-
-	using NUnit.Framework;
-
-	using NLog.Common;
-	using NLog.Config;
-	using NLog.Layouts;
-	using NLog.Targets;
-	using NLog.Targets.Wrappers;
-
-	using System.Threading;
-	using NLog.Internal;
-	using System.Collections.Generic;
-
 	[TestFixture]
 	public class FileTargetTests : NLogTestBase
 	{

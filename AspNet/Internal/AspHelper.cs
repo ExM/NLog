@@ -1,11 +1,10 @@
+using System;
+using System.Globalization;
+using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace NLog.Internal
 {
-	using System;
-	using System.Globalization;
-	using System.Reflection;
-	using System.Runtime.InteropServices;
-
 	/// <summary>
 	/// Various helper methods for accessing state of ASP application.
 	/// </summary>

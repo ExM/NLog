@@ -1,8 +1,7 @@
+using System;
 
 namespace NLog.Config
 {
-	using System;
-
 	/// <summary>
 	/// Marks the layout or layout renderer as producing correct results regardless of the thread
 	/// it's running on.

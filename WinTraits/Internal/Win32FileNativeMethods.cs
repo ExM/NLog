@@ -1,12 +1,9 @@
-
+using System;
+using System.Runtime.InteropServices;
+using NLog.Targets;
 
 namespace NLog.Internal
 {
-	using System;
-	using System.Runtime.InteropServices;
-
-	using NLog.Targets;
-
 	internal static class Win32FileNativeMethods
 	{
 		public const int FILE_SHARE_READ = 1;

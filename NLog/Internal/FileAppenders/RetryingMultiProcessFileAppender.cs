@@ -1,10 +1,9 @@
+using System;
+using System.IO;
+using NLog.Targets;
 
 namespace NLog.Internal.FileAppenders
 {
-	using System;
-	using System.IO;
-	using NLog.Targets;
-
 	/// <summary>
 	/// Multi-process and multi-host file appender which attempts
 	/// to get exclusive write access and retries if it's not available.

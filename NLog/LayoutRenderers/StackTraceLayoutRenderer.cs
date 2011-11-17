@@ -1,13 +1,11 @@
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Text;
+using NLog.Config;
+using NLog.Internal;
 
 namespace NLog.LayoutRenderers
 {
-	using System.ComponentModel;
-	using System.Diagnostics;
-	using System.Text;
-	using NLog.Config;
-
-	using NLog.Internal;
-
 	/// <summary>
 	/// Stack trace renderer.
 	/// </summary>

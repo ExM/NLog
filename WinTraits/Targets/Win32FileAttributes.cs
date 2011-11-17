@@ -1,8 +1,7 @@
+using System;
 
 namespace NLog.Targets
 {
-	using System;
-
 	/// <summary>
 	/// Win32 file attributes.
 	/// </summary>

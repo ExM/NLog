@@ -1,11 +1,10 @@
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Xml;
 
 namespace NLog.Config
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Globalization;
-	using System.Xml;
-
 	/// <summary>
 	/// Represents simple XML element with case-insensitive attribute semantics.
 	/// </summary>

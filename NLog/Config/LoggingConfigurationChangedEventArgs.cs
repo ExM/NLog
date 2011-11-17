@@ -1,8 +1,7 @@
+using System;
 
 namespace NLog.Config
 {
-	using System;
-
 	/// <summary>
 	/// Arguments for <see cref="LogFactory.ConfigurationChanged"/> events.
 	/// </summary>

@@ -1,18 +1,17 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
+using System.IO;
+using System.Reflection;
+using System.Text;
+using System.Xml;
+using NLog.Config;
+using NLog.Internal;
+using NLog.Targets;
 
 namespace NLog.LayoutRenderers
 {
-	using System;
-	using System.Collections.Generic;
-	using System.ComponentModel;
-	using System.Globalization;
-	using System.IO;
-	using System.Reflection;
-	using System.Text;
-	using System.Xml;
-	using NLog.Config;
-	using NLog.Internal;
-	using NLog.Targets;
-
 	/// <summary>
 	/// XML event description compatible with log4j, Chainsaw and NLogViewer.
 	/// </summary>

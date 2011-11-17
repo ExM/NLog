@@ -1,10 +1,9 @@
+using System;
+using System.ComponentModel;
+using System.Text;
 
 namespace NLog.LayoutRenderers
 {
-	using System;
-	using System.ComponentModel;
-	using System.Text;
-
 	/// <summary>
 	/// Globally-unique identifier (GUID).
 	/// </summary>

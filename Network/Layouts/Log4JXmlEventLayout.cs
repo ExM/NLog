@@ -1,8 +1,7 @@
+using NLog.LayoutRenderers;
 
 namespace NLog.Layouts
 {
-	using NLog.LayoutRenderers;
-
 	/// <summary>
 	/// A specialized layout that renders Log4j-compatible XML events.
 	/// </summary>

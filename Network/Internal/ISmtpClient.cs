@@ -1,11 +1,9 @@
-
+using System;
+using System.Net;
+using System.Net.Mail;
 
 namespace NLog.Internal
 {
-	using System;
-	using System.Net;
-	using System.Net.Mail;
-
 	/// <summary>
 	/// Supports mocking of SMTP Client code.
 	/// </summary>

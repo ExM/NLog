@@ -1,11 +1,9 @@
-
+using System.ComponentModel;
+using System.Security.Principal;
+using System.Text;
 
 namespace NLog.LayoutRenderers
 {
-	using System.ComponentModel;
-	using System.Security.Principal;
-	using System.Text;
-
 	/// <summary>
 	/// Thread Windows identity information (username).
 	/// </summary>

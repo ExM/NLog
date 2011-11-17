@@ -1,15 +1,14 @@
+using System;
+using System.Threading;
+using NUnit.Framework;
+using NLog.Common;
+using NLog.Conditions;
+using NLog.Internal;
+using NLog.Targets;
+using NLog.Targets.Wrappers;
 
 namespace NLog.UnitTests.Targets.Wrappers
 {
-	using System;
-	using System.Threading;
-	using NUnit.Framework;
-	using NLog.Common;
-	using NLog.Conditions;
-	using NLog.Internal;
-	using NLog.Targets;
-	using NLog.Targets.Wrappers;
-
 	[TestFixture]
 	public class FilteringTargetWrapperTests : NLogTestBase
 	{

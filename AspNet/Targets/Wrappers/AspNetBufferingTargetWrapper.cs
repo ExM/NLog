@@ -1,13 +1,12 @@
+using System;
+using System.ComponentModel;
+using System.Web;
+using NLog.Common;
+using NLog.Internal;
+using NLog.Web;
 
 namespace NLog.Targets.Wrappers
 {
-	using System;
-	using System.ComponentModel;
-	using System.Web;
-	using NLog.Common;
-	using NLog.Internal;
-	using NLog.Web;
-
 	/// <summary>
 	/// Buffers log events for the duration of ASP.NET request and sends them down 
 	/// to the wrapped target at the end of a request.

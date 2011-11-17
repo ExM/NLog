@@ -1,8 +1,7 @@
+using System;
 
 namespace NLog.Config
 {
-	using System;
-
 	/// <summary>
 	/// Used to mark configurable parameters which are arrays. 
 	/// Specifies the mapping between XML elements and .NET types.

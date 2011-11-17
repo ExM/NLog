@@ -1,8 +1,7 @@
+using NLog.Config;
 
 namespace NLog.Filters
 {
-	using NLog.Config;
-
 	/// <summary>
 	/// An abstract filter class. Provides a way to eliminate log messages
 	/// based on properties other than logger name and log level.

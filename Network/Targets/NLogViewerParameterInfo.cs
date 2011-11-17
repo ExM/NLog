@@ -1,9 +1,8 @@
+using NLog.Config;
+using NLog.Layouts;
 
 namespace NLog.Targets
 {
-	using NLog.Config;
-	using NLog.Layouts;
-
 	/// <summary>
 	/// Represents a parameter to a NLogViewer target.
 	/// </summary>

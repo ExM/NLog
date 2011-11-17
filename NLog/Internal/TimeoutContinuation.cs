@@ -1,10 +1,9 @@
+using System;
+using System.Threading;
+using NLog.Common;
 
 namespace NLog.Internal
 {
-	using System;
-	using System.Threading;
-	using NLog.Common;
-
 	/// <summary>
 	/// Wraps <see cref="AsyncContinuation"/> with a timeout.
 	/// </summary>

@@ -1,9 +1,9 @@
+using NUnit.Framework;
+using System.Security.Principal;
+using System.Threading;
+
 namespace NLog.UnitTests.LayoutRenderers
 {
-	using NUnit.Framework;
-	using System.Security.Principal;
-	using System.Threading;
-
 	[TestFixture]
 	public class IdentityTests : NLogTestBase
 	{

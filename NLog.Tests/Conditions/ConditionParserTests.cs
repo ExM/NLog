@@ -1,13 +1,12 @@
+using NLog.Internal;
+using NUnit.Framework;
+using NLog.Conditions;
+using NLog.Config;
+using NLog.LayoutRenderers;
+using NLog.Layouts;
 
 namespace NLog.UnitTests.Conditions
 {
-	using NLog.Internal;
-	using NUnit.Framework;
-	using NLog.Conditions;
-	using NLog.Config;
-	using NLog.LayoutRenderers;
-	using NLog.Layouts;
-
 	[TestFixture]
 	public class ConditionParserTests : NLogTestBase
 	{

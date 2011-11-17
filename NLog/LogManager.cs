@@ -1,13 +1,12 @@
+using System;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using NLog.Common;
+using NLog.Config;
+using NLog.Internal;
 
 namespace NLog
 {
-	using System;
-	using System.Diagnostics;
-	using System.Runtime.CompilerServices;
-	using NLog.Common;
-	using NLog.Config;
-	using NLog.Internal;
-
 	/// <summary>
 	/// Creates and manages instances of <see cref="T:NLog.Logger" /> objects.
 	/// </summary>

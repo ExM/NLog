@@ -1,11 +1,10 @@
+using System;
+using System.Diagnostics;
+using System.Text;
+using NLog.Internal;
 
 namespace NLog.LayoutRenderers
 {
-	using System;
-	using System.Diagnostics;
-	using System.Text;
-	using NLog.Internal;
-
 	/// <summary>
 	/// A newline literal.
 	/// </summary>

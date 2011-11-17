@@ -1,18 +1,17 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Reflection;
+using System.Text;
+using NLog.Common;
+using NLog.Conditions;
+using NLog.Config;
+using NLog.Internal;
+using NLog.LayoutRenderers;
+using NLog.LayoutRenderers.Wrappers;
 
 namespace NLog.Layouts
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Diagnostics;
-	using System.Reflection;
-	using System.Text;
-	using NLog.Common;
-	using NLog.Conditions;
-	using NLog.Config;
-	using NLog.Internal;
-	using NLog.LayoutRenderers;
-	using NLog.LayoutRenderers.Wrappers;
-
 	/// <summary>
 	/// Parses layout strings.
 	/// </summary>

@@ -5,13 +5,12 @@ using System.IO;
 using NLog;
 using NLog.Config;
 using NUnit.Framework;
+using System.Threading;
+using NLog.Internal;
+using System.Diagnostics;
 
 namespace NLog.UnitTests.LayoutRenderers
 {
-	using System.Threading;
-	using NLog.Internal;
-	using System.Diagnostics;
-
 	[TestFixture]
 	public class Log4JXmlTests : NLogTestBase
 	{

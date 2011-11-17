@@ -1,12 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using NLog.Common;
+using NLog.Internal;
 
 namespace NLog.Targets.Wrappers
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Text;
-	using NLog.Common;
-	using NLog.Internal;
-
 	/// <summary>
 	/// A base class for targets which wrap other (multiple) targets
 	/// and provide various forms of target routing.

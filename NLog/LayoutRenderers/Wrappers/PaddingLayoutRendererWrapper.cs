@@ -1,10 +1,9 @@
+using System;
+using System.ComponentModel;
+using NLog.Config;
 
 namespace NLog.LayoutRenderers.Wrappers
 {
-	using System;
-	using System.ComponentModel;
-	using NLog.Config;
-
 	/// <summary>
 	/// Applies padding to another layout output.
 	/// </summary>

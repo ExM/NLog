@@ -1,15 +1,14 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Text;
+using System.Threading;
+using NLog.Common;
+using NLog.Internal.NetworkSenders;
+using NLog.Layouts;
 
 namespace NLog.Targets
 {
-	using System;
-	using System.Collections.Generic;
-	using System.ComponentModel;
-	using System.Text;
-	using System.Threading;
-	using NLog.Common;
-	using NLog.Internal.NetworkSenders;
-	using NLog.Layouts;
-
 	/// <summary>
 	/// Sends log messages over the network.
 	/// </summary>

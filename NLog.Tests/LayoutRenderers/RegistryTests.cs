@@ -4,11 +4,10 @@ using System.Reflection;
 using NLog;
 using NLog.Config;
 using NUnit.Framework;
+using Microsoft.Win32;
 
 namespace NLog.UnitTests.LayoutRenderers
 {
-	using Microsoft.Win32;
-
 	[TestFixture]
 	public class RegistryTests : NLogTestBase
 	{

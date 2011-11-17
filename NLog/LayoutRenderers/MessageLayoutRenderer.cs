@@ -1,13 +1,11 @@
+using System;
+using System.Diagnostics;
+using System.Text;
+using NLog.Config;
+using NLog.Internal;
 
 namespace NLog.LayoutRenderers
 {
-	using System;
-	using System.Diagnostics;
-	using System.Text;
-
-	using NLog.Config;
-	using NLog.Internal;
-
 	/// <summary>
 	/// The formatted log message.
 	/// </summary>

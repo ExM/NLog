@@ -1,17 +1,16 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Net;
+using System.Net.Mail;
+using System.Text;
+using NLog.Common;
+using NLog.Config;
+using NLog.Internal;
+using NLog.Layouts;
 
 namespace NLog.Targets
 {
-	using System;
-	using System.Collections.Generic;
-	using System.ComponentModel;
-	using System.Net;
-	using System.Net.Mail;
-	using System.Text;
-	using NLog.Common;
-	using NLog.Config;
-	using NLog.Internal;
-	using NLog.Layouts;
-
 	/// <summary>
 	/// Sends log messages by email using SMTP protocol.
 	/// </summary>

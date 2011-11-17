@@ -1,15 +1,11 @@
-
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using NUnit.Framework;
 using System.Text;
-
-#pragma warning disable 0618
 
 namespace NLog.UnitTests.Contexts
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Threading;
-	using NUnit.Framework;
-
 	[TestFixture]
 	public class NestedDiagnosticsContextTests
 	{

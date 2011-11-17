@@ -1,10 +1,9 @@
+using NUnit.Framework;
+using NLog.Config;
+using NLog.Filters;
 
 namespace NLog.UnitTests.Config
 {
-	using NUnit.Framework;
-	using NLog.Config;
-	using NLog.Filters;
-
 	[TestFixture]
 	public class RuleConfigurationTests : NLogTestBase
 	{

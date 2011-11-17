@@ -1,17 +1,16 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Reflection;
+using System.Threading;
+using NLog.Common;
+using NLog.Config;
+using NLog.Filters;
+using NLog.Internal;
+using NLog.Targets;
 
 namespace NLog
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Diagnostics;
-	using System.Reflection;
-	using System.Threading;
-	using NLog.Common;
-	using NLog.Config;
-	using NLog.Filters;
-	using NLog.Internal;
-	using NLog.Targets;
-
 	/// <summary>
 	/// Implementation of logging engine.
 	/// </summary>

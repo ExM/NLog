@@ -1,12 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
+using NLog.Config;
 
 namespace NLog.Targets
 {
-	using System;
-	using System.Collections.Generic;
-	using System.ComponentModel;
-	using System.IO;
-	using NLog.Config;
-
 	/// <summary>
 	/// Writes log messages to the console with customizable coloring.
 	/// </summary>

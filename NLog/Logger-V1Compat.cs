@@ -1,10 +1,8 @@
-
+using System;
+using System.ComponentModel;
 
 namespace NLog
 {
-	using System;
-	using System.ComponentModel;
-
 	/// <content>
 	/// Auto-generated Logger members for binary compatibility with NLog 1.0.
 	/// </content>

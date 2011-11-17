@@ -1,8 +1,7 @@
+using System.Text;
 
 namespace NLog.LayoutRenderers
 {
-	using System.Text;
-
 	/// <summary>
 	/// The name of the current thread.
 	/// </summary>

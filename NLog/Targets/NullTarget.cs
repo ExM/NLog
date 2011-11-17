@@ -1,8 +1,7 @@
+using System.ComponentModel;
 
 namespace NLog.Targets
 {
-	using System.ComponentModel;
-
 	/// <summary>
 	/// Discards log messages. Used mainly for debugging and benchmarking.
 	/// </summary>
