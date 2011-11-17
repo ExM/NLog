@@ -8,9 +8,6 @@ namespace NLog.WinForm.RtfParsing
 {
 	public class RtfDocument
 	{
-		public List<RtfParagraph> Pars = new List<RtfParagraph>();
-
-
 		public static List<RtfParagraph> Load(string text)
 		{
 			int end;
@@ -29,32 +26,143 @@ namespace NLog.WinForm.RtfParsing
 
 		private static List<RtfParagraph> ExtractParagraphs(string text, Color[] table)
 		{
-			RtfParagraph last = null;
 			List<RtfParagraph> result = new List<RtfParagraph>();
-
-			int start = 0;
-			while(true)
+			Color? curColor = null;
+			FontStyle curFontStyle = FontStyle.Regular;
+			RtfReader reader = new RtfReader(text);
+			
+			bool newText = false;
+			RtfParagraph par = new RtfParagraph();
+			
+			while(reader.Next())
 			{
-				int pos = text.IndexOf("\\par", start);
-				if(pos == -1)
+				if(reader.Text != null)
 				{
-					result.Add(RtfParagraph.Parse(last, table, text.Substring(start)));
-					return result;
+					//Console.WriteLine("text: {0}", reader.Text);
+					
+					if(newText || par.Count == 0)
+					{
+						newText = false;
+						par.Add(new RtfText(){ Color = curColor, FontStyle = curFontStyle, Text = reader.Text});
+						continue;
+					}
+					else
+					{
+						var t = par[par.Count - 1];
+						t.Text += reader.Text;
+						continue;
+					}
+				}
+				// reader.Tag != null
+				//Console.WriteLine("tag: {0}", reader.Tag);
+				
+				if(reader.Tag == "par")
+				{
+					newText = true;
+					result.Add(par);
+					par = new RtfParagraph();
+					continue;
 				}
 
-				int offset = "\\par".Length;
-				if (text.IndexOf("\\pard", pos) == pos)
+				if(reader.Tag == "pard")
 				{
-					last = null;
-					offset = "\\pard".Length;
+					newText = true;
+					curColor = null;
+					curFontStyle = FontStyle.Regular;
+					result.Add(par);
+					par = new RtfParagraph();
+					continue;
 				}
+				
+				if(reader.Tag == "f")
+					continue;
+				
+				if(reader.Tag == "b")
+				{
+					newText = true;
+					curFontStyle |= FontStyle.Bold;
+					continue;
+				}
+				
+				if(reader.Tag == "b0")
+				{
+					newText = true;
+					curFontStyle &= ~FontStyle.Bold;
+					continue;
+				}
+				
+				if(reader.Tag == "i")
+				{
+					newText = true;
+					curFontStyle |= FontStyle.Italic;
+					continue;
+				}
+				
+				if(reader.Tag == "i0")
+				{
+					newText = true;
+					curFontStyle &= ~FontStyle.Italic;
+					continue;
+				}
+				
+				if(reader.Tag == "ul")
+				{
+					newText = true;
+					curFontStyle |= FontStyle.Underline;
+					continue;
+				}
+				
+				if(reader.Tag == "ul0")
+				{
+					newText = true;
+					curFontStyle &= ~FontStyle.Underline;
+					continue;
+				}
+				
+				int num;
+				num = NumTag("cf", reader.Tag);
+				if(num != -1)
+				{
+					newText = true;
+					curColor = table[num];
+					continue;
+				}
+				
+				num = NumTag("f", reader.Tag);
+				if(num != -1)
+					continue;
 
-				var p = RtfParagraph.Parse(last, table, text.Substring(start, pos - start));
-
-				last = p;
-				result.Add(p);
-				start = pos + offset;
+				num = NumTag("fs", reader.Tag);
+				if(num != -1)
+					continue;
+				
+				num = NumTag("cf", reader.Tag);
+				if(num != -1)
+				{
+					curColor = table[num];
+					continue;
+				}
+				
+				Console.WriteLine("unknown rtf tag: {0}", reader.Tag);
 			}
+			
+			result.RemoveAll(p => p.Count == 0);
+			return result;
+		}
+		
+		private static int NumTag(string tag, string text)
+		{
+			if(tag.Length >= text.Length)
+				return -1;
+			
+			if(!text.StartsWith(tag))
+				return -1;
+			
+			int num;
+			if(int.TryParse(text.Substring(tag.Length), out num))
+				return num;
+			
+			return -1;
 		}
 
 		private static Color[] ExtractColorTable(List<Token> list)

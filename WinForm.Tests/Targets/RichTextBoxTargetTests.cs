@@ -73,7 +73,28 @@ namespace NLog.UnitTests.Targets
 			Console.WriteLine(rtfText);
 
 			List<RtfParagraph> phs = RtfDocument.Load(rtfText);
-
+			
+			Assert.AreEqual("Fatal NLog.UnitTests.Targets.RichTextBoxTargetTests  {Test}rrr", phs[0][0].Text);
+			Assert.AreEqual(FontStyle.Bold, phs[0][0].FontStyle);
+			Assert.AreEqual(FontStyle.Bold, phs[0][0].FontStyle);
+			
+			Assert.AreEqual("Error NLog.UnitTests.Targets.RichTextBoxTargetTests  }F;o\\o", phs[1][0].Text);
+			Assert.AreEqual(FontStyle.Italic, phs[1][0].FontStyle);
+			
+			Assert.AreEqual("Warn NLog.UnitTests.Targets.RichTextBoxTargetTests Bar", phs[2][0].Text);
+			Assert.AreEqual(FontStyle.Italic | FontStyle.Underline, phs[2][0].FontStyle);
+			
+			Assert.AreEqual("Info NLog.UnitTests.Targets.RichTextBoxTargetTests Test", phs[3][0].Text);
+			Assert.AreEqual(FontStyle.Italic | FontStyle.Underline, phs[3][0].FontStyle);
+			
+			Assert.AreEqual("Debug NLog.UnitTests.Targets.RichTextBoxTargetTests Foo", phs[4][0].Text);
+			Assert.AreEqual(FontStyle.Italic | FontStyle.Underline, phs[4][0].FontStyle);
+			
+			Assert.AreEqual("Trace NLog.UnitTests.Targets.RichTextBoxTargetTests Bar", phs[5][0].Text);
+			Assert.AreEqual(FontStyle.Underline, phs[5][0].FontStyle);
+			
+			
+			
 			Assert.IsTrue(rtfText.Contains(expectedRtf), "Invalid RTF: " + rtfText);
 
 			LogManager.Configuration = null;
