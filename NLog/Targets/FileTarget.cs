@@ -393,6 +393,10 @@ namespace NLog.Targets
 			}
 		}
 
+		/// <summary>
+		/// Determines the file appender, depending on the current settings
+		/// </summary>
+		/// <returns>factory of file appender</returns>
 		protected virtual Func<string, BaseFileAppender> ResolveFileAppenderFactory()
 		{
 			if (!KeepFileOpen || NetworkWrites || ConcurrentWrites)
@@ -1073,7 +1077,7 @@ namespace NLog.Targets
 		private readonly Random random = new Random();
 
 		/// <summary>
-		/// Creates the file stream.
+		/// Several attempts to open the file
 		/// </summary>
 		/// <param name="fileName">name of file</param>
 		/// <param name="allowConcurrentWrite">If set to <c>true</c> allow concurrent writes.</param>
@@ -1115,6 +1119,12 @@ namespace NLog.Targets
 			throw new InvalidOperationException("Should not be reached.");
 		}
 
+		/// <summary>
+		/// Create the file stream.
+		/// </summary>
+		/// <param name="fileName">name of file</param>
+		/// <param name="allowConcurrentWrite">If set to <c>true</c> allow concurrent writes.</param>
+		/// <returns>A <see cref="FileStream"/> object which can be used to write to the file.</returns>
 		protected virtual FileStream TryCreateFileStream(string fileName, bool allowConcurrentWrite)
 		{
 			FileShare fileShare = allowConcurrentWrite ? FileShare.ReadWrite : FileShare.Read;

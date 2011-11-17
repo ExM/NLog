@@ -352,5 +352,19 @@ namespace NLog.Config
 			// so that whenever the container is initialized its children have already been
 			InternalLogger.Info("Found {0} configuration items", _initializedItems.Length);
 		}
+
+		/// <summary>
+		/// Evaluates the specified text by expadinging all layout renderers
+		/// in new <see cref="LogEventInfo" /> context.
+		/// </summary>
+		/// <param name="text">The text to be evaluated.</param>
+		/// <returns>The input text with all occurences of ${} replaced with
+		/// values provided by the appropriate layout renderers.</returns>
+		public string EvaluateLayout(string text)
+		{
+			var l = new NLog.Layouts.SimpleLayout(text);
+			using (l.Initialize(this))
+				return l.Render(LogEventInfo.CreateNullEvent());
+		}
 	}
 }

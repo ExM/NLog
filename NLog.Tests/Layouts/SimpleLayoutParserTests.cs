@@ -232,17 +232,9 @@ namespace NLog.UnitTests.Layouts
 		[Test]
 		public void EvaluateTest()
 		{
-			var logEventInfo = LogEventInfo.CreateNullEvent();
-			logEventInfo.Level = LogLevel.Warn;
-			Assert.AreEqual("Warn", SimpleLayout.Evaluate(CommonCfg, "${level}", logEventInfo));
-		}
-
-		[Test]
-		public void EvaluateTest2()
-		{
-			Assert.AreEqual("Off", SimpleLayout.Evaluate(CommonCfg, "${level}"));
-			Assert.AreEqual(string.Empty, SimpleLayout.Evaluate(CommonCfg, "${message}"));
-			Assert.AreEqual(string.Empty, SimpleLayout.Evaluate(CommonCfg, "${logger}"));
+			Assert.AreEqual("Off", CommonCfg.EvaluateLayout("${level}"));
+			Assert.AreEqual(string.Empty, CommonCfg.EvaluateLayout("${message}"));
+			Assert.AreEqual(string.Empty, CommonCfg.EvaluateLayout("${logger}"));
 		}
 
 		private void AssertEscapeRoundTrips(string originalString)

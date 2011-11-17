@@ -21,11 +21,11 @@ namespace NLog
 		/// </summary>
 		public static readonly DateTime ZeroDate = DateTime.UtcNow;
 
-		private static int globalSequenceId;
+		private static int _globalSequenceId;
 
-		private string formattedMessage;
-		private IDictionary<Layout, string> layoutCache;
-		private IDictionary<object, object> properties;
+		private string _formattedMessage;
+		private IDictionary<Layout, string> _layoutCache;
+		private IDictionary<object, object> _properties;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LogEventInfo" /> class.
@@ -69,19 +69,17 @@ namespace NLog
 		/// <param name="exception">Exception information.</param>
 		public LogEventInfo(LogLevel level, string loggerName, IFormatProvider formatProvider, [Localizable(false)] string message, object[] parameters, Exception exception)
 		{
-			this.TimeStamp = CurrentTimeGetter.Now;
-			this.Level = level;
-			this.LoggerName = loggerName;
-			this.Message = message;
-			this.Parameters = parameters;
-			this.FormatProvider = formatProvider;
-			this.Exception = exception;
-			this.SequenceID = Interlocked.Increment(ref globalSequenceId);
+			TimeStamp = CurrentTimeGetter.Now;
+			Level = level;
+			LoggerName = loggerName;
+			Message = message;
+			Parameters = parameters;
+			FormatProvider = formatProvider;
+			Exception = exception;
+			SequenceID = Interlocked.Increment(ref _globalSequenceId);
 
 			if (NeedToPreformatMessage(parameters))
-			{
-				this.CalcFormattedMessage();
-			}
+				CalcFormattedMessage();
 		}
 
 		/// <summary>
@@ -105,7 +103,10 @@ namespace NLog
 		/// </summary>
 		public bool HasStackTrace
 		{
-			get { return this.StackTrace != null; }
+			get
+			{
+				return StackTrace != null;
+			}
 		}
 
 		/// <summary>
@@ -113,7 +114,10 @@ namespace NLog
 		/// </summary>
 		public StackFrame UserStackFrame
 		{
-			get { return (this.StackTrace != null) ? this.StackTrace.GetFrame(this.UserStackFrameNumber) : null; }
+			get
+			{
+				return (StackTrace != null) ? StackTrace.GetFrame(UserStackFrameNumber) : null;
+			}
 		}
 
 		/// <summary>
@@ -158,14 +162,11 @@ namespace NLog
 		/// </summary>
 		public string FormattedMessage
 		{
-			get 
+			get
 			{
-				if (this.formattedMessage == null)
-				{
-					this.CalcFormattedMessage();
-				}
-
-				return this.formattedMessage;
+				if(_formattedMessage == null)
+					CalcFormattedMessage();
+				return _formattedMessage;
 			}
 		}
 
@@ -176,12 +177,9 @@ namespace NLog
 		{
 			get
 			{
-				if (this.properties == null)
-				{
-					this.InitEventContext();
-				}
-
-				return this.properties;
+				if(_properties == null)
+					_properties = new Dictionary<object, object>();
+				return _properties;
 			}
 		}
 
@@ -262,7 +260,7 @@ namespace NLog
 		/// <returns>String representation of the log event.</returns>
 		public override string ToString()
 		{
-			return "Log Event: Logger='" + this.LoggerName + "' Level=" + this.Level + " Message='" + this.FormattedMessage + "' SequenceID=" + this.SequenceID;
+			return "Log Event: Logger='" + LoggerName + "' Level=" + Level + " Message='" + FormattedMessage + "' SequenceID=" + SequenceID;
 		}
 
 		/// <summary>
@@ -272,30 +270,40 @@ namespace NLog
 		/// <param name="userStackFrame">Index of the first user stack frame within the stack trace.</param>
 		public void SetStackTrace(StackTrace stackTrace, int userStackFrame)
 		{
-			this.StackTrace = stackTrace;
-			this.UserStackFrameNumber = userStackFrame;
+			StackTrace = stackTrace;
+			UserStackFrameNumber = userStackFrame;
 		}
 
+		/// <summary>
+		/// Add to cache rendered message of layout
+		/// </summary>
+		/// <param name="layout"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
 		public string AddCachedLayoutValue(Layout layout, string value)
 		{
-			if (this.layoutCache == null)
-			{
-				this.layoutCache = new Dictionary<Layout, string>();
-			}
+			if (_layoutCache == null)
+				_layoutCache = new Dictionary<Layout, string>();
 
-			this.layoutCache[layout] = value;
+			_layoutCache[layout] = value;
 			return value;
 		}
 
+		/// <summary>
+		/// Get cached message of layout
+		/// </summary>
+		/// <param name="layout"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
 		public bool TryGetCachedLayoutValue(Layout layout, out string value)
 		{
-			if (this.layoutCache == null)
+			if (_layoutCache == null)
 			{
 				value = null;
 				return false;
 			}
 
-			return this.layoutCache.TryGetValue(layout, out value);
+			return _layoutCache.TryGetValue(layout, out value);
 		}
 
 		private static bool NeedToPreformatMessage(object[] parameters)
@@ -303,36 +311,20 @@ namespace NLog
 			// we need to preformat message if it contains any parameters which could possibly
 			// do logging in their ToString()
 			if (parameters == null || parameters.Length == 0)
-			{
 				return false;
-			}
 
 			if (parameters.Length > 3)
-			{
 				// too many parameters, too costly to check
 				return true;
-			}
 
 			if (!IsSafeToDeferFormatting(parameters[0]))
-			{
 				return true;
-			}
 
-			if (parameters.Length >= 2)
-			{
-				if (!IsSafeToDeferFormatting(parameters[1]))
-				{
-					return true;
-				}
-			}
+			if (parameters.Length >= 2 && !IsSafeToDeferFormatting(parameters[1]))
+				return true;
 
-			if (parameters.Length >= 3)
-			{
-				if (!IsSafeToDeferFormatting(parameters[2]))
-				{
-					return true;
-				}
-			}
+			if (parameters.Length >= 3 && !IsSafeToDeferFormatting(parameters[2]))
+				return true;
 
 			return false;
 		}
@@ -340,41 +332,31 @@ namespace NLog
 		private static bool IsSafeToDeferFormatting(object value)
 		{
 			if (value == null)
-			{
 				return true;
-			}
 
 			return value.GetType().IsPrimitive || (value is string);
 		}
 
 		private void CalcFormattedMessage()
 		{
-			if (this.Parameters == null || this.Parameters.Length == 0)
+			if (Parameters == null || Parameters.Length == 0)
 			{
-				this.formattedMessage = this.Message;
+				_formattedMessage = Message;
+				return;
 			}
-			else
+
+			try
 			{
-				try
-				{
-					this.formattedMessage = string.Format(this.FormatProvider ?? CultureInfo.CurrentCulture, this.Message, this.Parameters);
-				}
-				catch (Exception exception)
-				{
-					this.formattedMessage = this.Message;
-					if (exception.MustBeRethrown())
-					{
-						throw;
-					}
-
-					InternalLogger.Warn("Error when formatting a message: {0}", exception);
-				}
+				_formattedMessage = string.Format(FormatProvider ?? CultureInfo.CurrentCulture, Message, Parameters);
 			}
-		}
+			catch (Exception exception)
+			{
+				_formattedMessage = Message;
+				if (exception.MustBeRethrown())
+					throw;
 
-		private void InitEventContext()
-		{
-			this.properties = new Dictionary<object, object>();
+				InternalLogger.Warn("Error when formatting a message: {0}", exception);
+			}
 		}
 	}
 }

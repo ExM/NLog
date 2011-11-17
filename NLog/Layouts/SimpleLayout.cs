@@ -120,34 +120,6 @@ namespace NLog.Layouts
 		}
 
 		/// <summary>
-		/// Evaluates the specified text by expadinging all layout renderers.
-		/// </summary>
-		/// <param name="cfg">custom configuration to resolve renderers.</param>
-		/// <param name="text">The text to be evaluated.</param>
-		/// <param name="logEvent">Log event to be used for evaluation.</param>
-		/// <returns>The input text with all occurences of ${} replaced with
-		/// values provided by the appropriate layout renderers.</returns>
-		public static string Evaluate(LoggingConfiguration cfg, string text, LogEventInfo logEvent)
-		{
-			var l = new SimpleLayout(text);
-			using(l.Initialize(cfg))
-				return l.Render(logEvent);
-		}
-
-		/// <summary>
-		/// Evaluates the specified text by expadinging all layout renderers
-		/// in new <see cref="LogEventInfo" /> context.
-		/// </summary>
-		/// <param name="cfg">custom configuration to resolve renderers.</param>
-		/// <param name="text">The text to be evaluated.</param>
-		/// <returns>The input text with all occurences of ${} replaced with
-		/// values provided by the appropriate layout renderers.</returns>
-		public static string Evaluate(LoggingConfiguration cfg, string text)
-		{
-			return Evaluate(cfg, text, LogEventInfo.CreateNullEvent());
-		}
-
-		/// <summary>
 		/// Returns a <see cref="T:System.String"></see> that represents the current object.
 		/// </summary>
 		/// <returns>

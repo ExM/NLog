@@ -675,7 +675,7 @@ namespace NLog.Config
 			try
 			{
 				newFileName = this.ExpandVariables(newFileName);
-				newFileName = SimpleLayout.Evaluate(this, newFileName);
+				newFileName = this.EvaluateLayout(newFileName);
 				if (baseDirectory != null)
 				{
 					newFileName = Path.Combine(baseDirectory, newFileName);

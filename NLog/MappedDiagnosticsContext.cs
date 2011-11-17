@@ -13,6 +13,9 @@ namespace NLog
 	{
 		private static readonly object dataSlot = ThreadLocalStorageHelper.AllocateDataSlot();
 
+		/// <summary>
+		/// Gets the current thread dictionary of MDC.
+		/// </summary>
 		public static IDictionary<string, string> ThreadDictionary
 		{
 			get { return ThreadLocalStorageHelper.GetDataForSlot<Dictionary<string, string>>(dataSlot); }

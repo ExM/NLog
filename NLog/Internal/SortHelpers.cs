@@ -10,15 +10,6 @@ namespace NLog.Internal
 	internal static class SortHelpers
 	{
 		/// <summary>
-		/// Key selector delegate.
-		/// </summary>
-		/// <typeparam name="TValue">The type of the value.</typeparam>
-		/// <typeparam name="TKey">The type of the key.</typeparam>
-		/// <param name="value">Value to extract key information from.</param>
-		/// <returns>Key selected from log event.</returns>
-		internal delegate TKey KeySelector<TValue, TKey>(TValue value);
-
-		/// <summary>
 		/// Performs bucket sort (group by) on an array of items and returns a dictionary for easy traversal of the result set.
 		/// </summary>
 		/// <typeparam name="TValue">The type of the value.</typeparam>
@@ -28,7 +19,7 @@ namespace NLog.Internal
 		/// <returns>
 		/// Dictonary where keys are unique input keys, and values are lists of <see cref="AsyncLogEventInfo"/>.
 		/// </returns>
-		public static Dictionary<TKey, List<TValue>> BucketSort<TValue, TKey>(this IEnumerable<TValue> inputs, KeySelector<TValue, TKey> keySelector)
+		public static Dictionary<TKey, List<TValue>> BucketSort<TValue, TKey>(this IEnumerable<TValue> inputs, Func<TValue, TKey> keySelector)
 		{
 			var buckets = new Dictionary<TKey, List<TValue>>();
 
