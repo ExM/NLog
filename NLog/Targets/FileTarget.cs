@@ -1032,7 +1032,7 @@ namespace NLog.Targets
 				{
 					this.recentAppenders[i].GetFileInfo(out lastWriteTime, out fileLength);
 					return true;
-					//HACK: may be    return this.recentAppenders[i].GetFileInfo(out lastWriteTime, out fileLength);
+					//HACK: may be	return this.recentAppenders[i].GetFileInfo(out lastWriteTime, out fileLength);
 				}
 			}
 
