@@ -74,7 +74,6 @@ namespace NLog.UnitTests.Targets
 \cf0\highlight0\i0\par
 }
 */
-			Color fc = target.TargetRichTextBox.ForeColor;
 			Color bc = target.TargetRichTextBox.BackColor;
 			Color w = Color.FromName("White");
 			Color r = Color.FromName("Red");
@@ -128,8 +127,6 @@ namespace NLog.UnitTests.Targets
 				logger.Trace("Bar");
 
 				Application.DoEvents();
-
-				var form = target.TargetForm;
 
 				MemoryStream ms = new MemoryStream();
 				target.TargetRichTextBox.SaveFile(ms, RichTextBoxStreamType.RichText);
@@ -193,8 +190,6 @@ Trace Bar\par
 				logger.Trace("Bar");
 
 				Application.DoEvents();
-
-				var form = target.TargetForm;
 
 				MemoryStream ms = new MemoryStream();
 				target.TargetRichTextBox.SaveFile(ms, RichTextBoxStreamType.RichText);
@@ -261,8 +256,6 @@ Debug Foo\par
 
 				Application.DoEvents();
 
-				var form = target.TargetForm;
-
 				MemoryStream ms = new MemoryStream();
 				target.TargetRichTextBox.SaveFile(ms, RichTextBoxStreamType.RichText);
 				string rtfText = Encoding.UTF8.GetString(ms.GetBuffer());
@@ -328,7 +321,6 @@ Trace Bar ccc\par
 					AutoScroll = true,
 				};
 
-				var form = target.TargetForm;
 				SimpleConfigurator.ConfigureForTargetLogging(target, LogLevel.Trace);
 				for (int i = 0; i < 100; ++i)
 				{
@@ -361,7 +353,6 @@ Trace Bar ccc\par
 				Assert.AreEqual(0, target.MaxLines);
 				target.MaxLines = 7;
 
-				var form = target.TargetForm;
 				SimpleConfigurator.ConfigureForTargetLogging(target, LogLevel.Trace);
 				for (int i = 0; i < 100; ++i)
 				{
