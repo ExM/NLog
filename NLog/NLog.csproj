@@ -201,7 +201,6 @@
     <Compile Include="LoggerImpl.cs" />
     <Compile Include="LogLevel.cs" />
     <Compile Include="LogManager.cs" />
-    <Compile Include="LogMessageGenerator.cs" />
     <Compile Include="MappedDiagnosticsContext.cs" />
     <Compile Include="NestedDiagnosticsContext.cs" />
     <Compile Include="NLogConfigurationException.cs" />
