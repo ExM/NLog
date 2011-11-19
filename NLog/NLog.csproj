@@ -197,7 +197,6 @@
     <Compile Include="LogEventInfo.cs" />
     <Compile Include="LogFactory-T.cs" />
     <Compile Include="LogFactory.cs" />
-    <Compile Include="Logger-V1Compat.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="LoggerImpl.cs" />
     <Compile Include="LogLevel.cs" />
@@ -251,6 +250,15 @@
     <Compile Include="Internal\UrlHelper.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Common\ISupportsLazyParameters.cs" />
+    <Compile Include="Logger.Methods.cs">
+      <DependentUpon>Logger.Methods.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <None Include="Logger.Methods.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Logger.Methods.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
 </Project>

@@ -1,0 +1,432 @@
+﻿<#@ template language="C#v3.5" #>
+using System;
+using System.ComponentModel;
+using NLog.Internal;
+
+namespace NLog
+{
+	/// <summary>
+	/// Provides logging interface and utility functions.
+	/// </summary>
+	public partial class Logger
+	{
+		#region Log() overloads
+		/// <overloads>
+		/// Writes the diagnostic message at the specified level using the specified format provider and format parameters.
+		/// </overloads>
+		/// <summary>
+		/// Writes the diagnostic message at the specified level.
+		/// </summary>
+		/// <typeparam name="T">Type of the value.</typeparam>
+		/// <param name="level">The log level.</param>
+		/// <param name="value">The value to be written.</param>
+		public void Log<T>(LogLevel level, T value)
+		{
+			if (this.IsEnabled(level))
+			{
+				this.WriteToTargets(level, null, value);
+			}
+		}
+
+		/// <summary>
+		/// Writes the diagnostic message at the specified level.
+		/// </summary>
+		/// <typeparam name="T">Type of the value.</typeparam>
+		/// <param name="level">The log level.</param>
+		/// <param name="formatProvider">An IFormatProvider that supplies culture-specific formatting information.</param>
+		/// <param name="value">The value to be written.</param>
+		public void Log<T>(LogLevel level, IFormatProvider formatProvider, T value)
+		{
+			if (this.IsEnabled(level))
+			{
+				this.WriteToTargets(level, formatProvider, value);
+			}
+		}
+
+		/// <summary>
+		/// Writes the diagnostic message at the specified level.
+		/// </summary>
+		/// <param name="level">The log level.</param>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		public void Log(LogLevel level, LogMessageGenerator messageFunc)
+		{
+			if (this.IsEnabled(level))
+			{
+				if (messageFunc == null)
+				{
+					throw new ArgumentNullException("messageFunc");
+				}
+
+				this.WriteToTargets(level, null, messageFunc());
+			}
+		}
+
+		/// <summary>
+		/// Writes the diagnostic message and exception at the specified level.
+		/// </summary>
+		/// <param name="level">The log level.</param>
+		/// <param name="message">A <see langword="string" /> to be written.</param>
+		/// <param name="exception">An exception to be logged.</param>
+		public void LogException(LogLevel level, [Localizable(false)] string message, Exception exception)
+		{
+			if (this.IsEnabled(level))
+			{
+				this.WriteToTargets(level, message, exception);
+			}
+		}
+
+		/// <summary>
+		/// Writes the diagnostic message at the specified level using the specified parameters and formatting them with the supplied format provider.
+		/// </summary>
+		/// <param name="level">The log level.</param>
+		/// <param name="formatProvider">An IFormatProvider that supplies culture-specific formatting information.</param>
+		/// <param name="message">A <see langword="string" /> containing format items.</param>
+		/// <param name="args">Arguments to format.</param>
+		public void Log(LogLevel level, IFormatProvider formatProvider, [Localizable(false)] string message, params object[] args)
+		{ 
+			if (this.IsEnabled(level))
+			{
+				this.WriteToTargets(level, formatProvider, message, args); 
+			}
+		}
+
+		/// <summary>
+		/// Writes the diagnostic message at the specified level.
+		/// </summary>
+		/// <param name="level">The log level.</param>
+		/// <param name="message">Log message.</param>
+		public void Log(LogLevel level, [Localizable(false)] string message) 
+		{ 
+			if (this.IsEnabled(level))
+			{
+				this.WriteToTargets(level, null, message);
+			}
+		}
+
+		/// <summary>
+		/// Writes the diagnostic message at the specified level using the specified parameters.
+		/// </summary>
+		/// <param name="level">The log level.</param>
+		/// <param name="message">A <see langword="string" /> containing format items.</param>
+		/// <param name="args">Arguments to format.</param>
+		public void Log(LogLevel level, [Localizable(false)] string message, params object[] args) 
+		{ 
+			if (this.IsEnabled(level))
+			{
+				this.WriteToTargets(level, message, args);
+			}
+		}
+
+		/// <summary>
+		/// Writes the diagnostic message at the specified level using the specified parameter and formatting it with the supplied format provider.
+		/// </summary>
+		/// <typeparam name="TArgument">The type of the argument.</typeparam>
+		/// <param name="level">The log level.</param>
+		/// <param name="formatProvider">An IFormatProvider that supplies culture-specific formatting information.</param>
+		/// <param name="message">A <see langword="string" /> containing one format item.</param>
+		/// <param name="argument">The argument to format.</param>
+		public void Log<TArgument>(LogLevel level, IFormatProvider formatProvider, [Localizable(false)] string message, TArgument argument)
+		{ 
+			if (this.IsEnabled(level))
+			{
+				this.WriteToTargets(level, formatProvider, message, new object[] { argument }); 
+			}
+		}
+
+		/// <summary>
+		/// Writes the diagnostic message at the specified level using the specified parameter.
+		/// </summary>
+		/// <typeparam name="TArgument">The type of the argument.</typeparam>
+		/// <param name="level">The log level.</param>
+		/// <param name="message">A <see langword="string" /> containing one format item.</param>
+		/// <param name="argument">The argument to format.</param>
+		public void Log<TArgument>(LogLevel level, [Localizable(false)] string message, TArgument argument)
+		{ 
+			if (this.IsEnabled(level))
+			{
+				this.WriteToTargets(level, message, new object[] { argument });
+			}
+		}
+
+		/// <summary>
+		/// Writes the diagnostic message at the specified level using the specified arguments formatting it with the supplied format provider.
+		/// </summary>
+		/// <typeparam name="TArgument1">The type of the first argument.</typeparam>
+		/// <typeparam name="TArgument2">The type of the second argument.</typeparam>
+		/// <param name="level">The log level.</param>
+		/// <param name="formatProvider">An IFormatProvider that supplies culture-specific formatting information.</param>
+		/// <param name="message">A <see langword="string" /> containing one format item.</param>
+		/// <param name="argument1">The first argument to format.</param>
+		/// <param name="argument2">The second argument to format.</param>
+		public void Log<TArgument1, TArgument2>(LogLevel level, IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2) 
+		{ 
+			if (this.IsEnabled(level))
+			{
+				this.WriteToTargets(level, formatProvider, message, new object[] { argument1, argument2 }); 
+			}
+		}
+
+		/// <summary>
+		/// Writes the diagnostic message at the specified level using the specified parameters.
+		/// </summary>
+		/// <typeparam name="TArgument1">The type of the first argument.</typeparam>
+		/// <typeparam name="TArgument2">The type of the second argument.</typeparam>
+		/// <param name="level">The log level.</param>
+		/// <param name="message">A <see langword="string" /> containing one format item.</param>
+		/// <param name="argument1">The first argument to format.</param>
+		/// <param name="argument2">The second argument to format.</param>
+		public void Log<TArgument1, TArgument2>(LogLevel level, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
+		{ 
+			if (this.IsEnabled(level))
+			{
+				this.WriteToTargets(level, message, new object[] { argument1, argument2 });
+			}
+		}
+
+		/// <summary>
+		/// Writes the diagnostic message at the specified level using the specified arguments formatting it with the supplied format provider.
+		/// </summary>
+		/// <typeparam name="TArgument1">The type of the first argument.</typeparam>
+		/// <typeparam name="TArgument2">The type of the second argument.</typeparam>
+		/// <typeparam name="TArgument3">The type of the third argument.</typeparam>
+		/// <param name="level">The log level.</param>
+		/// <param name="formatProvider">An IFormatProvider that supplies culture-specific formatting information.</param>
+		/// <param name="message">A <see langword="string" /> containing one format item.</param>
+		/// <param name="argument1">The first argument to format.</param>
+		/// <param name="argument2">The second argument to format.</param>
+		/// <param name="argument3">The third argument to format.</param>
+		public void Log<TArgument1, TArgument2, TArgument3>(LogLevel level, IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3) 
+		{ 
+			if (this.IsEnabled(level))
+			{
+				this.WriteToTargets(level, formatProvider, message, new object[] { argument1, argument2, argument3 }); 
+			}
+		}
+
+		/// <summary>
+		/// Writes the diagnostic message at the specified level using the specified parameters.
+		/// </summary>
+		/// <typeparam name="TArgument1">The type of the first argument.</typeparam>
+		/// <typeparam name="TArgument2">The type of the second argument.</typeparam>
+		/// <typeparam name="TArgument3">The type of the third argument.</typeparam>
+		/// <param name="level">The log level.</param>
+		/// <param name="message">A <see langword="string" /> containing one format item.</param>
+		/// <param name="argument1">The first argument to format.</param>
+		/// <param name="argument2">The second argument to format.</param>
+		/// <param name="argument3">The third argument to format.</param>
+		public void Log<TArgument1, TArgument2, TArgument3>(LogLevel level, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3)
+		{ 
+			if (this.IsEnabled(level))
+			{
+				this.WriteToTargets(level, message, new object[] { argument1, argument2, argument3 });
+			}
+		}
+
+		#endregion
+<#
+string[] levels = new string[]{ "Trace", "Debug", "Info", "Warn", "Error", "Fatal"};
+foreach(string level in levels) {
+#>
+
+		#region <#=level#>() overloads
+		/// <overloads>
+		/// Writes the diagnostic message at the <c><#=level#></c> level using the specified format provider and format parameters.
+		/// </overloads>
+		/// <summary>
+		/// Writes the diagnostic message at the <c><#=level#></c> level.
+		/// </summary>
+		/// <typeparam name="T">Type of the value.</typeparam>
+		/// <param name="value">The value to be written.</param>
+		public void <#=level#><T>(T value)
+		{
+			if (this.Is<#=level#>Enabled)
+			{
+				this.WriteToTargets(LogLevel.<#=level#>, null, value);
+			}
+		}
+
+		/// <summary>
+		/// Writes the diagnostic message at the <c><#=level#></c> level.
+		/// </summary>
+		/// <typeparam name="T">Type of the value.</typeparam>
+		/// <param name="formatProvider">An IFormatProvider that supplies culture-specific formatting information.</param>
+		/// <param name="value">The value to be written.</param>
+		public void <#=level#><T>(IFormatProvider formatProvider, T value)
+		{
+			if (this.Is<#=level#>Enabled)
+			{
+				this.WriteToTargets(LogLevel.<#=level#>, formatProvider, value);
+			}
+		}
+
+		/// <summary>
+		/// Writes the diagnostic message at the <c><#=level#></c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		public void <#=level#>(LogMessageGenerator messageFunc)
+		{
+			if (this.Is<#=level#>Enabled)
+			{
+				if (messageFunc == null)
+				{
+					throw new ArgumentNullException("messageFunc");
+				}
+
+				this.WriteToTargets(LogLevel.<#=level#>, null, messageFunc());
+			}
+		}
+
+		/// <summary>
+		/// Writes the diagnostic message and exception at the <c><#=level#></c> level.
+		/// </summary>
+		/// <param name="message">A <see langword="string" /> to be written.</param>
+		/// <param name="exception">An exception to be logged.</param>
+		public void <#=level#>Exception([Localizable(false)] string message, Exception exception)
+		{
+			if (this.Is<#=level#>Enabled)
+			{
+				this.WriteToTargets(LogLevel.<#=level#>, message, exception);
+			}
+		}
+
+		/// <summary>
+		/// Writes the diagnostic message at the <c><#=level#></c> level using the specified parameters and formatting them with the supplied format provider.
+		/// </summary>
+		/// <param name="formatProvider">An IFormatProvider that supplies culture-specific formatting information.</param>
+		/// <param name="message">A <see langword="string" /> containing format items.</param>
+		/// <param name="args">Arguments to format.</param>
+		public void <#=level#>(IFormatProvider formatProvider, [Localizable(false)] string message, params object[] args)
+		{ 
+			if (this.Is<#=level#>Enabled)
+			{
+				this.WriteToTargets(LogLevel.<#=level#>, formatProvider, message, args); 
+			}
+		}
+
+		/// <summary>
+		/// Writes the diagnostic message at the <c><#=level#></c> level.
+		/// </summary>
+		/// <param name="message">Log message.</param>
+		public void <#=level#>([Localizable(false)] string message) 
+		{ 
+			if (this.Is<#=level#>Enabled)
+			{
+				this.WriteToTargets(LogLevel.<#=level#>, null, message);
+			}
+		}
+
+		/// <summary>
+		/// Writes the diagnostic message at the <c><#=level#></c> level using the specified parameters.
+		/// </summary>
+		/// <param name="message">A <see langword="string" /> containing format items.</param>
+		/// <param name="args">Arguments to format.</param>
+		public void <#=level#>([Localizable(false)] string message, params object[] args) 
+		{ 
+			if (this.Is<#=level#>Enabled)
+			{
+				this.WriteToTargets(LogLevel.<#=level#>, message, args);
+			}
+		}
+
+		/// <summary>
+		/// Writes the diagnostic message at the <c><#=level#></c> level using the specified parameter and formatting it with the supplied format provider.
+		/// </summary>
+		/// <typeparam name="TArgument">The type of the argument.</typeparam>
+		/// <param name="formatProvider">An IFormatProvider that supplies culture-specific formatting information.</param>
+		/// <param name="message">A <see langword="string" /> containing one format item.</param>
+		/// <param name="argument">The argument to format.</param>
+		public void <#=level#><TArgument>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument argument)
+		{ 
+			if (this.Is<#=level#>Enabled)
+			{
+				this.WriteToTargets(LogLevel.<#=level#>, formatProvider, message, new object[] { argument }); 
+			}
+		}
+
+		/// <summary>
+		/// Writes the diagnostic message at the <c><#=level#></c> level using the specified parameter.
+		/// </summary>
+		/// <typeparam name="TArgument">The type of the argument.</typeparam>
+		/// <param name="message">A <see langword="string" /> containing one format item.</param>
+		/// <param name="argument">The argument to format.</param>
+		public void <#=level#><TArgument>([Localizable(false)] string message, TArgument argument)
+		{ 
+			if (this.Is<#=level#>Enabled)
+			{
+				this.WriteToTargets(LogLevel.<#=level#>, message, new object[] { argument });
+			}
+		}
+
+		/// <summary>
+		/// Writes the diagnostic message at the <c><#=level#></c> level using the specified arguments formatting it with the supplied format provider.
+		/// </summary>
+		/// <typeparam name="TArgument1">The type of the first argument.</typeparam>
+		/// <typeparam name="TArgument2">The type of the second argument.</typeparam>
+		/// <param name="formatProvider">An IFormatProvider that supplies culture-specific formatting information.</param>
+		/// <param name="message">A <see langword="string" /> containing one format item.</param>
+		/// <param name="argument1">The first argument to format.</param>
+		/// <param name="argument2">The second argument to format.</param>
+		public void <#=level#><TArgument1, TArgument2>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2) 
+		{ 
+			if (this.Is<#=level#>Enabled)
+			{
+				this.WriteToTargets(LogLevel.<#=level#>, formatProvider, message, new object[] { argument1, argument2 }); 
+			}
+		}
+
+		/// <summary>
+		/// Writes the diagnostic message at the <c><#=level#></c> level using the specified parameters.
+		/// </summary>
+		/// <typeparam name="TArgument1">The type of the first argument.</typeparam>
+		/// <typeparam name="TArgument2">The type of the second argument.</typeparam>
+		/// <param name="message">A <see langword="string" /> containing one format item.</param>
+		/// <param name="argument1">The first argument to format.</param>
+		/// <param name="argument2">The second argument to format.</param>
+		public void <#=level#><TArgument1, TArgument2>([Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
+		{ 
+			if (this.Is<#=level#>Enabled)
+			{
+				this.WriteToTargets(LogLevel.<#=level#>, message, new object[] { argument1, argument2 });
+			}
+		}
+
+		/// <summary>
+		/// Writes the diagnostic message at the <c><#=level#></c> level using the specified arguments formatting it with the supplied format provider.
+		/// </summary>
+		/// <typeparam name="TArgument1">The type of the first argument.</typeparam>
+		/// <typeparam name="TArgument2">The type of the second argument.</typeparam>
+		/// <typeparam name="TArgument3">The type of the third argument.</typeparam>
+		/// <param name="formatProvider">An IFormatProvider that supplies culture-specific formatting information.</param>
+		/// <param name="message">A <see langword="string" /> containing one format item.</param>
+		/// <param name="argument1">The first argument to format.</param>
+		/// <param name="argument2">The second argument to format.</param>
+		/// <param name="argument3">The third argument to format.</param>
+		public void <#=level#><TArgument1, TArgument2, TArgument3>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3) 
+		{ 
+			if (this.Is<#=level#>Enabled)
+			{
+				this.WriteToTargets(LogLevel.<#=level#>, formatProvider, message, new object[] { argument1, argument2, argument3 }); 
+			}
+		}
+
+		/// <summary>
+		/// Writes the diagnostic message at the <c><#=level#></c> level using the specified parameters.
+		/// </summary>
+		/// <typeparam name="TArgument1">The type of the first argument.</typeparam>
+		/// <typeparam name="TArgument2">The type of the second argument.</typeparam>
+		/// <typeparam name="TArgument3">The type of the third argument.</typeparam>
+		/// <param name="message">A <see langword="string" /> containing one format item.</param>
+		/// <param name="argument1">The first argument to format.</param>
+		/// <param name="argument2">The second argument to format.</param>
+		/// <param name="argument3">The third argument to format.</param>
+		public void <#=level#><TArgument1, TArgument2, TArgument3>([Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3)
+		{ 
+			if (this.Is<#=level#>Enabled)
+			{
+				this.WriteToTargets(LogLevel.<#=level#>, message, new object[] { argument1, argument2, argument3 });
+			}
+		}
+		#endregion
+<#}#>
+	}
+}
