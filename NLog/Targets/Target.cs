@@ -59,7 +59,7 @@ namespace NLog.Targets
 		/// Flush any pending log messages (in case of asynchronous targets).
 		/// </summary>
 		/// <param name="asyncContinuation">The asynchronous continuation.</param>
-		public void Flush(AsyncContinuation asyncContinuation)
+		public void Flush(Action<Exception> asyncContinuation)
 		{
 			if (asyncContinuation == null)
 				throw new ArgumentNullException("asyncContinuation");
@@ -264,7 +264,7 @@ namespace NLog.Targets
 			}
 		}
 
-		internal void WriteAsyncLogEvents(AsyncLogEventInfo[] logEventInfos, AsyncContinuation continuation)
+		internal void WriteAsyncLogEvents(AsyncLogEventInfo[] logEventInfos, Action<Exception> continuation)
 		{
 			if (logEventInfos.Length == 0)
 			{
@@ -276,8 +276,8 @@ namespace NLog.Targets
 				int remaining = logEventInfos.Length;
 				for (int i = 0; i < logEventInfos.Length; ++i)
 				{
-					AsyncContinuation originalContinuation = logEventInfos[i].Continuation;
-					AsyncContinuation wrappedContinuation = ex =>
+					Action<Exception> originalContinuation = logEventInfos[i].Continuation;
+					Action<Exception> wrappedContinuation = ex =>
 																{
 																	originalContinuation(ex);
 																	if (0 == Interlocked.Decrement(ref remaining))
@@ -314,7 +314,7 @@ namespace NLog.Targets
 		/// Flush any pending log messages asynchronously (in case of asynchronous targets).
 		/// </summary>
 		/// <param name="asyncContinuation">The asynchronous continuation.</param>
-		protected virtual void FlushAsync(AsyncContinuation asyncContinuation)
+		protected virtual void FlushAsync(Action<Exception> asyncContinuation)
 		{
 			asyncContinuation(null);
 		}

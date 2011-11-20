@@ -26,7 +26,7 @@ namespace NLog.Internal.NetworkSenders
 		/// <param name="length">Number of bytes to send.</param>
 		/// <param name="asyncContinuation">The async continuation to be invoked after the buffer has been sent.</param>
 		/// <remarks>To be overridden in inheriting classes.</remarks>
-		protected override void DoSend(byte[] bytes, int offset, int length, AsyncContinuation asyncContinuation)
+		protected override void DoSend(byte[] bytes, int offset, int length, Action<Exception> asyncContinuation)
 		{
 			var webRequest = WebRequest.Create(new Uri(this.Address));
 			webRequest.Method = "POST";

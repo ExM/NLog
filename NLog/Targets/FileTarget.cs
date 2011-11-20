@@ -366,7 +366,7 @@ namespace NLog.Targets
 		/// The timeout parameter is ignored, because file APIs don't provide
 		/// the needed functionality.
 		/// </remarks>
-		protected override void FlushAsync(AsyncContinuation asyncContinuation)
+		protected override void FlushAsync(Action<Exception> asyncContinuation)
 		{
 			try
 			{
@@ -496,7 +496,7 @@ namespace NLog.Targets
 			var buckets = logEvents.BucketSort(c => this.FileName.Render(c.LogEvent));
 			using (var ms = new MemoryStream())
 			{
-				var pendingContinuations = new List<AsyncContinuation>();
+				var pendingContinuations = new List<Action<Exception>>();
 
 				foreach (var bucket in buckets)
 				{
@@ -564,7 +564,7 @@ namespace NLog.Targets
 			return pattern.Substring(0, firstPart) + Convert.ToString(value, 10).PadLeft(numDigits, '0') + pattern.Substring(lastPart);
 		}
 
-		private void FlushCurrentFileWrites(string currentFileName, LogEventInfo firstLogEvent, MemoryStream ms, List<AsyncContinuation> pendingContinuations)
+		private void FlushCurrentFileWrites(string currentFileName, LogEventInfo firstLogEvent, MemoryStream ms, List<Action<Exception>> pendingContinuations)
 		{
 			Exception lastException = null;
 
@@ -592,7 +592,7 @@ namespace NLog.Targets
 				lastException = exception;
 			}
 
-			foreach (AsyncContinuation cont in pendingContinuations)
+			foreach (var cont in pendingContinuations)
 			{
 				cont(lastException);
 			}

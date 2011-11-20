@@ -52,7 +52,7 @@ namespace NLog.Internal.NetworkSenders
 		/// Closes the socket.
 		/// </summary>
 		/// <param name="continuation">The continuation.</param>
-		protected override void DoClose(AsyncContinuation continuation)
+		protected override void DoClose(Action<Exception> continuation)
 		{
 			lock (this)
 			{
@@ -83,7 +83,7 @@ namespace NLog.Internal.NetworkSenders
 		/// <param name="length">Number of bytes to send.</param>
 		/// <param name="asyncContinuation">The async continuation to be invoked after the buffer has been sent.</param>
 		/// <remarks>To be overridden in inheriting classes.</remarks>
-		protected override void DoSend(byte[] bytes, int offset, int length, AsyncContinuation asyncContinuation)
+		protected override void DoSend(byte[] bytes, int offset, int length, Action<Exception> asyncContinuation)
 		{
 			lock (this)
 			{
@@ -102,7 +102,7 @@ namespace NLog.Internal.NetworkSenders
 
 		private void SocketOperationCompleted(object sender, SocketAsyncEventArgs e)
 		{
-			var asyncContinuation = e.UserToken as AsyncContinuation;
+			var asyncContinuation = e.UserToken as Action<Exception>;
 
 			Exception error = null;
 

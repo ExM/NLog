@@ -16,8 +16,8 @@ namespace NLog.Internal.NetworkSenders
 		private ISocket socket;
 		private Exception pendingError;
 		private bool asyncOperationInProgress;
-		private AsyncContinuation closeContinuation;
-		private AsyncContinuation flushContinuation;
+		private Action<Exception> closeContinuation;
+		private Action<Exception> flushContinuation;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TcpNetworkSender"/> class.
@@ -67,7 +67,7 @@ namespace NLog.Internal.NetworkSenders
 		/// Closes the socket.
 		/// </summary>
 		/// <param name="continuation">The continuation.</param>
-		protected override void DoClose(AsyncContinuation continuation)
+		protected override void DoClose(Action<Exception> continuation)
 		{
 			lock (this)
 			{
@@ -86,7 +86,7 @@ namespace NLog.Internal.NetworkSenders
 		/// Performs sender-specific flush.
 		/// </summary>
 		/// <param name="continuation">The continuation.</param>
-		protected override void DoFlush(AsyncContinuation continuation)
+		protected override void DoFlush(Action<Exception> continuation)
 		{
 			lock (this)
 			{
@@ -109,7 +109,7 @@ namespace NLog.Internal.NetworkSenders
 		/// <param name="length">Number of bytes to send.</param>
 		/// <param name="asyncContinuation">The async continuation to be invoked after the buffer has been sent.</param>
 		/// <remarks>To be overridden in inheriting classes.</remarks>
-		protected override void DoSend(byte[] bytes, int offset, int length, AsyncContinuation asyncContinuation)
+		protected override void DoSend(byte[] bytes, int offset, int length, Action<Exception> asyncContinuation)
 		{
 			var args = new MySocketAsyncEventArgs();
 			args.SetBuffer(bytes, offset, length);
@@ -124,7 +124,7 @@ namespace NLog.Internal.NetworkSenders
 			this.ProcessNextQueuedItem();
 		}
 
-		private void CloseSocket(AsyncContinuation continuation)
+		private void CloseSocket(Action<Exception> continuation)
 		{
 			try
 			{
@@ -154,7 +154,7 @@ namespace NLog.Internal.NetworkSenders
 			lock (this)
 			{
 				this.asyncOperationInProgress = false;
-				var asyncContinuation = e.UserToken as AsyncContinuation;
+				var asyncContinuation = e.UserToken as Action<Exception>;
 
 				if (e.SocketError != SocketError.Success)
 				{
@@ -188,7 +188,7 @@ namespace NLog.Internal.NetworkSenders
 					while (this.pendingRequests.Count != 0)
 					{
 						args = this.pendingRequests.Dequeue();
-						var asyncContinuation = (AsyncContinuation)args.UserToken;
+						var asyncContinuation = (Action<Exception>)args.UserToken;
 						asyncContinuation(this.pendingError);
 					}
 				}

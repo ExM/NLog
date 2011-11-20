@@ -257,7 +257,7 @@ namespace NLog.UnitTests.Targets
 				base.CloseTarget();
 			}
 
-			protected override void FlushAsync(AsyncContinuation asyncContinuation)
+			protected override void FlushAsync(Action<Exception> asyncContinuation)
 			{
 				Assert.AreEqual(0, this.inBlockingOperation);
 				this.FlushCount++;

@@ -75,7 +75,7 @@ namespace NLog.Targets.Wrappers
 			}
 		}
 
-		private static AsyncContinuation CountedWrap(AsyncContinuation originalContinuation, int counter)
+		private static Action<Exception> CountedWrap(Action<Exception> originalContinuation, int counter)
 		{
 			if (counter == 1)
 			{
@@ -84,7 +84,7 @@ namespace NLog.Targets.Wrappers
 
 			var exceptions = new List<Exception>();
 
-			AsyncContinuation wrapper =
+			Action<Exception> wrapper =
 				ex =>
 					{
 						if (ex != null)

@@ -55,7 +55,7 @@ namespace NLog.Internal.NetworkSenders
 		/// Closes the sender and releases any unmanaged resources.
 		/// </summary>
 		/// <param name="continuation">The continuation.</param>
-		public void Close(AsyncContinuation continuation)
+		public void Close(Action<Exception> continuation)
 		{
 			this.DoClose(continuation);
 		}
@@ -64,7 +64,7 @@ namespace NLog.Internal.NetworkSenders
 		/// Flushes any pending messages and invokes a continuation.
 		/// </summary>
 		/// <param name="continuation">The continuation.</param>
-		public void FlushAsync(AsyncContinuation continuation)
+		public void FlushAsync(Action<Exception> continuation)
 		{
 			this.DoFlush(continuation);
 		}
@@ -76,7 +76,7 @@ namespace NLog.Internal.NetworkSenders
 		/// <param name="offset">Offset in buffer.</param>
 		/// <param name="length">Number of bytes to send.</param>
 		/// <param name="asyncContinuation">The asynchronous continuation.</param>
-		public void Send(byte[] bytes, int offset, int length, AsyncContinuation asyncContinuation)
+		public void Send(byte[] bytes, int offset, int length, Action<Exception> asyncContinuation)
 		{
 			this.LastSendTime = Interlocked.Increment(ref currentSendTime);
 			this.DoSend(bytes, offset, length, asyncContinuation);
@@ -102,7 +102,7 @@ namespace NLog.Internal.NetworkSenders
 		/// Performs sender-specific close operation.
 		/// </summary>
 		/// <param name="continuation">The continuation.</param>
-		protected virtual void DoClose(AsyncContinuation continuation)
+		protected virtual void DoClose(Action<Exception> continuation)
 		{
 			continuation(null);
 		}
@@ -111,7 +111,7 @@ namespace NLog.Internal.NetworkSenders
 		/// Performs sender-specific flush.
 		/// </summary>
 		/// <param name="continuation">The continuation.</param>
-		protected virtual void DoFlush(AsyncContinuation continuation)
+		protected virtual void DoFlush(Action<Exception> continuation)
 		{
 			continuation(null);
 		}
@@ -124,7 +124,7 @@ namespace NLog.Internal.NetworkSenders
 		/// <param name="length">Number of bytes to send.</param>
 		/// <param name="asyncContinuation">The async continuation to be invoked after the buffer has been sent.</param>
 		/// <remarks>To be overridden in inheriting classes.</remarks>
-		protected abstract void DoSend(byte[] bytes, int offset, int length, AsyncContinuation asyncContinuation);
+		protected abstract void DoSend(byte[] bytes, int offset, int length, Action<Exception> asyncContinuation);
 
 		/// <summary>
 		/// Parses the URI into an endpoint address.

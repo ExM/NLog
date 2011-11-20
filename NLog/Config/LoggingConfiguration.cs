@@ -268,7 +268,7 @@ namespace NLog.Config
 		/// Flushes any pending log messages on all appenders.
 		/// </summary>
 		/// <param name="asyncContinuation">The asynchronous continuation.</param>
-		internal void FlushAllTargets(AsyncContinuation asyncContinuation)
+		internal void FlushAllTargets(Action<Exception> asyncContinuation)
 		{
 			var uniqueTargets = new List<Target>();
 			foreach (var rule in LoggingRules)
@@ -283,7 +283,7 @@ namespace NLog.Config
 			AsyncHelpers.ForEachItemInParallel(uniqueTargets, asyncContinuation, (target, cont) => target.Flush(cont));
 		}
 		
-		internal void FlushAllTargets2(AsyncContinuation asyncContinuation)
+		internal void FlushAllTargets2(Action<Exception> asyncContinuation)
 		{
 			var uniqueTargets = new List<Target>();
 			foreach (var rule in LoggingRules)
@@ -294,8 +294,7 @@ namespace NLog.Config
 			
 
 			//AsyncHelpers.ForEachItemInParallel(uniqueTargets, asyncContinuation, );
-			
-			AsynchronousAction<Target> action = AsyncHelpers.ExceptionGuard<Target>((target, cont) => target.Flush(cont));
+			Action<Target, Action<Exception>> action = AsyncHelpers.ExceptionGuard<Target>((target, cont) => target.Flush(cont));
 
 		
 			int remaining = uniqueTargets.Count;
@@ -309,7 +308,7 @@ namespace NLog.Config
 				return;
 			}
 
-			AsyncContinuation continuation =
+			Action<Exception> continuation =
 				ex =>
 					{
 						InternalLogger.Trace("Continuation invoked: {0}", ex);

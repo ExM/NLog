@@ -40,7 +40,7 @@ namespace NLog
 
 
 			int originalThreadId = Thread.CurrentThread.ManagedThreadId;
-			AsyncContinuation exceptionHandler = ex =>
+			Action<Exception> exceptionHandler = ex =>
 				{
 					if (ex != null)
 					{
@@ -110,7 +110,7 @@ namespace NLog
 			return false;
 		}
 
-		private static bool WriteToTargetWithFilterChain(TargetWithFilterChain targetListHead, LogEventInfo logEvent, AsyncContinuation onException)
+		private static bool WriteToTargetWithFilterChain(TargetWithFilterChain targetListHead, LogEventInfo logEvent, Action<Exception> onException)
 		{
 			Target target = targetListHead.Target;
 			FilterResult result = GetFilterResult(targetListHead.FilterChain, logEvent);

@@ -64,7 +64,7 @@ namespace NLog.Targets.Wrappers
 		/// </remarks>
 		protected override void Write(AsyncLogEventInfo logEvent)
 		{
-			AsyncContinuation continuation = null;
+			Action<Exception> continuation = null;
 			int tryCounter = 0;
 			int targetToInvoke;
 

@@ -302,7 +302,7 @@ namespace NLog
 		/// Flush any pending log messages (in case of asynchronous targets).
 		/// </summary>
 		/// <param name="asyncContinuation">The asynchronous continuation.</param>
-		public void Flush(AsyncContinuation asyncContinuation)
+		public void Flush(Action<Exception> asyncContinuation)
 		{
 			Flush(asyncContinuation, TimeSpan.MaxValue);
 		}
@@ -312,7 +312,7 @@ namespace NLog
 		/// </summary>
 		/// <param name="asyncContinuation">The asynchronous continuation.</param>
 		/// <param name="timeoutMilliseconds">Maximum time to allow for the flush. Any messages after that time will be discarded.</param>
-		public void Flush(AsyncContinuation asyncContinuation, int timeoutMilliseconds)
+		public void Flush(Action<Exception> asyncContinuation, int timeoutMilliseconds)
 		{
 			Flush(asyncContinuation, TimeSpan.FromMilliseconds(timeoutMilliseconds));
 		}
@@ -322,7 +322,7 @@ namespace NLog
 		/// </summary>
 		/// <param name="asyncContinuation">The asynchronous continuation.</param>
 		/// <param name="timeout">Maximum time to allow for the flush. Any messages after that time will be discarded.</param>
-		public void Flush(AsyncContinuation asyncContinuation, TimeSpan timeout)
+		public void Flush(Action<Exception> asyncContinuation, TimeSpan timeout)
 		{
 			InternalLogger.Trace("LogFactory.Flush({0})", timeout);
 			

@@ -61,7 +61,7 @@ namespace NLog.Targets.Wrappers
 		/// Flush any pending log messages for all wrapped targets.
 		/// </summary>
 		/// <param name="asyncContinuation">The asynchronous continuation.</param>
-		protected override void FlushAsync(AsyncContinuation asyncContinuation)
+		protected override void FlushAsync(Action<Exception> asyncContinuation)
 		{
 			AsyncHelpers.ForEachItemInParallel(this.Targets, asyncContinuation, (t, c) => t.Flush(c));
 		}

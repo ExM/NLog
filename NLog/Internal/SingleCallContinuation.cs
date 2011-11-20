@@ -9,13 +9,13 @@ namespace NLog.Internal
 	/// </summary>
 	internal class SingleCallContinuation
 	{
-		private AsyncContinuation asyncContinuation;
+		private Action<Exception> asyncContinuation;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SingleCallContinuation"/> class.
 		/// </summary>
 		/// <param name="asyncContinuation">The asynchronous continuation.</param>
-		public SingleCallContinuation(AsyncContinuation asyncContinuation)
+		public SingleCallContinuation(Action<Exception> asyncContinuation)
 		{
 			this.asyncContinuation = asyncContinuation;
 		}

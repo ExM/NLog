@@ -30,7 +30,7 @@ namespace NLog.Targets.Wrappers
 		/// Flush any pending log messages (in case of asynchronous targets).
 		/// </summary>
 		/// <param name="asyncContinuation">The asynchronous continuation.</param>
-		protected override void FlushAsync(AsyncContinuation asyncContinuation)
+		protected override void FlushAsync(Action<Exception> asyncContinuation)
 		{
 			this.WrappedTarget.Flush(asyncContinuation);
 		}

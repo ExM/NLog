@@ -435,7 +435,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 				}
 			}
 
-			protected override void FlushAsync(AsyncContinuation asyncContinuation)
+			protected override void FlushAsync(Action<Exception> asyncContinuation)
 			{
 				ThreadPool.QueueUserWorkItem(
 					s => asyncContinuation(null));
@@ -464,13 +464,13 @@ namespace NLog.UnitTests.Targets.Wrappers
 				this.WriteCount++;
 			}
 
-			protected override void FlushAsync(AsyncContinuation asyncContinuation)
+			protected override void FlushAsync(Action<Exception> asyncContinuation)
 			{
 				this.FlushCount++;
 				asyncContinuation(null);
 			}
 		}
 
-		private delegate AsyncContinuation CreateContinuationFunc(int eventNumber); 
+		private delegate Action<Exception> CreateContinuationFunc(int eventNumber); 
 	}
 }

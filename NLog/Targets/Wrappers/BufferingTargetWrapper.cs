@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Threading;
 using NLog.Common;
 using NLog.Internal;
+using System;
 
 namespace NLog.Targets.Wrappers
 {
@@ -87,7 +88,7 @@ namespace NLog.Targets.Wrappers
 		/// Flushes pending events in the buffer (if any).
 		/// </summary>
 		/// <param name="asyncContinuation">The asynchronous continuation.</param>
-		protected override void FlushAsync(AsyncContinuation asyncContinuation)
+		protected override void FlushAsync(Action<Exception> asyncContinuation)
 		{
 			AsyncLogEventInfo[] events = this.buffer.GetEventsAndClear();
 

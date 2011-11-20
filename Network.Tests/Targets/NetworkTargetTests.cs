@@ -33,7 +33,7 @@ namespace NLog.UnitTests.Targets
 				var exceptions = new List<Exception>();
 				var mre = new ManualResetEvent(false);
 				int remaining = 3;
-				AsyncContinuation asyncContinuation = ex =>
+				Action<Exception> asyncContinuation = ex =>
 					{
 						lock (exceptions)
 						{
@@ -90,7 +90,7 @@ namespace NLog.UnitTests.Targets
 				var exceptions = new List<Exception>();
 				var mre = new ManualResetEvent(false);
 				int remaining = 3;
-				AsyncContinuation asyncContinuation = ex =>
+				Action<Exception> asyncContinuation = ex =>
 				{
 					lock (exceptions)
 					{
@@ -116,7 +116,7 @@ namespace NLog.UnitTests.Targets
 				}
 
 				mre.Reset();
-				AsyncContinuation flushContinuation = ex =>
+				Action<Exception> flushContinuation = ex =>
 				{
 					mre.Set();
 				};
@@ -154,7 +154,7 @@ namespace NLog.UnitTests.Targets
 			{
 				var mre = new ManualResetEvent(false);
 
-				AsyncContinuation flushContinuation = ex =>
+				Action<Exception> flushContinuation = ex =>
 				{
 					mre.Set();
 				};
@@ -182,7 +182,7 @@ namespace NLog.UnitTests.Targets
 				var exceptions = new List<Exception>();
 				var mre = new ManualResetEvent(false);
 				int remaining = 6;
-				AsyncContinuation asyncContinuation = ex =>
+				Action<Exception> asyncContinuation = ex =>
 				{
 					lock (exceptions)
 					{
@@ -244,7 +244,7 @@ namespace NLog.UnitTests.Targets
 				var exceptions = new List<Exception>();
 				var mre = new ManualResetEvent(false);
 				int remaining = 6;
-				AsyncContinuation asyncContinuation = ex =>
+				Action<Exception> asyncContinuation = ex =>
 				{
 					lock (exceptions)
 					{
@@ -311,7 +311,7 @@ namespace NLog.UnitTests.Targets
 				var exceptions = new List<Exception>();
 				var mre = new ManualResetEvent(false);
 				int remaining = 3;
-				AsyncContinuation asyncContinuation = ex =>
+				Action<Exception> asyncContinuation = ex =>
 				{
 					lock (exceptions)
 					{
@@ -370,7 +370,7 @@ namespace NLog.UnitTests.Targets
 				var exceptions = new List<Exception>();
 				var mre = new ManualResetEvent(false);
 				int remaining = 3;
-				AsyncContinuation asyncContinuation = ex =>
+				Action<Exception> asyncContinuation = ex =>
 				{
 					lock (exceptions)
 					{
@@ -422,7 +422,7 @@ namespace NLog.UnitTests.Targets
 				var exceptions = new List<Exception>();
 				var mre = new ManualResetEvent(false);
 				int remaining = 3;
-				AsyncContinuation asyncContinuation = ex =>
+				Action<Exception> asyncContinuation = ex =>
 				{
 					lock (exceptions)
 					{
@@ -474,7 +474,7 @@ namespace NLog.UnitTests.Targets
 				var exceptions = new List<Exception>();
 				var mre = new ManualResetEvent(false);
 				int remaining = 5;
-				AsyncContinuation asyncContinuation = ex =>
+				Action<Exception> asyncContinuation = ex =>
 				{
 					lock (exceptions)
 					{
@@ -577,7 +577,7 @@ namespace NLog.UnitTests.Targets
 					var writeCompleted = new ManualResetEvent(false);
 					var exceptions = new List<Exception>();
 
-					AsyncContinuation writeFinished =
+					Action<Exception> writeFinished =
 						ex =>
 						{
 							lock (exceptions)
@@ -666,7 +666,7 @@ namespace NLog.UnitTests.Targets
 					var writeCompleted = new ManualResetEvent(false);
 					var exceptions = new List<Exception>();
 
-					AsyncContinuation writeFinished =
+					Action<Exception> writeFinished =
 						ex =>
 						{
 							lock (exceptions)
@@ -719,7 +719,7 @@ namespace NLog.UnitTests.Targets
 				int pendingWrites = toWrite;
 				var writeCompleted = new ManualResetEvent(false);
 
-				AsyncContinuation writeFinished =
+				Action<Exception> writeFinished =
 					ex =>
 					{
 						lock (exceptions)
@@ -776,7 +776,7 @@ namespace NLog.UnitTests.Targets
 				var exceptions = new List<Exception>();
 				var mre = new ManualResetEvent(false);
 				int remaining = 5;
-				AsyncContinuation asyncContinuation = ex =>
+				Action<Exception> asyncContinuation = ex =>
 				{
 					lock (exceptions)
 					{
@@ -861,19 +861,19 @@ namespace NLog.UnitTests.Targets
 				this.log.WriteLine("{0}: connect {1}", this.id, this.Address);
 			}
 
-			protected override void DoFlush(AsyncContinuation continuation)
+			protected override void DoFlush(Action<Exception> continuation)
 			{
 				this.log.WriteLine("{0}: flush", this.id);
 				continuation(null);
 			}
 
-			protected override void DoClose(AsyncContinuation continuation)
+			protected override void DoClose(Action<Exception> continuation)
 			{
 				this.log.WriteLine("{0}: close", this.id);
 				continuation(null);
 			}
 
-			protected override void DoSend(byte[] bytes, int offset, int length, AsyncContinuation asyncContinuation)
+			protected override void DoSend(byte[] bytes, int offset, int length, Action<Exception> asyncContinuation)
 			{
 				this.log.WriteLine("{0}: send {1} {2}", this.id, offset, length);
 				this.MemoryStream.Write(bytes, offset, length);

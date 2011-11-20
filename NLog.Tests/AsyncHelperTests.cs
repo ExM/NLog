@@ -14,7 +14,7 @@ namespace NLog.UnitTests
 		public void OneTimeOnlyTest1()
 		{
 			var exceptions = new List<Exception>();
-			AsyncContinuation cont = exceptions.Add;
+			Action<Exception> cont = exceptions.Add;
 			cont = AsyncHelpers.PreventMultipleCalls(cont);
 
 			// OneTimeOnly(OneTimeOnly(x)) == OneTimeOnly(x)
@@ -36,7 +36,7 @@ namespace NLog.UnitTests
 		public void OneTimeOnlyTest2()
 		{
 			var exceptions = new List<Exception>();
-			AsyncContinuation cont = exceptions.Add;
+			Action<Exception> cont = exceptions.Add;
 			cont = AsyncHelpers.PreventMultipleCalls(cont);
 
 			var sampleException = new InvalidOperationException("some message");
@@ -55,7 +55,7 @@ namespace NLog.UnitTests
 		{
 			var exceptions = new List<Exception>();
 			var sampleException = new InvalidOperationException("some message");
-			AsyncContinuation cont = ex => { exceptions.Add(ex); throw sampleException; };
+			Action<Exception> cont = ex => { exceptions.Add(ex); throw sampleException; };
 			cont = AsyncHelpers.PreventMultipleCalls(cont);
 
 			cont(null);
@@ -156,7 +156,7 @@ namespace NLog.UnitTests
 			bool finalContinuationInvoked = false;
 			Exception lastException = null;
 
-			AsyncContinuation finalContinuation = ex =>
+			Action<Exception> finalContinuation = ex =>
 				{
 					finalContinuationInvoked = true;
 					lastException = ex;
@@ -183,7 +183,7 @@ namespace NLog.UnitTests
 			Exception lastException = null;
 			Exception sampleException = new InvalidOperationException("Some message");
 
-			AsyncContinuation finalContinuation = ex =>
+			Action<Exception> finalContinuation = ex =>
 			{
 				finalContinuationInvoked = true;
 				lastException = ex;
@@ -211,7 +211,7 @@ namespace NLog.UnitTests
 			Exception lastException = null;
 			Exception sampleException = new InvalidOperationException("Some message");
 
-			AsyncContinuation finalContinuation = ex =>
+			Action<Exception> finalContinuation = ex =>
 			{
 				finalContinuationInvoked = true;
 				lastException = ex;
@@ -237,7 +237,7 @@ namespace NLog.UnitTests
 			bool finalContinuationInvoked = false;
 			Exception lastException = null;
 
-			AsyncContinuation finalContinuation = ex =>
+			Action<Exception> finalContinuation = ex =>
 			{
 				finalContinuationInvoked = true;
 				lastException = ex;
@@ -266,7 +266,7 @@ namespace NLog.UnitTests
 			Exception lastException = null;
 			Exception sampleException = new InvalidOperationException("Some message");
 
-			AsyncContinuation finalContinuation = ex =>
+			Action<Exception> finalContinuation = ex =>
 			{
 				finalContinuationInvoked = true;
 				lastException = ex;
@@ -295,7 +295,7 @@ namespace NLog.UnitTests
 			Exception lastException = null;
 			Exception sampleException = new InvalidOperationException("Some message");
 
-			AsyncContinuation finalContinuation = ex =>
+			Action<Exception> finalContinuation = ex =>
 			{
 				finalContinuationInvoked = true;
 				lastException = ex;
@@ -323,7 +323,7 @@ namespace NLog.UnitTests
 			Exception lastException = null;
 			bool finalContinuationInvoked = false;
 
-			AsyncContinuation continuation = ex =>
+			Action<Exception> continuation = ex =>
 				{
 					lastException = ex;
 					finalContinuationInvoked = true;
@@ -340,7 +340,7 @@ namespace NLog.UnitTests
 			var finalContinuationInvoked = new ManualResetEvent(false);
 			Exception lastException = null;
 
-			AsyncContinuation finalContinuation = ex =>
+			Action<Exception> finalContinuation = ex =>
 			{
 				lastException = ex;
 				finalContinuationInvoked.Set();
@@ -377,7 +377,7 @@ namespace NLog.UnitTests
 				var finalContinuationInvoked = new ManualResetEvent(false);
 				Exception lastException = null;
 
-				AsyncContinuation finalContinuation = ex =>
+				Action<Exception> finalContinuation = ex =>
 					{
 						lastException = ex;
 						finalContinuationInvoked.Set();
@@ -417,7 +417,7 @@ namespace NLog.UnitTests
 			var finalContinuationInvoked = new ManualResetEvent(false);
 			Exception lastException = null;
 
-			AsyncContinuation finalContinuation = ex =>
+			Action<Exception> finalContinuation = ex =>
 			{
 				lastException = ex;
 				finalContinuationInvoked.Set();
@@ -453,13 +453,13 @@ namespace NLog.UnitTests
 			int invokedCount1Sequence = 0;
 			int invokedCount2Sequence = 0;
 
-			AsyncContinuation originalContinuation = ex =>
+			Action<Exception> originalContinuation = ex =>
 			{
 				invokedCount1++;
 				invokedCount1Sequence = sequence++;
 			};
 
-			AsynchronousAction doSomethingElse = c =>
+			Action<Action<Exception>> doSomethingElse = c =>
 			{
 				invokedCount2++;
 				invokedCount2Sequence = sequence++;
@@ -467,7 +467,7 @@ namespace NLog.UnitTests
 				c(null);
 			};
 
-			AsyncContinuation cont = AsyncHelpers.PrecededBy(originalContinuation, doSomethingElse);
+			Action<Exception> cont = AsyncHelpers.PrecededBy(originalContinuation, doSomethingElse);
 			cont(null);
 
 			// make sure doSomethingElse was invoked first
@@ -487,13 +487,13 @@ namespace NLog.UnitTests
 			int invokedCount1Sequence = 0;
 			int invokedCount2Sequence = 0;
 
-			AsyncContinuation originalContinuation = ex =>
+			Action<Exception> originalContinuation = ex =>
 			{
 				invokedCount1++;
 				invokedCount1Sequence = sequence++;
 			};
 
-			AsynchronousAction doSomethingElse = c =>
+			Action<Action<Exception>> doSomethingElse = c =>
 			{
 				invokedCount2++;
 				invokedCount2Sequence = sequence++;
@@ -501,7 +501,7 @@ namespace NLog.UnitTests
 				c(null);
 			};
 
-			AsyncContinuation cont = AsyncHelpers.PrecededBy(originalContinuation, doSomethingElse);
+			Action<Exception> cont = AsyncHelpers.PrecededBy(originalContinuation, doSomethingElse);
 			var sampleException = new InvalidOperationException("Some message.");
 			cont(sampleException);
 

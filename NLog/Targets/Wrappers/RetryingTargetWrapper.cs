@@ -68,7 +68,7 @@ namespace NLog.Targets.Wrappers
 		/// <param name="logEvent">The log event.</param>
 		protected override void Write(AsyncLogEventInfo logEvent)
 		{
-			AsyncContinuation continuation = null;
+			Action<Exception> continuation = null;
 			int counter = 0;
 
 			continuation = ex =>

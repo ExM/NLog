@@ -51,7 +51,7 @@ namespace NLog.Targets
 		/// </summary>
 		/// <param name="parameters">Method call parameters.</param>
 		/// <param name="continuation">The continuation.</param>
-		protected virtual void DoInvoke(object[] parameters, AsyncContinuation continuation)
+		protected virtual void DoInvoke(object[] parameters, Action<Exception> continuation)
 		{
 			try
 			{

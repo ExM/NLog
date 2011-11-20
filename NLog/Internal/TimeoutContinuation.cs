@@ -5,11 +5,11 @@ using NLog.Common;
 namespace NLog.Internal
 {
 	/// <summary>
-	/// Wraps <see cref="AsyncContinuation"/> with a timeout.
+	/// Wraps Action[Exception] with a timeout.
 	/// </summary>
 	internal class TimeoutContinuation : IDisposable
 	{
-		private AsyncContinuation asyncContinuation;
+		private Action<Exception> asyncContinuation;
 		private Timer timeoutTimer;
 
 		/// <summary>
@@ -17,7 +17,7 @@ namespace NLog.Internal
 		/// </summary>
 		/// <param name="asyncContinuation">The asynchronous continuation.</param>
 		/// <param name="timeout">The timeout.</param>
-		public TimeoutContinuation(AsyncContinuation asyncContinuation, TimeSpan timeout)
+		public TimeoutContinuation(Action<Exception> asyncContinuation, TimeSpan timeout)
 		{
 			this.asyncContinuation = asyncContinuation;
 			this.timeoutTimer = new Timer(this.TimerElapsed, null, timeout, TimeSpan.FromMilliseconds(-1));

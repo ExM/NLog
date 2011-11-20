@@ -136,11 +136,11 @@ namespace NLog.Targets
 		/// Flush any pending log messages asynchronously (in case of asynchronous targets).
 		/// </summary>
 		/// <param name="asyncContinuation">The asynchronous continuation.</param>
-		protected override void FlushAsync(AsyncContinuation asyncContinuation)
+		protected override void FlushAsync(Action<Exception> asyncContinuation)
 		{
 			int remainingCount = 0;
 
-			AsyncContinuation continuation =
+			Action<Exception> continuation =
 				ex =>
 					{
 						// ignore exception
@@ -338,12 +338,12 @@ namespace NLog.Targets
 			}
 		}
 
-		private void ChunkedSend(NetworkSender sender, byte[] buffer, AsyncContinuation continuation)
+		private void ChunkedSend(NetworkSender sender, byte[] buffer, Action<Exception> continuation)
 		{
 			int tosend = buffer.Length;
 			int pos = 0;
 
-			AsyncContinuation sendNextChunk = null;
+			Action<Exception> sendNextChunk = null;
 
 			sendNextChunk = ex =>
 				{

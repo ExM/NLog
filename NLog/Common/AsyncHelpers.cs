@@ -20,10 +20,10 @@ namespace NLog.Common
 		/// <param name="asyncContinuation">The asynchronous continuation to invoke once all items
 		/// have been iterated.</param>
 		/// <param name="action">The action to invoke for each item.</param>
-		public static void ForEachItemSequentially<T>(IEnumerable<T> items, AsyncContinuation asyncContinuation, AsynchronousAction<T> action)
+		public static void ForEachItemSequentially<T>(IEnumerable<T> items, Action<Exception> asyncContinuation, Action<T, Action<Exception>> action)
 		{
 			action = ExceptionGuard(action);
-			AsyncContinuation invokeNext = null;
+			Action<Exception> invokeNext = null;
 			IEnumerator<T> enumerator = items.GetEnumerator();
 
 			invokeNext = ex =>
@@ -52,10 +52,10 @@ namespace NLog.Common
 		/// <param name="repeatCount">The repeat count.</param>
 		/// <param name="asyncContinuation">The asynchronous continuation to invoke at the end.</param>
 		/// <param name="action">The action to invoke.</param>
-		public static void Repeat(int repeatCount, AsyncContinuation asyncContinuation, AsynchronousAction action)
+		public static void Repeat(int repeatCount, Action<Exception> asyncContinuation, Action<Action<Exception>> action)
 		{
 			action = ExceptionGuard(action);
-			AsyncContinuation invokeNext = null;
+			Action<Exception> invokeNext = null;
 			int remaining = repeatCount;
 
 			invokeNext = ex =>
@@ -84,11 +84,11 @@ namespace NLog.Common
 		/// <param name="asyncContinuation">The async continuation.</param>
 		/// <param name="action">The action to pre-pend.</param>
 		/// <returns>Continuation which will execute the given action before forwarding to the actual continuation.</returns>
-		public static AsyncContinuation PrecededBy(AsyncContinuation asyncContinuation, AsynchronousAction action)
+		public static Action<Exception> PrecededBy(Action<Exception> asyncContinuation, Action<Action<Exception>> action)
 		{
 			action = ExceptionGuard(action);
 
-			AsyncContinuation continuation =
+			Action<Exception> continuation =
 				ex =>
 				{
 					if (ex != null)
@@ -112,7 +112,7 @@ namespace NLog.Common
 		/// <param name="asyncContinuation">The asynchronous continuation.</param>
 		/// <param name="timeout">The timeout.</param>
 		/// <returns>Wrapped continuation.</returns>
-		public static AsyncContinuation WithTimeout(AsyncContinuation asyncContinuation, TimeSpan timeout)
+		public static Action<Exception> WithTimeout(Action<Exception> asyncContinuation, TimeSpan timeout)
 		{
 			return new TimeoutContinuation(asyncContinuation, timeout).Function;
 		}
@@ -126,7 +126,7 @@ namespace NLog.Common
 		/// <param name="asyncContinuation">The asynchronous continuation to invoke once all items
 		/// have been iterated.</param>
 		/// <param name="action">The action to invoke for each item.</param>
-		public static void ForEachItemInParallel<T>(IEnumerable<T> values, AsyncContinuation asyncContinuation, AsynchronousAction<T> action)
+		public static void ForEachItemInParallel<T>(IEnumerable<T> values, Action<Exception> asyncContinuation, Action<T, Action<Exception>> action)
 		{
 			action = ExceptionGuard(action);
 
@@ -142,7 +142,7 @@ namespace NLog.Common
 				return;
 			}
 
-			AsyncContinuation continuation =
+			Action<Exception> continuation =
 				ex =>
 					{
 						InternalLogger.Trace("Continuation invoked: {0}", ex);
@@ -180,7 +180,7 @@ namespace NLog.Common
 		/// <remarks>
 		/// Using this method is not recommended because it will block the calling thread.
 		/// </remarks>
-		public static void RunSynchronously(AsynchronousAction action)
+		public static void RunSynchronously(Action<Action<Exception>> action)
 		{
 			var ev = new ManualResetEvent(false);
 			Exception lastException = null;
@@ -199,7 +199,7 @@ namespace NLog.Common
 		/// </summary>
 		/// <param name="asyncContinuation">The asynchronous continuation.</param>
 		/// <returns>Wrapped asynchronous continuation.</returns>
-		public static AsyncContinuation PreventMultipleCalls(AsyncContinuation asyncContinuation)
+		public static Action<Exception> PreventMultipleCalls(Action<Exception> asyncContinuation)
 		{
 			if (asyncContinuation.Target is SingleCallContinuation)
 			{
@@ -239,7 +239,7 @@ namespace NLog.Common
 			return new NLogRuntimeException("Got multiple exceptions:\r\n" + sb);
 		}
 
-		private static AsynchronousAction ExceptionGuard(AsynchronousAction action)
+		private static Action<Action<Exception>> ExceptionGuard(Action<Action<Exception>> action)
 		{
 			return cont =>
 			{
@@ -259,9 +259,9 @@ namespace NLog.Common
 			};
 		}
 
-		internal static AsynchronousAction<T> ExceptionGuard<T>(AsynchronousAction<T> action)
+		internal static Action<T, Action<Exception>> ExceptionGuard<T>(Action<T, Action<Exception>> action)
 		{
-			return (T argument, AsyncContinuation cont) =>
+			return (T argument, Action<Exception> cont) =>
 			{
 				try
 				{

@@ -96,7 +96,7 @@ namespace NLog.Targets
 		/// </summary>
 		/// <param name="parameters">Parameters to be passed.</param>
 		/// <param name="continuation">The continuation.</param>
-		protected override void DoInvoke(object[] parameters, AsyncContinuation continuation)
+		protected override void DoInvoke(object[] parameters, Action<Exception> continuation)
 		{
 			var request = (HttpWebRequest)WebRequest.Create(this.Url);
 			byte[] postPayload = null;
@@ -119,7 +119,7 @@ namespace NLog.Targets
 					break;
 			}
 
-			AsyncContinuation sendContinuation =
+			Action<Exception> sendContinuation =
 				ex =>
 					{
 						if (ex != null)

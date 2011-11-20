@@ -249,7 +249,7 @@ namespace NLog
 		/// </summary>
 		/// <param name="asyncContinuation">The asynchronous continuation.</param>
 		/// <returns>Instance of <see cref="AsyncLogEventInfo"/> with attached continuation.</returns>
-		public AsyncLogEventInfo WithContinuation(AsyncContinuation asyncContinuation)
+		public AsyncLogEventInfo WithContinuation(Action<Exception> asyncContinuation)
 		{
 			return new AsyncLogEventInfo(this, asyncContinuation);
 		}

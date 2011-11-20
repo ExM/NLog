@@ -27,7 +27,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 			var logEvent = new LogEventInfo();
 			Exception lastException = null;
 			bool continuationHit = false;
-			AsyncContinuation continuation =
+			Action<Exception> continuation =
 				ex =>
 					{
 						lastException = ex;
@@ -61,7 +61,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 			var logEvent = new LogEventInfo();
 			Exception lastException = null;
 			var continuationHit = new ManualResetEvent(false);
-			AsyncContinuation continuation =
+			Action<Exception> continuation =
 				ex =>
 				{
 					lastException = ex;
@@ -97,7 +97,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 			var logEvent = new LogEventInfo();
 			Exception lastException = null;
 			var continuationHit = new ManualResetEvent(false);
-			AsyncContinuation continuation =
+			Action<Exception> continuation =
 				ex =>
 				{
 					lastException = ex;
@@ -138,7 +138,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 			var logEvent = new LogEventInfo();
 			Exception lastException = null;
 			bool continuationHit = false;
-			AsyncContinuation continuation =
+			Action<Exception> continuation =
 				ex =>
 				{
 					lastException = ex;
@@ -172,7 +172,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 			var logEvent = new LogEventInfo();
 			Exception lastException = null;
 			var continuationHit = new ManualResetEvent(false);
-			AsyncContinuation continuation =
+			Action<Exception> continuation =
 				ex =>
 				{
 					lastException = ex;
@@ -207,7 +207,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 			var logEvent = new LogEventInfo();
 			Exception lastException = null;
 			var continuationHit = new ManualResetEvent(false);
-			AsyncContinuation continuation =
+			Action<Exception> continuation =
 				ex =>
 				{
 					lastException = ex;

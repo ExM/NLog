@@ -53,7 +53,8 @@ namespace NLog.Targets.Wrappers
 		public int RepeatCount { get; set; }
 
 		/// <summary>
-		/// Forwards the log message to the <see cref="WrapperTargetBase.WrappedTarget"/> by calling the <see cref="Target.Write(LogEventInfo)"/> method <see cref="RepeatCount"/> times.
+		/// Forwards the log message to the <see cref="WrapperTargetBase.WrappedTarget"/> by calling
+		/// the <see cref="Target.Write(LogEventInfo)"/> method <see cref="RepeatCount"/> times.
 		/// </summary>
 		/// <param name="logEvent">The log event.</param>
 		protected override void Write(AsyncLogEventInfo logEvent)

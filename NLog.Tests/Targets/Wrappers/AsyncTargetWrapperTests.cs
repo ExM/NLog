@@ -53,7 +53,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 			Exception lastException = null;
 			ManualResetEvent continuationHit = new ManualResetEvent(false);
 			Thread continuationThread = null;
-			AsyncContinuation continuation =
+			Action<Exception> continuation =
 				ex =>
 					{
 						lastException = ex;
@@ -86,7 +86,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 			var logEvent = new LogEventInfo();
 			Exception lastException = null;
 			var continuationHit = new ManualResetEvent(false);
-			AsyncContinuation continuation =
+			Action<Exception> continuation =
 				ex =>
 				{
 					lastException = ex;
@@ -120,7 +120,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 			var logEvent = new LogEventInfo();
 			Exception lastException = null;
 			var continuationHit = new ManualResetEvent(false);
-			AsyncContinuation continuation =
+			Action<Exception> continuation =
 				ex =>
 				{
 					lastException = ex;
@@ -304,7 +304,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 						});
 			}
 
-			protected override void FlushAsync(AsyncContinuation asyncContinuation)
+			protected override void FlushAsync(Action<Exception> asyncContinuation)
 			{
 				Interlocked.Increment(ref this.FlushCount);
 				ThreadPool.QueueUserWorkItem(
@@ -325,7 +325,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 				this.WriteCount++;
 			}
 
-			protected override void FlushAsync(AsyncContinuation asyncContinuation)
+			protected override void FlushAsync(Action<Exception> asyncContinuation)
 			{
 				this.FlushCount++;
 				asyncContinuation(null);

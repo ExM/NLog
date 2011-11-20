@@ -47,7 +47,7 @@ namespace NLog.Targets.Wrappers
 	{
 		private readonly object lockObject = new object();
 		private Timer lazyWriterTimer;
-		private AsyncContinuation flushAllContinuation;
+		private Action<Exception> flushAllContinuation;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AsyncTargetWrapper" /> class.
@@ -129,7 +129,7 @@ namespace NLog.Targets.Wrappers
 		/// Waits for the lazy writer thread to finish writing messages.
 		/// </summary>
 		/// <param name="asyncContinuation">The asynchronous continuation.</param>
-		protected override void FlushAsync(AsyncContinuation asyncContinuation)
+		protected override void FlushAsync(Action<Exception> asyncContinuation)
 		{
 			this.flushAllContinuation = asyncContinuation;
 		}

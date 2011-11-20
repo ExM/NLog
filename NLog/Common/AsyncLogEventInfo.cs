@@ -1,3 +1,4 @@
+using System;
 
 namespace NLog.Common
 {
@@ -11,7 +12,7 @@ namespace NLog.Common
 		/// </summary>
 		/// <param name="logEvent">The log event.</param>
 		/// <param name="continuation">The continuation.</param>
-		public AsyncLogEventInfo(LogEventInfo logEvent, AsyncContinuation continuation)
+		public AsyncLogEventInfo(LogEventInfo logEvent, Action<Exception> continuation)
 			: this()
 		{
 			this.LogEvent = logEvent;
@@ -26,7 +27,7 @@ namespace NLog.Common
 		/// <summary>
 		/// Gets the continuation.
 		/// </summary>
-		public AsyncContinuation Continuation { get; internal set; }
+		public Action<Exception> Continuation { get; internal set; }
 
 		/// <summary>
 		/// Implements the operator ==.

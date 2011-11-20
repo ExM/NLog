@@ -62,7 +62,7 @@ namespace NLog.UnitTests.Targets.Wrappers
 		{
 			public int FlushCount { get; set; }
 
-			protected override void FlushAsync(AsyncContinuation asyncContinuation)
+			protected override void FlushAsync(Action<Exception> asyncContinuation)
 			{
 				this.FlushCount++;
 				base.FlushAsync(asyncContinuation);

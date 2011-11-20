@@ -187,7 +187,7 @@ namespace NLog
 		/// Flush any pending log messages (in case of asynchronous targets).
 		/// </summary>
 		/// <param name="asyncContinuation">The asynchronous continuation.</param>
-		public static void Flush(AsyncContinuation asyncContinuation)
+		public static void Flush(Action<Exception> asyncContinuation)
 		{
 			globalFactory.Flush(asyncContinuation);
 		}
@@ -197,7 +197,7 @@ namespace NLog
 		/// </summary>
 		/// <param name="asyncContinuation">The asynchronous continuation.</param>
 		/// <param name="timeout">Maximum time to allow for the flush. Any messages after that time will be discarded.</param>
-		public static void Flush(AsyncContinuation asyncContinuation, TimeSpan timeout)
+		public static void Flush(Action<Exception> asyncContinuation, TimeSpan timeout)
 		{
 			globalFactory.Flush(asyncContinuation, timeout);
 		}
@@ -207,7 +207,7 @@ namespace NLog
 		/// </summary>
 		/// <param name="asyncContinuation">The asynchronous continuation.</param>
 		/// <param name="timeoutMilliseconds">Maximum time to allow for the flush. Any messages after that time will be discarded.</param>
-		public static void Flush(AsyncContinuation asyncContinuation, int timeoutMilliseconds)
+		public static void Flush(Action<Exception> asyncContinuation, int timeoutMilliseconds)
 		{
 			globalFactory.Flush(asyncContinuation, timeoutMilliseconds);
 		}
