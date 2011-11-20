@@ -132,6 +132,24 @@ namespace NLog
 		}
 
 		/// <summary>
+		/// Writes the diagnostic message at the specified level.
+		/// </summary>
+		/// <param name="level">The log level.</param>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		public void Log<TArg1>(LogLevel level, Func<TArg1, string> messageFunc,
+			TArg1 arg1)
+		{
+			if(IsEnabled(level))
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+					
+				WriteToTargets(level, null, messageFunc(arg1));
+			}
+		}
+
+		/// <summary>
 		/// Writes the diagnostic message at the specified level using the specified parameter and formatting it with the supplied format provider.
 		/// </summary>
 		/// <typeparam name="TArg1">The type of the argument.</typeparam>
@@ -162,6 +180,25 @@ namespace NLog
 		{
 			if(IsEnabled(level))
 				WriteToTargets(level, null, message, new object[] { arg1, arg2 });
+		}
+
+		/// <summary>
+		/// Writes the diagnostic message at the specified level.
+		/// </summary>
+		/// <param name="level">The log level.</param>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		/// <param name="arg2">The argument to function.</param>
+		public void Log<TArg1, TArg2>(LogLevel level, Func<TArg1, TArg2, string> messageFunc,
+			TArg1 arg1, TArg2 arg2)
+		{
+			if(IsEnabled(level))
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+					
+				WriteToTargets(level, null, messageFunc(arg1, arg2));
+			}
 		}
 
 		/// <summary>
@@ -199,6 +236,26 @@ namespace NLog
 		{
 			if(IsEnabled(level))
 				WriteToTargets(level, null, message, new object[] { arg1, arg2, arg3 });
+		}
+
+		/// <summary>
+		/// Writes the diagnostic message at the specified level.
+		/// </summary>
+		/// <param name="level">The log level.</param>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		/// <param name="arg2">The argument to function.</param>
+		/// <param name="arg3">The argument to function.</param>
+		public void Log<TArg1, TArg2, TArg3>(LogLevel level, Func<TArg1, TArg2, TArg3, string> messageFunc,
+			TArg1 arg1, TArg2 arg2, TArg3 arg3)
+		{
+			if(IsEnabled(level))
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+					
+				WriteToTargets(level, null, messageFunc(arg1, arg2, arg3));
+			}
 		}
 
 		/// <summary>
@@ -240,6 +297,27 @@ namespace NLog
 		{
 			if(IsEnabled(level))
 				WriteToTargets(level, null, message, new object[] { arg1, arg2, arg3, arg4 });
+		}
+
+		/// <summary>
+		/// Writes the diagnostic message at the specified level.
+		/// </summary>
+		/// <param name="level">The log level.</param>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		/// <param name="arg2">The argument to function.</param>
+		/// <param name="arg3">The argument to function.</param>
+		/// <param name="arg4">The argument to function.</param>
+		public void Log<TArg1, TArg2, TArg3, TArg4>(LogLevel level, Func<TArg1, TArg2, TArg3, TArg4, string> messageFunc,
+			TArg1 arg1, TArg2 arg2, TArg3 arg3, TArg4 arg4)
+		{
+			if(IsEnabled(level))
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+					
+				WriteToTargets(level, null, messageFunc(arg1, arg2, arg3, arg4));
+			}
 		}
 
 		/// <summary>
@@ -285,6 +363,28 @@ namespace NLog
 		{
 			if(IsEnabled(level))
 				WriteToTargets(level, null, message, new object[] { arg1, arg2, arg3, arg4, arg5 });
+		}
+
+		/// <summary>
+		/// Writes the diagnostic message at the specified level.
+		/// </summary>
+		/// <param name="level">The log level.</param>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		/// <param name="arg2">The argument to function.</param>
+		/// <param name="arg3">The argument to function.</param>
+		/// <param name="arg4">The argument to function.</param>
+		/// <param name="arg5">The argument to function.</param>
+		public void Log<TArg1, TArg2, TArg3, TArg4, TArg5>(LogLevel level, Func<TArg1, TArg2, TArg3, TArg4, TArg5, string> messageFunc,
+			TArg1 arg1, TArg2 arg2, TArg3 arg3, TArg4 arg4, TArg5 arg5)
+		{
+			if(IsEnabled(level))
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+					
+				WriteToTargets(level, null, messageFunc(arg1, arg2, arg3, arg4, arg5));
+			}
 		}
 		#endregion
 
@@ -415,6 +515,23 @@ namespace NLog
 			if(_isTraceEnabled)
 				WriteToTargets(LogLevel.Trace, null, message, new object[] { arg1 });
 		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Trace</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		public void Trace<TArg1>(Func<TArg1, string> messageFunc,
+			TArg1 arg1)
+		{
+			if(_isTraceEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Trace, null, messageFunc(arg1));
+			}
+		}
 		/// <summary>
 		/// Writes the diagnostic message at the <c>Trace</c> level using the specified parameter and formatting it with the supplied format provider.
 		/// </summary>
@@ -444,6 +561,24 @@ namespace NLog
 		{
 			if(_isTraceEnabled)
 				WriteToTargets(LogLevel.Trace, null, message, new object[] { arg1, arg2 });
+		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Trace</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		/// <param name="arg2">The argument to function.</param>
+		public void Trace<TArg1, TArg2>(Func<TArg1, TArg2, string> messageFunc,
+			TArg1 arg1, TArg2 arg2)
+		{
+			if(_isTraceEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Trace, null, messageFunc(arg1, arg2));
+			}
 		}
 		/// <summary>
 		/// Writes the diagnostic message at the <c>Trace</c> level using the specified parameter and formatting it with the supplied format provider.
@@ -478,6 +613,25 @@ namespace NLog
 		{
 			if(_isTraceEnabled)
 				WriteToTargets(LogLevel.Trace, null, message, new object[] { arg1, arg2, arg3 });
+		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Trace</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		/// <param name="arg2">The argument to function.</param>
+		/// <param name="arg3">The argument to function.</param>
+		public void Trace<TArg1, TArg2, TArg3>(Func<TArg1, TArg2, TArg3, string> messageFunc,
+			TArg1 arg1, TArg2 arg2, TArg3 arg3)
+		{
+			if(_isTraceEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Trace, null, messageFunc(arg1, arg2, arg3));
+			}
 		}
 		/// <summary>
 		/// Writes the diagnostic message at the <c>Trace</c> level using the specified parameter and formatting it with the supplied format provider.
@@ -516,6 +670,26 @@ namespace NLog
 		{
 			if(_isTraceEnabled)
 				WriteToTargets(LogLevel.Trace, null, message, new object[] { arg1, arg2, arg3, arg4 });
+		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Trace</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		/// <param name="arg2">The argument to function.</param>
+		/// <param name="arg3">The argument to function.</param>
+		/// <param name="arg4">The argument to function.</param>
+		public void Trace<TArg1, TArg2, TArg3, TArg4>(Func<TArg1, TArg2, TArg3, TArg4, string> messageFunc,
+			TArg1 arg1, TArg2 arg2, TArg3 arg3, TArg4 arg4)
+		{
+			if(_isTraceEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Trace, null, messageFunc(arg1, arg2, arg3, arg4));
+			}
 		}
 		/// <summary>
 		/// Writes the diagnostic message at the <c>Trace</c> level using the specified parameter and formatting it with the supplied format provider.
@@ -558,6 +732,27 @@ namespace NLog
 		{
 			if(_isTraceEnabled)
 				WriteToTargets(LogLevel.Trace, null, message, new object[] { arg1, arg2, arg3, arg4, arg5 });
+		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Trace</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		/// <param name="arg2">The argument to function.</param>
+		/// <param name="arg3">The argument to function.</param>
+		/// <param name="arg4">The argument to function.</param>
+		/// <param name="arg5">The argument to function.</param>
+		public void Trace<TArg1, TArg2, TArg3, TArg4, TArg5>(Func<TArg1, TArg2, TArg3, TArg4, TArg5, string> messageFunc,
+			TArg1 arg1, TArg2 arg2, TArg3 arg3, TArg4 arg4, TArg5 arg5)
+		{
+			if(_isTraceEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Trace, null, messageFunc(arg1, arg2, arg3, arg4, arg5));
+			}
 		}
 		#endregion
 
@@ -688,6 +883,23 @@ namespace NLog
 			if(_isDebugEnabled)
 				WriteToTargets(LogLevel.Debug, null, message, new object[] { arg1 });
 		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Debug</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		public void Debug<TArg1>(Func<TArg1, string> messageFunc,
+			TArg1 arg1)
+		{
+			if(_isDebugEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Debug, null, messageFunc(arg1));
+			}
+		}
 		/// <summary>
 		/// Writes the diagnostic message at the <c>Debug</c> level using the specified parameter and formatting it with the supplied format provider.
 		/// </summary>
@@ -717,6 +929,24 @@ namespace NLog
 		{
 			if(_isDebugEnabled)
 				WriteToTargets(LogLevel.Debug, null, message, new object[] { arg1, arg2 });
+		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Debug</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		/// <param name="arg2">The argument to function.</param>
+		public void Debug<TArg1, TArg2>(Func<TArg1, TArg2, string> messageFunc,
+			TArg1 arg1, TArg2 arg2)
+		{
+			if(_isDebugEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Debug, null, messageFunc(arg1, arg2));
+			}
 		}
 		/// <summary>
 		/// Writes the diagnostic message at the <c>Debug</c> level using the specified parameter and formatting it with the supplied format provider.
@@ -751,6 +981,25 @@ namespace NLog
 		{
 			if(_isDebugEnabled)
 				WriteToTargets(LogLevel.Debug, null, message, new object[] { arg1, arg2, arg3 });
+		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Debug</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		/// <param name="arg2">The argument to function.</param>
+		/// <param name="arg3">The argument to function.</param>
+		public void Debug<TArg1, TArg2, TArg3>(Func<TArg1, TArg2, TArg3, string> messageFunc,
+			TArg1 arg1, TArg2 arg2, TArg3 arg3)
+		{
+			if(_isDebugEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Debug, null, messageFunc(arg1, arg2, arg3));
+			}
 		}
 		/// <summary>
 		/// Writes the diagnostic message at the <c>Debug</c> level using the specified parameter and formatting it with the supplied format provider.
@@ -789,6 +1038,26 @@ namespace NLog
 		{
 			if(_isDebugEnabled)
 				WriteToTargets(LogLevel.Debug, null, message, new object[] { arg1, arg2, arg3, arg4 });
+		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Debug</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		/// <param name="arg2">The argument to function.</param>
+		/// <param name="arg3">The argument to function.</param>
+		/// <param name="arg4">The argument to function.</param>
+		public void Debug<TArg1, TArg2, TArg3, TArg4>(Func<TArg1, TArg2, TArg3, TArg4, string> messageFunc,
+			TArg1 arg1, TArg2 arg2, TArg3 arg3, TArg4 arg4)
+		{
+			if(_isDebugEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Debug, null, messageFunc(arg1, arg2, arg3, arg4));
+			}
 		}
 		/// <summary>
 		/// Writes the diagnostic message at the <c>Debug</c> level using the specified parameter and formatting it with the supplied format provider.
@@ -831,6 +1100,27 @@ namespace NLog
 		{
 			if(_isDebugEnabled)
 				WriteToTargets(LogLevel.Debug, null, message, new object[] { arg1, arg2, arg3, arg4, arg5 });
+		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Debug</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		/// <param name="arg2">The argument to function.</param>
+		/// <param name="arg3">The argument to function.</param>
+		/// <param name="arg4">The argument to function.</param>
+		/// <param name="arg5">The argument to function.</param>
+		public void Debug<TArg1, TArg2, TArg3, TArg4, TArg5>(Func<TArg1, TArg2, TArg3, TArg4, TArg5, string> messageFunc,
+			TArg1 arg1, TArg2 arg2, TArg3 arg3, TArg4 arg4, TArg5 arg5)
+		{
+			if(_isDebugEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Debug, null, messageFunc(arg1, arg2, arg3, arg4, arg5));
+			}
 		}
 		#endregion
 
@@ -961,6 +1251,23 @@ namespace NLog
 			if(_isInfoEnabled)
 				WriteToTargets(LogLevel.Info, null, message, new object[] { arg1 });
 		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Info</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		public void Info<TArg1>(Func<TArg1, string> messageFunc,
+			TArg1 arg1)
+		{
+			if(_isInfoEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Info, null, messageFunc(arg1));
+			}
+		}
 		/// <summary>
 		/// Writes the diagnostic message at the <c>Info</c> level using the specified parameter and formatting it with the supplied format provider.
 		/// </summary>
@@ -990,6 +1297,24 @@ namespace NLog
 		{
 			if(_isInfoEnabled)
 				WriteToTargets(LogLevel.Info, null, message, new object[] { arg1, arg2 });
+		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Info</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		/// <param name="arg2">The argument to function.</param>
+		public void Info<TArg1, TArg2>(Func<TArg1, TArg2, string> messageFunc,
+			TArg1 arg1, TArg2 arg2)
+		{
+			if(_isInfoEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Info, null, messageFunc(arg1, arg2));
+			}
 		}
 		/// <summary>
 		/// Writes the diagnostic message at the <c>Info</c> level using the specified parameter and formatting it with the supplied format provider.
@@ -1024,6 +1349,25 @@ namespace NLog
 		{
 			if(_isInfoEnabled)
 				WriteToTargets(LogLevel.Info, null, message, new object[] { arg1, arg2, arg3 });
+		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Info</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		/// <param name="arg2">The argument to function.</param>
+		/// <param name="arg3">The argument to function.</param>
+		public void Info<TArg1, TArg2, TArg3>(Func<TArg1, TArg2, TArg3, string> messageFunc,
+			TArg1 arg1, TArg2 arg2, TArg3 arg3)
+		{
+			if(_isInfoEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Info, null, messageFunc(arg1, arg2, arg3));
+			}
 		}
 		/// <summary>
 		/// Writes the diagnostic message at the <c>Info</c> level using the specified parameter and formatting it with the supplied format provider.
@@ -1062,6 +1406,26 @@ namespace NLog
 		{
 			if(_isInfoEnabled)
 				WriteToTargets(LogLevel.Info, null, message, new object[] { arg1, arg2, arg3, arg4 });
+		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Info</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		/// <param name="arg2">The argument to function.</param>
+		/// <param name="arg3">The argument to function.</param>
+		/// <param name="arg4">The argument to function.</param>
+		public void Info<TArg1, TArg2, TArg3, TArg4>(Func<TArg1, TArg2, TArg3, TArg4, string> messageFunc,
+			TArg1 arg1, TArg2 arg2, TArg3 arg3, TArg4 arg4)
+		{
+			if(_isInfoEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Info, null, messageFunc(arg1, arg2, arg3, arg4));
+			}
 		}
 		/// <summary>
 		/// Writes the diagnostic message at the <c>Info</c> level using the specified parameter and formatting it with the supplied format provider.
@@ -1104,6 +1468,27 @@ namespace NLog
 		{
 			if(_isInfoEnabled)
 				WriteToTargets(LogLevel.Info, null, message, new object[] { arg1, arg2, arg3, arg4, arg5 });
+		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Info</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		/// <param name="arg2">The argument to function.</param>
+		/// <param name="arg3">The argument to function.</param>
+		/// <param name="arg4">The argument to function.</param>
+		/// <param name="arg5">The argument to function.</param>
+		public void Info<TArg1, TArg2, TArg3, TArg4, TArg5>(Func<TArg1, TArg2, TArg3, TArg4, TArg5, string> messageFunc,
+			TArg1 arg1, TArg2 arg2, TArg3 arg3, TArg4 arg4, TArg5 arg5)
+		{
+			if(_isInfoEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Info, null, messageFunc(arg1, arg2, arg3, arg4, arg5));
+			}
 		}
 		#endregion
 
@@ -1234,6 +1619,23 @@ namespace NLog
 			if(_isWarnEnabled)
 				WriteToTargets(LogLevel.Warn, null, message, new object[] { arg1 });
 		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Warn</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		public void Warn<TArg1>(Func<TArg1, string> messageFunc,
+			TArg1 arg1)
+		{
+			if(_isWarnEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Warn, null, messageFunc(arg1));
+			}
+		}
 		/// <summary>
 		/// Writes the diagnostic message at the <c>Warn</c> level using the specified parameter and formatting it with the supplied format provider.
 		/// </summary>
@@ -1263,6 +1665,24 @@ namespace NLog
 		{
 			if(_isWarnEnabled)
 				WriteToTargets(LogLevel.Warn, null, message, new object[] { arg1, arg2 });
+		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Warn</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		/// <param name="arg2">The argument to function.</param>
+		public void Warn<TArg1, TArg2>(Func<TArg1, TArg2, string> messageFunc,
+			TArg1 arg1, TArg2 arg2)
+		{
+			if(_isWarnEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Warn, null, messageFunc(arg1, arg2));
+			}
 		}
 		/// <summary>
 		/// Writes the diagnostic message at the <c>Warn</c> level using the specified parameter and formatting it with the supplied format provider.
@@ -1297,6 +1717,25 @@ namespace NLog
 		{
 			if(_isWarnEnabled)
 				WriteToTargets(LogLevel.Warn, null, message, new object[] { arg1, arg2, arg3 });
+		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Warn</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		/// <param name="arg2">The argument to function.</param>
+		/// <param name="arg3">The argument to function.</param>
+		public void Warn<TArg1, TArg2, TArg3>(Func<TArg1, TArg2, TArg3, string> messageFunc,
+			TArg1 arg1, TArg2 arg2, TArg3 arg3)
+		{
+			if(_isWarnEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Warn, null, messageFunc(arg1, arg2, arg3));
+			}
 		}
 		/// <summary>
 		/// Writes the diagnostic message at the <c>Warn</c> level using the specified parameter and formatting it with the supplied format provider.
@@ -1335,6 +1774,26 @@ namespace NLog
 		{
 			if(_isWarnEnabled)
 				WriteToTargets(LogLevel.Warn, null, message, new object[] { arg1, arg2, arg3, arg4 });
+		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Warn</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		/// <param name="arg2">The argument to function.</param>
+		/// <param name="arg3">The argument to function.</param>
+		/// <param name="arg4">The argument to function.</param>
+		public void Warn<TArg1, TArg2, TArg3, TArg4>(Func<TArg1, TArg2, TArg3, TArg4, string> messageFunc,
+			TArg1 arg1, TArg2 arg2, TArg3 arg3, TArg4 arg4)
+		{
+			if(_isWarnEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Warn, null, messageFunc(arg1, arg2, arg3, arg4));
+			}
 		}
 		/// <summary>
 		/// Writes the diagnostic message at the <c>Warn</c> level using the specified parameter and formatting it with the supplied format provider.
@@ -1377,6 +1836,27 @@ namespace NLog
 		{
 			if(_isWarnEnabled)
 				WriteToTargets(LogLevel.Warn, null, message, new object[] { arg1, arg2, arg3, arg4, arg5 });
+		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Warn</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		/// <param name="arg2">The argument to function.</param>
+		/// <param name="arg3">The argument to function.</param>
+		/// <param name="arg4">The argument to function.</param>
+		/// <param name="arg5">The argument to function.</param>
+		public void Warn<TArg1, TArg2, TArg3, TArg4, TArg5>(Func<TArg1, TArg2, TArg3, TArg4, TArg5, string> messageFunc,
+			TArg1 arg1, TArg2 arg2, TArg3 arg3, TArg4 arg4, TArg5 arg5)
+		{
+			if(_isWarnEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Warn, null, messageFunc(arg1, arg2, arg3, arg4, arg5));
+			}
 		}
 		#endregion
 
@@ -1507,6 +1987,23 @@ namespace NLog
 			if(_isErrorEnabled)
 				WriteToTargets(LogLevel.Error, null, message, new object[] { arg1 });
 		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Error</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		public void Error<TArg1>(Func<TArg1, string> messageFunc,
+			TArg1 arg1)
+		{
+			if(_isErrorEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Error, null, messageFunc(arg1));
+			}
+		}
 		/// <summary>
 		/// Writes the diagnostic message at the <c>Error</c> level using the specified parameter and formatting it with the supplied format provider.
 		/// </summary>
@@ -1536,6 +2033,24 @@ namespace NLog
 		{
 			if(_isErrorEnabled)
 				WriteToTargets(LogLevel.Error, null, message, new object[] { arg1, arg2 });
+		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Error</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		/// <param name="arg2">The argument to function.</param>
+		public void Error<TArg1, TArg2>(Func<TArg1, TArg2, string> messageFunc,
+			TArg1 arg1, TArg2 arg2)
+		{
+			if(_isErrorEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Error, null, messageFunc(arg1, arg2));
+			}
 		}
 		/// <summary>
 		/// Writes the diagnostic message at the <c>Error</c> level using the specified parameter and formatting it with the supplied format provider.
@@ -1570,6 +2085,25 @@ namespace NLog
 		{
 			if(_isErrorEnabled)
 				WriteToTargets(LogLevel.Error, null, message, new object[] { arg1, arg2, arg3 });
+		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Error</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		/// <param name="arg2">The argument to function.</param>
+		/// <param name="arg3">The argument to function.</param>
+		public void Error<TArg1, TArg2, TArg3>(Func<TArg1, TArg2, TArg3, string> messageFunc,
+			TArg1 arg1, TArg2 arg2, TArg3 arg3)
+		{
+			if(_isErrorEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Error, null, messageFunc(arg1, arg2, arg3));
+			}
 		}
 		/// <summary>
 		/// Writes the diagnostic message at the <c>Error</c> level using the specified parameter and formatting it with the supplied format provider.
@@ -1608,6 +2142,26 @@ namespace NLog
 		{
 			if(_isErrorEnabled)
 				WriteToTargets(LogLevel.Error, null, message, new object[] { arg1, arg2, arg3, arg4 });
+		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Error</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		/// <param name="arg2">The argument to function.</param>
+		/// <param name="arg3">The argument to function.</param>
+		/// <param name="arg4">The argument to function.</param>
+		public void Error<TArg1, TArg2, TArg3, TArg4>(Func<TArg1, TArg2, TArg3, TArg4, string> messageFunc,
+			TArg1 arg1, TArg2 arg2, TArg3 arg3, TArg4 arg4)
+		{
+			if(_isErrorEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Error, null, messageFunc(arg1, arg2, arg3, arg4));
+			}
 		}
 		/// <summary>
 		/// Writes the diagnostic message at the <c>Error</c> level using the specified parameter and formatting it with the supplied format provider.
@@ -1650,6 +2204,27 @@ namespace NLog
 		{
 			if(_isErrorEnabled)
 				WriteToTargets(LogLevel.Error, null, message, new object[] { arg1, arg2, arg3, arg4, arg5 });
+		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Error</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		/// <param name="arg2">The argument to function.</param>
+		/// <param name="arg3">The argument to function.</param>
+		/// <param name="arg4">The argument to function.</param>
+		/// <param name="arg5">The argument to function.</param>
+		public void Error<TArg1, TArg2, TArg3, TArg4, TArg5>(Func<TArg1, TArg2, TArg3, TArg4, TArg5, string> messageFunc,
+			TArg1 arg1, TArg2 arg2, TArg3 arg3, TArg4 arg4, TArg5 arg5)
+		{
+			if(_isErrorEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Error, null, messageFunc(arg1, arg2, arg3, arg4, arg5));
+			}
 		}
 		#endregion
 
@@ -1780,6 +2355,23 @@ namespace NLog
 			if(_isFatalEnabled)
 				WriteToTargets(LogLevel.Fatal, null, message, new object[] { arg1 });
 		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Fatal</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		public void Fatal<TArg1>(Func<TArg1, string> messageFunc,
+			TArg1 arg1)
+		{
+			if(_isFatalEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Fatal, null, messageFunc(arg1));
+			}
+		}
 		/// <summary>
 		/// Writes the diagnostic message at the <c>Fatal</c> level using the specified parameter and formatting it with the supplied format provider.
 		/// </summary>
@@ -1809,6 +2401,24 @@ namespace NLog
 		{
 			if(_isFatalEnabled)
 				WriteToTargets(LogLevel.Fatal, null, message, new object[] { arg1, arg2 });
+		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Fatal</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		/// <param name="arg2">The argument to function.</param>
+		public void Fatal<TArg1, TArg2>(Func<TArg1, TArg2, string> messageFunc,
+			TArg1 arg1, TArg2 arg2)
+		{
+			if(_isFatalEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Fatal, null, messageFunc(arg1, arg2));
+			}
 		}
 		/// <summary>
 		/// Writes the diagnostic message at the <c>Fatal</c> level using the specified parameter and formatting it with the supplied format provider.
@@ -1843,6 +2453,25 @@ namespace NLog
 		{
 			if(_isFatalEnabled)
 				WriteToTargets(LogLevel.Fatal, null, message, new object[] { arg1, arg2, arg3 });
+		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Fatal</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		/// <param name="arg2">The argument to function.</param>
+		/// <param name="arg3">The argument to function.</param>
+		public void Fatal<TArg1, TArg2, TArg3>(Func<TArg1, TArg2, TArg3, string> messageFunc,
+			TArg1 arg1, TArg2 arg2, TArg3 arg3)
+		{
+			if(_isFatalEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Fatal, null, messageFunc(arg1, arg2, arg3));
+			}
 		}
 		/// <summary>
 		/// Writes the diagnostic message at the <c>Fatal</c> level using the specified parameter and formatting it with the supplied format provider.
@@ -1881,6 +2510,26 @@ namespace NLog
 		{
 			if(_isFatalEnabled)
 				WriteToTargets(LogLevel.Fatal, null, message, new object[] { arg1, arg2, arg3, arg4 });
+		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Fatal</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		/// <param name="arg2">The argument to function.</param>
+		/// <param name="arg3">The argument to function.</param>
+		/// <param name="arg4">The argument to function.</param>
+		public void Fatal<TArg1, TArg2, TArg3, TArg4>(Func<TArg1, TArg2, TArg3, TArg4, string> messageFunc,
+			TArg1 arg1, TArg2 arg2, TArg3 arg3, TArg4 arg4)
+		{
+			if(_isFatalEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Fatal, null, messageFunc(arg1, arg2, arg3, arg4));
+			}
 		}
 		/// <summary>
 		/// Writes the diagnostic message at the <c>Fatal</c> level using the specified parameter and formatting it with the supplied format provider.
@@ -1923,6 +2572,27 @@ namespace NLog
 		{
 			if(_isFatalEnabled)
 				WriteToTargets(LogLevel.Fatal, null, message, new object[] { arg1, arg2, arg3, arg4, arg5 });
+		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c>Fatal</c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+		/// <param name="arg1">The argument to function.</param>
+		/// <param name="arg2">The argument to function.</param>
+		/// <param name="arg3">The argument to function.</param>
+		/// <param name="arg4">The argument to function.</param>
+		/// <param name="arg5">The argument to function.</param>
+		public void Fatal<TArg1, TArg2, TArg3, TArg4, TArg5>(Func<TArg1, TArg2, TArg3, TArg4, TArg5, string> messageFunc,
+			TArg1 arg1, TArg2 arg2, TArg3 arg3, TArg4 arg4, TArg5 arg5)
+		{
+			if(_isFatalEnabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.Fatal, null, messageFunc(arg1, arg2, arg3, arg4, arg5));
+			}
 		}
 		#endregion
 	}

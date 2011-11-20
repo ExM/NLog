@@ -147,6 +147,24 @@ namespace NLog
 			if(IsEnabled(level))
 				WriteToTargets(level, null, message, new object[] { <#=string.Join(", ", Arg)#> });
 		}
+
+		/// <summary>
+		/// Writes the diagnostic message at the specified level.
+		/// </summary>
+		/// <param name="level">The log level.</param>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+<#foreach(string arg in Arg) {#>		/// <param name="<#=arg#>">The argument to function.</param>
+<#}#>		public void Log<<#=string.Join(", ", TArg)#>>(LogLevel level, Func<<#=string.Join(", ", TArg)#>, string> messageFunc,
+			<#=string.Join(", ", TArgArg)#>)
+		{
+			if(IsEnabled(level))
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+					
+				WriteToTargets(level, null, messageFunc(<#=string.Join(", ", Arg)#>));
+			}
+		}
 <# } #>
 		#endregion
 <# foreach(string level in new string[]{ "Trace", "Debug", "Info", "Warn", "Error", "Fatal"}) { #>
@@ -289,6 +307,23 @@ namespace NLog
 		{
 			if(_is<#=level#>Enabled)
 				WriteToTargets(LogLevel.<#=level#>, null, message, new object[] { <#=string.Join(", ", Arg)#> });
+		}
+		
+		/// <summary>
+		/// Writes the diagnostic message at the <c><#=level#></c> level.
+		/// </summary>
+		/// <param name="messageFunc">A function returning message to be written. Function is not evaluated if logging is not enabled.</param>
+<#foreach(string arg in Arg) {#>		/// <param name="<#=arg#>">The argument to function.</param>
+<#}#>		public void <#=level#><<#=string.Join(", ", TArg)#>>(Func<<#=string.Join(", ", TArg)#>, string> messageFunc,
+			<#=string.Join(", ", TArgArg)#>)
+		{
+			if(_is<#=level#>Enabled)
+			{
+				if(messageFunc == null)
+					throw new ArgumentNullException("messageFunc");
+
+				WriteToTargets(LogLevel.<#=level#>, null, messageFunc(<#=string.Join(", ", Arg)#>));
+			}
 		}
 <# } #>
 		#endregion
