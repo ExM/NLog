@@ -193,15 +193,15 @@ namespace NLog.WinForm.RtfParsing
 
 		private static Color[] ExtractColorTable(List<Token> list)
 		{
-			foreach (var t in list)
+			foreach(var t in list)
 			{
-				if (t.Text == null)
+				if(t.Text == null)
 					continue;
-				if (t.Text.StartsWith("\\colortbl"))
+				if(t.Text.StartsWith("\\colortbl"))
 					return ParseColorTable(t.Text.Substring("\\colortbl".Length + 1));
 			}
 
-			return new Color[0];
+			return new Color[]{ Color.FromKnownColor(KnownColor.WindowText)};
 		}
 
 		private static Color[] ParseColorTable(string text)

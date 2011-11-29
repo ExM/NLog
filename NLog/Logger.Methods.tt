@@ -1,8 +1,7 @@
-﻿<#@ template language="C#v3.5" 
+﻿<#@ template language="C#" 
 #><#@ import namespace="System" 
 #><#@ import namespace="System.Collections.Generic" 
 #><#@ import namespace="System.IO" 
-#><#@ import namespace="System.Linq" 
 #>using System;
 using System.ComponentModel;
 using NLog.Internal;

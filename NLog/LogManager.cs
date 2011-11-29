@@ -10,9 +10,9 @@ namespace NLog
 	/// <summary>
 	/// Creates and manages instances of <see cref="T:NLog.Logger" /> objects.
 	/// </summary>
-	public sealed class LogManager
+	public static class LogManager
 	{
-		private static readonly LogFactory globalFactory = new LogFactory();
+		private static readonly LogFactory _globalFactory = new LogFactory();
 
 		/// <summary>
 		/// Initializes static members of the LogManager class.
@@ -21,24 +21,28 @@ namespace NLog
 		{
 			try
 			{
-				SetupTerminationEvents();
+				AppDomain.CurrentDomain.DomainUnload += TurnOffLogging;
 			}
-			catch (Exception exception)
+			catch(Exception exception)
 			{
-				if (exception.MustBeRethrown())
-				{
+				if(exception.MustBeRethrown())
 					throw;
-				}
-
 				InternalLogger.Warn("Error setting up termiation events: {0}", exception);
 			}
 		}
 
-		/// <summary>
-		/// Prevents a default instance of the LogManager class from being created.
-		/// </summary>
-		private LogManager()
+		private static void TurnOffLogging(object sender, EventArgs args)
 		{
+			TurnOff();
+		}
+		
+		public static void TurnOff()
+		{
+			// reset logging configuration to null
+			// this causes old configuration (if any) to be closed.
+			InternalLogger.Info("Shutting down logging...");
+			Configuration = null;
+			InternalLogger.Info("Logger has been shut down.");
 		}
 
 		/// <summary>
@@ -46,8 +50,14 @@ namespace NLog
 		/// </summary>
 		public static event EventHandler<LoggingConfigurationChangedEventArgs> ConfigurationChanged
 		{
-			add { globalFactory.ConfigurationChanged += value; }
-			remove { globalFactory.ConfigurationChanged -= value; }
+			add
+			{
+				_globalFactory.ConfigurationChanged += value;
+			}
+			remove
+			{
+				_globalFactory.ConfigurationChanged -= value;
+			}
 		}
 
 		/// <summary>
@@ -55,8 +65,14 @@ namespace NLog
 		/// </summary>
 		public static event EventHandler<LoggingConfigurationReloadedEventArgs> ConfigurationReloaded
 		{
-			add { globalFactory.ConfigurationReloaded += value; }
-			remove { globalFactory.ConfigurationReloaded -= value; }
+			add
+			{
+				_globalFactory.ConfigurationReloaded += value;
+			}
+			remove
+			{
+				_globalFactory.ConfigurationReloaded -= value;
+			}
 		}
 
 		/// <summary>
@@ -65,8 +81,14 @@ namespace NLog
 		/// </summary>
 		public static bool ThrowExceptions
 		{
-			get { return globalFactory.ThrowExceptions; }
-			set { globalFactory.ThrowExceptions = value; }
+			get
+			{
+				return _globalFactory.ThrowExceptions;
+			}
+			set
+			{
+				_globalFactory.ThrowExceptions = value;
+			}
 		}
 
 		/// <summary>
@@ -74,8 +96,14 @@ namespace NLog
 		/// </summary>
 		public static LoggingConfiguration Configuration
 		{
-			get { return globalFactory.Configuration; }
-			set { globalFactory.Configuration = value; }
+			get
+			{
+				return _globalFactory.Configuration;
+			}
+			set
+			{
+				_globalFactory.Configuration = value;
+			}
 		}
 
 		/// <summary>
@@ -83,8 +111,14 @@ namespace NLog
 		/// </summary>
 		public static LogLevel GlobalThreshold
 		{
-			get { return globalFactory.GlobalThreshold; }
-			set { globalFactory.GlobalThreshold = value; }
+			get
+			{
+				return _globalFactory.GlobalThreshold;
+			}
+			set
+			{
+				_globalFactory.GlobalThreshold = value;
+			}
 		}
 
 
@@ -98,7 +132,7 @@ namespace NLog
 		public static Logger GetCurrentClassLogger()
 		{
 			StackFrame frame = new StackFrame(1, false);
-			return globalFactory.GetLogger(frame.GetMethod().DeclaringType.FullName);
+			return _globalFactory.GetLogger(frame.GetMethod().DeclaringType.FullName);
 		}
 
 		/// <summary>
@@ -112,7 +146,7 @@ namespace NLog
 		public static Logger GetCurrentClassLogger(Type loggerType)
 		{
 			StackFrame frame = new StackFrame(1, false);
-			return globalFactory.GetLogger(frame.GetMethod().DeclaringType.FullName, loggerType);
+			return _globalFactory.GetLogger(frame.GetMethod().DeclaringType.FullName, loggerType);
 		}
 
 		/// <summary>
@@ -121,7 +155,7 @@ namespace NLog
 		/// <returns>Null logger which discards all log messages.</returns>
 		public static Logger CreateNullLogger()
 		{
-			return globalFactory.CreateNullLogger();
+			return _globalFactory.CreateNullLogger();
 		}
 
 		/// <summary>
@@ -131,7 +165,7 @@ namespace NLog
 		/// <returns>The logger reference. Multiple calls to <c>GetLogger</c> with the same argument aren't guaranteed to return the same logger reference.</returns>
 		public static Logger GetLogger(string name)
 		{
-			return globalFactory.GetLogger(name);
+			return _globalFactory.GetLogger(name);
 		}
 
 		/// <summary>
@@ -142,7 +176,7 @@ namespace NLog
 		/// <returns>The logger reference. Multiple calls to <c>GetLogger</c> with the same argument aren't guaranteed to return the same logger reference.</returns>
 		public static Logger GetLogger(string name, Type loggerType)
 		{
-			return globalFactory.GetLogger(name, loggerType);
+			return _globalFactory.GetLogger(name, loggerType);
 		}
 
 		/// <summary>
@@ -152,7 +186,7 @@ namespace NLog
 		/// </summary>
 		public static void ReconfigExistingLoggers()
 		{
-			globalFactory.ReconfigExistingLoggers();
+			_globalFactory.ReconfigExistingLoggers();
 		}
 
 
@@ -161,7 +195,7 @@ namespace NLog
 		/// </summary>
 		public static void Flush()
 		{
-			globalFactory.Flush();
+			_globalFactory.Flush();
 		}
 
 		/// <summary>
@@ -170,7 +204,7 @@ namespace NLog
 		/// <param name="timeout">Maximum time to allow for the flush. Any messages after that time will be discarded.</param>
 		public static void Flush(TimeSpan timeout)
 		{
-			globalFactory.Flush(timeout);
+			_globalFactory.Flush(timeout);
 		}
 
 		/// <summary>
@@ -179,7 +213,7 @@ namespace NLog
 		/// <param name="timeoutMilliseconds">Maximum time to allow for the flush. Any messages after that time will be discarded.</param>
 		public static void Flush(int timeoutMilliseconds)
 		{
-			globalFactory.Flush(timeoutMilliseconds);
+			_globalFactory.Flush(timeoutMilliseconds);
 		}
 
 
@@ -189,7 +223,7 @@ namespace NLog
 		/// <param name="asyncContinuation">The asynchronous continuation.</param>
 		public static void Flush(Action<Exception> asyncContinuation)
 		{
-			globalFactory.Flush(asyncContinuation);
+			_globalFactory.Flush(asyncContinuation);
 		}
 
 		/// <summary>
@@ -199,7 +233,7 @@ namespace NLog
 		/// <param name="timeout">Maximum time to allow for the flush. Any messages after that time will be discarded.</param>
 		public static void Flush(Action<Exception> asyncContinuation, TimeSpan timeout)
 		{
-			globalFactory.Flush(asyncContinuation, timeout);
+			_globalFactory.Flush(asyncContinuation, timeout);
 		}
 
 		/// <summary>
@@ -209,7 +243,7 @@ namespace NLog
 		/// <param name="timeoutMilliseconds">Maximum time to allow for the flush. Any messages after that time will be discarded.</param>
 		public static void Flush(Action<Exception> asyncContinuation, int timeoutMilliseconds)
 		{
-			globalFactory.Flush(asyncContinuation, timeoutMilliseconds);
+			_globalFactory.Flush(asyncContinuation, timeoutMilliseconds);
 		}
 
 		/// <summary>Decreases the log enable counter and if it reaches -1 
@@ -220,7 +254,7 @@ namespace NLog
 		/// reenables logging. To be used with C# <c>using ()</c> statement.</returns>
 		public static IDisposable DisableLogging()
 		{
-			return globalFactory.DisableLogging();
+			return _globalFactory.DisableLogging();
 		}
 
 		/// <summary>Increases the log enable counter and if it reaches 0 the logs are disabled.</summary>
@@ -228,7 +262,7 @@ namespace NLog
 		/// than or equal to <see cref="DisableLogging"/> calls.</remarks>
 		public static void EnableLogging()
 		{
-			globalFactory.EnableLogging();
+			_globalFactory.EnableLogging();
 		}
 
 		/// <summary>
@@ -240,23 +274,7 @@ namespace NLog
 		/// than or equal to <see cref="DisableLogging"/> calls.</remarks>
 		public static bool IsLoggingEnabled()
 		{
-			return globalFactory.IsLoggingEnabled();
-		}
-
-		private static void SetupTerminationEvents()
-		{
-			AppDomain.CurrentDomain.ProcessExit += TurnOffLogging;
-			AppDomain.CurrentDomain.DomainUnload += TurnOffLogging;
-		}
-
-		private static void TurnOffLogging(object sender, EventArgs args)
-		{
-			// reset logging configuration to null
-			// this causes old configuration (if any) to be closed.
-			InternalLogger.Info("Shutting down logging...");
-			//Configuration = null;
-			globalFactory.Shutdown();
-			InternalLogger.Info("Logger has been shut down.");
+			return _globalFactory.IsLoggingEnabled();
 		}
 	}
 }

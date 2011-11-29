@@ -101,7 +101,7 @@ namespace NLog.UnitTests.Targets
 			Assert.AreEqual(exfs, rtf.FontStyle);
 			if(exF != null)
 				Assert.AreEqual(exF.Value.ToArgb(), rtf.FColor.ToArgb(), "{0} not equal {1} ", exF, rtf.FColor);
-			if(exB != null)
+			if(!InMono && exB != null) // mono not set background color
 				Assert.AreEqual(exB.Value.ToArgb(), rtf.BColor.ToArgb(), "{0} not equal {1} ", exB, rtf.BColor);
 		}
 

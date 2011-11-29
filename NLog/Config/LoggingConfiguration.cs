@@ -282,59 +282,6 @@ namespace NLog.Config
 
 			AsyncHelpers.ForEachItemInParallel(uniqueTargets, asyncContinuation, (target, cont) => target.Flush(cont));
 		}
-		
-		internal void FlushAllTargets2(Action<Exception> asyncContinuation)
-		{
-			var uniqueTargets = new List<Target>();
-			foreach (var rule in LoggingRules)
-			foreach (var t in rule.Targets)
-				if (!uniqueTargets.Contains(t))
-					uniqueTargets.Add(t);
-			
-			
-
-			//AsyncHelpers.ForEachItemInParallel(uniqueTargets, asyncContinuation, );
-			Action<Target, Action<Exception>> action = AsyncHelpers.ExceptionGuard<Target>((target, cont) => target.Flush(cont));
-
-		
-			int remaining = uniqueTargets.Count;
-			var exceptions = new List<Exception>();
-
-			//InternalLogger.Trace("ForEachItemInParallel() {0} items", items.Count);
-
-			if (remaining == 0)
-			{
-				asyncContinuation(null);
-				return;
-			}
-
-			Action<Exception> continuation =
-				ex =>
-					{
-						InternalLogger.Trace("Continuation invoked: {0}", ex);
-						int r;
-
-						if (ex != null)
-						{
-							lock (exceptions)
-							{
-								exceptions.Add(ex);
-							}
-						}
-
-						r = Interlocked.Decrement(ref remaining);
-						InternalLogger.Trace("Parallel task completed. {0} items remaining", r);
-						if (r == 0)
-						{
-							asyncContinuation(AsyncHelpers.GetCombinedException(exceptions));
-						}
-					};
-			
-			foreach (Target item in uniqueTargets)
-				action(item, AsyncHelpers.PreventMultipleCalls(continuation));
-			
-			//TODO: wait all exit
-		}
 
 		internal void InitializeAll()
 		{

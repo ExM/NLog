@@ -303,10 +303,10 @@ namespace NLog.Targets
 			rtbx.SelectionLength = rtbx.Text.Length - rtbx.SelectionStart;
 
 			// find word to color
-			foreach (RichTextBoxWordColoringRule wordRule in WordColoringRules)
+			foreach(RichTextBoxWordColoringRule wordRule in WordColoringRules)
 			{
 				MatchCollection mc = wordRule.CompiledRegex.Matches(rtbx.Text, startIndex);
-				foreach (Match m in mc)
+				foreach(Match m in mc)
 				{
 					rtbx.SelectionStart = m.Index;
 					rtbx.SelectionLength = m.Length;
@@ -316,10 +316,10 @@ namespace NLog.Targets
 				}
 			}
 
-			if (MaxLines > 0)
+			if(MaxLines > 0)
 			{
 				lineCount++;
-				if (lineCount > MaxLines)
+				if(lineCount > MaxLines)
 				{
 					int pos = rtbx.GetFirstCharIndexFromLine(1);
 					rtbx.Select(0, pos);
@@ -328,7 +328,7 @@ namespace NLog.Targets
 				}
 			}
 
-			if (AutoScroll)
+			if(AutoScroll)
 			{
 				rtbx.Select(rtbx.TextLength, 0);
 				rtbx.ScrollToCaret();
