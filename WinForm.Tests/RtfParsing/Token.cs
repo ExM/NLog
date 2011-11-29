@@ -20,7 +20,7 @@ namespace NLog.WinForm.RtfParsing
 			if (Text != null)
 				return Text;
 
-			return string.Join("|", Inner);
+			return string.Join("|", Inner.Select(t => t.ToString()).ToArray());
 		}
 	}
 }

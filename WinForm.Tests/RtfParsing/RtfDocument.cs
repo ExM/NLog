@@ -301,7 +301,12 @@ namespace NLog.WinForm.RtfParsing
 		private static bool IsEmpty(string text)
 		{
 			text = text.Replace('\r', ' ').Replace('\n', ' ').Replace('\0', ' ');
-			return string.IsNullOrWhiteSpace(text);
+			if(string.IsNullOrEmpty(text))
+				return true;
+			foreach(var ch in text)
+				if(!Char.IsWhiteSpace(ch))
+					return false;
+			return true;
 		}
 
 		private static int FindNextBracket(int start, string text)

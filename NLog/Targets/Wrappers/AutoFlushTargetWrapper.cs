@@ -45,7 +45,7 @@ namespace NLog.Targets.Wrappers
 
 		/// <summary>
 		/// Forwards the call to the <see cref="WrapperTargetBase.WrappedTarget"/>.Write()
-		/// and calls <see cref="Target.Flush(AsyncContinuation)"/> on it.
+		/// and calls <see cref="Target.Flush(Action&lt;Exception&gt;)"/> on it.
 		/// </summary>
 		/// <param name="logEvent">Logging event to be written out.</param>
 		protected override void Write(AsyncLogEventInfo logEvent)

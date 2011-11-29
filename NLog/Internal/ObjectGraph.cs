@@ -65,20 +65,23 @@ namespace NLog.Internal
 			return true;
 		}
 
-		public static IEnumerable<T> AllChilds<T>(IEnumerable<object> roots)
-			where T : class
-		{
-			HashSet<object> visited = new HashSet<object>();
-
-			foreach (object root in roots)
-				foreach (T item in AllChilds<T>(root, visited))
-					yield return item;
-		}
-
-		public static IEnumerable<T> AllChilds<T>(object root)
+		public static IEnumerable<T> AllChilds<T>(object arg)
 			where T: class
 		{
-			return AllChilds<T>(root, new HashSet<object>());
+			IEnumerable roots = arg as IEnumerable;
+			if(roots == null)
+			{
+				foreach(T item in AllChilds<T>(arg, new HashSet<object>()))
+					yield return item;
+			}
+			else
+			{
+				HashSet<object> visited = new HashSet<object>();
+
+				foreach(object root in roots)
+					foreach(T item in AllChilds<T>(root, visited))
+						yield return item;
+			}
 		}
 
 		private static IEnumerable<T> AllChilds<T>(object o, HashSet<object> visited)

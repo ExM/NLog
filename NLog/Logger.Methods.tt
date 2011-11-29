@@ -105,7 +105,7 @@ namespace NLog
 			if(IsEnabled(level))
 				WriteToTargets(level, null, message, args);
 		}
-<# for(int i = 1; i<=5; i++) {
+<# for(int i = 1; i<=4; i++) {
   List<string> TArg = new List<string>();
   List<string> Arg = new List<string>();
   List<string> TArgArg = new List<string>();
@@ -269,7 +269,7 @@ namespace NLog
 				WriteToTargets(LogLevel.<#=level#>, null, message, args);
 		}
 
-<# for(int i = 1; i<=5; i++) {
+<# for(int i = 1; i<=4; i++) {
   List<string> TArg = new List<string>();
   List<string> Arg = new List<string>();
   List<string> TArgArg = new List<string>();
