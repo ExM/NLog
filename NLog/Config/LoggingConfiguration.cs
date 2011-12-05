@@ -271,11 +271,11 @@ namespace NLog.Config
 		internal void FlushAllTargets(Action<Exception> asyncContinuation)
 		{
 			var uniqueTargets = new List<Target>();
-			foreach (var rule in LoggingRules)
+			foreach(var rule in LoggingRules)
 			{
-				foreach (var t in rule.Targets)
+				foreach(var t in rule.Targets)
 				{
-					if (!uniqueTargets.Contains(t))
+					if(!uniqueTargets.Contains(t))
 						uniqueTargets.Add(t);
 				}
 			}
