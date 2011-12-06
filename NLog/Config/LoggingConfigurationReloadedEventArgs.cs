@@ -14,8 +14,8 @@ namespace NLog.Config
 		/// <param name="exception">The exception during configuration reload.</param>
 		internal LoggingConfigurationReloadedEventArgs(bool succeeded, Exception exception)
 		{
-			this.Succeeded = succeeded;
-			this.Exception = exception;
+			Succeeded = succeeded;
+			Exception = exception;
 		}
 
 		/// <summary>

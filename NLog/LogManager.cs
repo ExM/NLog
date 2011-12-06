@@ -184,7 +184,6 @@ namespace NLog
 			_globalFactory.ReconfigExistingLoggers();
 		}
 
-
 		/// <summary>
 		/// Flush any pending log messages (in case of asynchronous targets).
 		/// </summary>

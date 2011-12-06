@@ -15,7 +15,7 @@ namespace NLog.Config
 		where TClassAttributeType : Attribute
 		where TMethodAttributeType : NameBaseAttribute
 	{
-		private readonly Dictionary<string, MethodInfo> nameToMethodInfo = new Dictionary<string, MethodInfo>();
+		private readonly Dictionary<string, MethodInfo> _nameToMethodInfo = new Dictionary<string, MethodInfo>();
 
 		/// <summary>
 		/// Gets a collection of all registered items in the factory.
@@ -27,7 +27,10 @@ namespace NLog.Config
 		/// </returns>
 		public IDictionary<string, MethodInfo> AllRegisteredItems
 		{
-			get { return this.nameToMethodInfo; }
+			get
+			{
+				return _nameToMethodInfo;
+			}
 		}
 
 		/// <summary>
@@ -43,16 +46,12 @@ namespace NLog.Config
 			{
 				InternalLogger.Debug("ScanAssembly('{0}','{1}','{2}')", theAssembly.FullName, typeof(TClassAttributeType), typeof(TMethodAttributeType));
 				foreach (Type t in theAssembly.SafeGetTypes())
-				{
-					this.RegisterType(t, prefix);
-				}
+					RegisterType(t, prefix);
 			}
 			catch (Exception exception)
 			{
 				if (exception.MustBeRethrown())
-				{
 					throw;
-				}
 
 				InternalLogger.Error("Failed to add targets from '" + theAssembly.FullName + "': {0}", exception);
 			}
@@ -71,9 +70,7 @@ namespace NLog.Config
 				{
 					var methodAttributes = (TMethodAttributeType[])mi.GetCustomAttributes(typeof(TMethodAttributeType), false);
 					foreach (TMethodAttributeType attr in methodAttributes)
-					{
-						this.RegisterDefinition(itemNamePrefix + attr.Name, mi);
-					}
+						RegisterDefinition(itemNamePrefix + attr.Name, mi);
 				}
 			}
 		}
@@ -83,7 +80,7 @@ namespace NLog.Config
 		/// </summary>
 		public void Clear()
 		{
-			this.nameToMethodInfo.Clear();
+			_nameToMethodInfo.Clear();
 		}
 
 		/// <summary>
@@ -93,7 +90,7 @@ namespace NLog.Config
 		/// <param name="methodInfo">The method info.</param>
 		public void RegisterDefinition(string name, MethodInfo methodInfo)
 		{
-			this.nameToMethodInfo[name] = methodInfo;
+			_nameToMethodInfo[name] = methodInfo;
 		}
 
 		/// <summary>
@@ -104,7 +101,7 @@ namespace NLog.Config
 		/// <returns>A value of <c>true</c> if the method was found, <c>false</c> otherwise.</returns>
 		public bool TryCreateInstance(string name, out MethodInfo result)
 		{
-			return this.nameToMethodInfo.TryGetValue(name, out result);
+			return _nameToMethodInfo.TryGetValue(name, out result);
 		}
 
 		/// <summary>
@@ -116,10 +113,8 @@ namespace NLog.Config
 		{
 			MethodInfo result;
 
-			if (this.TryCreateInstance(name, out result))
-			{
+			if(TryCreateInstance(name, out result))
 				return result;
-			}
 
 			throw new NLogConfigurationException("Unknown function: '" + name + "'");
 		}
@@ -132,7 +127,7 @@ namespace NLog.Config
 		/// <returns>A value of <c>true</c> if the method was found, <c>false</c> otherwise.</returns>
 		public bool TryGetDefinition(string name, out MethodInfo result)
 		{
-			return this.nameToMethodInfo.TryGetValue(name, out result);
+			return _nameToMethodInfo.TryGetValue(name, out result);
 		}
 	}
 }

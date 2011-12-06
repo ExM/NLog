@@ -7,7 +7,7 @@ namespace NLog.Internal
 	/// <summary>
 	/// Object construction helper.
 	/// </summary>
-	public class FactoryHelper
+	internal class FactoryHelper
 	{
 		private static Type[] emptyTypes = new Type[0];
 		private static object[] emptyParams = new object[0];
@@ -16,7 +16,7 @@ namespace NLog.Internal
 		{
 		}
 
-		public static object CreateInstance(Type t)
+		internal static object CreateInstance(Type t)
 		{
 			ConstructorInfo constructor = t.GetConstructor(emptyTypes);
 			if (constructor != null)

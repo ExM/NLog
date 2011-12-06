@@ -32,8 +32,10 @@ namespace NLog.UnitTests.Config
 			var cif = new ConfigurationItemFactory();
 			cif.RegisterType(typeof(DebugTarget), string.Empty);
 			List<Type> resolvedTypes = new List<Type>();
-			cif.CreateInstance = t => { resolvedTypes.Add(t); return FactoryHelper.CreateInstance(t); };
+			Func<Type, object> standartCreater = cif.CreateInstance;
+			cif.CreateInstance = t => { resolvedTypes.Add(t); return standartCreater(t); };
 			Target target = cif.Targets.CreateInstance("Debug");
+			
 			Assert.IsNotNull(target);
 			Assert.AreEqual(1, resolvedTypes.Count);
 			Assert.AreEqual(typeof(DebugTarget), resolvedTypes[0]);

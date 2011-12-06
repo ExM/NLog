@@ -183,14 +183,6 @@ namespace NLog.UnitTests.Config
 				</rules>
 			</nlog>");
 
-			LogFactory factory = new LogFactory(c);
-			var loggerConfig = factory.GetConfigurationForLogger("AAA", c);
-			var targets = loggerConfig.GetTargetsForLevel(LogLevel.Warn);
-			Assert.AreEqual("d1", targets.Target.Name);
-			Assert.AreEqual("d2", targets.NextInChain.Target.Name);
-			Assert.AreEqual("d3", targets.NextInChain.NextInChain.Target.Name);
-			Assert.IsNull(targets.NextInChain.NextInChain.NextInChain);
-
 			LogManager.Configuration = c;
 
 			var logger = LogManager.GetLogger("BBB");

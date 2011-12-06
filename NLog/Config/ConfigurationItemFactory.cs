@@ -15,13 +15,13 @@ namespace NLog.Config
 	/// </summary>
 	public class ConfigurationItemFactory
 	{
-		private readonly IList<object> allFactories;
-		private readonly Factory<Target, TargetAttribute> targets;
-		private readonly Factory<Filter, FilterAttribute> filters;
-		private readonly Factory<LayoutRenderer, LayoutRendererAttribute> layoutRenderers;
-		private readonly Factory<Layout, LayoutAttribute> layouts;
-		private readonly MethodFactory<ConditionMethodsAttribute, ConditionMethodAttribute> conditionMethods;
-		private readonly Factory<LayoutRenderer, AmbientPropertyAttribute> ambientProperties;
+		private readonly IList<object> _allFactories;
+		private readonly Factory<Target, TargetAttribute> _targets;
+		private readonly Factory<Filter, FilterAttribute> _filters;
+		private readonly Factory<LayoutRenderer, LayoutRendererAttribute> _layoutRenderers;
+		private readonly Factory<Layout, LayoutAttribute> _layouts;
+		private readonly MethodFactory<ConditionMethodsAttribute, ConditionMethodAttribute> _conditionMethods;
+		private readonly Factory<LayoutRenderer, AmbientPropertyAttribute> _ambientProperties;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ConfigurationItemFactory"/> class.
@@ -29,27 +29,25 @@ namespace NLog.Config
 		/// <param name="assemblies">The assemblies to scan for named items.</param>
 		public ConfigurationItemFactory(params Assembly[] assemblies)
 		{
-			this.CreateInstance = FactoryHelper.CreateInstance;
-			this.targets = new Factory<Target, TargetAttribute>(this);
-			this.filters = new Factory<Filter, FilterAttribute>(this);
-			this.layoutRenderers = new Factory<LayoutRenderer, LayoutRendererAttribute>(this);
-			this.layouts = new Factory<Layout, LayoutAttribute>(this);
-			this.conditionMethods = new MethodFactory<ConditionMethodsAttribute, ConditionMethodAttribute>();
-			this.ambientProperties = new Factory<LayoutRenderer, AmbientPropertyAttribute>(this);
-			this.allFactories = new List<object>
+			CreateInstance = FactoryHelper.CreateInstance;
+			_targets = new Factory<Target, TargetAttribute>(this);
+			_filters = new Factory<Filter, FilterAttribute>(this);
+			_layoutRenderers = new Factory<LayoutRenderer, LayoutRendererAttribute>(this);
+			_layouts = new Factory<Layout, LayoutAttribute>(this);
+			_conditionMethods = new MethodFactory<ConditionMethodsAttribute, ConditionMethodAttribute>();
+			_ambientProperties = new Factory<LayoutRenderer, AmbientPropertyAttribute>(this);
+			_allFactories = new List<object>
 			{
-				this.targets,
-				this.filters,
-				this.layoutRenderers,
-				this.layouts,
-				this.conditionMethods,
-				this.ambientProperties,
+				_targets,
+				_filters,
+				_layoutRenderers,
+				_layouts,
+				_conditionMethods,
+				_ambientProperties,
 			};
 
 			foreach (var asm in assemblies)
-			{
-				this.RegisterItemsFromAssembly(asm);
-			}
+				RegisterItemsFromAssembly(asm);
 		}
 
 		/// <summary>
@@ -66,7 +64,10 @@ namespace NLog.Config
 		/// <value>The target factory.</value>
 		public INamedItemFactory<Target, Type> Targets
 		{
-			get { return this.targets; }
+			get
+			{
+				return _targets;
+			}
 		}
 
 		/// <summary>
@@ -75,7 +76,10 @@ namespace NLog.Config
 		/// <value>The filter factory.</value>
 		public INamedItemFactory<Filter, Type> Filters
 		{
-			get { return this.filters; }
+			get
+			{
+				return _filters;
+			}
 		}
 
 		/// <summary>
@@ -84,7 +88,10 @@ namespace NLog.Config
 		/// <value>The layout renderer factory.</value>
 		public INamedItemFactory<LayoutRenderer, Type> LayoutRenderers
 		{
-			get { return this.layoutRenderers; }
+			get
+			{
+				return _layoutRenderers;
+			}
 		}
 
 		/// <summary>
@@ -93,7 +100,10 @@ namespace NLog.Config
 		/// <value>The layout factory.</value>
 		public INamedItemFactory<Layout, Type> Layouts
 		{
-			get { return this.layouts; }
+			get
+			{
+				return _layouts;
+			}
 		}
 
 		/// <summary>
@@ -102,7 +112,10 @@ namespace NLog.Config
 		/// <value>The ambient property factory.</value>
 		public INamedItemFactory<LayoutRenderer, Type> AmbientProperties
 		{
-			get { return this.ambientProperties; }
+			get
+			{
+				return _ambientProperties;
+			}
 		}
 
 		/// <summary>
@@ -111,7 +124,10 @@ namespace NLog.Config
 		/// <value>The condition method factory.</value>
 		public INamedItemFactory<MethodInfo, MethodInfo> ConditionMethods
 		{
-			get { return this.conditionMethods; }
+			get
+			{
+				return _conditionMethods;
+			}
 		}
 
 		/// <summary>
@@ -120,7 +136,7 @@ namespace NLog.Config
 		/// <param name="assembly">The assembly.</param>
 		public void RegisterItemsFromAssembly(Assembly assembly)
 		{
-			this.RegisterItemsFromAssembly(assembly, string.Empty);
+			RegisterItemsFromAssembly(assembly, string.Empty);
 		}
 
 		/// <summary>
@@ -130,10 +146,8 @@ namespace NLog.Config
 		/// <param name="itemNamePrefix">Item name prefix.</param>
 		public void RegisterItemsFromAssembly(Assembly assembly, string itemNamePrefix)
 		{
-			foreach (IFactory f in this.allFactories)
-			{
+			foreach (IFactory f in _allFactories)
 				f.ScanAssembly(assembly, itemNamePrefix);
-			}
 		}
 
 		/// <summary>
@@ -141,10 +155,8 @@ namespace NLog.Config
 		/// </summary>
 		public void Clear()
 		{
-			foreach (IFactory f in this.allFactories)
-			{
+			foreach (IFactory f in _allFactories)
 				f.Clear();
-			}
 		}
 
 		/// <summary>
@@ -154,10 +166,8 @@ namespace NLog.Config
 		/// <param name="itemNamePrefix">The item name prefix.</param>
 		public void RegisterType(Type type, string itemNamePrefix)
 		{
-			foreach (IFactory f in this.allFactories)
-			{
+			foreach (IFactory f in _allFactories)
 				f.RegisterType(type, itemNamePrefix);
-			}
 		}
 	}
 }

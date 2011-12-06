@@ -15,12 +15,12 @@ namespace NLog.Config
 		where TBaseType : class 
 		where TAttributeType : NameBaseAttribute
 	{
-		private readonly Dictionary<string, GetTypeDelegate> items = new Dictionary<string, GetTypeDelegate>(StringComparer.OrdinalIgnoreCase);
-		private ConfigurationItemFactory parentFactory;
+		private readonly Dictionary<string, GetTypeDelegate> _items = new Dictionary<string, GetTypeDelegate>(StringComparer.OrdinalIgnoreCase);
+		private ConfigurationItemFactory _parentFactory;
 
 		internal Factory(ConfigurationItemFactory parentFactory)
 		{
-			this.parentFactory = parentFactory;
+			_parentFactory = parentFactory;
 		}
 
 		private delegate Type GetTypeDelegate();
@@ -36,16 +36,12 @@ namespace NLog.Config
 			{
 				InternalLogger.Debug("ScanAssembly('{0}','{1}','{2}')", theAssembly.FullName, typeof(TAttributeType), typeof(TBaseType));
 				foreach (Type t in theAssembly.SafeGetTypes())
-				{
-					this.RegisterType(t, prefix);
-				}
+					RegisterType(t, prefix);
 			}
 			catch (Exception exception)
 			{
 				if (exception.MustBeRethrown())
-				{
 					throw;
-				}
 
 				InternalLogger.Error("Failed to add targets from '" + theAssembly.FullName + "': {0}", exception);
 			}
@@ -59,13 +55,11 @@ namespace NLog.Config
 		public void RegisterType(Type type, string itemNamePrefix)
 		{
 			TAttributeType[] attributes = (TAttributeType[])type.GetCustomAttributes(typeof(TAttributeType), false);
-			if (attributes != null)
-			{
-				foreach (TAttributeType attr in attributes)
-				{
-					this.RegisterDefinition(itemNamePrefix + attr.Name, type);
-				}
-			}
+			if (attributes == null)
+				return;
+
+			foreach (TAttributeType attr in attributes)
+				RegisterDefinition(itemNamePrefix + attr.Name, type);
 		}
 
 		/// <summary>
@@ -75,7 +69,7 @@ namespace NLog.Config
 		/// <param name="typeName">Name of the type.</param>
 		public void RegisterNamedType(string itemName, string typeName)
 		{
-			this.items[itemName] = () => Type.GetType(typeName, false);
+			_items[itemName] = () => Type.GetType(typeName, false);
 		}
 
 		/// <summary>
@@ -83,7 +77,7 @@ namespace NLog.Config
 		/// </summary>
 		public void Clear()
 		{
-			this.items.Clear();
+			_items.Clear();
 		}
 
 		/// <summary>
@@ -93,7 +87,7 @@ namespace NLog.Config
 		/// <param name="type">The type of the item.</param>
 		public void RegisterDefinition(string name, Type type)
 		{
-			this.items[name] = () => type;
+			_items[name] = () => type;
 		}
 
 		/// <summary>
@@ -106,7 +100,7 @@ namespace NLog.Config
 		{
 			GetTypeDelegate del;
 
-			if (!this.items.TryGetValue(itemName, out del))
+			if (!_items.TryGetValue(itemName, out del))
 			{
 				result = null;
 				return false;
@@ -120,9 +114,7 @@ namespace NLog.Config
 			catch (Exception ex)
 			{
 				if (ex.MustBeRethrown())
-				{
 					throw;
-				}
 
 				// delegate invocation failed - type is not available
 				result = null;
@@ -140,13 +132,13 @@ namespace NLog.Config
 		{
 			Type type;
 
-			if (!this.TryGetDefinition(itemName, out type))
+			if (!TryGetDefinition(itemName, out type))
 			{
 				result = null;
 				return false;
 			}
 
-			result = (TBaseType)this.parentFactory.CreateInstance(type);
+			result = (TBaseType)_parentFactory.CreateInstance(type);
 			return true;
 		}
 
@@ -159,10 +151,8 @@ namespace NLog.Config
 		{
 			TBaseType result;
 
-			if (this.TryCreateInstance(name, out result))
-			{
+			if (TryCreateInstance(name, out result))
 				return result;
-			}
 
 			throw new ArgumentException(typeof(TBaseType).Name + " cannot be found: '" + name + "'");
 		}
