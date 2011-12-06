@@ -3,6 +3,7 @@
 Release/
 Debug/
 *.userprefs
+*.csproj.user
 *.pidb
 test-results/
 TestResult.xml
