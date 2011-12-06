@@ -543,9 +543,19 @@ namespace NLog
 			// current config file with .config renamed to .nlog
 			string cf = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
 			if (cf != null)
-			{
 				yield return Path.ChangeExtension(cf, ".nlog");
+
+			string asmPath = null;
+			try
+			{
+				asmPath = Assembly.GetEntryAssembly().Location;
 			}
+			catch(Exception)
+			{
+			}
+
+			if(asmPath != null && Path.IsPathRooted(asmPath))
+				yield return asmPath + ".nlog";
 
 			// get path to NLog.dll.nlog only if the assembly is not in the GAC
 			var nlogAssembly = typeof(LogFactory).Assembly;
