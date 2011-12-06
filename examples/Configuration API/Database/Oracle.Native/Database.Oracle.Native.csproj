@@ -3,10 +3,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{29B2985C-C196-453F-848E-7195AADAC21C}</ProjectGuid>
+    <ProjectGuid>{0A94DFDE-A128-4F83-B0D2-2D97B18BF7BA}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <NoStandardLibraries>false</NoStandardLibraries>
-    <AssemblyName>AsyncWrapper.Wrapping File</AssemblyName>
+    <AssemblyName>Database.Oracle.Native</AssemblyName>
     <RootNamespace>
     </RootNamespace>
     <FileUpgradeFlags>
@@ -54,12 +54,6 @@
     <Compile Include="Example.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\NLog\NLog.csproj">
-      <Project>{CB8BE551-CB33-44A6-B793-1B266862EB25}</Project>
-      <Name>NLog %28NLog\NLog%29</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
@@ -75,6 +69,16 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Database\Database.csproj">
+      <Project>{BACDB92F-A795-4631-8FC7-C6599D96B1BE}</Project>
+      <Name>Database %28NLog\Database%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\NLog\NLog.csproj">
+      <Project>{CB8BE551-CB33-44A6-B793-1B266862EB25}</Project>
+      <Name>NLog %28NLog\NLog%29</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <ProjectExtensions>

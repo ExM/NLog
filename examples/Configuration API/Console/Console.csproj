@@ -46,7 +46,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\NLog\NLog.csproj">
       <Project>{CB8BE551-CB33-44A6-B793-1B266862EB25}</Project>
-      <Name>NLog</Name>
+      <Name>NLog %28NLog\NLog%29</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
