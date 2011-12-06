@@ -33,11 +33,6 @@ namespace NLog
 
 		private static void TurnOffLogging(object sender, EventArgs args)
 		{
-			TurnOff();
-		}
-		
-		public static void TurnOff()
-		{
 			// reset logging configuration to null
 			// this causes old configuration (if any) to be closed.
 			InternalLogger.Info("Shutting down logging...");

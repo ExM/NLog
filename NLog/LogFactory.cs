@@ -487,7 +487,7 @@ namespace NLog
 			}
 		}
 
-		public LoggerConfiguration GetConfigurationForLogger(string name, LoggingConfiguration configuration)
+		internal LoggerConfiguration GetConfigurationForLogger(string name, LoggingConfiguration configuration)
 		{
 			TargetWithFilterChain[] targetsByLevel = new TargetWithFilterChain[LogLevel.MaxLevel.Ordinal + 1];
 			TargetWithFilterChain[] lastTargetsByLevel = new TargetWithFilterChain[LogLevel.MaxLevel.Ordinal + 1];
