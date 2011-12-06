@@ -286,7 +286,27 @@ namespace NLog
 		/// <param name="timeout">Maximum time to allow for the flush. Any messages after that time will be discarded.</param>
 		public void Flush(TimeSpan timeout)
 		{
-			AsyncHelpers.RunSynchronously(cb => Flush(cb, timeout));
+			var copyCfg = Configuration;
+			if (copyCfg == null)
+				return;
+
+			var wait = new ManualResetEvent(false);
+			Exception viewException = null;
+
+			InternalLogger.Trace("LogFactory.Flush({0})", timeout);
+
+			InternalLogger.Trace("Flushing all targets...");
+			copyCfg.FlushAllTargets(ex =>
+			{
+				Interlocked.CompareExchange(ref viewException, ex, null);
+				wait.Set();
+			});
+
+			if(!wait.WaitOne(timeout))
+				throw new NLogRuntimeException("Asynchronous exception has occurred.", new TimeoutException("Timeout."));
+
+			if (viewException != null)
+				throw new NLogRuntimeException("Asynchronous exception has occurred.", viewException);
 		}
 
 		/// <summary>
@@ -326,11 +346,11 @@ namespace NLog
 		{
 			InternalLogger.Trace("LogFactory.Flush({0})", timeout);
 			
-			var loggingConfiguration = Configuration;
-			if (loggingConfiguration != null)
+			var copy = Configuration;
+			if (copy != null)
 			{
 				InternalLogger.Trace("Flushing all targets...");
-				loggingConfiguration.FlushAllTargets(AsyncHelpers.WithTimeout(asyncContinuation, timeout));
+				copy.FlushAllTargets(AsyncHelpers.WithTimeout(asyncContinuation, timeout));
 			}
 			else
 			{

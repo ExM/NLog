@@ -9,7 +9,7 @@ namespace NLog.Internal
 	/// </summary>
 	internal class SingleCallContinuation
 	{
-		private Action<Exception> asyncContinuation;
+		private Action<Exception> _asyncContinuation;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SingleCallContinuation"/> class.
@@ -17,7 +17,7 @@ namespace NLog.Internal
 		/// <param name="asyncContinuation">The asynchronous continuation.</param>
 		public SingleCallContinuation(Action<Exception> asyncContinuation)
 		{
-			this.asyncContinuation = asyncContinuation;
+			_asyncContinuation = asyncContinuation;
 		}
 
 		/// <summary>
@@ -28,7 +28,7 @@ namespace NLog.Internal
 		{
 			try
 			{
-				var cont = Interlocked.Exchange(ref this.asyncContinuation, null);
+				var cont = Interlocked.Exchange(ref _asyncContinuation, null);
 				if (cont != null)
 				{
 					cont(exception);
@@ -37,17 +37,10 @@ namespace NLog.Internal
 			catch (Exception ex)
 			{
 				if (ex.MustBeRethrown())
-				{
 					throw;
-				}
 
-				ReportExceptionInHandler(ex);
+				InternalLogger.Error("Exception in asynchronous handler {0}", exception);
 			}
-		}
-
-		private static void ReportExceptionInHandler(Exception exception)
-		{
-			InternalLogger.Error("Exception in asynchronous handler {0}", exception);
 		}
 	}
 }

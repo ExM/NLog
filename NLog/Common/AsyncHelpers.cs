@@ -173,27 +173,6 @@ namespace NLog.Common
 		}
 
 		/// <summary>
-		/// Runs the specified asynchronous action synchronously (blocks until the continuation has
-		/// been invoked).
-		/// </summary>
-		/// <param name="action">The action.</param>
-		/// <remarks>
-		/// Using this method is not recommended because it will block the calling thread.
-		/// </remarks>
-		public static void RunSynchronously(Action<Action<Exception>> action)
-		{
-			var ev = new ManualResetEvent(false);
-			Exception lastException = null;
-
-			action(PreventMultipleCalls(ex => { lastException = ex; ev.Set(); }));
-			ev.WaitOne();
-			if (lastException != null)
-			{
-				throw new NLogRuntimeException("Asynchronous exception has occurred.", lastException);
-			}
-		}
-
-		/// <summary>
 		/// Wraps the continuation with a guard which will only make sure that the continuation function
 		/// is invoked only once.
 		/// </summary>
