@@ -20,7 +20,7 @@ namespace ASPNetBufferingWrapper
             fileTarget.FileName = "${basedir}/logfile.txt";
 
             PostFilteringTargetWrapper postfilteringTarget = new PostFilteringTargetWrapper();
-            ASPNetBufferingTargetWrapper aspnetBufferingTarget = new ASPNetBufferingTargetWrapper();
+			AspNetBufferingTargetWrapper aspnetBufferingTarget = new AspNetBufferingTargetWrapper();
             aspnetBufferingTarget.WrappedTarget = postfilteringTarget;
             postfilteringTarget.WrappedTarget = fileTarget;
 

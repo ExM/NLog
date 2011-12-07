@@ -11,6 +11,7 @@ void Page_Load(Object sender, EventArgs e)
 </script>
 <html>
 <head>
+	<title>test</title>
 </head>
 <body>
     <p>

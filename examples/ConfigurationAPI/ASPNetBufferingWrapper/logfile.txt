@@ -1,0 +1,8 @@
+2011-12-08 13:55:47.2709|INFO|ASPNetBufferingWrapper.NormalPage|info1
+2011-12-08 13:55:47.2749|INFO|ASPNetBufferingWrapper.NormalPage|info2
+2011-12-08 13:55:55.8530|INFO|ASPNetBufferingWrapper.PageWithWarnings|info1
+2011-12-08 13:55:55.8530|DEBUG|ASPNetBufferingWrapper.PageWithWarnings|some debug message
+2011-12-08 13:55:55.8530|DEBUG|ASPNetBufferingWrapper.PageWithWarnings|some other debug message
+2011-12-08 13:55:55.8530|DEBUG|ASPNetBufferingWrapper.PageWithWarnings|yet another other debug message
+2011-12-08 13:55:55.8530|WARN|ASPNetBufferingWrapper.PageWithWarnings|warning!
+2011-12-08 13:55:55.8530|INFO|ASPNetBufferingWrapper.PageWithWarnings|info2

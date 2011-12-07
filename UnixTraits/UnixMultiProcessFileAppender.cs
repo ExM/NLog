@@ -3,6 +3,7 @@ using System.IO;
 using Mono.Unix;
 using Mono.Unix.Native;
 using NLog.UnixTraits.Targets;
+using NLog.Common;
 
 namespace NLog.Internal.FileAppenders
 {
@@ -60,8 +61,8 @@ namespace NLog.Internal.FileAppenders
 		{
 			if(file == null)
 				return;
-			//HACK: public internal logger?
-			//InternalLogger.Trace("Closing '{0}'", FileName); 
+
+			InternalLogger.Trace("Closing '{0}'", FileName); 
 			file.Close();
 			file = null;
 			FileTouched();

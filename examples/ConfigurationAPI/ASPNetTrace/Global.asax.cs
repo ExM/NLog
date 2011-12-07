@@ -16,7 +16,7 @@ namespace SomeWebApplication
         //
         protected void Application_Start(Object sender, EventArgs e)
         {
-            ASPNetTraceTarget target = new ASPNetTraceTarget();
+			AspNetTraceTarget target = new AspNetTraceTarget();
             target.Layout = "${logger} ${message}";
 
             NLog.Config.SimpleConfigurator.ConfigureForTargetLogging(target, LogLevel.Debug);
