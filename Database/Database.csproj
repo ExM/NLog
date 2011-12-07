@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -48,7 +48,7 @@
   <ItemGroup>
     <ProjectReference Include="..\NLog\NLog.csproj">
       <Project>{CB8BE551-CB33-44A6-B793-1B266862EB25}</Project>
-      <Name>NLog</Name>
+      <Name>NLog %28NLog\NLog%29</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

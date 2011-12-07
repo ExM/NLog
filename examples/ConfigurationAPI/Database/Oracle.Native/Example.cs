@@ -6,7 +6,6 @@ class Example
 	static void Main(string[] args)
 	{
 		DatabaseTarget target = new DatabaseTarget();
-		DatabaseParameterInfo param;
 
 		target.DBProvider = "System.Data.OracleClient.OracleConnection,System.Data.OracleClient, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
 		target.ConnectionString = "Data Source=MYORACLEDB;User Id=DBO;Password=MYPASSWORD;Integrated Security=no;";
