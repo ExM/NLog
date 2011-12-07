@@ -34,7 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
@@ -52,6 +51,16 @@
     <None Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\LogReceiverService.Wcf\LogReceiverService.Wcf.csproj">
+      <Project>{F753CDF8-D013-439A-A64F-872DD29C4E2C}</Project>
+      <Name>LogReceiverService.Wcf</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NLog\NLog.csproj">
+      <Project>{CB8BE551-CB33-44A6-B793-1B266862EB25}</Project>
+      <Name>NLog</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
