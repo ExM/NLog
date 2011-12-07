@@ -7,40 +7,40 @@ using NLog.Targets;
 
 namespace RichTextBox2
 {
-    public partial class Form1 : Form
-    {
-        public Form1()
-        {
-            InitializeComponent();
-        }
+	public partial class Form1 : Form
+	{
+		public Form1()
+		{
+			InitializeComponent();
+		}
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
+		private void Form1_Load(object sender, EventArgs e)
+		{
 
-            RichTextBoxTarget target = new RichTextBoxTarget();
-            target.Layout = "${date:format=HH\\:MM\\:ss} ${logger} ${message}";
-            target.ControlName = "richTextBox1";
-            target.FormName = "Form1";
-            target.UseDefaultRowColoringRules = false;
-            target.RowColoringRules.Add(
-                    new RichTextBoxRowColoringRule(
-                        "level >= LogLevel.Error and contains(message,'serious')", // condition
-                        "White", // font color
-                        "Red", // background color
-                        FontStyle.Bold | FontStyle.Italic
-                        )
-                    );
+			RichTextBoxTarget target = new RichTextBoxTarget();
+			target.Layout = "${date:format=HH\\:MM\\:ss} ${logger} ${message}";
+			target.ControlName = "richTextBox1";
+			target.FormName = "Form1";
+			target.UseDefaultRowColoringRules = false;
+			target.RowColoringRules.Add(
+					new RichTextBoxRowColoringRule(
+						"level >= LogLevel.Error and contains(message,'serious')", // condition
+						"White", // font color
+						"Red", // background color
+						FontStyle.Bold | FontStyle.Italic
+						)
+					);
 
-            NLog.Config.SimpleConfigurator.ConfigureForTargetLogging(target, LogLevel.Trace);
+			NLog.Config.SimpleConfigurator.ConfigureForTargetLogging(target, LogLevel.Trace);
 
-            Logger logger = LogManager.GetLogger("Example");
-            logger.Trace("trace log message");
-            logger.Debug("debug log message");
-            logger.Info("info log message");
-            logger.Warn("warn log message");
-            logger.Error("error log message");
-            logger.Fatal("fatal log message");
-            logger.Fatal("fatal log message, rather serious");
-        }
-    }
+			Logger logger = LogManager.GetLogger("Example");
+			logger.Trace("trace log message");
+			logger.Debug("debug log message");
+			logger.Info("info log message");
+			logger.Warn("warn log message");
+			logger.Error("error log message");
+			logger.Fatal("fatal log message");
+			logger.Fatal("fatal log message, rather serious");
+		}
+	}
 }

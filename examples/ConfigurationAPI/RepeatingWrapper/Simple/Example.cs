@@ -7,18 +7,18 @@ using System.Diagnostics;
 
 class Example
 {
-    static void Main(string[] args)
-    {
-        FileTarget wrappedTarget = new FileTarget();
-        wrappedTarget.FileName = "${basedir}/file.txt";
+	static void Main(string[] args)
+	{
+		FileTarget wrappedTarget = new FileTarget();
+		wrappedTarget.FileName = "${basedir}/file.txt";
 
-        RepeatingTargetWrapper target = new RepeatingTargetWrapper();
-        target.WrappedTarget = wrappedTarget;
-        target.RepeatCount = 3;
+		RepeatingTargetWrapper target = new RepeatingTargetWrapper();
+		target.WrappedTarget = wrappedTarget;
+		target.RepeatCount = 3;
 
-        NLog.Config.SimpleConfigurator.ConfigureForTargetLogging(target, LogLevel.Debug);
+		NLog.Config.SimpleConfigurator.ConfigureForTargetLogging(target, LogLevel.Debug);
 
-        Logger logger = LogManager.GetLogger("Example");
-        logger.Debug("log message");
-    }
+		Logger logger = LogManager.GetLogger("Example");
+		logger.Debug("log message");
+	}
 }

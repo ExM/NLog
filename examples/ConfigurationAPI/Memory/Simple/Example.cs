@@ -5,19 +5,19 @@ using NLog.Targets;
 
 class Example
 {
-    static void Main(string[] args)
-    {
-        MemoryTarget target = new MemoryTarget();
-        target.Layout = "${message}";
+	static void Main(string[] args)
+	{
+		MemoryTarget target = new MemoryTarget();
+		target.Layout = "${message}";
 
-        NLog.Config.SimpleConfigurator.ConfigureForTargetLogging(target, LogLevel.Debug);
+		NLog.Config.SimpleConfigurator.ConfigureForTargetLogging(target, LogLevel.Debug);
 
-        Logger logger = LogManager.GetLogger("Example");
-        logger.Debug("log message");
+		Logger logger = LogManager.GetLogger("Example");
+		logger.Debug("log message");
 
-        foreach (string s in target.Logs)
-        {
-            Console.Write("logged: {0}", s);
-        }
-    }
+		foreach (string s in target.Logs)
+		{
+			Console.Write("logged: {0}", s);
+		}
+	}
 }
