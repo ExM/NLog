@@ -9,4 +9,5 @@ test-results/
 TestResult.xml
 *.VisualState.xml
 bin/
+*.resources
 
