@@ -1081,8 +1081,9 @@ namespace NLog.Targets
 		/// </summary>
 		/// <param name="fileName">name of file</param>
 		/// <param name="allowConcurrentWrite">If set to <c>true</c> allow concurrent writes.</param>
+		/// <param name="shareFile">If set to <c>true</c> allow write to the file to other processes.</param>
 		/// <returns>A <see cref="FileStream"/> object which can be used to write to the file.</returns>
-		public FileStream CreateFileStream(string fileName, bool allowConcurrentWrite)
+		public FileStream CreateFileStream(string fileName, bool allowConcurrentWrite, bool shareFile)
 		{
 			int currentDelay = ConcurrentWriteAttemptDelay;
 
@@ -1093,7 +1094,7 @@ namespace NLog.Targets
 				{
 					try
 					{
-						return this.TryCreateFileStream(fileName, allowConcurrentWrite);
+						return this.TryCreateFileStream(fileName, shareFile);
 					}
 					catch (DirectoryNotFoundException)
 					{
@@ -1101,7 +1102,7 @@ namespace NLog.Targets
 							throw;
 
 						Directory.CreateDirectory(Path.GetDirectoryName(fileName));
-						return this.TryCreateFileStream(fileName, allowConcurrentWrite);
+						return this.TryCreateFileStream(fileName, shareFile);
 					}
 				}
 				catch (IOException)
@@ -1123,11 +1124,11 @@ namespace NLog.Targets
 		/// Create the file stream.
 		/// </summary>
 		/// <param name="fileName">name of file</param>
-		/// <param name="allowConcurrentWrite">If set to <c>true</c> allow concurrent writes.</param>
+		/// <param name="shareFile">If set to <c>true</c> allow write to the file to other processes.</param>
 		/// <returns>A <see cref="FileStream"/> object which can be used to write to the file.</returns>
-		protected virtual FileStream TryCreateFileStream(string fileName, bool allowConcurrentWrite)
+		protected virtual FileStream TryCreateFileStream(string fileName, bool shareFile)
 		{
-			FileShare fileShare = allowConcurrentWrite ? FileShare.ReadWrite : FileShare.Read;
+			FileShare fileShare = shareFile ? FileShare.ReadWrite : FileShare.Read;
 
 			if (EnableFileDelete && Platform.CurrentOS != PlatformID.Win32Windows)
 				fileShare |= FileShare.Delete;

@@ -20,7 +20,7 @@ namespace NLog.Internal.FileAppenders
 		public SingleProcessFileAppender(string fileName, FileTarget target)
 			: base(fileName)
 		{
-			this.file = target.CreateFileStream(fileName, false);
+			this.file = target.CreateFileStream(fileName, false, false);
 		}
 
 		/// <summary>

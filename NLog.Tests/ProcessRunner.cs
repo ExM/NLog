@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using Microsoft.CSharp;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace NLog.UnitTests
 {
@@ -49,10 +50,12 @@ class C1
 		}
 	}
 }";
-			CSharpCodeProvider provider = new CSharpCodeProvider();
+			CSharpCodeProvider provider = new CSharpCodeProvider(new Dictionary<string, string>() { { "CompilerVersion", "v3.5" } });
 			var options = new CompilerParameters();
 			options.OutputAssembly = "Runner.exe";
 			options.GenerateExecutable = true;
+			options.ReferencedAssemblies.Add("System.dll");
+			options.ReferencedAssemblies.Add("System.Core.dll");
 			options.IncludeDebugInformation = true;
 			var results = provider.CompileAssemblyFromSource(options, sourceCode);
 			Assert.IsFalse(results.Errors.HasWarnings);

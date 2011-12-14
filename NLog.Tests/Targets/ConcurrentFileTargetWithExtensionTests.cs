@@ -16,11 +16,25 @@ using System.CodeDom.Compiler;
 namespace NLog.UnitTests.Targets
 {
 	[TestFixture]
-	public class ConcurrentFileTargetTests : NLogTestBase
+	public class ConcurrentFileTargetWithExtensionTests : NLogTestBase
 	{
 		[TestFixtureSetUp]
 		public void CheckDll()
 		{
+			if (Platform.CurrentOS == PlatformID.Win32NT)
+			{
+				if (!File.Exists("NLog.WinTraits.dll"))
+					Assert.Ignore("file NLog.WinTraits.dll not found");
+			}
+			else if (Platform.CurrentOS == PlatformID.Unix)
+			{
+				if (!File.Exists("NLog.UnixTraits.dll"))
+					Assert.Ignore("file NLog.UnixTraits.dll not found");
+			}
+			else
+				Assert.Ignore("unexpected OS: {0}", Platform.CurrentOS);
+
+
 			if (File.Exists("Runner.exe"))
 				File.Delete("Runner.exe");
 			CompileRunner();
@@ -100,7 +114,7 @@ class C1
 			return proc;
 		}
 
-		private void DoConcurrentTest(int numProcesses, int numLogs, string mode)
+		private void DoConcurrentTest(int numProcesses, int numLogs)
 		{
 			string logFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "file.txt");
 
@@ -151,26 +165,19 @@ class C1
 			}
 		}
 
-		string _defaultCfgContent =
+		string _cfgFrmContent =
 @"<configuration>
 	<configSections>
 		<section name='nlog' type='NLog.Config.ConfigSectionHandler, NLog'/>
 	</configSections>
 	<nlog throwExceptions='true' internalLogLevel='Trace' internalLogToConsole='true' >
 		<extensions>
-			<!--add platform='Win32NT' assemblyFile='NLog.WinTraits.dll' /-->
-			<!--add platform='Unix' assemblyFile='NLog.UnixTraits.dll' /-->
+			<add platform='Win32NT' assemblyFile='NLog.WinTraits.dll' />
+			<add platform='Unix' assemblyFile='NLog.UnixTraits.dll' />
 		</extensions>
 
 		<targets>
-			<target name='t' type='File'
-				fileName='${basedir}/file.txt'
-				layout='${threadname} ${message}'
-				keepFileOpen='true'
-				openFileCacheTimeout='10'
-				openFileCacheSize='1'
-				lineEnding='LF'
-				concurrentWrites='true'/>
+{0}
 		</targets>
 
 		<rules>
@@ -179,15 +186,99 @@ class C1
 	</nlog>
 </configuration>";
 
-		[Test]
-		public void SimpleConcurrentTest()
+		private void ConfigEnvironment(string targets, Action action)
 		{
-			File.WriteAllText("Runner.exe.config", _defaultCfgContent);
-
-			DoConcurrentTest(2, 1000, "none");
-			//More processes requires an increase in the number attempts to write.
-
+			File.WriteAllText("Runner.exe.config", string.Format(_cfgFrmContent, targets));
+			action();
 			File.Delete("Runner.exe.config");
+		}
+
+
+		[Test]
+		public void SimpleConcurrentTest_2_10000()
+		{
+			SimpleConcurrentTest(2, 10000);
+		}
+
+		[Test]
+		public void SimpleConcurrentTest_5_4000()
+		{
+			SimpleConcurrentTest(5, 4000);
+		}
+
+		[Test]
+		public void SimpleConcurrentTest_10_2000()
+		{
+			SimpleConcurrentTest(10, 2000);
+		}
+
+		public void SimpleConcurrentTest(int numProcesses, int numLogs)
+		{
+			string target = @"
+			<target name='t' type='File'
+				fileName='${basedir}/file.txt'
+				layout='${threadname} ${message}'
+				keepFileOpen='true'
+				openFileCacheTimeout='10'
+				openFileCacheSize='1'
+				lineEnding='LF'
+				concurrentWrites='true'/>";
+
+			ConfigEnvironment(target, () => DoConcurrentTest(numProcesses, numLogs));
+		}
+
+		[Test]
+		public void AsyncConcurrentTest()
+		{
+			string target = @"
+			<target name='t' type='AsyncWrapper' queueLimit='10' overflowAction='Grow'>
+				<target type='File'
+					fileName='${basedir}/file.txt'
+					layout='${threadname} ${message}'
+					keepFileOpen='true'
+					openFileCacheTimeout='10'
+					openFileCacheSize='1'
+					lineEnding='LF'
+					concurrentWrites='true'/>
+			</target>";
+
+			ConfigEnvironment(target, () => DoConcurrentTest(2, 1000));
+		}
+		
+		[Test]
+		public void BufferedConcurrentTest()
+		{
+			string target = @"
+			<target name='t' type='BufferingWrapper' bufferSize='10'>
+				<target type='File'
+					fileName='${basedir}/file.txt'
+					layout='${threadname} ${message}'
+					keepFileOpen='true'
+					openFileCacheTimeout='10'
+					openFileCacheSize='1'
+					lineEnding='LF'
+					concurrentWrites='true'/>
+			</target>";
+
+			ConfigEnvironment(target, () => DoConcurrentTest(2, 100));
+		}
+
+		[Test]
+		public void BufferedTimedFlushConcurrentTest()
+		{
+			string target = @"
+			<target name='t' type='BufferingWrapper' bufferSize='100' flushTimeout='10'>
+				<target type='File'
+					fileName='${basedir}/file.txt'
+					layout='${threadname} ${message}'
+					keepFileOpen='true'
+					openFileCacheTimeout='10'
+					openFileCacheSize='1'
+					lineEnding='LF'
+					concurrentWrites='true'/>
+			</target>";
+
+			ConfigEnvironment(target, () => DoConcurrentTest(2, 1000));
 		}
 	}
 }

@@ -34,7 +34,7 @@ namespace NLog.Internal.FileAppenders
 				this.currentFileLength = 0;
 			}
 
-			this.file = target.CreateFileStream(fileName, false);
+			this.file = target.CreateFileStream(fileName, false, false);
 		}
 
 		/// <summary>

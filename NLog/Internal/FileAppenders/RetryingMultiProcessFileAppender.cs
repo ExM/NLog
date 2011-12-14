@@ -29,7 +29,7 @@ namespace NLog.Internal.FileAppenders
 		/// <param name="bytes">The bytes.</param>
 		public override void Write(byte[] bytes)
 		{
-			using (FileStream fileStream = _target.CreateFileStream(FileName, false))
+			using (FileStream fileStream = _target.CreateFileStream(FileName, true, false))
 			{
 				fileStream.Write(bytes, 0, bytes.Length);
 			}

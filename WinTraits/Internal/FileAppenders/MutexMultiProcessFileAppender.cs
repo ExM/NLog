@@ -34,7 +34,7 @@ namespace NLog.Internal.FileAppenders
 			try
 			{
 				this.mutex = new Mutex(false, GetMutexName(fileName));
-				this.file = target.CreateFileStream(fileName, true);
+				this.file = target.CreateFileStream(fileName, true, true);
 			}
 			catch
 			{
