@@ -91,7 +91,7 @@ class C1
 			Assert.IsFalse(results.Errors.HasErrors);
 		}
 
-		public static Process Run(int procNum, int numLogs)
+		public static Process Run(int procNum, int numLogs, LineCollection coll)
 		{
 			Process proc = new Process();
 			proc.StartInfo.Arguments = string.Format("{0} {1}", procNum, numLogs);
@@ -106,10 +106,7 @@ class C1
 			proc.Start();
 
 			proc.BeginOutputReadLine();
-			proc.OutputDataReceived += (s, e) =>
-			{
-				Console.WriteLine("Process {0}: `{1}'", procNum, e.Data);
-			};
+			proc.OutputDataReceived += (s, e) => coll.AppendLine("Process {0}: `{1}'", procNum, e.Data);
 			
 			return proc;
 		}
@@ -118,34 +115,39 @@ class C1
 		{
 			string logFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "file.txt");
 
-			if (File.Exists(logFile))
+			if(File.Exists(logFile))
 				File.Delete(logFile);
 
+			LineCollection coll = new LineCollection();
 			Process[] processes = new Process[numProcesses];
 
-			for (int i = 0; i < numProcesses; ++i)
-			{
-				processes[i] = Run(i, numLogs);
-			}
+			for(int i = 0; i < numProcesses; ++i)
+				processes[i] = Run(i, numLogs, coll);
 			
-			for (int i = 0; i < numProcesses; ++i)
+			bool errorFound = false;
+			
+			for(int i = 0; i < numProcesses; ++i)
 			{
 				processes[i].WaitForExit();
-				if (processes[i].ExitCode != 0)
-				{
-					Assert.Fail("Runner returned with an error.");
-				}
+				if(processes[i].ExitCode != 0)
+					errorFound = true;
 				processes[i].Dispose();
 				processes[i] = null;
+			}
+			
+			if(errorFound)
+			{
+				Console.WriteLine(coll.BuildLines());
+				Assert.Fail("Runner returned with an error.");
 			}
 
 			int[] maxNumber = new int[numProcesses];
 
-			using (StreamReader sr = File.OpenText(logFile))
+			using(StreamReader sr = File.OpenText(logFile))
 			{
 				string line;
 
-				while ((line = sr.ReadLine()) != null)
+				while((line = sr.ReadLine()) != null)
 				{
 					string[] tokens = line.Split(' ');
 					Assert.AreEqual(2, tokens.Length, "invalid output line: '" + line + "' expected two numbers.");
@@ -157,7 +159,7 @@ class C1
 						Assert.AreEqual(maxNumber[thread], number);
 						maxNumber[thread]++;
 					}
-					catch (Exception ex)
+					catch(Exception ex)
 					{
 						throw new InvalidOperationException("Error when parsing line '" + line + "'", ex);
 					}

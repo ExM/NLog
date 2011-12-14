@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -125,7 +125,6 @@
     <Compile Include="LoggerTests.cs" />
     <Compile Include="LogLevelTests.cs" />
     <Compile Include="LogManagerTests.cs" />
-    <Compile Include="NLogTestBase.cs" />
     <Compile Include="NLogTraceListenerTests.cs" />
     <Compile Include="ProcessRunner.cs" />
     <Compile Include="RegressionTests.cs" />
@@ -133,6 +132,8 @@
     <Compile Include="ThCulture.cs" />
     <Compile Include="LayoutRenderers\ProcessInfoTests.cs" />
     <Compile Include="LayoutRenderers\GarbageCollectorTests.cs" />
+    <Compile Include="NLogTestBase.cs" />
+    <Compile Include="LineCollection.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ConfigFiles\included.nlog" />
