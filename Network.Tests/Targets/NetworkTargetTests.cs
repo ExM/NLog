@@ -10,6 +10,7 @@ using NLog.Common;
 using NLog.Config;
 using NLog.Internal.NetworkSenders;
 using NLog.Targets;
+using NLog.Common.NetworkSenders;
 
 namespace NLog.UnitTests.Targets
 {

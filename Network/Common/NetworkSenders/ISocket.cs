@@ -1,11 +1,11 @@
 using System.Net.Sockets;
 
-namespace NLog.Internal.NetworkSenders
+namespace NLog.Common.NetworkSenders
 {
 	/// <summary>
 	/// Interface for mocking socket calls.
 	/// </summary>
-	public interface ISocket //TODO: change namespace
+	public interface ISocket
 	{
 		bool ConnectAsync(SocketAsyncEventArgs args);
 

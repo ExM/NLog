@@ -104,7 +104,7 @@
     <Compile Include="Internal\ObjectGraph.cs" />
     <Compile Include="Internal\CurrentTimeGetter.cs" />
     <Compile Include="Internal\DictionaryAdapter.cs" />
-    <Compile Include="Internal\ExceptionHelper.cs" />
+    <Compile Include="Common\ExceptionHelper.cs" />
     <Compile Include="Internal\FactoryHelper.cs" />
     <Compile Include="Internal\FileAppenders\BaseFileAppender.cs" />
     <Compile Include="Internal\FileAppenders\CountingSingleProcessFileAppender.cs" />

@@ -2,12 +2,12 @@ using System;
 using System.Net;
 using System.Net.Mail;
 
-namespace NLog.Internal
+namespace NLog.Common
 {
 	/// <summary>
 	/// Supports mocking of SMTP Client code.
 	/// </summary>
-	public interface ISmtpClient : IDisposable //TODO: change namespace
+	public interface ISmtpClient : IDisposable
 	{
 		string Host { get; set; }
 

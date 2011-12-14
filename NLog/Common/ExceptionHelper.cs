@@ -1,12 +1,12 @@
 using System;
 using System.Threading;
 
-namespace NLog.Internal
+namespace NLog.Common
 {
 	/// <summary>
 	/// Helper class for dealing with exceptions.
 	/// </summary>
-	public static class ExceptionHelper //TODO: change namespace
+	public static class ExceptionHelper
 	{
 		/// <summary>
 		/// Determines whether the exception must be rethrown.

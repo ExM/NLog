@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
-using NLog.Common;
+using NLog.Internal.NetworkSenders;
 
-namespace NLog.Internal.NetworkSenders
+namespace NLog.Common.NetworkSenders
 {
 	/// <summary>
 	/// Sends messages over a TCP network connection.
 	/// </summary>
-	public class TcpNetworkSender : NetworkSender //TODO: change namespace
+	public class TcpNetworkSender : NetworkSender
 	{
 		private readonly Queue<SocketAsyncEventArgs> pendingRequests = new Queue<SocketAsyncEventArgs>();
 

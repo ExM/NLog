@@ -49,17 +49,17 @@
     <Compile Include="LayoutRenderers\Log4JXmlEventLayoutRenderer.cs" />
     <Compile Include="Layouts\Log4JXmlEventLayout.cs" />
     <Compile Include="Internal\ThreadIDHelper.cs" />
-    <Compile Include="Internal\NetworkSenders\HttpNetworkSender.cs" />
-    <Compile Include="Internal\NetworkSenders\INetworkSenderFactory.cs" />
-    <Compile Include="Internal\NetworkSenders\ISocket.cs" />
-    <Compile Include="Internal\NetworkSenders\NetworkSender.cs" />
-    <Compile Include="Internal\NetworkSenders\NetworkSenderFactory.cs" />
+    <Compile Include="Common\NetworkSenders\HttpNetworkSender.cs" />
+    <Compile Include="Common\NetworkSenders\INetworkSenderFactory.cs" />
+    <Compile Include="Common\NetworkSenders\ISocket.cs" />
+    <Compile Include="Common\NetworkSenders\NetworkSender.cs" />
+    <Compile Include="Common\NetworkSenders\NetworkSenderFactory.cs" />
     <Compile Include="Internal\NetworkSenders\SocketProxy.cs" />
-    <Compile Include="Internal\NetworkSenders\TcpNetworkSender.cs" />
-    <Compile Include="Internal\NetworkSenders\UdpNetworkSender.cs" />
+    <Compile Include="Common\NetworkSenders\TcpNetworkSender.cs" />
+    <Compile Include="Common\NetworkSenders\UdpNetworkSender.cs" />
     <Compile Include="Internal\UrlHelper.cs" />
     <Compile Include="Internal\SortHelpers.cs" />
-    <Compile Include="Internal\ISmtpClient.cs" />
+    <Compile Include="Common\ISmtpClient.cs" />
     <Compile Include="Internal\MySmtpClient.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

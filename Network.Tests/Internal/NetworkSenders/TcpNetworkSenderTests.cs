@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using NUnit.Framework;
+using NLog.Common.NetworkSenders;
 using NLog.Internal.NetworkSenders;
 
 namespace NLog.UnitTests.Internal.NetworkSenders

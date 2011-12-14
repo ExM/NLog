@@ -2,9 +2,9 @@ using System;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using NLog.Common;
+using NLog.Internal.NetworkSenders;
 
-namespace NLog.Internal.NetworkSenders
+namespace NLog.Common.NetworkSenders
 {
 	/// <summary>
 	/// Sends messages over the network as UDP datagrams.

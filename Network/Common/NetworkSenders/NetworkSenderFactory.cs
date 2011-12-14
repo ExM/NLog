@@ -2,9 +2,8 @@ using System;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using NLog.Common;
 
-namespace NLog.Internal.NetworkSenders
+namespace NLog.Common.NetworkSenders
 {
 	/// <summary>
 	/// Default implementation of <see cref="INetworkSenderFactory"/>.

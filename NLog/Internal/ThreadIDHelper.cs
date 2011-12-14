@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Threading;
 using System;
 using System.IO;
+using NLog.Common;
 
 namespace NLog.Internal
 {

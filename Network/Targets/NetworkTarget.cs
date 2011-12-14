@@ -6,6 +6,7 @@ using System.Threading;
 using NLog.Common;
 using NLog.Internal.NetworkSenders;
 using NLog.Layouts;
+using NLog.Common.NetworkSenders;
 
 namespace NLog.Targets
 {

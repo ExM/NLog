@@ -3,15 +3,14 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using NLog.Common;
 
-namespace NLog.Internal.NetworkSenders
+namespace NLog.Common.NetworkSenders
 {
 	/// <summary>
 	/// A base class for all network senders. Supports one-way sending of messages
 	/// over various protocols.
 	/// </summary>
-	public abstract class NetworkSender : IDisposable //TODO: change namespace
+	public abstract class NetworkSender : IDisposable
 	{
 		private static int currentSendTime;
 

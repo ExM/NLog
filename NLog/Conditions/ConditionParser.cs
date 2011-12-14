@@ -4,6 +4,7 @@ using System.Globalization;
 using NLog.Config;
 using NLog.Internal;
 using NLog.Layouts;
+using NLog.Common;
 
 namespace NLog.Conditions
 {

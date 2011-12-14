@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.Win32;
 using NLog.Config;
 using NLog.Internal;
+using NLog.Common;
 
 namespace NLog.LayoutRenderers
 {

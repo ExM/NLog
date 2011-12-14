@@ -1,6 +1,7 @@
 using System;
 using System.Net.Sockets;
 using System.Security;
+using NLog.Common.NetworkSenders;
 
 namespace NLog.Internal.NetworkSenders
 {
