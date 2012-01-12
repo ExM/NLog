@@ -131,7 +131,7 @@ namespace NLog.Common.NetworkSenders
 		/// <param name="uri">The URI to parse.</param>
 		/// <param name="addressFamily">The address family.</param>
 		/// <returns>Parsed endpoint.</returns>
-		protected virtual EndPoint ParseEndpointAddress(Uri uri, AddressFamily addressFamily)
+		protected virtual IPEndPoint ParseEndpointAddress(Uri uri, AddressFamily addressFamily)
 		{
 			switch (uri.HostNameType)
 			{

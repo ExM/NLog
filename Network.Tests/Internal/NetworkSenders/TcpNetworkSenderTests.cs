@@ -238,10 +238,10 @@ close
 				return new MockSocket(addressFamily, socketType, protocolType, this);
 			}
 
-			protected override EndPoint ParseEndpointAddress(Uri uri, AddressFamily addressFamily)
+			protected override IPEndPoint ParseEndpointAddress(Uri uri, AddressFamily addressFamily)
 			{
 				this.Log.WriteLine("Parse endpoint address {0} {1}", uri, addressFamily);
-				return new MockEndPoint(uri);
+				return base.ParseEndpointAddress(uri, addressFamily);
 			}
 
 			public int ConnectFailure { get; set; }

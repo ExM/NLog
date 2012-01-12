@@ -11,8 +11,8 @@ namespace NLog.Common.NetworkSenders
 	/// </summary>
 	internal class UdpNetworkSender : NetworkSender
 	{
-		private ISocket socket;
-		private EndPoint endpoint;
+		private UdpClient _client;
+		private IPEndPoint _endpoint;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UdpNetworkSender"/> class.
@@ -22,30 +22,19 @@ namespace NLog.Common.NetworkSenders
 		public UdpNetworkSender(string url, AddressFamily addressFamily)
 			: base(url)
 		{
-			this.AddressFamily = addressFamily;
+			AddressFamily = addressFamily;
 		}
 
 		internal AddressFamily AddressFamily { get; set; }
-
-		/// <summary>
-		/// Creates the socket.
-		/// </summary>
-		/// <param name="addressFamily">The address family.</param>
-		/// <param name="socketType">Type of the socket.</param>
-		/// <param name="protocolType">Type of the protocol.</param>
-		/// <returns>Implementation of <see cref="ISocket"/> to use.</returns>
-		protected internal virtual ISocket CreateSocket(AddressFamily addressFamily, SocketType socketType, ProtocolType protocolType)
-		{
-			return new SocketProxy(addressFamily, socketType, protocolType);
-		}
 
 		/// <summary>
 		/// Performs sender-specific initialization.
 		/// </summary>
 		protected override void DoInitialize()
 		{
-			this.endpoint = this.ParseEndpointAddress(new Uri(this.Address), this.AddressFamily);
-			this.socket = this.CreateSocket(this.endpoint.AddressFamily, SocketType.Dgram, ProtocolType.Udp);
+			_endpoint = ParseEndpointAddress(new Uri(Address), AddressFamily);
+			_client = new UdpClient();
+			_client.Connect(_endpoint);
 		}
 
 		/// <summary>
@@ -54,25 +43,26 @@ namespace NLog.Common.NetworkSenders
 		/// <param name="continuation">The continuation.</param>
 		protected override void DoClose(Action<Exception> continuation)
 		{
+			Exception resultEx = null;
+
 			lock (this)
 			{
 				try
 				{
-					if (this.socket != null)
-					{
-						this.socket.Close();
-					}
+					if (_client != null)
+						_client.Close();
 				}
 				catch (Exception exception)
 				{
-					if (exception.MustBeRethrown())
-					{
+					if(exception.MustBeRethrown())
 						throw;
-					}
+					resultEx = exception;
 				}
 
-				this.socket = null;
+				_client = null;
 			}
+			if (continuation != null)
+				continuation(resultEx);
 		}
 
 		/// <summary>
@@ -85,37 +75,31 @@ namespace NLog.Common.NetworkSenders
 		/// <remarks>To be overridden in inheriting classes.</remarks>
 		protected override void DoSend(byte[] bytes, int offset, int length, Action<Exception> asyncContinuation)
 		{
+			byte[] copy = new byte[length];
+			Array.Copy(bytes, offset, copy, 0, length);
+
 			lock (this)
 			{
-				var args = new SocketAsyncEventArgs();
-				args.SetBuffer(bytes, offset, length);
-				args.UserToken = asyncContinuation;
-				args.Completed += this.SocketOperationCompleted;
-				args.RemoteEndPoint = this.endpoint;
+				UdpClient clientCopy = _client;
 
-				if (!this.socket.SendToAsync(args))
+				Console.WriteLine("BeginSend");
+				clientCopy.BeginSend(copy, length, _endpoint, (ar) =>
 				{
-					this.SocketOperationCompleted(this.socket, args);
-				}
-			}
-		}
-
-		private void SocketOperationCompleted(object sender, SocketAsyncEventArgs e)
-		{
-			var asyncContinuation = e.UserToken as Action<Exception>;
-
-			Exception error = null;
-
-			if (e.SocketError != SocketError.Success)
-			{
-				error = new IOException("Error: " + e.SocketError);
-			}
-
-			e.Dispose();
-
-			if (asyncContinuation != null)
-			{
-				asyncContinuation(error);
+					Console.WriteLine("EndSend");
+					Exception resultEx = null;
+					try
+					{
+						clientCopy.EndSend(ar);
+					}
+					catch (Exception exception)
+					{
+						if (exception.MustBeRethrown())
+							throw;
+						resultEx = exception;
+					}
+					if(asyncContinuation != null)
+						asyncContinuation(resultEx);
+				}, null);
 			}
 		}
 	}
