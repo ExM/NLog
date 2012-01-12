@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -37,6 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Common\NetworkSenders\UdpNetworkSender.Ticket.cs" />
     <Compile Include="Targets\MailTarget.cs" />
     <Compile Include="Targets\NetworkTarget.cs" />
     <Compile Include="Targets\NetworkTargetOverflowAction.cs" />
@@ -65,7 +66,7 @@
   <ItemGroup>
     <ProjectReference Include="..\NLog\NLog.csproj">
       <Project>{CB8BE551-CB33-44A6-B793-1B266862EB25}</Project>
-      <Name>NLog</Name>
+      <Name>NLog %28NLog\NLog%29</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
