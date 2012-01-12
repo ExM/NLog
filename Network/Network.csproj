@@ -37,7 +37,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Common\NetworkSenders\UdpNetworkSender.Ticket.cs" />
     <Compile Include="Targets\MailTarget.cs" />
     <Compile Include="Targets\NetworkTarget.cs" />
     <Compile Include="Targets\NetworkTargetOverflowAction.cs" />

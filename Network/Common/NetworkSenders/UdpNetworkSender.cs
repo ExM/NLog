@@ -10,7 +10,7 @@ namespace NLog.Common.NetworkSenders
 	/// <summary>
 	/// Sends messages over the network as UDP datagrams.
 	/// </summary>
-	internal partial class UdpNetworkSender : NetworkSender
+	internal class UdpNetworkSender : NetworkSender
 	{
 		private object _sync = new object();
 		private readonly Queue<Ticket> _pendingRequests = new Queue<Ticket>();
@@ -179,6 +179,12 @@ namespace NLog.Common.NetworkSenders
 				continuation(_pendingError);
 
 			ProcessNextQueuedItem();
+		}
+
+		private class Ticket
+		{
+			public byte[] Buffer { get; set; }
+			public Action<Exception> Continuation { get; set; }
 		}
 	}
 }

@@ -14,6 +14,7 @@ namespace NLog.UnitTests.Internal.NetworkSenders
 	[TestFixture]
 	public class TcpNetworkSenderTests : NLogTestBase
 	{
+		/*
 		[Test]
 		public void TcpHappyPathTest()
 		{
@@ -369,5 +370,6 @@ close
 				return "{mock end point: " + this.uri + "}";
 			}
 		}
+		 * */
 	}
 }

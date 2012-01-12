@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using NLog.Internal.NetworkSenders;
+using System.Net;
 
 namespace NLog.Common.NetworkSenders
 {
@@ -11,13 +12,17 @@ namespace NLog.Common.NetworkSenders
 	/// </summary>
 	public class TcpNetworkSender : NetworkSender
 	{
-		private readonly Queue<SocketAsyncEventArgs> pendingRequests = new Queue<SocketAsyncEventArgs>();
+		private readonly Queue<Ticket> _pendingRequests = new Queue<Ticket>();
 
-		private ISocket socket;
-		private Exception pendingError;
-		private bool asyncOperationInProgress;
-		private Action<Exception> closeContinuation;
-		private Action<Exception> flushContinuation;
+		private object _sync = new object();
+
+		private TcpClient _client;
+		private NetworkStream _netStream;
+
+		private Exception _pendingError;
+		private bool _asyncOperationInProgress;
+		private Action<Exception> _closeContinuation;
+		private Action<Exception> _flushContinuation;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TcpNetworkSender"/> class.
@@ -27,7 +32,7 @@ namespace NLog.Common.NetworkSenders
 		public TcpNetworkSender(string url, AddressFamily addressFamily)
 			: base(url)
 		{
-			this.AddressFamily = addressFamily;
+			AddressFamily = addressFamily;
 		}
 
 		internal AddressFamily AddressFamily { get; set; }
@@ -49,18 +54,32 @@ namespace NLog.Common.NetworkSenders
 		/// </summary>
 		protected override void DoInitialize()
 		{
-			var args = new MySocketAsyncEventArgs();
-			args.RemoteEndPoint = this.ParseEndpointAddress(new Uri(this.Address), this.AddressFamily);
-			args.Completed += this.SocketOperationCompleted;
-			args.UserToken = null;
+			IPEndPoint ep = ParseEndpointAddress(new Uri(Address), AddressFamily);
+			_client = new TcpClient(ep.AddressFamily);
+			lock (_sync)
+				_asyncOperationInProgress = true;
+			_client.BeginConnect(ep.Address, ep.Port, ConnectCompleted, null);
+		}
 
-			this.socket = this.CreateSocket(args.RemoteEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-			this.asyncOperationInProgress = true;
-
-			if (!this.socket.ConnectAsync(args))
+		private void ConnectCompleted(IAsyncResult ar)
+		{
+			lock (_sync)
 			{
-				this.SocketOperationCompleted(this.socket, args);
+				_asyncOperationInProgress = false;
+				try
+				{
+					_client.EndConnect(ar);
+					_netStream = _client.GetStream();
+				}
+				catch (Exception ex)
+				{
+					if (ex.MustBeRethrown())
+						throw;
+					_pendingError = ex;
+				}
 			}
+
+			ProcessNextQueuedItem();
 		}
 
 		/// <summary>
@@ -69,17 +88,37 @@ namespace NLog.Common.NetworkSenders
 		/// <param name="continuation">The continuation.</param>
 		protected override void DoClose(Action<Exception> continuation)
 		{
-			lock (this)
+			lock (_sync)
 			{
-				if (this.asyncOperationInProgress)
-				{
-					this.closeContinuation = continuation;
-				}
+				if (_asyncOperationInProgress)
+					_closeContinuation += continuation;
 				else
-				{
-					this.CloseSocket(continuation);
-				}
+					CloseSocket(continuation);
 			}
+		}
+
+		private void CloseSocket(Action<Exception> continuation)
+		{
+			Exception resultEx = null;
+
+			lock (_sync)
+			{
+				try
+				{
+					if (_client != null)
+						_client.Close();
+				}
+				catch (Exception exception)
+				{
+					if (exception.MustBeRethrown())
+						throw;
+					resultEx = exception;
+				}
+
+				_client = null;
+			}
+			if (continuation != null)
+				continuation(resultEx);
 		}
 
 		/// <summary>
@@ -88,16 +127,12 @@ namespace NLog.Common.NetworkSenders
 		/// <param name="continuation">The continuation.</param>
 		protected override void DoFlush(Action<Exception> continuation)
 		{
-			lock (this)
+			lock (_sync)
 			{
-				if (!this.asyncOperationInProgress && this.pendingRequests.Count == 0)
-				{
+				if (!_asyncOperationInProgress && _pendingRequests.Count == 0)
 					continuation(null);
-				}
 				else
-				{
-					this.flushContinuation = continuation;
-				}
+					_flushContinuation += continuation;
 			}
 		}
 
@@ -111,129 +146,81 @@ namespace NLog.Common.NetworkSenders
 		/// <remarks>To be overridden in inheriting classes.</remarks>
 		protected override void DoSend(byte[] bytes, int offset, int length, Action<Exception> asyncContinuation)
 		{
-			var args = new MySocketAsyncEventArgs();
-			args.SetBuffer(bytes, offset, length);
-			args.UserToken = asyncContinuation;
-			args.Completed += this.SocketOperationCompleted;
+			var ticket = new Ticket() { Buffer = bytes, Offset = offset, Length = length, Continuation = asyncContinuation };
 
-			lock (this)
-			{
-				this.pendingRequests.Enqueue(args);
-			}
+			lock (_sync)
+				_pendingRequests.Enqueue(ticket);
 
-			this.ProcessNextQueuedItem();
+			ProcessNextQueuedItem();
 		}
 
-		private void CloseSocket(Action<Exception> continuation)
+		private void WriteCompleted(Action<Exception> continuation, IAsyncResult ar)
 		{
-			try
+			lock (_sync)
 			{
-				var sock = this.socket;
-				this.socket = null;
-
-				if (sock != null)
+				_asyncOperationInProgress = false;
+				try
 				{
-					sock.Close();
+					_netStream.EndWrite(ar);
 				}
-
-				continuation(null);
-			}
-			catch (Exception exception)
-			{
-				if (exception.MustBeRethrown())
+				catch (Exception ex)
 				{
-					throw;
-				}
-
-				continuation(exception);
-			}
-		}
-
-		private void SocketOperationCompleted(object sender, SocketAsyncEventArgs e)
-		{
-			lock (this)
-			{
-				this.asyncOperationInProgress = false;
-				var asyncContinuation = e.UserToken as Action<Exception>;
-
-				if (e.SocketError != SocketError.Success)
-				{
-					this.pendingError = new IOException("Error: " + e.SocketError);
-				}
-
-				e.Dispose();
-
-				if (asyncContinuation != null)
-				{
-					asyncContinuation(this.pendingError);
+					if (ex.MustBeRethrown())
+						throw;
+					_pendingError = ex;
 				}
 			}
 
-			this.ProcessNextQueuedItem();
+			if (continuation != null)
+				continuation(_pendingError);
+
+			ProcessNextQueuedItem();
 		}
 
 		private void ProcessNextQueuedItem()
 		{
-			SocketAsyncEventArgs args;
-
-			lock (this)
+			lock (_sync)
 			{
-				if (this.asyncOperationInProgress)
-				{
+				if (_asyncOperationInProgress)
 					return;
-				}
 
-				if (this.pendingError != null)
-				{
-					while (this.pendingRequests.Count != 0)
-					{
-						args = this.pendingRequests.Dequeue();
-						var asyncContinuation = (Action<Exception>)args.UserToken;
-						asyncContinuation(this.pendingError);
-					}
-				}
+				if (_pendingError != null)
+					while (_pendingRequests.Count != 0)
+						_pendingRequests.Dequeue().Continuation(_pendingError);
 
-				if (this.pendingRequests.Count == 0)
+				if (_pendingRequests.Count == 0)
 				{
-					var fc = this.flushContinuation;
+					var fc = _flushContinuation;
 					if (fc != null)
 					{
-						this.flushContinuation = null;
-						fc(this.pendingError);
+						_flushContinuation = null;
+						fc(_pendingError);
 					}
 
-					var cc = this.closeContinuation;
+					var cc = _closeContinuation;
 					if (cc != null)
 					{
-						this.closeContinuation = null;
-						this.CloseSocket(cc);
+						_closeContinuation = null;
+						CloseSocket(cc);
 					}
 
 					return;
 				}
 
-				args = this.pendingRequests.Dequeue();
+				var t = _pendingRequests.Dequeue();
 
-				this.asyncOperationInProgress = true;
-				if (!this.socket.SendAsync(args))
-				{
-					this.SocketOperationCompleted(this.socket, args);
-				}
+				_asyncOperationInProgress = true;
+				_netStream.BeginWrite(t.Buffer, t.Offset, t.Length,
+					(ar) => WriteCompleted(t.Continuation, ar), null);
 			}
 		}
 
-		/// <summary>
-		/// Facilitates mocking of <see cref="SocketAsyncEventArgs"/> class.
-		/// </summary>
-		public class MySocketAsyncEventArgs : SocketAsyncEventArgs
+		private class Ticket
 		{
-			/// <summary>
-			/// Raises the Completed event.
-			/// </summary>
-			public void RaiseCompleted()
-			{
-				this.OnCompleted(this);
-			}
+			public byte[] Buffer { get; set; }
+			public int Offset { get; set; }
+			public int Length { get; set; }
+			public Action<Exception> Continuation { get; set; }
 		}
 	}
 }
