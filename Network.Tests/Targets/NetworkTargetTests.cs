@@ -21,9 +21,10 @@ namespace NLog.UnitTests.Targets
 		public void NetworkTargetHappyPathTest()
 		{
 			var senderFactory = new MySenderFactory();
+
 			var target = new NetworkTarget();
 			target.Address = "tcp://someaddress/";
-			target.SenderFactory = senderFactory;
+			target.SenderCreater = senderFactory.Create;
 			target.Layout = "${message}";
 			target.NewLine = true;
 			target.KeepConnection = true;
@@ -83,7 +84,7 @@ namespace NLog.UnitTests.Targets
 			var senderFactory = new MySenderFactory();
 			var target = new NetworkTarget();
 			target.Address = "tcp://${logger}.company.lan/";
-			target.SenderFactory = senderFactory;
+			target.SenderCreater = senderFactory.Create;
 			target.Layout = "${message}";
 			target.KeepConnection = true;
 			using (target.Initialize(CommonCfg))
@@ -148,7 +149,7 @@ namespace NLog.UnitTests.Targets
 			var senderFactory = new MySenderFactory();
 			var target = new NetworkTarget();
 			target.Address = "tcp://${logger}.company.lan/";
-			target.SenderFactory = senderFactory;
+			target.SenderCreater = senderFactory.Create;
 			target.Layout = "${message}";
 			target.KeepConnection = true;
 			using (target.Initialize(CommonCfg))
@@ -174,7 +175,7 @@ namespace NLog.UnitTests.Targets
 			var senderFactory = new MySenderFactory();
 			var target = new NetworkTarget();
 			target.Address = "tcp://${logger}.company.lan/";
-			target.SenderFactory = senderFactory;
+			target.SenderCreater = senderFactory.Create;
 			target.Layout = "${message}";
 			target.KeepConnection = true;
 			target.ConnectionCacheSize = 2;
@@ -237,7 +238,7 @@ namespace NLog.UnitTests.Targets
 			var senderFactory = new MySenderFactory();
 			var target = new NetworkTarget();
 			target.Address = "tcp://${logger}.company.lan/";
-			target.SenderFactory = senderFactory;
+			target.SenderCreater = senderFactory.Create;
 			target.Layout = "${message}";
 			target.KeepConnection = false;
 			using (target.Initialize(CommonCfg))
@@ -302,7 +303,7 @@ namespace NLog.UnitTests.Targets
 			var senderFactory = new MySenderFactory();
 			var target = new NetworkTarget();
 			target.Address = "tcp://${logger}.company.lan/";
-			target.SenderFactory = senderFactory;
+			target.SenderCreater = senderFactory.Create;
 			target.Layout = "${message}";
 			target.KeepConnection = true;
 			target.MaxMessageSize = 9;
@@ -361,7 +362,7 @@ namespace NLog.UnitTests.Targets
 			var senderFactory = new MySenderFactory();
 			var target = new NetworkTarget();
 			target.Address = "tcp://${logger}.company.lan/";
-			target.SenderFactory = senderFactory;
+			target.SenderCreater = senderFactory.Create;
 			target.Layout = "${message}";
 			target.KeepConnection = true;
 			target.MaxMessageSize = 10;
@@ -413,7 +414,7 @@ namespace NLog.UnitTests.Targets
 			var senderFactory = new MySenderFactory();
 			var target = new NetworkTarget();
 			target.Address = "tcp://${logger}.company.lan/";
-			target.SenderFactory = senderFactory;
+			target.SenderCreater = senderFactory.Create;
 			target.Layout = "${message}";
 			target.KeepConnection = true;
 			target.MaxMessageSize = 10;
@@ -466,7 +467,7 @@ namespace NLog.UnitTests.Targets
 
 			var target = new NetworkTarget();
 			target.Address = "tcp://${logger}.company.lan/";
-			target.SenderFactory = senderFactory;
+			target.SenderCreater = senderFactory.Create;
 			target.Layout = "${message}";
 			target.KeepConnection = true;
 			target.OnOverflow = NetworkTargetOverflowAction.Discard;
@@ -768,7 +769,7 @@ namespace NLog.UnitTests.Targets
 
 			var target = new NetworkTarget();
 			target.Address = "tcp://${logger}.company.lan/";
-			target.SenderFactory = senderFactory;
+			target.SenderCreater = senderFactory.Create;
 			target.Layout = "${message}";
 			target.KeepConnection = false;
 			target.OnOverflow = NetworkTargetOverflowAction.Discard;
@@ -825,7 +826,7 @@ namespace NLog.UnitTests.Targets
 			Assert.AreEqual(expectedLog, senderFactory.Log.ToString());
 		}
 
-		internal class MySenderFactory : INetworkSenderFactory
+		internal class MySenderFactory
 		{
 			internal List<MyNetworkSender> Senders = new List<MyNetworkSender>();
 			internal StringWriter Log = new StringWriter();

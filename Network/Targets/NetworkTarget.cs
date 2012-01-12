@@ -61,7 +61,7 @@ namespace NLog.Targets
 		/// </remarks>
 		public NetworkTarget()
 		{
-			this.SenderFactory = NetworkSenderFactory.Default;
+			this.SenderCreater = NetworkSender.CreateDefaultSender;
 			this.Encoding = Encoding.UTF8;
 			this.OnOverflow = NetworkTargetOverflowAction.Split;
 			this.KeepConnection = true;
@@ -131,7 +131,10 @@ namespace NLog.Targets
 		[DefaultValue("utf-8")]
 		public Encoding Encoding { get; set; }
 
-		public INetworkSenderFactory SenderFactory { get; set; }
+		/// <summary>
+		/// Creates a new instance of the network sender based on a network URL
+		/// </summary>
+		public Func<string, NetworkSender> SenderCreater { get; set; }
 
 		/// <summary>
 		/// Flush any pending log messages asynchronously (in case of asynchronous targets).
@@ -219,7 +222,7 @@ namespace NLog.Targets
 			}
 			else
 			{
-				var sender = this.SenderFactory.Create(address);
+				var sender = SenderCreater(address);
 				sender.Initialize();
 
 				lock (this.openNetworkSenders)
@@ -301,7 +304,7 @@ namespace NLog.Targets
 					}
 				}
 
-				sender = this.SenderFactory.Create(address);
+				sender = SenderCreater(address);
 				sender.Initialize();
 				lock (this.openNetworkSenders)
 				{
