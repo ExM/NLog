@@ -40,9 +40,9 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Targets\MailTargetTests.cs" />
     <Compile Include="Targets\NetworkTargetTests.cs" />
-    <Compile Include="Internal\NetworkSenders\TcpNetworkSenderTests.cs" />
     <Compile Include="RegressionTests.cs" />
     <Compile Include="LayoutRenderers\Log4JXmlTests.cs" />
+    <Compile Include="Common\NetworkSenders\NetworkSenderTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

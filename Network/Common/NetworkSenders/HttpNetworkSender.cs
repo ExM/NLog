@@ -6,7 +6,7 @@ namespace NLog.Common.NetworkSenders
 	/// <summary>
 	/// Network sender which uses HTTP or HTTPS POST.
 	/// </summary>
-	internal class HttpNetworkSender : NetworkSender
+	public class HttpNetworkSender : NetworkSender
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HttpNetworkSender"/> class.

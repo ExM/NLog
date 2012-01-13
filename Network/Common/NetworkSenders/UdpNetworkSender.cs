@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using NLog.Internal.NetworkSenders;
 using System.Collections.Generic;
 
 namespace NLog.Common.NetworkSenders
@@ -10,7 +9,7 @@ namespace NLog.Common.NetworkSenders
 	/// <summary>
 	/// Sends messages over the network as UDP datagrams.
 	/// </summary>
-	internal class UdpNetworkSender : NetworkSender
+	public class UdpNetworkSender : NetworkSender
 	{
 		private object _sync = new object();
 		private readonly Queue<Ticket> _pendingRequests = new Queue<Ticket>();

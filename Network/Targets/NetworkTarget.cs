@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Text;
 using System.Threading;
 using NLog.Common;
-using NLog.Internal.NetworkSenders;
 using NLog.Layouts;
 using NLog.Common.NetworkSenders;
 

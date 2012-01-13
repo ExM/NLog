@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
-using NLog.Internal.NetworkSenders;
 using System.Net;
 
 namespace NLog.Common.NetworkSenders
@@ -36,18 +35,6 @@ namespace NLog.Common.NetworkSenders
 		}
 
 		internal AddressFamily AddressFamily { get; set; }
-
-		/// <summary>
-		/// Creates the socket with given parameters. 
-		/// </summary>
-		/// <param name="addressFamily">The address family.</param>
-		/// <param name="socketType">Type of the socket.</param>
-		/// <param name="protocolType">Type of the protocol.</param>
-		/// <returns>Instance of <see cref="ISocket" /> which represents the socket.</returns>
-		public virtual ISocket CreateSocket(AddressFamily addressFamily, SocketType socketType, ProtocolType protocolType)
-		{
-			return new SocketProxy(addressFamily, socketType, protocolType);
-		}
 
 		/// <summary>
 		/// Performs sender-specific initialization.
