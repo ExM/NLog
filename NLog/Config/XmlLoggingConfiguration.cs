@@ -170,7 +170,24 @@ namespace NLog.Config
 			s = s.Replace(" ", string.Empty); // get rid of the whitespace
 			return s;
 		}
+		
+		private static string StripOptionalNamespacePrefix(string attributeValue)
+		{
+			if (attributeValue == null)
+			{
+				return null;
+			}
 
+			int p = attributeValue.IndexOf(':');
+			if (p < 0)
+			{
+				return attributeValue;
+			}
+
+			return attributeValue.Substring(p + 1);
+		}
+		
+		
 		private static Target WrapWithAsyncTargetWrapper(Target target)
 		{
 			var asyncTargetWrapper = new AsyncTargetWrapper();
@@ -447,7 +464,7 @@ namespace NLog.Config
 			foreach (var targetElement in targetsElement.Children)
 			{
 				string name = targetElement.LocalName;
-				string type = targetElement.GetOptionalAttribute("type", null);
+				string type = StripOptionalNamespacePrefix(targetElement.GetOptionalAttribute("type", null));
 
 				switch (name.ToUpper(CultureInfo.InvariantCulture))
 				{
@@ -529,7 +546,7 @@ namespace NLog.Config
 
 					if (IsTargetElement(name))
 					{
-						string type = childElement.GetRequiredAttribute("type");
+						string type = StripOptionalNamespacePrefix(childElement.GetRequiredAttribute("type"));
 
 						Target newTarget = ItemFactory.Targets.CreateInstance(type);
 						if (newTarget != null)
@@ -565,7 +582,7 @@ namespace NLog.Config
 
 					if (IsTargetElement(name))
 					{
-						string type = childElement.GetRequiredAttribute("type");
+						string type = StripOptionalNamespacePrefix(childElement.GetRequiredAttribute("type"));
 
 						Target newTarget = ItemFactory.Targets.CreateInstance(type);
 						if (newTarget != null)
@@ -616,7 +633,7 @@ namespace NLog.Config
 					prefix = prefix + ".";
 				}
 
-				string type = addElement.GetOptionalAttribute("type", null);
+				string type = StripOptionalNamespacePrefix(addElement.GetOptionalAttribute("type", null));
 				if (type != null)
 				{
 					ItemFactory.RegisterType(Type.GetType(type, true), prefix);
@@ -786,7 +803,7 @@ namespace NLog.Config
 				// and is a Layout
 				if (typeof(Layout).IsAssignableFrom(targetPropertyInfo.PropertyType))
 				{
-					string layoutTypeName = layoutElement.GetOptionalAttribute("type", null);
+					string layoutTypeName = StripOptionalNamespacePrefix(layoutElement.GetOptionalAttribute("type", null));
 
 					// and 'type' attribute has been specified
 					if (layoutTypeName != null)
@@ -814,7 +831,7 @@ namespace NLog.Config
 
 		private Target WrapWithDefaultWrapper(Target t, NLogXmlElement defaultParameters)
 		{
-			string wrapperType = defaultParameters.GetRequiredAttribute("type");
+			string wrapperType = StripOptionalNamespacePrefix(defaultParameters.GetRequiredAttribute("type"));
 
 			Target wrapperTargetInstance = ItemFactory.Targets.CreateInstance(wrapperType);
 			WrapperTargetBase wtb = wrapperTargetInstance as WrapperTargetBase;

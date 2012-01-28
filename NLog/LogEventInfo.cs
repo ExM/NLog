@@ -285,7 +285,8 @@ namespace NLog
 			if (_layoutCache == null)
 				_layoutCache = new Dictionary<Layout, string>();
 
-			_layoutCache[layout] = value;
+			lock(_layoutCache)
+				_layoutCache[layout] = value;
 			return value;
 		}
 
@@ -302,8 +303,9 @@ namespace NLog
 				value = null;
 				return false;
 			}
-
-			return _layoutCache.TryGetValue(layout, out value);
+			
+			lock(_layoutCache)
+				return _layoutCache.TryGetValue(layout, out value);
 		}
 
 		private static bool NeedToPreformatMessage(object[] parameters)
