@@ -97,6 +97,7 @@ namespace NLog.UnitTests
 		protected string RunAndCaptureInternalLog(SyncAction action, LogLevel internalLogLevel)
 		{
 			var stringWriter = new StringWriter();
+			stringWriter.NewLine = "\r\n";
 			var oldWriter = InternalLogger.LogWriter;
 			var oldLevel = InternalLogger.LogLevel;
 			var oldIncludeTimestamp = InternalLogger.IncludeTimestamp;
