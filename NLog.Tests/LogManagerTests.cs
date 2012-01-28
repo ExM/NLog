@@ -34,6 +34,22 @@ namespace NLog.UnitTests
 			Logger loggerA2 = LogManager.GetLogger(uniqueLoggerName);
 			Assert.AreSame(loggerA1, loggerA2);
 		}
+		
+		private static WeakReference GetWeakReferenceToTemporaryLogger()
+		{
+			string uniqueLoggerName = Guid.NewGuid ().ToString();
+			return new WeakReference (LogManager.GetLogger(uniqueLoggerName));
+		}
+
+		[Test]
+		public void GarbageCollection2Test()
+		{
+			WeakReference wr = GetWeakReferenceToTemporaryLogger();
+
+			// nobody's holding a reference to this Logger anymore, so GC.Collect(2) should free it
+			GC.Collect();
+			Assert.IsFalse(wr.IsAlive);
+		}
 
 		[Test]
 		public void NullLoggerTest()
