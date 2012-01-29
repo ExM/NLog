@@ -103,7 +103,7 @@ Trace Filter to apply: (level >= Debug)
 Trace After filtering: 6 events.
 Trace Sending to MyTarget
 ";
-			Assert.AreEqual(expectedLogOutput, internalLogOutput);
+			Assert.AreEqual(expectedLogOutput.GetLines(), internalLogOutput.GetLines());
 
 			// make sure all Debug,Info,Warn events went through
 			Assert.AreEqual(6, target.Events.Count);
@@ -161,7 +161,7 @@ Trace After filtering: 7 events.
 Trace Sending to MyTarget
 ";
 
-			Assert.AreEqual(expectedLogOutput, internalLogOutput);
+			Assert.AreEqual(expectedLogOutput.GetLines(), internalLogOutput.GetLines());
 
 			// make sure all events went through
 			Assert.AreEqual(7, target.Events.Count);

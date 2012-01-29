@@ -134,6 +134,7 @@
     <Compile Include="LayoutRenderers\GarbageCollectorTests.cs" />
     <Compile Include="NLogTestBase.cs" />
     <Compile Include="LineCollection.cs" />
+    <Compile Include="Toolkit.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ConfigFiles\included.nlog" />

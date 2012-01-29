@@ -21,7 +21,6 @@ namespace NLog.UnitTests.Targets
 			};
 
 			var consoleOutWriter = new StringWriter();
-			consoleOutWriter.NewLine = "\r\n";
 			TextWriter oldConsoleOutWriter = Console.Out;
 			Console.SetOut(consoleOutWriter);
 
@@ -54,7 +53,7 @@ Logger2 message5
 Logger1 message6
 -- footer --
 ";
-			Assert.AreEqual(expectedResult, consoleOutWriter.ToString());
+			Assert.AreEqual(expectedResult.GetLines(), consoleOutWriter.GetLines());
 		}
 
 		[Test]
@@ -69,7 +68,6 @@ Logger1 message6
 			};
 
 			var consoleErrorWriter = new StringWriter();
-			consoleErrorWriter.NewLine = "\r\n";
 			TextWriter oldConsoleErrorWriter = Console.Error;
 			Console.SetError(consoleErrorWriter);
 
@@ -102,7 +100,7 @@ Logger2 message5
 Logger1 message6
 -- footer --
 ";
-			Assert.AreEqual(expectedResult, consoleErrorWriter.ToString());
+			Assert.AreEqual(expectedResult.GetLines(), consoleErrorWriter.GetLines());
 		}
 	}
 }
